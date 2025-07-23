@@ -1,0 +1,40 @@
+---
+title: Pre-reading 2
+authors: Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui
+date: "Tuesday, July 22, 2025"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Approximate time: XY minutes
+
+# Learning Objectives
+
+-   LO 1
+-   LO 2
+-   LO 3
+
+# Topic 1
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+# Topic 2
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+# Topic 3
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3

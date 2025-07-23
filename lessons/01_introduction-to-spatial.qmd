@@ -1,0 +1,58 @@
+---
+title: "Introduction to Spatial Single Cell RNA-sequencing"
+authors: "Will Gammerdinger, Noor Sohail, Mandovi Chatterjee, Zhu Zhuo, James Billingsley, Shannan Ho Sui"
+date: "Tuesday, July 22, 2025"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Approximate time: XY minutes
+
+# Learning Objectives
+
+-   LO 1
+-   LO 2
+-   LO 3
+
+# Topic 1
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+::: callout-tip
+# [**Exercise 1**](01_introduction-to-spatial_Answer-key.qmd#exercise-1)
+
+Exercise 1
+:::
+
+# Topic 2
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+::: callout-tip
+# [**Exercise 2**](01_introduction-to-spatial_Answer-key.qmd#exercise-2)
+
+Exercise 1
+:::
+
+# Topic 3
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+::: callout-tip
+# [**Exercise 3**](01_introduction-to-spatial_Answer-key.qmd#exercise-3)
+
+Exercise 3
+:::
