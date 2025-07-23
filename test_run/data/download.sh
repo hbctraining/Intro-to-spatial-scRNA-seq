@@ -11,7 +11,8 @@ curl -O https://cf.10xgenomics.com/samples/spatial-exp/3.1.1/Visium_HD_Mouse_Bra
 curl -O https://cf.10xgenomics.com/samples/spatial-exp/3.1.1/Visium_HD_Mouse_Brain_Fresh_Frozen/Visium_HD_Mouse_Brain_Fresh_Frozen_spatial.tar.gz --output-dir fresh_frozen
 curl -O https://cf.10xgenomics.com/samples/spatial-exp/3.1.1/Visium_HD_Mouse_Brain_Fresh_Frozen/Visium_HD_Mouse_Brain_Fresh_Frozen_binned_outputs.tar.gz --output-dir fresh_frozen
 
-# Unzip spatial folder
+# Unzip bin folder
+tar -xvf fresh_frozen/Visium_HD_Mouse_Brain_Fresh_Frozen_binned_outputs.tar.gz --directory fresh_frozen
 tar -xvf fresh_frozen/Visium_HD_Mouse_Brain_Fresh_Frozen_spatial.tar.gz --directory fresh_frozen
 
 # Fixed Frozen
@@ -25,6 +26,6 @@ curl -O https://cf.10xgenomics.com/samples/spatial-exp/3.1.1/Visium_HD_Mouse_Bra
 curl -O https://cf.10xgenomics.com/samples/spatial-exp/3.1.1/Visium_HD_Mouse_Brain_Fixed_Frozen/Visium_HD_Mouse_Brain_Fixed_Frozen_spatial.tar.gz --output-dir fixed_frozen
 curl -O https://cf.10xgenomics.com/samples/spatial-exp/3.1.1/Visium_HD_Mouse_Brain_Fixed_Frozen/Visium_HD_Mouse_Brain_Fixed_Frozen_binned_outputs.tar.gz --output-dir fixed_frozen
 
-# Unzip spatial folder
+# Unzip bin folder
+tar -xvf fixed_frozen/Visium_HD_Mouse_Brain_Fixed_Frozen_binned_outputs.tar.gz --directory fixed_frozen
 tar -xvf fixed_frozen/Visium_HD_Mouse_Brain_Fixed_Frozen_spatial.tar.gz --directory fixed_frozen
-
