@@ -1,0 +1,133 @@
+---
+sidebar: false
+toc: false
+execute: 
+  eval: false
+---
+
+
+# Introduction to Spatial Single-cell RNA-seq
+
+| Audience | Computational skills required| Duration |
+:----------|:----------|:----------|
+| Biologists | [Introduction to R](https://hbctraining.github.io/Intro-to-R-flipped/) | 4-session online workshop (~7.5 hours of trainer-led time)|
+
+### Description
+
+This repository has teaching materials for a hands-on **Introduction to Spatial Single-cell RNA-seq** workshop. **ADD DESCRIPTION HERE STILL** Working knowledge of R is required or completion of the [Introduction to R workshop](https://hbctraining.github.io/Intro-to-R-flipped/). 
+
+**Note for Trainers:** Please note that the schedule linked below assumes that learners will spend between 3-4 hours on reading through, and completing exercises from selected lessons between classes. The online component of the workshop focuses on more exercises and discussion/Q & A.
+
+::: callout-note
+These materials were developed for a trainer-led workshop, but are also amenable to self-guided learning.
+:::
+
+### Learning Objectives
+
+- LO 1
+- LO 2
+- LO 3
+- LO 4
+
+
+### Lessons
+* [Workshop schedule (trainer-led learning)](schedule/schedule.qmd)
+* [Self-learning](schedule/links-to-lessons.qmd)
+
+### Installation Requirements
+
+#### Applications
+Download the most recent versions of R and RStudio for your laptop:
+
+ - [R](http://lib.stat.cmu.edu/R/CRAN/) **(version 4.0.0 or above)**
+ - [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
+
+#### Packages for R
+
+::: callout-note
+# Notes
+
+**Note 1: Install the packages in the order listed below.**
+
+**Note 2: All the package names listed below are case sensitive!**
+
+**Note 3**: If you have a Mac with an M1 chip, download and install this tool before intalling your packages: https://mac.r-project.org/tools/gfortran-12.2-universal.pkg
+
+**Note 4**: At any point (especially if you’ve used R/Bioconductor in the past), in the console **R may ask you if you want to update any old packages by asking Update all/some/none? [a/s/n]:**. If you see this, **type "a" at the prompt and hit Enter** to update any old packages. _Updating packages can sometimes take quite a bit of time to run, so please account for that before you start with these installations._  
+
+**Note 5:** If you see a message in your console along the lines of “binary version available but the source version is later”, followed by a question, **“Do you want to install from sources the package which needs compilation? y/n”, type n for no, and hit enter**.
+
+:::
+
+**(1)** Install the X packages listed below from **Bioconductor** using the the `BiocManager::install()` function.
+
+1. `package_1`
+2. `package_2`
+3. `package_3`
+4. `package_4`
+
+**Please install them one-by-one as follows:**
+
+```{r}
+BiocManager::install("package_1")
+BiocManager::install("package_2")
+BiocManager::install("package_3")
+BiocManager::install("package_4")
+```
+
+**(2)** Install the Y packages listed below from **CRAN** using the `install.packages()` function. 
+
+1. `package_5`
+2. `package_6`
+3. `package_7`
+4. `package_8`
+5. `package_9`
+6. `package_10`
+7. `package_11`
+
+**Please install them one-by-one as follows:**
+
+```{r}
+install.packages("package_5")
+install.packages("package_6")
+install.packages("package_7")
+install.packages("package_8")
+install.packages("package_9")
+install.packages("package_10")
+install.packages("package_11")
+```
+
+**(3)** Finally, please check that all the packages were installed successfully by **loading them one at a time** using the `library()` function.  
+
+```{r}
+library(package_1)
+library(package_2)
+library(package_3)
+library(package_4)
+library(package_5)
+library(package_6)
+library(package_7)
+library(package_8)
+library(package_9)
+library(package_10)
+library(package_11)
+```
+
+**(4)** Once all packages have been loaded, run sessionInfo().  
+
+```{r}
+sessionInfo()
+```
+
+---
+
+### Citation
+
+To cite material from this course in your publications, please use:
+
+::: callout-important
+# Citation
+**Create Zenodo citation**
+:::
+
+A lot of time and effort went into the preparation of these materials. Citations help us understand the needs of the community, gain recognition for our work, and attract further funding to support our teaching activities. Thank you for citing this material if it helped you in your data analysis.
