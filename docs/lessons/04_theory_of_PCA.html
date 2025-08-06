@@ -6,6 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Will Gammerdinger">
+<meta name="author" content="Noor Sohail">
+<meta name="author" content="Zhu Zhuo">
+<meta name="author" content="James Billingsley">
+<meta name="author" content="Shannan Ho Sui">
 <meta name="dcterms.date" content="2025-07-22">
 
 <title>Theory of PCA – Introduction to single-cell RNA-seq</title>
@@ -102,6 +107,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../css/styles.css">
 </head>
@@ -330,8 +364,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">lessons/Cheatsheet_seurat.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../lessons/Cheatsheet_seurat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Seurat Cheatsheet</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -362,23 +399,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
-  <li><a href="#topic-1" id="toc-topic-1" class="nav-link" data-scroll-target="#topic-1">Topic 1</a>
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
+  <li><a href="#setting-up-to-calculate-eigenvalues-and-eigenvectors" id="toc-setting-up-to-calculate-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#setting-up-to-calculate-eigenvalues-and-eigenvectors">Setting up to calculate Eigenvalues and Eigenvectors</a>
   <ul class="collapse">
-  <li><a href="#sub-topic-1" id="toc-sub-topic-1" class="nav-link" data-scroll-target="#sub-topic-1">Sub-topic 1</a></li>
-  <li><a href="#sub-topic-2" id="toc-sub-topic-2" class="nav-link" data-scroll-target="#sub-topic-2">Sub-topic 2</a></li>
-  <li><a href="#sub-topic-3" id="toc-sub-topic-3" class="nav-link" data-scroll-target="#sub-topic-3">Sub-topic 3</a></li>
+  <li><a href="#creating-an-example-data-set" id="toc-creating-an-example-data-set" class="nav-link" data-scroll-target="#creating-an-example-data-set">Creating an example data set</a></li>
+  <li><a href="#re-centering-the-dataset" id="toc-re-centering-the-dataset" class="nav-link" data-scroll-target="#re-centering-the-dataset">Re-centering the dataset</a></li>
+  <li><a href="#create-a-covariance-matrix" id="toc-create-a-covariance-matrix" class="nav-link" data-scroll-target="#create-a-covariance-matrix">Create a covariance matrix</a></li>
   </ul></li>
-  <li><a href="#topic-2" id="toc-topic-2" class="nav-link" data-scroll-target="#topic-2">Topic 2</a>
+  <li><a href="#calculating-the-principal-components" id="toc-calculating-the-principal-components" class="nav-link" data-scroll-target="#calculating-the-principal-components">Calculating the Principal Components</a>
   <ul class="collapse">
-  <li><a href="#sub-topic-1-1" id="toc-sub-topic-1-1" class="nav-link" data-scroll-target="#sub-topic-1-1">Sub-topic 1</a></li>
-  <li><a href="#sub-topic-2-1" id="toc-sub-topic-2-1" class="nav-link" data-scroll-target="#sub-topic-2-1">Sub-topic 2</a></li>
-  <li><a href="#sub-topic-3-1" id="toc-sub-topic-3-1" class="nav-link" data-scroll-target="#sub-topic-3-1">Sub-topic 3</a></li>
+  <li><a href="#calculate-eigenvalues-and-eigenvectors-from-the-covariance-matrix" id="toc-calculate-eigenvalues-and-eigenvectors-from-the-covariance-matrix" class="nav-link" data-scroll-target="#calculate-eigenvalues-and-eigenvectors-from-the-covariance-matrix">Calculate Eigenvalues and Eigenvectors from the Covariance Matrix</a></li>
+  <li><a href="#principal-component-scores" id="toc-principal-component-scores" class="nav-link" data-scroll-target="#principal-component-scores">Principal Component Scores</a></li>
+  <li><a href="#percent-variance-explained" id="toc-percent-variance-explained" class="nav-link" data-scroll-target="#percent-variance-explained">Percent Variance Explained</a></li>
+  <li><a href="#plotting-our-principal-components" id="toc-plotting-our-principal-components" class="nav-link" data-scroll-target="#plotting-our-principal-components">Plotting our Principal Components</a></li>
   </ul></li>
-  <li><a href="#topic-3" id="toc-topic-3" class="nav-link" data-scroll-target="#topic-3">Topic 3</a>
+  <li><a href="#prcomp-comparison" id="toc-prcomp-comparison" class="nav-link" data-scroll-target="#prcomp-comparison"><code>prcomp()</code> comparison</a>
   <ul class="collapse">
-  <li><a href="#sub-topic-1-2" id="toc-sub-topic-1-2" class="nav-link" data-scroll-target="#sub-topic-1-2">Sub-topic 1</a></li>
-  <li><a href="#sub-topic-2-2" id="toc-sub-topic-2-2" class="nav-link" data-scroll-target="#sub-topic-2-2">Sub-topic 2</a></li>
-  <li><a href="#sub-topic-3-2" id="toc-sub-topic-3-2" class="nav-link" data-scroll-target="#sub-topic-3-2">Sub-topic 3</a></li>
+  <li><a href="#center-of-the-data" id="toc-center-of-the-data" class="nav-link" data-scroll-target="#center-of-the-data">Center of the Data</a></li>
+  <li><a href="#eigenvalues" id="toc-eigenvalues" class="nav-link" data-scroll-target="#eigenvalues">Eigenvalues</a></li>
+  <li><a href="#eigenvectors" id="toc-eigenvectors" class="nav-link" data-scroll-target="#eigenvectors">Eigenvectors</a></li>
+  <li><a href="#pc-scores" id="toc-pc-scores" class="nav-link" data-scroll-target="#pc-scores">PC Scores</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -396,9 +436,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Authors</div>
     <div class="quarto-title-meta-contents">
-             <p>Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui </p>
+             <p>Will Gammerdinger </p>
+             <p>Noor Sohail </p>
+             <p>Zhu Zhuo </p>
+             <p>James Billingsley </p>
+             <p>Shannan Ho Sui </p>
           </div>
   </div>
     
@@ -417,25 +461,221 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Approximate time: XY minutes</p>
+<p>Approximate time: 45 minutes</p>
 <section id="learning-objectives" class="level1">
 <h1>Learning Objectives</h1>
 <ul>
-<li>LO 1</li>
-<li>LO 2</li>
-<li>LO 3</li>
+<li>Derive the covariance matrix used for Principal Components Analysis</li>
+<li>Explain the roles of eigenvectors and eigenvalues within a Principal Components Analysis</li>
+<li>Compare and contrast our Principal Components Analysis to the output of <code>prcomp()</code></li>
 </ul>
 </section>
-<section id="topic-1" class="level1">
-<h1>Topic 1</h1>
-<section id="sub-topic-1" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-1">Sub-topic 1</h2>
+<section id="background" class="level1">
+<h1>Background</h1>
+<p>Principal Components Analysis is a dimensionality-reduction method employed to stratify data by their variance. Thus, points that are more closely together on a PCA are more similar to each other, while points that are more dissimilar to each other will be further apart. As a result, you would likely expect similar cell from the same cell type to cluster near each other and apart from distinctly different cell types. In order to demonstrate how Principal Components Analysis works we are going to describe the process roughly works in high-dimensional data, then work through it a two-dimensional example data set.</p>
+<p>Consider a single-cell experiment where you have the expression value for every gene in each cell. Let’s hypothetically say that our sample has data from 25,000 genes. We could plot this 25,000-dimensional space where each dimension represents a given gene’s expression and each point represents a cell in that 25,000-dimensional space. However, that is rather unintuitive and many of those dimensions are uninteresting, so we would like to reduce the dimensionality to the axes that separate the variance the most. This is what we will be doing with a Principal Components Analysis.</p>
+<p>From a high-level perspective, what we will be doing is:</p>
+<ul>
+<li>Finding the vector in that 25,000-dimensional space that has the most variance in it.</li>
+<li>Looking for another vector that is orthogonal (a 90° angle but in multi-dimensional space) to the first vector that explains the most of the remaining variance. We this process until, in theory, you have have as many vectors as dimensions in your original dataset. However, in practice, people oftentimes stop after a few dozen.</li>
+<li>Using these vectors to transform your original data into Principal Components space.</li>
+</ul>
 </section>
-<section id="sub-topic-2" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-2">Sub-topic 2</h2>
+<section id="setting-up-to-calculate-eigenvalues-and-eigenvectors" class="level1">
+<h1>Setting up to calculate Eigenvalues and Eigenvectors</h1>
+<p>We will be using some functions from <code>tidyverse</code> in the lesson, so we will need to load it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="creating-an-example-data-set" class="level2">
+<h2 class="anchored" data-anchor-id="creating-an-example-data-set">Creating an example data set</h2>
+<p>We are going to discuss the steps for deriving a Principal Components analysis, but in order to do it, we are going to use an example dataset. Let’s start by creating an tibble that has gene expression values for two genes from four cells.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a vector for Cell IDs</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cells <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Cell_1"</span>, <span class="st">"Cell_2"</span>, <span class="st">"Cell_3"</span>, <span class="st">"Cell_4"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a vector to hold expression values for Gene A across all of the cells</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>Gene_A <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12</span>, <span class="dv">65</span>, <span class="dv">23</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a vector to hold expression values for Gene B across all of the cells</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>Gene_B <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">30</span>, <span class="dv">57</span>, <span class="dv">18</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a tibble to hold the cell names and expression values</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>expression_tibble <span class="ot">&lt;-</span> <span class="fu">tibble</span>(cells, Gene_A, Gene_B)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># View the expression tibble</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>expression_tibble</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  cells  Gene_A Gene_B
+  &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1 Cell_1      0      4
+2 Cell_2     12     30
+3 Cell_3     65     57
+4 Cell_4     23     18</code></pre>
+</div>
+</div>
+<p>Let’s get an idea of what our data looks like by plotting it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a plot to view the raw expression data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(expression_tibble, <span class="fu">aes</span>(<span class="at">x =</span> Gene_A, <span class="at">y =</span> Gene_B, <span class="at">label =</span> cells)) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"cornflowerblue"</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">80</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">80</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Gene A"</span>) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Gene B"</span>) <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Example Expression Values from Four Cells"</span>) <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_theory_of_PCA_files/figure-html/plot_raw_data-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now if were were to consider our data set that has <strong><em>X</em></strong> genes and <strong><em>Y</em></strong> cells, then this plot would have <strong><em>X</em></strong> dimensions and <strong><em>Y</em></strong> points.</p>
 </section>
-<section id="sub-topic-3" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-3">Sub-topic 3</h2>
+<section id="re-centering-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="re-centering-the-dataset">Re-centering the dataset</h2>
+<p>When performing PCA, the first step is to re-center the data so that the center of the data is the origin. In order to do this, we need to do two steps:</p>
+<p><strong>1. Find the center of the data</strong></p>
+<p>We can find the center of the data by taking the average gene expression across each gene (dimension).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Determine the center of the data by:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding the average expression of gene A</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>Gene_A_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(expression_tibble<span class="sc">$</span>Gene_A)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding the average expression of gene B</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>Gene_B_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(expression_tibble<span class="sc">$</span>Gene_B)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a vector to hold the center of the data</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>center_of_data <span class="ot">&lt;-</span> <span class="fu">c</span>(Gene_A_mean, Gene_B_mean)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign names to the components of the vector</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(center_of_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Gene_A"</span>, <span class="st">"Gene_B"</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out the center_of_data vector</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>center_of_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Gene_A Gene_B 
+ 25.00  27.25 </code></pre>
+</div>
+</div>
+<p>The new center of the data will be where <strong><em>( 25, 27.25 )</em></strong> is currently. We can visualize this center and inspect that this is does in fact appear to be roughly in the middle of the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View where the center of the data is located</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(expression_tibble, <span class="fu">aes</span>(<span class="at">x =</span> Gene_A, <span class="at">y =</span> Gene_B, <span class="at">label =</span> cells)) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"cornflowerblue"</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"point"</span>, <span class="at">x =</span> Gene_A_mean, <span class="at">y =</span> Gene_B_mean, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> Gene_A_mean, <span class="at">y =</span> Gene_B_mean, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">label=</span><span class="st">"New Center"</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">80</span>) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">80</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Gene A"</span>) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Gene B"</span>) <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Example Expression Values from Four Cells"</span>) <span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_theory_of_PCA_files/figure-html/new_center_plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>2. Translate the points from their raw expression coordinates to coordinates centered around the center of the data</strong></p>
+<p>Next, we need to shift the points so that the center of the data corresponds to the origin. We can do this by subtracting the mean value from each gene from the raw values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shift the data points so that they data is centered on the origin</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>recentered_expression_tibble <span class="ot">&lt;-</span> expression_tibble <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gene_A =</span> Gene_A <span class="sc">-</span> Gene_A_mean,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gene_B =</span> Gene_B <span class="sc">-</span> Gene_B_mean</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out the re-centered data</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>recentered_expression_tibble</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  cells  Gene_A Gene_B
+  &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1 Cell_1    -25 -23.2 
+2 Cell_2    -13   2.75
+3 Cell_3     40  29.8 
+4 Cell_4     -2  -9.25</code></pre>
+</div>
+</div>
+<p>As with any data analysis, it is always a good idea to visualize your data to ensure that it appears to behaving how you intended. So let’s visualize our re-centered data to ensure that the data appears centered around the origin.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the raw data after it has been shifted to have the center of the data align with the origin</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(recentered_expression_tibble, <span class="fu">aes</span>(<span class="at">x =</span> Gene_A, <span class="at">y =</span> Gene_B, <span class="at">label =</span> cells)) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"cornflowerblue"</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"point"</span>, <span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">label=</span><span class="st">"New Center"</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">50</span>, <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">50</span>, <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Gene A"</span>) <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Gene B"</span>) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Example Re-centered Expression Values from Four Cells"</span>) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_theory_of_PCA_files/figure-html/plot_recentered_data-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="create-a-covariance-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-covariance-matrix">Create a covariance matrix</h2>
+<p>The next step that we will after we have re-centered our data around the origin is to calculate the covariance matrix. As a reminder, the covariance is the joint variability of two random variables. In this case our random variables are the genes. The illustration below we provide examples for positive and negative covariance values along with a covariance that is near zero.</p>
+<p><img src="../img/Covariance.png" width="800"></p>
+<p>The equation to estimate the sample covariance is:</p>
+<p><img src="https://latex.codecogs.com/svg.image?&amp;space;cov(X,Y)=\frac{1}{n - 1}\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})" width="300"></p>
+<p>Where:</p>
+<ul>
+<li><em>X</em> is Gene A</li>
+<li><em>Y</em> is Gene B</li>
+<li><em>n</em> is the number of cells</li>
+<li><em>x<sub>i</sub></em> is an expression value for Gene A</li>
+<li><em><span class="math inline">\(\bar{x}\)</span></em> is the mean expression value for Gene A</li>
+<li><em>y<sub>i</sub></em> is an expression value for Gene B</li>
+<li><em><span class="math inline">\(\bar{y}\)</span></em> is the mean expression value for Gene B</li>
+</ul>
+<p>Now we will calculate the covariance for all pairwise comparisons for our re-centered expression data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Move the cell IDs to the rownames and convert the tibble to a matrix</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>recentered_expression_matrix <span class="ot">&lt;-</span> recentered_expression_tibble <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"cells"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a covariance matrix</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>cov_matrix <span class="ot">&lt;-</span> <span class="fu">cov</span>(recentered_expression_matrix)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out the covariance matrix</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>cov_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Gene_A   Gene_B
+Gene_A 799.3333 584.6667
+Gene_B 584.6667 506.2500</code></pre>
+</div>
+</div>
+<p>Let’s go ahead and manually check a covariance by hand to ensure that we trust the outputted covariance matrix. Let’s estimate the covariance of Gene A and Gene B.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the covariance of Gene A and Gene B by hand</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span><span class="sc">/</span>(<span class="dv">4-1</span>))<span class="sc">*</span>((<span class="dv">0-25</span>)<span class="sc">*</span>(<span class="dv">4</span><span class="fl">-27.25</span>) <span class="sc">+</span> (<span class="dv">12-25</span>)<span class="sc">*</span>(<span class="dv">30</span><span class="fl">-27.25</span>) <span class="sc">+</span> (<span class="dv">65-25</span>)<span class="sc">*</span>(<span class="dv">57</span><span class="fl">-27.25</span>) <span class="sc">+</span> (<span class="dv">23-25</span>)<span class="sc">*</span>(<span class="dv">18</span><span class="fl">-27.25</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 584.6667</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or you can use the covariance function</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(recentered_expression_matrix[, <span class="st">"Gene_A"</span>], recentered_expression_matrix[, <span class="st">"Gene_B"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 584.6667</code></pre>
+</div>
+</div>
+<p>This value should match the covariance found in our covariance matrix for the covariance between Gene A and Gene B.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -447,20 +687,205 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <p>Exercise 1</p>
+<p>There are a couple properties of variance and co-variance that we can verify:</p>
+<p><em>cov(X,X)</em> is equal to <em>var(X)</em>. We can observe this is mathematically below:</p>
+<p><img src="https://latex.codecogs.com/svg.image?&amp;space;cov(X,X)=\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})(x_{i}-\bar{x})=\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}=var(X)" width="500"></p>
+<p>As a result, you will sometimes see covariance matrices written as:</p>
+<p><img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}var(X)&amp;cov(X,Y)&amp;...&amp;cov(X,Z)\\cov(Y,X)&amp;var(Y)&amp;...&amp;cov(Y,Z)\\...&amp;...&amp;...&amp;...\\cov(Z,X)&amp;cov(Z,Y)&amp;...&amp;var(Z)\\\end{bmatrix}" width="300"></p>
+<ol type="1">
+<li>Confirm this property by estimating the variance for Gene A.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the variance for Gene A</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(recentered_expression_matrix[, <span class="st">"Gene_A"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 799.3333</code></pre>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Now estimate the covariance for Gene A and Gene A</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the covariance for Gene A and Gene A</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(recentered_expression_matrix[, <span class="st">"Gene_A"</span>], recentered_expression_matrix[, <span class="st">"Gene_A"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 799.3333</code></pre>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Is the value the same? Does it match the value in the covariance matrix for Gene A and Gene A?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the covariance estimate of Gene A and Gene A from the covariance matrix</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>cov_matrix[<span class="st">"Gene_A"</span>, <span class="st">"Gene_A"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 799.3333</code></pre>
+</div>
+</div>
+<p><em>cov(X,Y)</em> is equal to <em>cov(Y,X)</em>. We can observe this is mathematically below:</p>
+<p><img src="https://latex.codecogs.com/svg.image?&amp;space;cov(X,Y)=\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})=\frac{1}{n-1}\sum_{i=1}^{n}(y_{i}-\bar{y})(x_{i}-\bar{x})=cov(Y,X)" width="500"></p>
+<ol start="4" type="1">
+<li>Estimate the covariance of Gene B and Gene A.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the covariance of Gene B and Gene A</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(recentered_expression_tibble[, <span class="st">"Gene_B"</span>], recentered_expression_tibble[, <span class="st">"Gene_A"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Gene_A
+Gene_B 584.6667</code></pre>
+</div>
+</div>
+<ol start="4" type="1">
+<li>How does this compare to the covariance that we estimated by hand?</li>
+</ol>
 </div>
 </div>
 </section>
 </section>
-<section id="topic-2" class="level1">
-<h1>Topic 2</h1>
-<section id="sub-topic-1-1" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-1-1">Sub-topic 1</h2>
+<section id="calculating-the-principal-components" class="level1">
+<h1>Calculating the Principal Components</h1>
+<section id="calculate-eigenvalues-and-eigenvectors-from-the-covariance-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="calculate-eigenvalues-and-eigenvectors-from-the-covariance-matrix">Calculate Eigenvalues and Eigenvectors from the Covariance Matrix</h2>
+<p>First, we will need to calculate our eigenvalues, which are a measure of variance for a principal component. We can then use eigenvalues to calculate our eigenvectors, but R will do this all in a single step for us. We can think of the eigenvectors as the weights, or influence, for transforming our re-centered expression values into PCA space.</p>
+<p>Now that we have a covariance matrix for the re-centered expression values, we need to estimate the eigenvalues and eigenvectors for the covariance matrix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the eigenvalues and eigenvectors of the covariance matrix</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>eig <span class="ot">&lt;-</span> <span class="fu">eigen</span>(cov_matrix)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the output from eigen()</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>eig</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>eigen() decomposition
+$values
+[1] 1255.543   50.040
+
+$vectors
+           [,1]       [,2]
+[1,] -0.7883911  0.6151743
+[2,] -0.6151743 -0.7883911</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Click here to see how to calculate eigenvalues and eigenvectors">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click here to see how to calculate eigenvalues and eigenvectors
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Calculating Eigenvalues</strong></p>
+<p>If we wanted to do this by hand then we need to set the determinant of the covariance matrix minus <span class="math inline">\(\lambda\)</span> times the identify matrix equal to 0 and solving for <span class="math inline">\(\lambda\)</span>.</p>
+<p><img src="https://latex.codecogs.com/svg.image?det(\begin{bmatrix}var(X)&amp;cov(X,Y)\\cov(Y,X)&amp;var(Y)\\\end{bmatrix}-\lambda\begin{bmatrix}1&amp;0\\0&amp;1\\\end{bmatrix})=0" width="500"></p>
+<p>In this case it can be simplified to:</p>
+<p><img src="https://latex.codecogs.com/svg.image?(var(X)-\lambda)(var(Y)-\lambda)-(cov(X,Y))(cov(Y,X))=0" width="500"></p>
+<p>We can now replace the variance and covariance values with the values that we have from the covariance matrix and solve for <span class="math inline">\(\lambda\)</span>. This results in two lambda values: <strong><span class="math inline">\(\lambda\)</span><sub>1</sub> = 1255.543</strong> and <strong><span class="math inline">\(\lambda\)</span><sub>2</sub> = 50.04</strong>.</p>
+<p>We can see that this is equal to the eigenvalues returned from our <code>eig</code> object:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the eigenvalues</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>eig<span class="sc">$</span>values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1255.543   50.040</code></pre>
+</div>
+</div>
+<p><strong>Calculating Eigenvectors</strong></p>
+<p>In order to find the eigenvectors, we need to substitute the variacne and covariance values from the covariance matrix along with one of our <em><span class="math inline">\(\lambda\)</span></em> values, <em><span class="math inline">\(\lambda\)</span><sub>1</sub></em> to find the associated eigenvector, <em>v<sub>1</sub></em>. This results in <em>v<sub>1</sub></em> being equal to -0.7883911, -0.6151743.</p>
+<p><img src="https://latex.codecogs.com/svg.image?(\begin{bmatrix}var(X)&amp;cov(X,Y)\\cov(Y,X)&amp;var(Y)\\\end{bmatrix}-\lambda&amp;space;_{1}\begin{bmatrix}1&amp;0\\0&amp;1\\\end{bmatrix})v_{1}=0" width="500"></p>
+<p>We can confirm this by plugging our covariance matrix, eigenvalues and eigenvectors back into the above equation and it should return 0, or near 0 (due to rounding errors).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the eigenvalues and eigenvectors</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>(cov_matrix <span class="sc">-</span> eig<span class="sc">$</span>values[<span class="dv">1</span>]<span class="sc">*</span><span class="fu">diag</span>(<span class="dv">2</span>)) <span class="sc">%*%</span> eig<span class="sc">$</span>vectors[,<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                [,1]
+Gene_A -5.484729e-14
+Gene_B -1.507339e-14</code></pre>
+</div>
+</div>
+<p>We then repeat this process for <em><span class="math inline">\(\lambda\)</span><sub>2</sub></em> in order to to find its associated eigenvector, <em>v<sub>2</sub></em>, which results in 0.6151743, -0.7883911. Thus, our resulting matrix of eigenvectors appears as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the eigenvectors</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>eig<span class="sc">$</span>vectors</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]       [,2]
+[1,] -0.7883911  0.6151743
+[2,] -0.6151743 -0.7883911</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="sub-topic-2-1" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-2-1">Sub-topic 2</h2>
+<section id="principal-component-scores" class="level2">
+<h2 class="anchored" data-anchor-id="principal-component-scores">Principal Component Scores</h2>
+<p>Now that we have our re-centered expression matrix and eigenvectors, we can perform matrix multiplication to obtain our principal component scores. This is where we are transforming our data from the re-centered expression into Principal Components space by the weight, or influence, of the eigenvector.</p>
+<p><img src="../img/PC_generation.png" width="800"></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the data into PC space by multiply the re-centered expression matrix by the eigenvectors</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>pc_scores <span class="ot">&lt;-</span> recentered_expression_matrix <span class="sc">%*%</span> eig<span class="sc">$</span>vectors</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Name the columns in pc_scores object</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pc_scores) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PC_1"</span>, <span class="st">"PC_2"</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out the pc_scores object</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>pc_scores</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             PC_1       PC_2
+Cell_1  34.012581   2.950736
+Cell_2   8.557355 -10.165342
+Cell_3 -49.837081   1.152337
+Cell_4   7.267145   6.062269</code></pre>
+</div>
+</div>
 </section>
-<section id="sub-topic-3-1" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-3-1">Sub-topic 3</h2>
+<section id="percent-variance-explained" class="level2">
+<h2 class="anchored" data-anchor-id="percent-variance-explained">Percent Variance Explained</h2>
+<p>We are likely interested in knowing in knowing the amount of variance explained in our data by each principal component. As we alluded to earlier, we can use the eigenvalues to help us with this. The sum of all of the eigenvalues captures the total variance explained by the principal components analysis.</p>
+<p>Thus, if we want to know the proportion of the variance explained by each principal component, then we would need to divide each eigenvalue by the total variance explained (the sum of the eigenvalues) and if we wanted this as a percentage then we would need to multiply it by 100.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the percent of variance explained by each PC using the eigenvalues</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>pct_var_explained <span class="ot">&lt;-</span> (eig<span class="sc">$</span>values <span class="sc">/</span> <span class="fu">sum</span>(eig<span class="sc">$</span>values)) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Name the elements of the pct_var_explained by their PC</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pct_var_explained) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PC_1"</span>, <span class="st">"PC_2"</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out the percent of variance explained by each PC</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>pct_var_explained</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    PC_1     PC_2 
+96.16723  3.83277 </code></pre>
+</div>
+</div>
+</section>
+<section id="plotting-our-principal-components" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-our-principal-components">Plotting our Principal Components</h2>
+<p>With out principal components in hand, we will create a visualization of the principal components.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a tibble to hold the PC scores we found and also make the Cell IDs into a column</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>pc_scores_tibble <span class="ot">&lt;-</span> pc_scores <span class="sc">%&gt;%</span> </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"cells"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the PC scores we found</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pc_scores_tibble, <span class="fu">aes</span>(<span class="at">x =</span> PC_1, <span class="at">y =</span> PC_2, <span class="at">label =</span> cells)) <span class="sc">+</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="at">color =</span> <span class="st">"cornflowerblue"</span>) <span class="sc">+</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">50</span>, <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">12</span>, <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">"PC 1 (Variance Explained "</span>, <span class="fu">round</span>(pct_var_explained[<span class="st">"PC_1"</span>], <span class="at">digits =</span> <span class="dv">2</span>),<span class="st">"%)"</span>)) <span class="sc">+</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">"PC 2 (Variance Explained "</span>, <span class="fu">round</span>(pct_var_explained[<span class="st">"PC_2"</span>], <span class="at">digits =</span> <span class="dv">2</span>),<span class="st">"%)"</span>)) <span class="sc">+</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PCA of Expression Values from Four Cells"</span>) <span class="sc">+</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_theory_of_PCA_files/figure-html/plotting_PCA_hand-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -471,21 +896,122 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Exercise 1</p>
+<p>When looking at the percent explained by each principal component, the first principal component should explain the most and each of the following principal components should explain less than the previous principal component. Let’s have a look at our <code>pct_var_explained</code> object, are our results congruent with the expectation this expectation?</p>
 </div>
 </div>
 </section>
 </section>
-<section id="topic-3" class="level1">
-<h1>Topic 3</h1>
-<section id="sub-topic-1-2" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-1-2">Sub-topic 1</h2>
+<section id="prcomp-comparison" class="level1">
+<h1><code>prcomp()</code> comparison</h1>
+<p>At this point we have completed a principal components analysis, but we can also compare it to how R does a principal components analysis and see how our results compare. One way to do a principal components analysis in R is to us the <code>prcomp()</code> function in R.</p>
+<p>In order to run <code>prcomp()</code>, we need to start from an expression matrix and move the cell IDs to the rownames:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run prcomp() on the expression tibble after moving the Cell IDs to be rownames</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>prcomp_PCA <span class="ot">&lt;-</span> expression_tibble <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"cells"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prcomp</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s inspect the output from <code>prcomp()</code> to ensure that we are getting the same output:</p>
+<section id="center-of-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="center-of-the-data">Center of the Data</h2>
+<p>First we can ensure that we have the same center of the data. <code>prcomp()</code> says that the center of the data is:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the center of the data found by prcomp()</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>prcomp_PCA<span class="sc">$</span>center</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Gene_A Gene_B 
+ 25.00  27.25 </code></pre>
+</div>
+</div>
+<p>We can compare this with what we derived as the center of the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the center of the data we found</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>center_of_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Gene_A Gene_B 
+ 25.00  27.25 </code></pre>
+</div>
+</div>
+<p>They match which is a great sign that we did this correctly!</p>
 </section>
-<section id="sub-topic-2-2" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-2-2">Sub-topic 2</h2>
+<section id="eigenvalues" class="level2">
+<h2 class="anchored" data-anchor-id="eigenvalues">Eigenvalues</h2>
+<p>Note that eigenvalues are the variance for a particular principal component and that variance is the square of the standard deviation as shown below.</p>
+<p><img src="https://latex.codecogs.com/svg.image?var(X)=sd(X)^{2}" width="150"></p>
+<p><code>prcomp()</code> reports the standard deviation, so we will need to square the items in the <code>prcomp_PCA$sdev</code> slot in order to recover our variance, or eigenvalues.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the eigenvalues found by prcomp() by squaring prcomp_PCA$sdev</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>prcomp_eigenvalues <span class="ot">&lt;-</span> prcomp_PCA<span class="sc">$</span>sdev <span class="sc">**</span> <span class="dv">2</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Name the elements of the prcomp_eigenvalues by their PC</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(prcomp_eigenvalues) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PC_1"</span>, <span class="st">"PC_2"</span>)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out prcomp_eigenvalues</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>prcomp_eigenvalues</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    PC_1     PC_2 
+1255.543   50.040 </code></pre>
+</div>
+</div>
+<p>We can compare this with our estimation of eiganvalues by hand:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the eigenvalues we found</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>eig<span class="sc">$</span>values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1255.543   50.040</code></pre>
+</div>
+</div>
 </section>
-<section id="sub-topic-3-2" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-3-2">Sub-topic 3</h2>
+<section id="eigenvectors" class="level2">
+<h2 class="anchored" data-anchor-id="eigenvectors">Eigenvectors</h2>
+<p>Let’s go ahead and compare the eigenvectors from <code>prcomp()</code> to the eigenvectors that we calculated. <code>prcomp()</code> calculated the eigenvectors as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the eigenvectors found by prcomp()</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>prcomp_PCA<span class="sc">$</span>rotation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             PC1        PC2
+Gene_A 0.7883911  0.6151743
+Gene_B 0.6151743 -0.7883911</code></pre>
+</div>
+</div>
+<p>While we calculated the eigenvectors as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the eigenvectors we found</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>eig<span class="sc">$</span>vectors</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]       [,2]
+[1,] -0.7883911  0.6151743
+[2,] -0.6151743 -0.7883911</code></pre>
+</div>
+</div>
+<p>We can see that the values are the same, but the sign is flipped between the two methods. This is because eigenvectors are only defined “up to sign”. This means for a given eigenvalue, the eigenvector <em>v<sub>1</sub></em> and <em>-v<sub>1</sub></em> are the same line, but point in different directions. This does not impact our principal components calculations. However, it could mean that a plot derived <em>v<sub>1</sub></em> will look rotated 180° when compared to a plot derived from <em>-v<sub>1</sub></em>. Regardless, it looks like we have the same eigenvectors in both approaches.</p>
+</section>
+<section id="pc-scores" class="level2">
+<h2 class="anchored" data-anchor-id="pc-scores">PC Scores</h2>
+<p>Finally, we can check our PC scores to ensure that they are also equivalent. We should note that since the eigenvector from <code>prcomp()</code> and the eigenvector we calculated differed by sign and eigenvectors are multiplied by the re-centered expression, then we should expect our principal components to also differ by sign. The principal components from <code>prcomp()</code> are:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the PC scores found by prcomp()</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>prcomp_PCA<span class="sc">$</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              PC1        PC2
+Cell_1 -34.012581   2.950736
+Cell_2  -8.557355 -10.165342
+Cell_3  49.837081   1.152337
+Cell_4  -7.267145   6.062269</code></pre>
+</div>
+</div>
+<p>While our principal components were:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the PC scores we found</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>pc_scores</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             PC_1       PC_2
+Cell_1  34.012581   2.950736
+Cell_2   8.557355 -10.165342
+Cell_3 -49.837081   1.152337
+Cell_4   7.267145   6.062269</code></pre>
+</div>
+</div>
+<p>Once again, the values are the same, but the only difference is the sign, which comes from the arbitrary direction of the eigenvector.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -496,7 +1022,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Exercise 3</p>
+<p>Create a plot of the Principal Components Analysis derived from <code>prcomp()</code>. Is it the same as the plot we derived except only rotated 180°?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a tibble to hold the PC scores prcomp() found and also make the Cell IDs into a column</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>prcomp_pc_scores_tibble <span class="ot">&lt;-</span> prcomp_PCA<span class="sc">$</span>x <span class="sc">%&gt;%</span> </span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"cells"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the PC scores found by prcomp()</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prcomp_pc_scores_tibble, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">label =</span> cells)) <span class="sc">+</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="at">color =</span> <span class="st">"cornflowerblue"</span>) <span class="sc">+</span></span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">50</span>, <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">12</span>, <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">"PC 1 (Variance Explained "</span>, <span class="fu">round</span>(prcomp_eigenvalues[<span class="st">"PC_1"</span>], <span class="at">digits =</span> <span class="dv">2</span>),<span class="st">"%)"</span>)) <span class="sc">+</span></span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">"PC 2 (Variance Explained "</span>, <span class="fu">round</span>(prcomp_eigenvalues[<span class="st">"PC_2"</span>], <span class="at">digits =</span> <span class="dv">2</span>),<span class="st">"%)"</span>)) <span class="sc">+</span></span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PCA of Expression Values from Four Cells"</span>) <span class="sc">+</span></span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04_theory_of_PCA_files/figure-html/plotting_PCA_prcomp-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 
@@ -975,64 +1527,494 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Theory of PCA"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">authors:</span><span class="co"> "Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "Tuesday, July 22, 2025"</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>Approximate time: XY minutes</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu"># Learning Objectives</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>LO 1</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>LO 2</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>LO 3</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu"># Topic 1</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 1</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 2</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 3</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 1**](04_theory_of_PCA_Answer-key.qmd#exercise-1)</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>Exercise 1</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu"># Topic 2</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 1</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 2</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 3</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 2**](04_theory_of_PCA_Answer-key.qmd#exercise-2)</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>Exercise 1</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="fu"># Topic 3</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 1</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 2</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 3</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 3**](04_theory_of_PCA_Answer-key.qmd#exercise-3)</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>Exercise 3</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb56" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Theory of PCA"</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> </span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co">  - Will Gammerdinger</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - Noor Sohail</span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - Zhu Zhuo</span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - James Billingsley</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - Shannan Ho Sui</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "Tuesday, July 22, 2025"</span></span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>Approximate time: 45 minutes</span>
+<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a><span class="fu"># Learning Objectives</span></span>
+<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Derive the covariance matrix used for Principal Components Analysis</span>
+<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Explain the roles of eigenvectors and eigenvalues within a Principal Components Analysis</span>
+<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Compare and contrast our Principal Components Analysis to the output of <span class="in">`prcomp()`</span></span>
+<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-23"><a href="#cb56-23" aria-hidden="true" tabindex="-1"></a><span class="fu"># Background</span></span>
+<span id="cb56-24"><a href="#cb56-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-25"><a href="#cb56-25" aria-hidden="true" tabindex="-1"></a>Principal Components Analysis is a dimensionality-reduction method employed to stratify data by their variance. Thus, points that are more closely together on a PCA are more similar to each other, while points that are more dissimilar to each other will be further apart. As a result, you would likely expect similar cell from the same cell type to cluster near each other and apart from distinctly different cell types. In order to demonstrate how Principal Components Analysis works we are going to describe the process roughly works in high-dimensional data, then work through it a two-dimensional example data set.</span>
+<span id="cb56-26"><a href="#cb56-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-27"><a href="#cb56-27" aria-hidden="true" tabindex="-1"></a>Consider a single-cell experiment where you have the expression value for every gene in each cell. Let's hypothetically say that our sample has data from 25,000 genes. We could plot this 25,000-dimensional space where each dimension represents a given gene's expression and each point represents a cell in that 25,000-dimensional space. However, that is rather unintuitive and many of those dimensions are uninteresting, so we would like to reduce the dimensionality to the axes that separate the variance the most. This is what we will be doing with a Principal Components Analysis.</span>
+<span id="cb56-28"><a href="#cb56-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-29"><a href="#cb56-29" aria-hidden="true" tabindex="-1"></a>From a high-level perspective, what we will be doing is:</span>
+<span id="cb56-30"><a href="#cb56-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-31"><a href="#cb56-31" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Finding the vector in that 25,000-dimensional space that has the most variance in it.</span>
+<span id="cb56-32"><a href="#cb56-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Looking for another vector that is orthogonal (a 90<span class="dv">&amp;deg;</span> angle but in multi-dimensional space) to the first vector that explains the most of the remaining variance. We this process until, in theory, you have have as many vectors as dimensions in your original dataset. However, in practice, people oftentimes stop after a few dozen. </span>
+<span id="cb56-33"><a href="#cb56-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Using these vectors to transform your original data into Principal Components space.</span>
+<span id="cb56-34"><a href="#cb56-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-35"><a href="#cb56-35" aria-hidden="true" tabindex="-1"></a><span class="fu"># Setting up to calculate Eigenvalues and Eigenvectors</span></span>
+<span id="cb56-36"><a href="#cb56-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-37"><a href="#cb56-37" aria-hidden="true" tabindex="-1"></a>We will be using some functions from <span class="in">`tidyverse`</span> in the lesson, so we will need to load it:</span>
+<span id="cb56-38"><a href="#cb56-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-39"><a href="#cb56-39" aria-hidden="true" tabindex="-1"></a><span class="in">```{r load_tidyverse}</span></span>
+<span id="cb56-40"><a href="#cb56-40" aria-hidden="true" tabindex="-1"></a><span class="in">library(tidyverse)</span></span>
+<span id="cb56-41"><a href="#cb56-41" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-42"><a href="#cb56-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-43"><a href="#cb56-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## Creating an example data set</span></span>
+<span id="cb56-44"><a href="#cb56-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-45"><a href="#cb56-45" aria-hidden="true" tabindex="-1"></a>We are going to discuss the steps for deriving a Principal Components analysis, but in order to do it, we are going to use an example dataset. Let's start by creating an tibble that has gene expression values for two genes from four cells.</span>
+<span id="cb56-46"><a href="#cb56-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-47"><a href="#cb56-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{r create_tibble}</span></span>
+<span id="cb56-48"><a href="#cb56-48" aria-hidden="true" tabindex="-1"></a><span class="in"># Create a vector for Cell IDs</span></span>
+<span id="cb56-49"><a href="#cb56-49" aria-hidden="true" tabindex="-1"></a><span class="in">cells &lt;- c("Cell_1", "Cell_2", "Cell_3", "Cell_4")</span></span>
+<span id="cb56-50"><a href="#cb56-50" aria-hidden="true" tabindex="-1"></a><span class="in"># Create a vector to hold expression values for Gene A across all of the cells</span></span>
+<span id="cb56-51"><a href="#cb56-51" aria-hidden="true" tabindex="-1"></a><span class="in">Gene_A &lt;- c(0, 12, 65, 23)</span></span>
+<span id="cb56-52"><a href="#cb56-52" aria-hidden="true" tabindex="-1"></a><span class="in"># Create a vector to hold expression values for Gene B across all of the cells</span></span>
+<span id="cb56-53"><a href="#cb56-53" aria-hidden="true" tabindex="-1"></a><span class="in">Gene_B &lt;- c(4, 30, 57, 18)</span></span>
+<span id="cb56-54"><a href="#cb56-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-55"><a href="#cb56-55" aria-hidden="true" tabindex="-1"></a><span class="in"># Create a tibble to hold the cell names and expression values</span></span>
+<span id="cb56-56"><a href="#cb56-56" aria-hidden="true" tabindex="-1"></a><span class="in">expression_tibble &lt;- tibble(cells, Gene_A, Gene_B)</span></span>
+<span id="cb56-57"><a href="#cb56-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-58"><a href="#cb56-58" aria-hidden="true" tabindex="-1"></a><span class="in"># View the expression tibble</span></span>
+<span id="cb56-59"><a href="#cb56-59" aria-hidden="true" tabindex="-1"></a><span class="in">expression_tibble</span></span>
+<span id="cb56-60"><a href="#cb56-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-61"><a href="#cb56-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-62"><a href="#cb56-62" aria-hidden="true" tabindex="-1"></a>Let's get an idea of what our data looks like by plotting it:</span>
+<span id="cb56-63"><a href="#cb56-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-64"><a href="#cb56-64" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plot_raw_data}</span></span>
+<span id="cb56-65"><a href="#cb56-65" aria-hidden="true" tabindex="-1"></a><span class="in"># Create a plot to view the raw expression data</span></span>
+<span id="cb56-66"><a href="#cb56-66" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(expression_tibble, aes(x = Gene_A, y = Gene_B, label = cells)) +</span></span>
+<span id="cb56-67"><a href="#cb56-67" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(color = "cornflowerblue") +</span></span>
+<span id="cb56-68"><a href="#cb56-68" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_text(hjust = 0, vjust = -1) +</span></span>
+<span id="cb56-69"><a href="#cb56-69" aria-hidden="true" tabindex="-1"></a><span class="in">  xlim(0, 80) +</span></span>
+<span id="cb56-70"><a href="#cb56-70" aria-hidden="true" tabindex="-1"></a><span class="in">  ylim(0, 80) +</span></span>
+<span id="cb56-71"><a href="#cb56-71" aria-hidden="true" tabindex="-1"></a><span class="in">  theme_bw() +</span></span>
+<span id="cb56-72"><a href="#cb56-72" aria-hidden="true" tabindex="-1"></a><span class="in">  xlab("Gene A") +</span></span>
+<span id="cb56-73"><a href="#cb56-73" aria-hidden="true" tabindex="-1"></a><span class="in">  ylab("Gene B") +</span></span>
+<span id="cb56-74"><a href="#cb56-74" aria-hidden="true" tabindex="-1"></a><span class="in">  ggtitle("Example Expression Values from Four Cells") +</span></span>
+<span id="cb56-75"><a href="#cb56-75" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(plot.title = element_text(hjust = 0.5))</span></span>
+<span id="cb56-76"><a href="#cb56-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-77"><a href="#cb56-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-78"><a href="#cb56-78" aria-hidden="true" tabindex="-1"></a>Now if were were to consider our data set that has ***X*** genes and ***Y*** cells, then this plot would have ***X*** dimensions and ***Y*** points.</span>
+<span id="cb56-79"><a href="#cb56-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-80"><a href="#cb56-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Re-centering the dataset</span></span>
+<span id="cb56-81"><a href="#cb56-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-82"><a href="#cb56-82" aria-hidden="true" tabindex="-1"></a>When performing PCA, the first step is to re-center the data so that the center of the data is the origin. In order to do this, we need to do two steps:</span>
+<span id="cb56-83"><a href="#cb56-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-84"><a href="#cb56-84" aria-hidden="true" tabindex="-1"></a>**1. Find the center of the data**</span>
+<span id="cb56-85"><a href="#cb56-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-86"><a href="#cb56-86" aria-hidden="true" tabindex="-1"></a>We can find the center of the data by taking the average gene expression across each gene (dimension).</span>
+<span id="cb56-87"><a href="#cb56-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-88"><a href="#cb56-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{r center_of_data}</span></span>
+<span id="cb56-89"><a href="#cb56-89" aria-hidden="true" tabindex="-1"></a><span class="in"># Determine the center of the data by:</span></span>
+<span id="cb56-90"><a href="#cb56-90" aria-hidden="true" tabindex="-1"></a><span class="in"># Finding the average expression of gene A</span></span>
+<span id="cb56-91"><a href="#cb56-91" aria-hidden="true" tabindex="-1"></a><span class="in">Gene_A_mean &lt;- mean(expression_tibble$Gene_A)</span></span>
+<span id="cb56-92"><a href="#cb56-92" aria-hidden="true" tabindex="-1"></a><span class="in"># Finding the average expression of gene B</span></span>
+<span id="cb56-93"><a href="#cb56-93" aria-hidden="true" tabindex="-1"></a><span class="in">Gene_B_mean &lt;- mean(expression_tibble$Gene_B)</span></span>
+<span id="cb56-94"><a href="#cb56-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-95"><a href="#cb56-95" aria-hidden="true" tabindex="-1"></a><span class="in"># Create a vector to hold the center of the data</span></span>
+<span id="cb56-96"><a href="#cb56-96" aria-hidden="true" tabindex="-1"></a><span class="in">center_of_data &lt;- c(Gene_A_mean, Gene_B_mean)</span></span>
+<span id="cb56-97"><a href="#cb56-97" aria-hidden="true" tabindex="-1"></a><span class="in"># Assign names to the components of the vector</span></span>
+<span id="cb56-98"><a href="#cb56-98" aria-hidden="true" tabindex="-1"></a><span class="in">names(center_of_data) &lt;- c("Gene_A", "Gene_B")</span></span>
+<span id="cb56-99"><a href="#cb56-99" aria-hidden="true" tabindex="-1"></a><span class="in"># Print out the center_of_data vector</span></span>
+<span id="cb56-100"><a href="#cb56-100" aria-hidden="true" tabindex="-1"></a><span class="in">center_of_data</span></span>
+<span id="cb56-101"><a href="#cb56-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-102"><a href="#cb56-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-103"><a href="#cb56-103" aria-hidden="true" tabindex="-1"></a>The new center of the data will be where ***( `r center_of_data` )*** is currently. We can visualize this center and inspect that this is does in fact appear to be roughly in the middle of the data.</span>
+<span id="cb56-104"><a href="#cb56-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-105"><a href="#cb56-105" aria-hidden="true" tabindex="-1"></a><span class="in">``` {r new_center_plot}</span></span>
+<span id="cb56-106"><a href="#cb56-106" aria-hidden="true" tabindex="-1"></a><span class="in"># View where the center of the data is located</span></span>
+<span id="cb56-107"><a href="#cb56-107" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(expression_tibble, aes(x = Gene_A, y = Gene_B, label = cells)) +</span></span>
+<span id="cb56-108"><a href="#cb56-108" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(color = "cornflowerblue") +</span></span>
+<span id="cb56-109"><a href="#cb56-109" aria-hidden="true" tabindex="-1"></a><span class="in">    annotate("point", x = Gene_A_mean, y = Gene_B_mean, color = "red", size = 3) +</span></span>
+<span id="cb56-110"><a href="#cb56-110" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_text(hjust = 0, vjust = -1) +</span></span>
+<span id="cb56-111"><a href="#cb56-111" aria-hidden="true" tabindex="-1"></a><span class="in">  annotate("text", x = Gene_A_mean, y = Gene_B_mean, color = "red", label="New Center", hjust = 0, vjust = -1) +</span></span>
+<span id="cb56-112"><a href="#cb56-112" aria-hidden="true" tabindex="-1"></a><span class="in">  xlim(0, 80) +</span></span>
+<span id="cb56-113"><a href="#cb56-113" aria-hidden="true" tabindex="-1"></a><span class="in">  ylim(0, 80) +</span></span>
+<span id="cb56-114"><a href="#cb56-114" aria-hidden="true" tabindex="-1"></a><span class="in">  theme_bw() +</span></span>
+<span id="cb56-115"><a href="#cb56-115" aria-hidden="true" tabindex="-1"></a><span class="in">  xlab("Gene A") +</span></span>
+<span id="cb56-116"><a href="#cb56-116" aria-hidden="true" tabindex="-1"></a><span class="in">  ylab("Gene B") +</span></span>
+<span id="cb56-117"><a href="#cb56-117" aria-hidden="true" tabindex="-1"></a><span class="in">  ggtitle("Example Expression Values from Four Cells") +</span></span>
+<span id="cb56-118"><a href="#cb56-118" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(plot.title = element_text(hjust = 0.5))</span></span>
+<span id="cb56-119"><a href="#cb56-119" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-120"><a href="#cb56-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-121"><a href="#cb56-121" aria-hidden="true" tabindex="-1"></a>**2. Translate the points from their raw expression coordinates to coordinates centered around the center of the data**</span>
+<span id="cb56-122"><a href="#cb56-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-123"><a href="#cb56-123" aria-hidden="true" tabindex="-1"></a>Next, we need to shift the points so that the center of the data corresponds to the origin. We can do this by subtracting the mean value from each gene from the raw values.</span>
+<span id="cb56-124"><a href="#cb56-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-125"><a href="#cb56-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{r recentered_data}</span></span>
+<span id="cb56-126"><a href="#cb56-126" aria-hidden="true" tabindex="-1"></a><span class="in"># Shift the data points so that they data is centered on the origin</span></span>
+<span id="cb56-127"><a href="#cb56-127" aria-hidden="true" tabindex="-1"></a><span class="in">recentered_expression_tibble &lt;- expression_tibble %&gt;%</span></span>
+<span id="cb56-128"><a href="#cb56-128" aria-hidden="true" tabindex="-1"></a><span class="in">  mutate(</span></span>
+<span id="cb56-129"><a href="#cb56-129" aria-hidden="true" tabindex="-1"></a><span class="in">    Gene_A = Gene_A - Gene_A_mean,</span></span>
+<span id="cb56-130"><a href="#cb56-130" aria-hidden="true" tabindex="-1"></a><span class="in">    Gene_B = Gene_B - Gene_B_mean</span></span>
+<span id="cb56-131"><a href="#cb56-131" aria-hidden="true" tabindex="-1"></a><span class="in">  )</span></span>
+<span id="cb56-132"><a href="#cb56-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-133"><a href="#cb56-133" aria-hidden="true" tabindex="-1"></a><span class="in"># Print out the re-centered data</span></span>
+<span id="cb56-134"><a href="#cb56-134" aria-hidden="true" tabindex="-1"></a><span class="in">recentered_expression_tibble</span></span>
+<span id="cb56-135"><a href="#cb56-135" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-136"><a href="#cb56-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-137"><a href="#cb56-137" aria-hidden="true" tabindex="-1"></a>As with any data analysis, it is always a good idea to visualize your data to ensure that it appears to behaving how you intended. So let's visualize our re-centered data to ensure that the data appears centered around the origin. </span>
+<span id="cb56-138"><a href="#cb56-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-139"><a href="#cb56-139" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plot_recentered_data}</span></span>
+<span id="cb56-140"><a href="#cb56-140" aria-hidden="true" tabindex="-1"></a><span class="in"># Plot the raw data after it has been shifted to have the center of the data align with the origin</span></span>
+<span id="cb56-141"><a href="#cb56-141" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(recentered_expression_tibble, aes(x = Gene_A, y = Gene_B, label = cells)) +</span></span>
+<span id="cb56-142"><a href="#cb56-142" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(color = "cornflowerblue") +</span></span>
+<span id="cb56-143"><a href="#cb56-143" aria-hidden="true" tabindex="-1"></a><span class="in">  annotate("point", x = 0, y = 0, color = "red", size = 3) +</span></span>
+<span id="cb56-144"><a href="#cb56-144" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_text(hjust = 0, vjust = -1) +</span></span>
+<span id="cb56-145"><a href="#cb56-145" aria-hidden="true" tabindex="-1"></a><span class="in">  annotate("text", x = 0, y = 0, color = "red", label="New Center", hjust = 0, vjust = -1) +</span></span>
+<span id="cb56-146"><a href="#cb56-146" aria-hidden="true" tabindex="-1"></a><span class="in">  xlim(-50, 50) +</span></span>
+<span id="cb56-147"><a href="#cb56-147" aria-hidden="true" tabindex="-1"></a><span class="in">  ylim(-50, 50) +</span></span>
+<span id="cb56-148"><a href="#cb56-148" aria-hidden="true" tabindex="-1"></a><span class="in">  theme_bw() +</span></span>
+<span id="cb56-149"><a href="#cb56-149" aria-hidden="true" tabindex="-1"></a><span class="in">  xlab("Gene A") +</span></span>
+<span id="cb56-150"><a href="#cb56-150" aria-hidden="true" tabindex="-1"></a><span class="in">  ylab("Gene B") +</span></span>
+<span id="cb56-151"><a href="#cb56-151" aria-hidden="true" tabindex="-1"></a><span class="in">  ggtitle("Example Re-centered Expression Values from Four Cells") +</span></span>
+<span id="cb56-152"><a href="#cb56-152" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(plot.title = element_text(hjust = 0.5))</span></span>
+<span id="cb56-153"><a href="#cb56-153" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-154"><a href="#cb56-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-155"><a href="#cb56-155" aria-hidden="true" tabindex="-1"></a><span class="fu">## Create a covariance matrix</span></span>
+<span id="cb56-156"><a href="#cb56-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-157"><a href="#cb56-157" aria-hidden="true" tabindex="-1"></a>The next step that we will after we have re-centered our data around the origin is to calculate the covariance matrix. As a reminder, the covariance is the joint variability of two random variables. In this case our random variables are the genes. The illustration below we provide examples for positive and negative covariance values along with a covariance that is near zero.</span>
+<span id="cb56-158"><a href="#cb56-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-159"><a href="#cb56-159" aria-hidden="true" tabindex="-1"></a>&lt;img src="../img/Covariance.png" width="800"&gt;</span>
+<span id="cb56-160"><a href="#cb56-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-161"><a href="#cb56-161" aria-hidden="true" tabindex="-1"></a>The equation to estimate the sample covariance is:</span>
+<span id="cb56-162"><a href="#cb56-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-163"><a href="#cb56-163" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://latex.codecogs.com/svg.image?<span class="dv">&amp;space;</span>cov(X,Y)=\frac{1}{n - 1}\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})" width="300"&gt;</span>
+<span id="cb56-164"><a href="#cb56-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-165"><a href="#cb56-165" aria-hidden="true" tabindex="-1"></a>Where:</span>
+<span id="cb56-166"><a href="#cb56-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-167"><a href="#cb56-167" aria-hidden="true" tabindex="-1"></a><span class="ss"> - </span>*X* is Gene A</span>
+<span id="cb56-168"><a href="#cb56-168" aria-hidden="true" tabindex="-1"></a><span class="ss"> - </span>*Y* is Gene B</span>
+<span id="cb56-169"><a href="#cb56-169" aria-hidden="true" tabindex="-1"></a><span class="ss"> - </span>*n* is the number of cells</span>
+<span id="cb56-170"><a href="#cb56-170" aria-hidden="true" tabindex="-1"></a><span class="ss"> - </span>*x~i~* is an expression value for Gene A</span>
+<span id="cb56-171"><a href="#cb56-171" aria-hidden="true" tabindex="-1"></a><span class="ss"> - </span>*$\bar{x}$* is the mean expression value for Gene A</span>
+<span id="cb56-172"><a href="#cb56-172" aria-hidden="true" tabindex="-1"></a><span class="ss"> - </span>*y~i~* is an expression value for Gene B</span>
+<span id="cb56-173"><a href="#cb56-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>*$\bar{y}$* is the mean expression value for Gene B</span>
+<span id="cb56-174"><a href="#cb56-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-175"><a href="#cb56-175" aria-hidden="true" tabindex="-1"></a>Now we will calculate the covariance for all pairwise comparisons for our re-centered expression data.</span>
+<span id="cb56-176"><a href="#cb56-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-177"><a href="#cb56-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r create_covariance_matrix}</span></span>
+<span id="cb56-178"><a href="#cb56-178" aria-hidden="true" tabindex="-1"></a><span class="in"># Move the cell IDs to the rownames and convert the tibble to a matrix</span></span>
+<span id="cb56-179"><a href="#cb56-179" aria-hidden="true" tabindex="-1"></a><span class="in">recentered_expression_matrix &lt;- recentered_expression_tibble %&gt;% </span></span>
+<span id="cb56-180"><a href="#cb56-180" aria-hidden="true" tabindex="-1"></a><span class="in">  column_to_rownames("cells") %&gt;% </span></span>
+<span id="cb56-181"><a href="#cb56-181" aria-hidden="true" tabindex="-1"></a><span class="in">  as.matrix()</span></span>
+<span id="cb56-182"><a href="#cb56-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-183"><a href="#cb56-183" aria-hidden="true" tabindex="-1"></a><span class="in"># Create a covariance matrix</span></span>
+<span id="cb56-184"><a href="#cb56-184" aria-hidden="true" tabindex="-1"></a><span class="in">cov_matrix &lt;- cov(recentered_expression_matrix)</span></span>
+<span id="cb56-185"><a href="#cb56-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-186"><a href="#cb56-186" aria-hidden="true" tabindex="-1"></a><span class="in"># Print out the covariance matrix</span></span>
+<span id="cb56-187"><a href="#cb56-187" aria-hidden="true" tabindex="-1"></a><span class="in">cov_matrix</span></span>
+<span id="cb56-188"><a href="#cb56-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-189"><a href="#cb56-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-190"><a href="#cb56-190" aria-hidden="true" tabindex="-1"></a>Let's go ahead and manually check a covariance by hand to ensure that we trust the outputted covariance matrix. Let's estimate the covariance of Gene A and Gene B.</span>
+<span id="cb56-191"><a href="#cb56-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-192"><a href="#cb56-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{r handcheck_covariance_matrix}</span></span>
+<span id="cb56-193"><a href="#cb56-193" aria-hidden="true" tabindex="-1"></a><span class="in"># Estimate the covariance of Gene A and Gene B by hand</span></span>
+<span id="cb56-194"><a href="#cb56-194" aria-hidden="true" tabindex="-1"></a><span class="in">(1/(4-1))*((0-25)*(4-27.25) + (12-25)*(30-27.25) + (65-25)*(57-27.25) + (23-25)*(18-27.25))</span></span>
+<span id="cb56-195"><a href="#cb56-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-196"><a href="#cb56-196" aria-hidden="true" tabindex="-1"></a><span class="in"># Or you can use the covariance function</span></span>
+<span id="cb56-197"><a href="#cb56-197" aria-hidden="true" tabindex="-1"></a><span class="in">cov(recentered_expression_matrix[, "Gene_A"], recentered_expression_matrix[, "Gene_B"])</span></span>
+<span id="cb56-198"><a href="#cb56-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-199"><a href="#cb56-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-200"><a href="#cb56-200" aria-hidden="true" tabindex="-1"></a>This value should match the covariance found in our covariance matrix for the covariance between Gene A and Gene B.</span>
+<span id="cb56-201"><a href="#cb56-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-202"><a href="#cb56-202" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb56-203"><a href="#cb56-203" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 1**](04_theory_of_PCA_Answer-key.qmd#exercise-1)</span></span>
+<span id="cb56-204"><a href="#cb56-204" aria-hidden="true" tabindex="-1"></a>Exercise 1</span>
+<span id="cb56-205"><a href="#cb56-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-206"><a href="#cb56-206" aria-hidden="true" tabindex="-1"></a>There are a couple properties of variance and co-variance that we can verify:</span>
+<span id="cb56-207"><a href="#cb56-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-208"><a href="#cb56-208" aria-hidden="true" tabindex="-1"></a>*cov(X,X)* is equal to *var(X)*. We can observe this is mathematically below:</span>
+<span id="cb56-209"><a href="#cb56-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-210"><a href="#cb56-210" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://latex.codecogs.com/svg.image?<span class="dv">&amp;space;</span>cov(X,X)=\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})(x_{i}-\bar{x})=\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}=var(X)" width="500"&gt;</span>
+<span id="cb56-211"><a href="#cb56-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-212"><a href="#cb56-212" aria-hidden="true" tabindex="-1"></a>As a result, you will sometimes see covariance matrices written as:</span>
+<span id="cb56-213"><a href="#cb56-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-214"><a href="#cb56-214" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}var(X)&amp;cov(X,Y)&amp;...&amp;cov(X,Z)\\cov(Y,X)&amp;var(Y)&amp;...&amp;cov(Y,Z)\\...&amp;...&amp;...&amp;...\\cov(Z,X)&amp;cov(Z,Y)&amp;...&amp;var(Z)\\\end{bmatrix}" width="300"&gt;</span>
+<span id="cb56-215"><a href="#cb56-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-216"><a href="#cb56-216" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Confirm this property by estimating the variance for Gene A.</span>
+<span id="cb56-217"><a href="#cb56-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-218"><a href="#cb56-218" aria-hidden="true" tabindex="-1"></a><span class="in">```{r covariance_check_1}</span></span>
+<span id="cb56-219"><a href="#cb56-219" aria-hidden="true" tabindex="-1"></a><span class="in"># Estimate the variance for Gene A</span></span>
+<span id="cb56-220"><a href="#cb56-220" aria-hidden="true" tabindex="-1"></a><span class="in">var(recentered_expression_matrix[, "Gene_A"])</span></span>
+<span id="cb56-221"><a href="#cb56-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-222"><a href="#cb56-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-223"><a href="#cb56-223" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Now estimate the covariance for Gene A and Gene A</span>
+<span id="cb56-224"><a href="#cb56-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-225"><a href="#cb56-225" aria-hidden="true" tabindex="-1"></a><span class="in">```{r covariance_check_2}</span></span>
+<span id="cb56-226"><a href="#cb56-226" aria-hidden="true" tabindex="-1"></a><span class="in"># Estimate the covariance for Gene A and Gene A</span></span>
+<span id="cb56-227"><a href="#cb56-227" aria-hidden="true" tabindex="-1"></a><span class="in">cov(recentered_expression_matrix[, "Gene_A"], recentered_expression_matrix[, "Gene_A"])</span></span>
+<span id="cb56-228"><a href="#cb56-228" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-229"><a href="#cb56-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-230"><a href="#cb56-230" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Is the value the same? Does it match the value in the covariance matrix for Gene A and Gene A?</span>
+<span id="cb56-231"><a href="#cb56-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-232"><a href="#cb56-232" aria-hidden="true" tabindex="-1"></a><span class="in">```{r covariance_matrix_check}</span></span>
+<span id="cb56-233"><a href="#cb56-233" aria-hidden="true" tabindex="-1"></a><span class="in"># Extract the covariance estimate of Gene A and Gene A from the covariance matrix</span></span>
+<span id="cb56-234"><a href="#cb56-234" aria-hidden="true" tabindex="-1"></a><span class="in">cov_matrix["Gene_A", "Gene_A"]</span></span>
+<span id="cb56-235"><a href="#cb56-235" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-236"><a href="#cb56-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-237"><a href="#cb56-237" aria-hidden="true" tabindex="-1"></a>*cov(X,Y)* is equal to *cov(Y,X)*. We can observe this is mathematically below:</span>
+<span id="cb56-238"><a href="#cb56-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-239"><a href="#cb56-239" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://latex.codecogs.com/svg.image?<span class="dv">&amp;space;</span>cov(X,Y)=\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})=\frac{1}{n-1}\sum_{i=1}^{n}(y_{i}-\bar{y})(x_{i}-\bar{x})=cov(Y,X)" width="500"&gt;</span>
+<span id="cb56-240"><a href="#cb56-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-241"><a href="#cb56-241" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Estimate the covariance of Gene B and Gene A.</span>
+<span id="cb56-242"><a href="#cb56-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-243"><a href="#cb56-243" aria-hidden="true" tabindex="-1"></a><span class="in">```{r covariance_check_3}</span></span>
+<span id="cb56-244"><a href="#cb56-244" aria-hidden="true" tabindex="-1"></a><span class="in"># Estimate the covariance of Gene B and Gene A</span></span>
+<span id="cb56-245"><a href="#cb56-245" aria-hidden="true" tabindex="-1"></a><span class="in">cov(recentered_expression_tibble[, "Gene_B"], recentered_expression_tibble[, "Gene_A"])</span></span>
+<span id="cb56-246"><a href="#cb56-246" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-247"><a href="#cb56-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-248"><a href="#cb56-248" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>How does this compare to the covariance that we estimated by hand?</span>
+<span id="cb56-249"><a href="#cb56-249" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb56-250"><a href="#cb56-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-251"><a href="#cb56-251" aria-hidden="true" tabindex="-1"></a><span class="fu"># Calculating the Principal Components</span></span>
+<span id="cb56-252"><a href="#cb56-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-253"><a href="#cb56-253" aria-hidden="true" tabindex="-1"></a><span class="fu">## Calculate Eigenvalues and Eigenvectors from the Covariance Matrix</span></span>
+<span id="cb56-254"><a href="#cb56-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-255"><a href="#cb56-255" aria-hidden="true" tabindex="-1"></a>First, we will need to calculate our eigenvalues, which are a measure of variance for a principal component. We can then use eigenvalues to calculate our eigenvectors, but R will do this all in a single step for us. We can think of the eigenvectors as the weights, or influence, for transforming our re-centered expression values into PCA space. </span>
+<span id="cb56-256"><a href="#cb56-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-257"><a href="#cb56-257" aria-hidden="true" tabindex="-1"></a>Now that we have a covariance matrix for the re-centered expression values, we need to estimate the eigenvalues and eigenvectors for the covariance matrix. </span>
+<span id="cb56-258"><a href="#cb56-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-259"><a href="#cb56-259" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eigen_calculation}</span></span>
+<span id="cb56-260"><a href="#cb56-260" aria-hidden="true" tabindex="-1"></a><span class="in"># Find the eigenvalues and eigenvectors of the covariance matrix</span></span>
+<span id="cb56-261"><a href="#cb56-261" aria-hidden="true" tabindex="-1"></a><span class="in">eig &lt;- eigen(cov_matrix)</span></span>
+<span id="cb56-262"><a href="#cb56-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-263"><a href="#cb56-263" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the output from eigen()</span></span>
+<span id="cb56-264"><a href="#cb56-264" aria-hidden="true" tabindex="-1"></a><span class="in">eig</span></span>
+<span id="cb56-265"><a href="#cb56-265" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-266"><a href="#cb56-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-267"><a href="#cb56-267" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true" title="Click here to see how to calculate eigenvalues and eigenvectors"}</span>
+<span id="cb56-268"><a href="#cb56-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-269"><a href="#cb56-269" aria-hidden="true" tabindex="-1"></a>**Calculating Eigenvalues**</span>
+<span id="cb56-270"><a href="#cb56-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-271"><a href="#cb56-271" aria-hidden="true" tabindex="-1"></a>If we wanted to do this by hand then we need to set the determinant of the covariance matrix minus $\lambda$ times the identify matrix equal to 0 and solving for $\lambda$.</span>
+<span id="cb56-272"><a href="#cb56-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-273"><a href="#cb56-273" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://latex.codecogs.com/svg.image?det(\begin{bmatrix}var(X)&amp;cov(X,Y)\\cov(Y,X)&amp;var(Y)\\\end{bmatrix}-\lambda\begin{bmatrix}1&amp;0\\0&amp;1\\\end{bmatrix})=0" width="500"&gt;</span>
+<span id="cb56-274"><a href="#cb56-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-275"><a href="#cb56-275" aria-hidden="true" tabindex="-1"></a>In this case it can be simplified to:</span>
+<span id="cb56-276"><a href="#cb56-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-277"><a href="#cb56-277" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://latex.codecogs.com/svg.image?(var(X)-\lambda)(var(Y)-\lambda)-(cov(X,Y))(cov(Y,X))=0" width="500"&gt;</span>
+<span id="cb56-278"><a href="#cb56-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-279"><a href="#cb56-279" aria-hidden="true" tabindex="-1"></a>We can now replace the variance and covariance values with the values that we have from the covariance matrix and solve for $\lambda$. This results in two lambda values: **$\lambda$~1~ = `r round(eig$values[1], digits = 3)`** and **$\lambda$~2~ = `r round(eig$values[2], digits = 3)`**.</span>
+<span id="cb56-280"><a href="#cb56-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-281"><a href="#cb56-281" aria-hidden="true" tabindex="-1"></a>We can see that this is equal to the eigenvalues returned from our <span class="in">`eig`</span> object:</span>
+<span id="cb56-282"><a href="#cb56-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-283"><a href="#cb56-283" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eigenvalues}</span></span>
+<span id="cb56-284"><a href="#cb56-284" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the eigenvalues</span></span>
+<span id="cb56-285"><a href="#cb56-285" aria-hidden="true" tabindex="-1"></a><span class="in">eig$values</span></span>
+<span id="cb56-286"><a href="#cb56-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-287"><a href="#cb56-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-288"><a href="#cb56-288" aria-hidden="true" tabindex="-1"></a>**Calculating Eigenvectors**</span>
+<span id="cb56-289"><a href="#cb56-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-290"><a href="#cb56-290" aria-hidden="true" tabindex="-1"></a>In order to find the eigenvectors, we need to substitute the variacne and covariance values from the covariance matrix along with one of our *$\lambda$* values, *$\lambda$~1~* to find the associated eigenvector, *v~1~*. This results in *v~1~* being equal to <span class="in">`r eig$vectors[,1]`</span>.</span>
+<span id="cb56-291"><a href="#cb56-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-292"><a href="#cb56-292" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://latex.codecogs.com/svg.image?(\begin{bmatrix}var(X)&amp;cov(X,Y)\\cov(Y,X)&amp;var(Y)\\\end{bmatrix}-\lambda<span class="dv">&amp;space;</span>_{1}\begin{bmatrix}1&amp;0\\0&amp;1\\\end{bmatrix})v_{1}=0" width="500"&gt;</span>
+<span id="cb56-293"><a href="#cb56-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-294"><a href="#cb56-294" aria-hidden="true" tabindex="-1"></a>We can confirm this by plugging our covariance matrix, eigenvalues and eigenvectors back into the above equation and it should return 0, or near 0 (due to rounding errors).</span>
+<span id="cb56-295"><a href="#cb56-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-296"><a href="#cb56-296" aria-hidden="true" tabindex="-1"></a><span class="in">```{r check_eigen}</span></span>
+<span id="cb56-297"><a href="#cb56-297" aria-hidden="true" tabindex="-1"></a><span class="in"># Check the eigenvalues and eigenvectors</span></span>
+<span id="cb56-298"><a href="#cb56-298" aria-hidden="true" tabindex="-1"></a><span class="in">(cov_matrix - eig$values[1]*diag(2)) %*% eig$vectors[,1]</span></span>
+<span id="cb56-299"><a href="#cb56-299" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-300"><a href="#cb56-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-301"><a href="#cb56-301" aria-hidden="true" tabindex="-1"></a>We then repeat this process for *$\lambda$~2~* in order to to find its associated eigenvector, *v~2~*, which results in <span class="in">`r eig$vectors[,2]`</span>. Thus, our resulting matrix of eigenvectors appears as:</span>
+<span id="cb56-302"><a href="#cb56-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-303"><a href="#cb56-303" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eigenvectors}</span></span>
+<span id="cb56-304"><a href="#cb56-304" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the eigenvectors</span></span>
+<span id="cb56-305"><a href="#cb56-305" aria-hidden="true" tabindex="-1"></a><span class="in">eig$vectors</span></span>
+<span id="cb56-306"><a href="#cb56-306" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-307"><a href="#cb56-307" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb56-308"><a href="#cb56-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-309"><a href="#cb56-309" aria-hidden="true" tabindex="-1"></a><span class="fu">## Principal Component Scores</span></span>
+<span id="cb56-310"><a href="#cb56-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-311"><a href="#cb56-311" aria-hidden="true" tabindex="-1"></a>Now that we have our re-centered expression matrix and eigenvectors, we can perform matrix multiplication to obtain our principal component scores. This is where we are transforming our data from the re-centered expression into Principal Components space by the weight, or influence, of the eigenvector.</span>
+<span id="cb56-312"><a href="#cb56-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-313"><a href="#cb56-313" aria-hidden="true" tabindex="-1"></a>&lt;img src="../img/PC_generation.png" width="800"&gt;</span>
+<span id="cb56-314"><a href="#cb56-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-315"><a href="#cb56-315" aria-hidden="true" tabindex="-1"></a><span class="in">```{r pc_scores}</span></span>
+<span id="cb56-316"><a href="#cb56-316" aria-hidden="true" tabindex="-1"></a><span class="in"># Transform the data into PC space by multiply the re-centered expression matrix by the eigenvectors</span></span>
+<span id="cb56-317"><a href="#cb56-317" aria-hidden="true" tabindex="-1"></a><span class="in">pc_scores &lt;- recentered_expression_matrix %*% eig$vectors</span></span>
+<span id="cb56-318"><a href="#cb56-318" aria-hidden="true" tabindex="-1"></a><span class="in"># Name the columns in pc_scores object</span></span>
+<span id="cb56-319"><a href="#cb56-319" aria-hidden="true" tabindex="-1"></a><span class="in">colnames(pc_scores) &lt;- c("PC_1", "PC_2")</span></span>
+<span id="cb56-320"><a href="#cb56-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-321"><a href="#cb56-321" aria-hidden="true" tabindex="-1"></a><span class="in"># Print out the pc_scores object</span></span>
+<span id="cb56-322"><a href="#cb56-322" aria-hidden="true" tabindex="-1"></a><span class="in">pc_scores</span></span>
+<span id="cb56-323"><a href="#cb56-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-324"><a href="#cb56-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-325"><a href="#cb56-325" aria-hidden="true" tabindex="-1"></a><span class="fu">## Percent Variance Explained</span></span>
+<span id="cb56-326"><a href="#cb56-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-327"><a href="#cb56-327" aria-hidden="true" tabindex="-1"></a>We are likely interested in knowing in knowing the amount of variance explained in our data by each principal component. As we alluded to earlier, we can use the eigenvalues to help us with this. The sum of all of the eigenvalues captures the total variance explained by the principal components analysis.</span>
+<span id="cb56-328"><a href="#cb56-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-329"><a href="#cb56-329" aria-hidden="true" tabindex="-1"></a>Thus, if we want to know the proportion of the variance explained by each principal component, then we would need to divide each eigenvalue by the total variance explained (the sum of the eigenvalues) and if we wanted this as a percentage then we would need to multiply it by 100.</span>
+<span id="cb56-330"><a href="#cb56-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-331"><a href="#cb56-331" aria-hidden="true" tabindex="-1"></a><span class="in">```{r percent_explained}</span></span>
+<span id="cb56-332"><a href="#cb56-332" aria-hidden="true" tabindex="-1"></a><span class="in"># Calculate the percent of variance explained by each PC using the eigenvalues</span></span>
+<span id="cb56-333"><a href="#cb56-333" aria-hidden="true" tabindex="-1"></a><span class="in">pct_var_explained &lt;- (eig$values / sum(eig$values)) * 100</span></span>
+<span id="cb56-334"><a href="#cb56-334" aria-hidden="true" tabindex="-1"></a><span class="in"># Name the elements of the pct_var_explained by their PC</span></span>
+<span id="cb56-335"><a href="#cb56-335" aria-hidden="true" tabindex="-1"></a><span class="in">names(pct_var_explained) &lt;- c("PC_1", "PC_2")</span></span>
+<span id="cb56-336"><a href="#cb56-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-337"><a href="#cb56-337" aria-hidden="true" tabindex="-1"></a><span class="in"># Print out the percent of variance explained by each PC</span></span>
+<span id="cb56-338"><a href="#cb56-338" aria-hidden="true" tabindex="-1"></a><span class="in">pct_var_explained</span></span>
+<span id="cb56-339"><a href="#cb56-339" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-340"><a href="#cb56-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-341"><a href="#cb56-341" aria-hidden="true" tabindex="-1"></a><span class="fu">## Plotting our Principal Components</span></span>
+<span id="cb56-342"><a href="#cb56-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-343"><a href="#cb56-343" aria-hidden="true" tabindex="-1"></a>With out principal components in hand, we will create a visualization of the principal components.</span>
+<span id="cb56-344"><a href="#cb56-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-345"><a href="#cb56-345" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plotting_PCA_hand}</span></span>
+<span id="cb56-346"><a href="#cb56-346" aria-hidden="true" tabindex="-1"></a><span class="in"># Create a tibble to hold the PC scores we found and also make the Cell IDs into a column</span></span>
+<span id="cb56-347"><a href="#cb56-347" aria-hidden="true" tabindex="-1"></a><span class="in">pc_scores_tibble &lt;- pc_scores %&gt;% </span></span>
+<span id="cb56-348"><a href="#cb56-348" aria-hidden="true" tabindex="-1"></a><span class="in">  as.data.frame() %&gt;% </span></span>
+<span id="cb56-349"><a href="#cb56-349" aria-hidden="true" tabindex="-1"></a><span class="in">  rownames_to_column("cells") %&gt;% </span></span>
+<span id="cb56-350"><a href="#cb56-350" aria-hidden="true" tabindex="-1"></a><span class="in">  as_tibble()</span></span>
+<span id="cb56-351"><a href="#cb56-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-352"><a href="#cb56-352" aria-hidden="true" tabindex="-1"></a><span class="in"># Plot the PC scores we found</span></span>
+<span id="cb56-353"><a href="#cb56-353" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(pc_scores_tibble, aes(x = PC_1, y = PC_2, label = cells)) +</span></span>
+<span id="cb56-354"><a href="#cb56-354" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point( color = "cornflowerblue") +</span></span>
+<span id="cb56-355"><a href="#cb56-355" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_text(hjust = 0, vjust = -1) +</span></span>
+<span id="cb56-356"><a href="#cb56-356" aria-hidden="true" tabindex="-1"></a><span class="in">  theme_bw() +</span></span>
+<span id="cb56-357"><a href="#cb56-357" aria-hidden="true" tabindex="-1"></a><span class="in">  xlim(-50, 50) +</span></span>
+<span id="cb56-358"><a href="#cb56-358" aria-hidden="true" tabindex="-1"></a><span class="in">  ylim(-12, 12) +</span></span>
+<span id="cb56-359"><a href="#cb56-359" aria-hidden="true" tabindex="-1"></a><span class="in">  xlab(paste0("PC 1 (Variance Explained ", round(pct_var_explained["PC_1"], digits = 2),"%)")) +</span></span>
+<span id="cb56-360"><a href="#cb56-360" aria-hidden="true" tabindex="-1"></a><span class="in">  ylab(paste0("PC 2 (Variance Explained ", round(pct_var_explained["PC_2"], digits = 2),"%)")) +</span></span>
+<span id="cb56-361"><a href="#cb56-361" aria-hidden="true" tabindex="-1"></a><span class="in">  ggtitle("PCA of Expression Values from Four Cells") +</span></span>
+<span id="cb56-362"><a href="#cb56-362" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(plot.title = element_text(hjust = 0.5))</span></span>
+<span id="cb56-363"><a href="#cb56-363" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-364"><a href="#cb56-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-365"><a href="#cb56-365" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb56-366"><a href="#cb56-366" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 2**](04_theory_of_PCA_Answer-key.qmd#exercise-2)</span></span>
+<span id="cb56-367"><a href="#cb56-367" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-368"><a href="#cb56-368" aria-hidden="true" tabindex="-1"></a>When looking at the percent explained by each principal component, the first principal component should explain the most and each of the following principal components should explain less than the previous principal component. Let's have a look at our <span class="in">`pct_var_explained`</span> object, are our results congruent with the expectation this expectation?</span>
+<span id="cb56-369"><a href="#cb56-369" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb56-370"><a href="#cb56-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-371"><a href="#cb56-371" aria-hidden="true" tabindex="-1"></a><span class="fu"># `prcomp()` comparison</span></span>
+<span id="cb56-372"><a href="#cb56-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-373"><a href="#cb56-373" aria-hidden="true" tabindex="-1"></a>At this point we have completed a principal components analysis, but we can also compare it to how R does a principal components analysis and see how our results compare. One way to do a principal components analysis in R is to us the <span class="in">`prcomp()`</span> function in R.</span>
+<span id="cb56-374"><a href="#cb56-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-375"><a href="#cb56-375" aria-hidden="true" tabindex="-1"></a>In order to run <span class="in">`prcomp()`</span>, we need to start from an expression matrix and move the cell IDs to the rownames:</span>
+<span id="cb56-376"><a href="#cb56-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-377"><a href="#cb56-377" aria-hidden="true" tabindex="-1"></a><span class="in">```{r prcomp_check}</span></span>
+<span id="cb56-378"><a href="#cb56-378" aria-hidden="true" tabindex="-1"></a><span class="in"># Run prcomp() on the expression tibble after moving the Cell IDs to be rownames</span></span>
+<span id="cb56-379"><a href="#cb56-379" aria-hidden="true" tabindex="-1"></a><span class="in">prcomp_PCA &lt;- expression_tibble %&gt;% </span></span>
+<span id="cb56-380"><a href="#cb56-380" aria-hidden="true" tabindex="-1"></a><span class="in">  column_to_rownames("cells") %&gt;% </span></span>
+<span id="cb56-381"><a href="#cb56-381" aria-hidden="true" tabindex="-1"></a><span class="in">  prcomp()</span></span>
+<span id="cb56-382"><a href="#cb56-382" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-383"><a href="#cb56-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-384"><a href="#cb56-384" aria-hidden="true" tabindex="-1"></a>Let's inspect the output from <span class="in">`prcomp()`</span> to ensure that we are getting the same output:</span>
+<span id="cb56-385"><a href="#cb56-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-386"><a href="#cb56-386" aria-hidden="true" tabindex="-1"></a><span class="fu">## Center of the Data</span></span>
+<span id="cb56-387"><a href="#cb56-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-388"><a href="#cb56-388" aria-hidden="true" tabindex="-1"></a>First we can ensure that we have the same center of the data. <span class="in">`prcomp()`</span> says that the center of the data is:</span>
+<span id="cb56-389"><a href="#cb56-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-390"><a href="#cb56-390" aria-hidden="true" tabindex="-1"></a><span class="in">```{r center_prcomp}</span></span>
+<span id="cb56-391"><a href="#cb56-391" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the center of the data found by prcomp()</span></span>
+<span id="cb56-392"><a href="#cb56-392" aria-hidden="true" tabindex="-1"></a><span class="in">prcomp_PCA$center</span></span>
+<span id="cb56-393"><a href="#cb56-393" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-394"><a href="#cb56-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-395"><a href="#cb56-395" aria-hidden="true" tabindex="-1"></a>We can compare this with what we derived as the center of the data:</span>
+<span id="cb56-396"><a href="#cb56-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-397"><a href="#cb56-397" aria-hidden="true" tabindex="-1"></a><span class="in">```{r center_hand}</span></span>
+<span id="cb56-398"><a href="#cb56-398" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the center of the data we found</span></span>
+<span id="cb56-399"><a href="#cb56-399" aria-hidden="true" tabindex="-1"></a><span class="in">center_of_data</span></span>
+<span id="cb56-400"><a href="#cb56-400" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-401"><a href="#cb56-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-402"><a href="#cb56-402" aria-hidden="true" tabindex="-1"></a>They match which is a great sign that we did this correctly!</span>
+<span id="cb56-403"><a href="#cb56-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-404"><a href="#cb56-404" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eigenvalues</span></span>
+<span id="cb56-405"><a href="#cb56-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-406"><a href="#cb56-406" aria-hidden="true" tabindex="-1"></a>Note that eigenvalues are the variance for a particular principal component and that variance is the square of the standard deviation as shown below. </span>
+<span id="cb56-407"><a href="#cb56-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-408"><a href="#cb56-408" aria-hidden="true" tabindex="-1"></a>&lt;img src="https://latex.codecogs.com/svg.image?var(X)=sd(X)^{2}" width="150"&gt;</span>
+<span id="cb56-409"><a href="#cb56-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-410"><a href="#cb56-410" aria-hidden="true" tabindex="-1"></a><span class="in">`prcomp()`</span> reports the standard deviation, so we will need to square the items in the <span class="in">`prcomp_PCA$sdev`</span> slot in order to recover our variance, or eigenvalues.</span>
+<span id="cb56-411"><a href="#cb56-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-412"><a href="#cb56-412" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eigenvalues_prcomp}</span></span>
+<span id="cb56-413"><a href="#cb56-413" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the eigenvalues found by prcomp() by squaring prcomp_PCA$sdev</span></span>
+<span id="cb56-414"><a href="#cb56-414" aria-hidden="true" tabindex="-1"></a><span class="in">prcomp_eigenvalues &lt;- prcomp_PCA$sdev ** 2</span></span>
+<span id="cb56-415"><a href="#cb56-415" aria-hidden="true" tabindex="-1"></a><span class="in"># Name the elements of the prcomp_eigenvalues by their PC</span></span>
+<span id="cb56-416"><a href="#cb56-416" aria-hidden="true" tabindex="-1"></a><span class="in">names(prcomp_eigenvalues) &lt;- c("PC_1", "PC_2")</span></span>
+<span id="cb56-417"><a href="#cb56-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-418"><a href="#cb56-418" aria-hidden="true" tabindex="-1"></a><span class="in"># Print out prcomp_eigenvalues</span></span>
+<span id="cb56-419"><a href="#cb56-419" aria-hidden="true" tabindex="-1"></a><span class="in">prcomp_eigenvalues</span></span>
+<span id="cb56-420"><a href="#cb56-420" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-421"><a href="#cb56-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-422"><a href="#cb56-422" aria-hidden="true" tabindex="-1"></a>We can compare this with our estimation of eiganvalues by hand:</span>
+<span id="cb56-423"><a href="#cb56-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-424"><a href="#cb56-424" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eigenvalue_hand}</span></span>
+<span id="cb56-425"><a href="#cb56-425" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the eigenvalues we found</span></span>
+<span id="cb56-426"><a href="#cb56-426" aria-hidden="true" tabindex="-1"></a><span class="in">eig$values</span></span>
+<span id="cb56-427"><a href="#cb56-427" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-428"><a href="#cb56-428" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-429"><a href="#cb56-429" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eigenvectors</span></span>
+<span id="cb56-430"><a href="#cb56-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-431"><a href="#cb56-431" aria-hidden="true" tabindex="-1"></a>Let's go ahead and compare the eigenvectors from <span class="in">`prcomp()`</span> to the eigenvectors that we calculated. <span class="in">`prcomp()`</span> calculated the eigenvectors as:</span>
+<span id="cb56-432"><a href="#cb56-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-433"><a href="#cb56-433" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eigenvector_prcomp}</span></span>
+<span id="cb56-434"><a href="#cb56-434" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the eigenvectors found by prcomp()</span></span>
+<span id="cb56-435"><a href="#cb56-435" aria-hidden="true" tabindex="-1"></a><span class="in">prcomp_PCA$rotation</span></span>
+<span id="cb56-436"><a href="#cb56-436" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-437"><a href="#cb56-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-438"><a href="#cb56-438" aria-hidden="true" tabindex="-1"></a>While we calculated the eigenvectors as:</span>
+<span id="cb56-439"><a href="#cb56-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-440"><a href="#cb56-440" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eigenvector_hand}</span></span>
+<span id="cb56-441"><a href="#cb56-441" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the eigenvectors we found</span></span>
+<span id="cb56-442"><a href="#cb56-442" aria-hidden="true" tabindex="-1"></a><span class="in">eig$vectors</span></span>
+<span id="cb56-443"><a href="#cb56-443" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-444"><a href="#cb56-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-445"><a href="#cb56-445" aria-hidden="true" tabindex="-1"></a>We can see that the values are the same, but the sign is flipped between the two methods. This is because eigenvectors are only defined "up to sign". This means for a given eigenvalue, the eigenvector *v~1~* and *-v~1~* are the same line, but point in different directions. This does not impact our principal components calculations. However, it could mean that a plot derived *v~1~* will look rotated 180&amp;deg; when compared to a plot derived from *-v~1~*. Regardless, it looks like we have the same eigenvectors in both approaches.</span>
+<span id="cb56-446"><a href="#cb56-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-447"><a href="#cb56-447" aria-hidden="true" tabindex="-1"></a><span class="fu">## PC Scores</span></span>
+<span id="cb56-448"><a href="#cb56-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-449"><a href="#cb56-449" aria-hidden="true" tabindex="-1"></a>Finally, we can check our PC scores to ensure that they are also equivalent. We should note that since the eigenvector from <span class="in">`prcomp()`</span> and the eigenvector we calculated differed by sign and eigenvectors are multiplied by the re-centered expression, then we should expect our principal components to also differ by sign. The principal components from <span class="in">`prcomp()`</span> are:</span>
+<span id="cb56-450"><a href="#cb56-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-451"><a href="#cb56-451" aria-hidden="true" tabindex="-1"></a><span class="in">```{r pc_scores_prcomp}</span></span>
+<span id="cb56-452"><a href="#cb56-452" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the PC scores found by prcomp()</span></span>
+<span id="cb56-453"><a href="#cb56-453" aria-hidden="true" tabindex="-1"></a><span class="in">prcomp_PCA$x</span></span>
+<span id="cb56-454"><a href="#cb56-454" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-455"><a href="#cb56-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-456"><a href="#cb56-456" aria-hidden="true" tabindex="-1"></a>While our principal components were:</span>
+<span id="cb56-457"><a href="#cb56-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-458"><a href="#cb56-458" aria-hidden="true" tabindex="-1"></a><span class="in">```{r pc_scores_hand}</span></span>
+<span id="cb56-459"><a href="#cb56-459" aria-hidden="true" tabindex="-1"></a><span class="in"># Print the PC scores we found</span></span>
+<span id="cb56-460"><a href="#cb56-460" aria-hidden="true" tabindex="-1"></a><span class="in">pc_scores</span></span>
+<span id="cb56-461"><a href="#cb56-461" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-462"><a href="#cb56-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-463"><a href="#cb56-463" aria-hidden="true" tabindex="-1"></a>Once again, the values are the same, but the only difference is the sign, which comes from the arbitrary direction of the eigenvector.</span>
+<span id="cb56-464"><a href="#cb56-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-465"><a href="#cb56-465" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb56-466"><a href="#cb56-466" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 3**](04_theory_of_PCA_Answer-key.qmd#exercise-3)</span></span>
+<span id="cb56-467"><a href="#cb56-467" aria-hidden="true" tabindex="-1"></a>Create a plot of the Principal Components Analysis derived from <span class="in">`prcomp()`</span>. Is it the same as the plot we derived except only rotated 180<span class="dv">&amp;deg;</span>?</span>
+<span id="cb56-468"><a href="#cb56-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-469"><a href="#cb56-469" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plotting_PCA_prcomp}</span></span>
+<span id="cb56-470"><a href="#cb56-470" aria-hidden="true" tabindex="-1"></a><span class="in"># Create a tibble to hold the PC scores prcomp() found and also make the Cell IDs into a column</span></span>
+<span id="cb56-471"><a href="#cb56-471" aria-hidden="true" tabindex="-1"></a><span class="in">prcomp_pc_scores_tibble &lt;- prcomp_PCA$x %&gt;% </span></span>
+<span id="cb56-472"><a href="#cb56-472" aria-hidden="true" tabindex="-1"></a><span class="in">  as.data.frame() %&gt;% </span></span>
+<span id="cb56-473"><a href="#cb56-473" aria-hidden="true" tabindex="-1"></a><span class="in">  rownames_to_column("cells") %&gt;% </span></span>
+<span id="cb56-474"><a href="#cb56-474" aria-hidden="true" tabindex="-1"></a><span class="in">  as_tibble()</span></span>
+<span id="cb56-475"><a href="#cb56-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-476"><a href="#cb56-476" aria-hidden="true" tabindex="-1"></a><span class="in"># Plot the PC scores found by prcomp()</span></span>
+<span id="cb56-477"><a href="#cb56-477" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(prcomp_pc_scores_tibble, aes(x = PC1, y = PC2, label = cells)) +</span></span>
+<span id="cb56-478"><a href="#cb56-478" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point( color = "cornflowerblue") +</span></span>
+<span id="cb56-479"><a href="#cb56-479" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_text(hjust = 0, vjust = -1) +</span></span>
+<span id="cb56-480"><a href="#cb56-480" aria-hidden="true" tabindex="-1"></a><span class="in">  theme_bw() +</span></span>
+<span id="cb56-481"><a href="#cb56-481" aria-hidden="true" tabindex="-1"></a><span class="in">  xlim(-50, 50) +</span></span>
+<span id="cb56-482"><a href="#cb56-482" aria-hidden="true" tabindex="-1"></a><span class="in">  ylim(-12, 12) +</span></span>
+<span id="cb56-483"><a href="#cb56-483" aria-hidden="true" tabindex="-1"></a><span class="in">  xlab(paste0("PC 1 (Variance Explained ", round(prcomp_eigenvalues["PC_1"], digits = 2),"%)")) +</span></span>
+<span id="cb56-484"><a href="#cb56-484" aria-hidden="true" tabindex="-1"></a><span class="in">  ylab(paste0("PC 2 (Variance Explained ", round(prcomp_eigenvalues["PC_2"], digits = 2),"%)")) +</span></span>
+<span id="cb56-485"><a href="#cb56-485" aria-hidden="true" tabindex="-1"></a><span class="in">  ggtitle("PCA of Expression Values from Four Cells") +</span></span>
+<span id="cb56-486"><a href="#cb56-486" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(plot.title = element_text(hjust = 0.5))</span></span>
+<span id="cb56-487"><a href="#cb56-487" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb56-488"><a href="#cb56-488" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

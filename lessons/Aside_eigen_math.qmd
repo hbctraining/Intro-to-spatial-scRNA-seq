@@ -1,0 +1,24 @@
+---
+title: "Theory of PCA - Eigen Derivation"
+authors: "Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui"
+date: "Tuesday, July 22, 2025"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Tossed some eigenvalue and eigenvector formulas in here. Maybe we will flesh it out later if we want to.
+
+<img src="https://latex.codecogs.com/svg.image?det(\begin{bmatrix}var(X)&cov(X,Y)\\cov(Y,X)&var(Y)\\\end{bmatrix}-\lambda&space;I)=0" width="500">
+
+<img src="https://latex.codecogs.com/svg.image?det(\begin{bmatrix}var(X)&cov(X,Y)\\cov(Y,X)&var(Y)\\\end{bmatrix}-\begin{bmatrix}\lambda&0\\0&\lambda\\\end{bmatrix})=0" width="500">
+
+<img src="https://latex.codecogs.com/svg.image?\begin{vmatrix}var(X)-\lambda&cov(X,Y)\\cov(Y,X)&var(Y)-\lambda\\\end{vmatrix}=0" width="500">
+
+<img src="https://latex.codecogs.com/svg.image?\begin{vmatrix}var(X)-\lambda&cov(X,Y)\\cov(Y,X)&var(Y)-\lambda\\\end{vmatrix}=(var(X)-\lambda)(var(Y)-\lambda)-(cov(X,Y))(cov(Y,X))=0" width="500">
+
+<img src="https://latex.codecogs.com/svg.image?(var(X)-\lambda)(var(Y)-\lambda)-(cov(X,Y))(cov(Y,X))=(799.3333-\lambda)(506.25-\lambda)-(584.6667)(584.6667)=0" width="500">
+
+<img src="https://latex.codecogs.com/svg.image?(799.3333-\lambda)(506.25-\lambda)-(584.6667)(584.6667)=\lambda^{2}-1305.583\lambda&plus;62827.3=0" width="500">
+
+This results in **$\lambda$ = {{ eig[['values']][1] }}** and **$\lambda$ = {{ eig[['values']][2] }}**.
