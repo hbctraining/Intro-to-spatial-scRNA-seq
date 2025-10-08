@@ -1,2 +1,5 @@
 /.quarto/
 .DS_Store
+.Rhistory
+lessons/data/
+lessons/data_filtered/

@@ -77,9 +77,9 @@ BiocManager::install("package_4")
 
 **(2)** Install the Y packages listed below from **CRAN** using the `install.packages()` function. 
 
-1. `package_5`
-2. `package_6`
-3. `package_7`
+1. `arrow`
+2. `hdf5r`
+3. `Seurat`
 4. `package_8`
 5. `package_9`
 6. `package_10`
