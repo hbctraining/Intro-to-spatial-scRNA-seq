@@ -126,7 +126,7 @@ library(DT)
 # View the first 60 lines in a data table
 coordinates %>% 
   head(n = 60) %>% 
-  datatable()
+  datatable(options = list(pageLength = 5))
 ```
 
 The `x` and `y` values correspond to the spot in pixel space that Seurat will be using. 
@@ -185,7 +185,7 @@ The first few dozen lines will look like:
 # View the first 60 lines of the parquet file in a data table
 parquet_df %>% 
   head(n = 60) %>% 
-  datatable()
+  datatable(options = list(pageLength = 5))
 ```
 
 In order to get a sense for this table, let's investigate each column:
