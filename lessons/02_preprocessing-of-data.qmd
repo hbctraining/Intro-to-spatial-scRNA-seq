@@ -11,25 +11,50 @@ Approximate time: XY minutes
 
 # Learning Objectives
 
--   LO 1
--   LO 2
--   LO 3
+-   Describe the data set that we will be using for this analysis
+-   Read in the data to a Seurat object
+-   Discuss the slots in the Seurat object that have been filled after reading in the data
 
-# Topic 1
+# The Dataset
 
-## Sub-topic 1
+## Metadata
 
-## Sub-topic 2
+A mouse brain (fresh frozen) was obtained from Charles River Laboratories.
 
-## Sub-topic 3
+Strain: C57BL/6 Sex: Male Age: 8 weeks Sample preparation
+
+A 10 µm section was taken with a cryostat (Epredia CryoStar NX70). Tissue block preparation, sectioning, H&E staining, and imaging followed the Visium HD Fresh Frozen Tissue Preparation Handbook (CG000763).
+
+The data was subset to a smaller cross-section of the brain in order to make it more manageable on local laptops. The instructions for how to subset a 10X Visium HD slides can be found [here](Aside_subsetting_slide.qmd).
+
+## Dowloading the R Project and Data
+
+We have assembled an R Project for you to download that includes the data along with a basic file structure for maintain good data management. It can be quite easy when starting a new analysis to want to dive right in and start analyzing your data. However, good data management practices occur at each step of data's lifecycle. It is a good habit to begin by creating a basic directory structure to hold your data. Let's start by download this R Project and data from [here](). Left-click on the link and select "Save Link As.." or "Download Linked File As..", then select a place on your computer where you would like to place this R Project.
+
+We can open the R Project up and see that the provided file structure should look like:
+
+```{r}
+#| label: file_structure
+#| echo: false
+library(fs)
+
+# Print the first level in the downloaded directory
+#dir_tree("path/to/directory/, recurse = 1")
+```
+
+If your R Project looks like below, then you are ready to start!
+
+**Insert picture of what the R Project will look when it is ready to start**
 
 ::: callout-tip
 # [**Exercise 1**](02_preprocessing-of-data_Answer-key.qmd#exercise-1)
 
-Exercise 1
+Given the information that we know from the metadata, what might be some questions that we are interested in interrogating using our data?
 :::
 
-# Topic 2
+# Reading the Data into a Seurat Object
+
+There are two main tools used for analyzing single-cell RNA-seq data, Python's [scanpy](https://scanpy.readthedocs.io/en/stable/) and R's [Seurat](https://satijalab.org/seurat/). While both tools have nuances that they other doesn't have, they have many functionalities in common since this in an R-based workshop, we will be using Seurat. 
 
 ## Sub-topic 1
 

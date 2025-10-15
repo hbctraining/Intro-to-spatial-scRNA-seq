@@ -1242,7 +1242,7 @@
     "href": "lessons/02_preprocessing-of-data.html#sub-topic-3",
     "title": "Pre-processing of Spatial Data",
     "section": "Sub-topic 3",
-    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 1\n\n\n\nExercise 1",
+    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 2\n\n\n\nExercise 1",
     "crumbs": [
       "Day 1:",
       "Pre-processing of Spatial Data"
@@ -1275,7 +1275,7 @@
     "href": "lessons/02_preprocessing-of-data.html#sub-topic-3-1",
     "title": "Pre-processing of Spatial Data",
     "section": "Sub-topic 3",
-    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 2\n\n\n\nExercise 1",
+    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 3\n\n\n\nExercise 3",
     "crumbs": [
       "Day 1:",
       "Pre-processing of Spatial Data"
@@ -2193,5 +2193,27 @@
     "title": "Subsetting a Slide",
     "section": "Merging the 16μm Bin Size",
     "text": "Merging the 16μm Bin Size\nNow, we will merge the 16μm bin size following the same steps:\n\n# DO NOT RUN\n\n# Merge two sample together\nmerged_16 &lt;- merge(fixed_16, fresh_16)\n\nAgain, we will use the JoinLayers() to combine the counts matrices of the previously fixed_16 and fresh_16 :\n\n# DO NOT RUN\n\n# Combines combines the count matrices from different layers into a single layer\nmerged_16 &lt;- JoinLayers(merged_16)\n\nWe will normalize our 16μm data for visualization with Seuart’s NormalizeData() function:\n\n# DO NOT RUN\n\n# Normalize data for the merged 16μm bin size\nmerged_16 &lt;- NormalizeData(merged_16)\n\nWe can visualize a gene that we are potentially interested in “Cck” using SpatialFeaturePlot() on the 16μm data:\n\n# DO NOT RUN\n\n# Visualize Cck for our merged 16μm bin size\nSpatialFeaturePlot(merged_16, \n                   features = \"Cck\", \n                   pt.size.factor = 3)\n\nAt this point we have successfully subsetted out data for two different bin sizes and from two separate samples while performing appropriate checks along the way to ensure that our subsetting has been done correctly."
+  },
+  {
+    "objectID": "lessons/02_preprocessing-of-data.html#metadata",
+    "href": "lessons/02_preprocessing-of-data.html#metadata",
+    "title": "Pre-processing of Spatial Data",
+    "section": "Metadata",
+    "text": "Metadata\nA mouse brain (fresh frozen) was obtained from Charles River Laboratories.\nStrain: C57BL/6 Sex: Male Age: 8 weeks Sample preparation\nA 10 µm section was taken with a cryostat (Epredia CryoStar NX70). Tissue block preparation, sectioning, H&E staining, and imaging followed the Visium HD Fresh Frozen Tissue Preparation Handbook (CG000763).\nThe data was subset to a smaller cross-section of the brain in order to make it more manageable on local laptops. The instructions for how to subset a 10X Visium HD slides can be found here.",
+    "crumbs": [
+      "Day 1:",
+      "Pre-processing of Spatial Data"
+    ]
+  },
+  {
+    "objectID": "lessons/02_preprocessing-of-data.html#dowloading-the-r-project-and-data",
+    "href": "lessons/02_preprocessing-of-data.html#dowloading-the-r-project-and-data",
+    "title": "Pre-processing of Spatial Data",
+    "section": "Dowloading the R Project and Data",
+    "text": "Dowloading the R Project and Data\nWe have assembled an R Project for you to download that includes the data along with a basic file structure for maintain good data management. It can be quite easy when starting a new analysis to want to dive right in and start analyzing your data. However, good data management practices occur at each step of data’s lifecycle. It is a good habit to begin by creating a basic directory structure to hold your data. Let’s start by download this R Project and data from here. Left-click on the link and select “Save Link As..” or “Download Linked File As..”, then select a place on your computer where you would like to place this R Project.\nWe can open the R Project up and see that the provided file structure should look like:\nIf your R Project looks like below, then you are ready to start!\nInsert picture of what the R Project will look when it is ready to start\n\n\n\n\n\n\nExercise 1\n\n\n\nGiven the information that we know from the metadata, what might be some questions that we are interested in interrogating using our data?",
+    "crumbs": [
+      "Day 1:",
+      "Pre-processing of Spatial Data"
+    ]
   }
 ]
