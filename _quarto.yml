@@ -88,6 +88,7 @@ format:
     code-line-wrap: wrap
     google-analytics: UA-150953419-1
     prompt: true
+    self-contained: true
 
 # Global Execution Defaults
 execute:
