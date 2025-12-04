@@ -1,7 +1,5 @@
 /.quarto/
 .DS_Store
 .Rhistory
-lessons/data/
-lessons/data_filtered/
-data/P5NAT/
-data/P5CRC/
+lessons/data
+data/P5*
