@@ -140,15 +140,18 @@ Using [GeneCards](https://www.genecards.org/), loop up one of the top genes and 
 
 As single-cell technologies have evolved, the datasets have grown ever larger. The concept of a "sketch" has become popularized to offset the difficulties of analysis on these large populations. The aim is to generate a subset of cells in the dataset that is representative of each cell state in the samples.
 
+::: callout-note
+# What are the advantages of using a "sketch" method
+One of the advantages of such a method is that we can run our typical scRNA-seq workflow on the downsampled data and project it back onto the larger dataset. Therefore we can run more computationally intensive algorithms (PCA, clustering, integration) on a smaller number of cells and reduce both the time and resources to make calculations. 
+:::
+
 In order to determine which cells to keep, a [leverage score](https://dl.acm.org/doi/pdf/10.1145/3019134) is calculated. The leverage score reflects the magnitude of its contribution to the gene-covariance matrix, and its importance to the overall dataset. Where **TODO write about what this actually does.**
 
-This sketch-based analyses aims to "subsample" large datasets in a way
-that preserves rare populations. The authors of Seurat found that rare
-population, that have fewer cells, have higher leverage scores.
+This sketch-based analyses aims to "subsample" large datasets in a way that preserves rare populations. The authors of Seurat found that rare population, that have fewer cells, have higher leverage scores.
 
 ![[Hao et. al, 2024](https://www.nature.com/articles/s41587-023-01767-y), _Supplementary Figure 5H_](../img/ncells_vs_leverage_score.png){width="50%"}
 
-This means that our downsampled cells in the sketch will oversample rare populations, retaining the biological complexity of the sample, while drastically compressing the dataset.
+This means that our downsampled cells in the sketch will oversample rare populations, retaining the biological complexity of the sample while drastically compressing the dataset. 
 
 ## Downsampling
 

@@ -15,58 +15,327 @@ Approximate time: XY minutes
 -   LO 2
 -   LO 3
 
-# Single-Cell RNAseq (scRNA-seq) Workflow
+# Single-Cell RNA-seq (scRNA-seq) Workflow
 
-We will be peforming a standard scRNA-seq workflow on our sketch object. For more explicit details on each one of these steps, we have materials on how to conduct a [scRNA-seq analysis](https://hbctraining.github.io/Intro-to-scRNAseq-Quarto/).
+We will be peforming a standard scRNA-seq workflow on our sketch object.
+For more explicit details on each one of these steps, we have materials
+on how to conduct a [scRNA-seq
+analysis](https://hbctraining.github.io/Intro-to-scRNAseq-Quarto/) from
+start to end.
 
-Here we show the overarching
+Here we show the overarching steps that are takin in a classical
+single-cell analysis.
 
-<img src="../img/sc_workflow_2022.jpg" width="630">
+<img src="../img/sc_workflow_2022.jpg" width="630"/>
 
+The broader principles of this workflow remain the same when working
+with spatial transcriptomics data. This lesson will cover the following
+steps:
 
-1. `FindVariableFeatures`: As before, this generates a list of highly variable genes, which may be slightly different for the sketched dataset than for the full dataset
-2. `ScaleData`: Highly variable genes will be confounded with the most highly expressed genes, so we need to adjust for this
-3. `RunPCA`: Perform a principal component analysis using our scaled data and variable genes. This will emphasize variation in gene expression as well as similarity across bins
-4. `FindNeighbors`: Determine the Euclidean distance between bins in PCA space
-5. `FindClusters`: Iteratively group bins together based on neighborhood distances. Higher resolution will yield more groups. 
+1.  `FindVariableFeatures()`: As before, this generates a list of highly
+    variable genes, which may be slightly different for the sketched
+    dataset than for the full dataset
+2.  `ScaleData()`: Highly variable genes will be confounded with the
+    most highly expressed genes, so we need to adjust for this
+3.  `RunPCA()`: Perform a principal component analysis using our scaled
+    data and variable genes. This will emphasize variation in gene
+    expression as well as similarity across bins
+4.  `FindNeighbors()`: Determine the Euclidean distance between bins in
+    PCA space
+5.  `FindClusters()`: Iteratively group bins together based on
+    neighborhood distances. Higher resolution will yield more groups.
 
+With that being said, there are certain elements that are unique to a
+spatial dataset that we will highlight as we go through all of these
+steps.
 
-## Sub-topic 1
+# Variation in the Dataset
 
-## Sub-topic 2
+```{r}
+library(Seurat)
+library(tidyverse)
 
-## Sub-topic 3
+seurat_sketch <- readRDS("data/seurat_sketch.RDS")
+```
+
+## Identify Highly Variable Features
+
+Recall that when we were working with the entire dataset, we found the
+following genes to be the most variable:
+
+```{r}
+# Identify the 15 most highly variable genes
+ranked_variable_genes <- VariableFeatures(seurat_sketch, assay="Spatial.008um")
+top_genes <- ranked_variable_genes[1:15]
+top_genes
+```
+
+We are going to run `FindVariableFeatures()` once more, but this time on
+our smaller dataset of 10,000 bins.
+
+```{r}
+# Identify the most variable genes
+seurat_processed <- FindVariableFeatures(seurat_sketch, 
+                                         selection.method = "vst",
+                                         nfeatures = 2000,
+                                         assay="sketch")
+seurat_processed
+```
 
 ::: callout-tip
 # [**Exercise 1**](06_clustering_Answer-key.qmd#exercise-1)
 
-Exercise 1
+Do you seen any differences when we calculated HVGs for the entire
+dataset versus the sketch assay?
+
+```{r}
+# Identify the 15 most highly variable genes
+ranked_variable_genes <- VariableFeatures(seurat_processed, assay="sketch")
+ranked_variable_genes[1:15]
+```
 :::
 
-# Topic 2
+## Visualize Highly Variable Genes
 
-## Sub-topic 1
+We can visualize the dispersion of all genes using Seurat's
+`VariableFeaturePlot()`, which shows a gene's average expression across
+all cells on the x-axis and variance on the y-axis. Ideally we would see
+genes lay across the entire x-axis, as we want to ensure that we are
+using genes that are both lowly and highly expressed.
 
-## Sub-topic 2
+For the visualization, we are adding labels using `LabelPoints()` to
+help us better understand which genes are driving the shape of our data.
 
-## Sub-topic 3
+```{r}
+#| label: top_15_variable_genes
+# Identify the 15 most highly variable genes
+ranked_variable_genes <- VariableFeatures(seurat_processed,
+                                          assay = "sketch")
+top_genes <- ranked_variable_genes[1:15]
+
+# Plot the average expression and variance of these genes
+# With labels to indicate which genes are in the top 15
+p <- VariableFeaturePlot(seurat_processed)
+LabelPoints(plot = p, points = top_genes, repel = TRUE)
+```
+
+Now we are primed to run the next step of the workflow, which is
+Principal Component Analysis.
+
+## PCA
+
+Principal Component Analysis (PCA) is a technique used to emphasize
+variation as well as similarity, and to bring out strong patterns in a
+dataset; it is one of the methods used for *"dimensionality reduction"*.
+
+::: {.callout-note collapse="true"}
+# Video on how PCA is calculated
+
+For a more **detailed explanation on PCA**, please [look over this
+lesson](04_theory_of_PCA.qmd) (adapted from StatQuests/Josh Starmer's
+YouTube video). We also strongly encourage you to explore the video
+[StatQuest's video](https://www.youtube.com/watch?v=_UVHneBUBW0) for a
+more thorough understanding.
+:::
+
+Let's say you are working with a single-cell RNA-seq dataset with
+*12,000 cells* and you have quantified the expression of *20,000 genes*.
+The schematic below demonstrates how you would go from a cell x gene
+matrix to principal component (PC) scores for each individual cell.
+
+<img src="../img/PCA_scrnaseq_1.png" width="900"/>
+
+To perform PCA, we need to first choose the most variable features, then
+**scale the data**. Since highly expressed genes exhibit the highest
+amount of variation and we don't want our 'highly variable genes' only
+to reflect high expression, we need to scale the data to scale variation
+with expression level. The Seurat `ScaleData()` function will scale the
+data by:
+
+-   Adjusting the expression of each gene to give a mean expression
+    across cells to be 0
+-   Scaling expression of each gene to give a variance across cells to
+    be 1
+
+```{r}
+# Scale the data counts
+seurat_processed <- ScaleData(seurat_processed)
+seurat_processed
+```
+
+We have calculated a new layer titled `sale.data`, where our scaled
+log-normalized counts now exist. So now we can proceed in calculating
+our Principal Components with `RunPCA()`.
+
+```{r}
+# Run PCA
+seurat_processed <- RunPCA(seurat_processed,
+                           assay = "sketch",
+                           reduction.name = "pca.sketch")
+```
+
+The information printed out show the top genes that influence a cell's
+score for each component. This includes genes that have both a positive
+and negative weight.
+
+If we look at our updated `seurat_processed` object:
+
+```{r}
+seurat_processed
+```
+
+We see that we have stored our PCA results:
+`dimensional reduction calculated: pca.sketch`
+
+## Visualize PCA
+
+After the PC scores have been calculated, you are looking at a matrix of
+12,000 x 12,000 that represents the information about relative gene
+expression in all the cells. You can select the PC1 and PC2 columns and
+plot that in a 2D way.
+
+<img src="../img/PCA_scrnaseq_2.png" width="600"/>
+
+```{r}
+DimPlot(seurat_processed,
+        reduction = "pca.sketch")
+```
+
+Ultimately what we have calculated with PCA are values that can represent how similar cells are to one another. We would expect that cells with similar gene expression will have similar PC values. For example, we would anticipate that two Fibroblast cells would have comparable gene expression - which would also results in similar scores in principal components. This is why many of the downstream steps in the remainder of this lesson use PCA as the input.
+
+## Selecting PC Dimensions
+
+To overcome the extensive technical noise in the expression of any single gene for scRNA-seq data, Seurat assigns cells to clusters based on their PCA scores derived from the expression of the integrated most variable genes. Each PC essentially representing a "metagene" that combines information across a correlated gene set. **Determining how many PCs to include in the clustering step is therefore important to ensure that we are capturing the majority of the variation**, or cell types, present in our dataset. 
+
+It is useful to explore the PCs prior to deciding which PCs to include for the downstream clustering analysis.
+
+The **elbow plot** is a helpful way to determine how many PCs to use for clustering so that we are capturing majority of the variation in the data. The elbow plot visualizes the standard deviation of each PC, and we are looking for where the standard deviations begins to plateau. Essentially, **where the elbow appears is usually the threshold for identifying the majority of the variation**. However, this method can be quite subjective. 
+
+Let's draw an elbow plot using the top 50 PCs:
+
+```{r}
+#| label: PC_elbow_plot
+# Plot the elbow plot
+ElbowPlot(object = seurat_processed,
+          reduction = "pca.sketch",
+          ndims = 50)
+```
+
+Based on this plot, we could roughly determine the majority of the variation by where the elbow occurs around PC8 - PC10, or one could argue that it should be when the data points start to get close to the X-axis, PC30 or so. This gives us a very rough idea of the number of PCs needed to be included.
+
+**We will be using 50 PCs for our downstream steps.**
+
+# Grouping Similar Cells Together
+
+Seurat uses a graph-based clustering approach using a K-nearest neighbor approach, and then attempts to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’ [[Seurat - Guided Clustering Tutorial](https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html)]. A nice in-depth description of clustering methods is provided in the [SVI Bioinformatics and Cellular Genomics Lab course](https://biocellgen-public.svi.edu.au/mig_2019_scrnaseq-workshop/clustering-and-cell-annotation.html).
+
+## k-Nearest Neighbors
+
+The first step is to **construct a K-nearest neighbor (KNN) graph** based on the euclidean distance in PCA space. 
+
+<img src="../img/k-means.png" width="500">
+_Image source: [Analysis of Single cell RNA-seq data](https://biocellgen-public.svi.edu.au/mig_2019_scrnaseq-workshop/clustering-and-cell-annotation.html)_
+  
+- Edges are drawn between cells with similar features expression patterns.
+- Edge weights are refined between any two cells based on shared overlap in their local neighborhoods.
+
+This is done in Seurat by using the `FindNeighbors()` function. We also specify the `reduction` we want to use as well as which components (`dims`) will be used for the calculation. In this case, we will be using the first 50.
+
+```{r}
+#| label: FindNeighbors
+# Determine the K-nearest neighbor graph
+seurat_processed <- FindNeighbors(seurat_processed, 
+                                  assay = "sketch", 
+                                  reduction = "pca.sketch",
+                                  dims = 1:50)
+```    
+
+## Clustering
+
+Next, Seurat will **iteratively group cells together with the goal of optimizing the standard modularity function**. 
+
+We will use the `FindClusters()` function to perform the graph-based clustering. The `resolution` is an important argument that sets the "granularity" of the downstream clustering and will need to be optimized for every individual experiment.  For datasets of 3,000 - 5,000 cells, the `resolution` set between `0.4`-`1.4` generally yields good clustering. Increased resolution values lead to a greater number of clusters, which is often required for larger datasets. 
+
+The `FindClusters()` function allows us to enter a series of resolutions and will calculate the "granularity" of the clustering. This is very helpful for testing which resolution works for moving forward without having to run the function for each resolution.
+
+::: callout-note
+# Testing different resolution values
+Typically we would recommend using a variety of different resolutions and select a resolution that best suits your dataset. However, for the sake of time, we will proceed with a `resolution = 0.65`. We have more [detailed explanations](https://hbctraining.github.io/Intro-to-scRNAseq-Quarto/lessons/10_clustering_cells_SCT.html#find-clusters) of how to test a variety of resolutions at one time.
+:::
+
+```{r}
+seurat_processed <- FindClusters(seurat_processed, 
+                                 cluster.name = "seurat_cluster.sketched", 
+                                 resolution = 0.65)
+```
+
+If we take a look at the columns in our `@meta.data`, we see that the column `seurat_cluster.sketched` is a new column that was added.
+
+```{r}
+seurat_processed@meta.data %>% head(120) %>% relocate("seurat_cluster.sketched")
+```
 
 ::: callout-tip
 # [**Exercise 2**](06_clustering_Answer-key.qmd#exercise-2)
 
-Exercise 1
+When we looked at the first few rows of our metadata, it appeared that there were many cells that do not have a cluster value.
+
+Count how many `NA`'s are found for our cluster with `table()` function and use the argument (`useNA = "ifany"`):
+
+```{r}
+table(seurat_processed$seurat_cluster.sketched, useNA = "ifany")
+```
+
+Why do you think there are so many `NA` values?
+
 :::
 
-# Topic 3
+`FindClusters()` tends to automatically change the `Idents()` to the cluster values that were just calculated. If we take a look at our `Idents` we can see if that it has changed from `orig.ident` to `seurat_cluster.sketched`
 
-## Sub-topic 1
+```{r}
+Idents(seurat_processed) %>% head()
+```
 
-## Sub-topic 2
+## UMAP
 
-## Sub-topic 3
+To visualize the cell clusters, there are a few different dimensionality reduction techniques that can be helpful. The most popular methods include [t-distributed stochastic neighbor embedding (t-SNE)](https://kb.10xgenomics.com/hc/en-us/articles/217265066-What-is-t-Distributed-Stochastic-Neighbor-Embedding-t-SNE-) and [Uniform Manifold Approximation and Projection (UMAP)](https://umap-learn.readthedocs.io/en/latest/index.html) techniques. 
 
-::: callout-tip
-# [**Exercise 3**](06_clustering_Answer-key.qmd#exercise-3)
+Both methods aim to place cells with similar local neighborhoods in high-dimensional space together in low-dimensional space. These methods will require you to input number of PCA dimentions to use for the visualization, we suggest using the same number of PCs as input to the clustering analysis. Here, we will proceed with the [UMAP method](https://umap-learn.readthedocs.io/en/latest/how_umap_works.html) for visualizing the clusters.
 
-Exercise 3
-:::
+```{r}
+seurat_processed <- RunUMAP(seurat_processed, 
+                            reduction = "pca.sketch", 
+                            reduction.name = "umap.sketch", 
+                            return.model = T, dims = 1:50)
+seurat_processed
+```
+
+These UMAP coordinates are now stored in the `dimensional reductions calculated: pca.sketch, umap.sketch`
+
+Which we can now visualize with the clusters that we calculated earlier using `DimPlot() and adding clearer labels with `LabelClusters()`.
+
+```{r}
+# Plot UMAP
+p <- DimPlot(seurat_processed, 
+        reduction = "umap.sketch", label = T) + 
+  ggtitle("Sketched clustering")
+LabelClusters(p, id = "ident",  fontface = "bold", size = 5, 
+              bg.colour = "white", bg.r = .2, force = 0)
+```
+
+# Save!
+
+Now is a great spot to save our `seurat_processed` object as we have added a lot new information into our Seurat object, such as:
+
+- Sketch HVGs
+- Scaled log-normalized counts
+- PCA
+- k-Nearest neighbors
+- Clusters
+- UMAP
+
+```{r}
+#| eval: false
+# Save Seurat object
+saveRDS(seurat_processed, "data/seurat_processed.RDS")
+```
