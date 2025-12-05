@@ -3,3 +3,5 @@
 .Rhistory
 lessons/data
 data/P5*
+lessons/intermediates
+*.RDS
