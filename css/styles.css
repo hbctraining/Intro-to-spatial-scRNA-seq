@@ -109,3 +109,67 @@ img {
   height: auto;
   display: block;
 }
+
+/* Hide breadcrumbs for both possible classnames */
+.quarto-breadcrumbs,
+.quarto-page-breadcrumbs {
+  display: none !important;
+}
+
+/* --- Refined, crimson-themed Quarto Tabsets --- */
+
+.panel-tabset {
+  border: 1px solid #e0e0e0;        /* lighter outline */
+  border-radius: 8px;
+  padding: 0.75em 1em;
+  margin-top: 1.5em;
+  margin-bottom: 2em;
+  background: #fafafa;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.1);   /* soft shadow */
+}
+
+/* Tab bar */
+.panel-tabset .nav-tabs {
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 0.75em;
+}
+
+/* Tab labels: shorter, rounded, crimson */
+.panel-tabset .nav-tabs .nav-link {
+  padding: 0.25em 0.75em;              /* shorter tabs */
+  border-radius: 6px 6px 0 0;          /* rounded top */
+  border: 1px solid #a51c30 !important;
+  border-bottom: none !important;
+  background-color: #a51c30 !important;  /* crimson */
+  color: #fff !important;
+  margin-right: 4px;
+}
+
+/* Active tab: lighter background but still crimson-themed */
+.panel-tabset .nav-tabs .nav-link.active {
+  background-color: #fff !important;
+  color: #a51c30 !important;
+  font-weight: 600;
+  border-color: #a51c30 !important;
+  border-bottom: 1px solid #fff !important; /* blends smoothly */
+}
+
+/* Inner content box */
+.panel-tabset .tab-content {
+  border: 1px solid #e0e0e0;    /* softer border */
+  border-radius: 6px;
+  padding: 1em;
+  background: #fff;
+}
+
+/* Ensure tabsets use the full content width */
+.panel-tabset {
+  width: 100%;
+}
+
+/* Remove Quarto’s built‑in max-width constraints inside tab content */
+.panel-tabset .tab-content,
+.panel-tabset .tab-pane {
+  max-width: 100%;
+  width: 100%;
+}
