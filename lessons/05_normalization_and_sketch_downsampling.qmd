@@ -1,0 +1,206 @@
+---
+title: "Normalization and Sketch Downsampling"
+authors: "Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui"
+date: "Tuesday, July 22, 2025"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Approximate time: XY minutes
+
+# Learning Objectives
+
+-   Discuss why normalizing counts is necessary for accurate comparison
+    between cells
+-   LO 2
+-   LO 3
+
+# Normalization
+
+Normalization is important in order to make expression counts comparable across genes and/or samples. We note that the best normalization methods for spatial data are still being developed and evaluated. In particular, [Bhuva et. al](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-024-03241-7) tested a variety of normalization techniques and found that normalizing by the number of transcripts detected per bin negatively affects spatial domain identification because total detections per bin can represent real biology.
+
+We are cognizant of this, but as discussed earlier, it can be challenging to determine whether a bin has few detections because of a technical artifact or biological signal. In the absence of normalization, this lack of signal will strongly affect clustering regardless of whether it is technical or biological. For this reason, we apply a **standard log-transformed library size normalization** to our data.
+
+## Why Should We Normalize?
+
+An essential first step in the majority of mRNA expression analyses is normalization, whereby systematic variations are adjusted for to **make expression counts comparable across genes and/or samples**. The counts of mapped reads for each gene is proportional to the expression of RNA ("interesting") in addition to many other factors ("uninteresting"). Normalization is the process of adjusting raw count values to account for the "uninteresting" factors.
+
+The main factors often considered during normalization are:
+
+**Sequencing depth:** Accounting for sequencing depth is necessary for comparison of gene expression between cells. In the example below, each gene appears to have doubled in expression in cell 2, however this is a consequence of cell 2 having twice the sequencing depth.
+
+<img src="../img/sequencing_depth.png" width="400"/>
+
+## Log-normalization Steps
+
+Various methods have been developed specifically for scRNA-seq normalization. Some **simpler methods resemble what we have seen with bulk RNA-seq; the application of** global scale factors\*\* adjusting for a count-depth relationship that is assumed common across all genes. However, if those assumptions are not true then this basic normalization can lead to over-correction for lowly and moderately expressed genes and, in some cases, under-normalization of highly expressed genes ([Bacher R et al, 2017](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5473255/)). **More complex methods will apply correction on a per-gene basis.** In this lesson we will explore both approaches.
+
+Regardless of which method is used for normalization, it can be helpful to **think of it as a two-step process** (even though it is often described as a single step in most papers). The first is a scaling step and the second is a transformation.
+
+**1. Scaling**
+
+The first step in normalization is to **multiply each UMI count by a cell specific factor to get all cells to have the same UMI counts**. Why would we want to do this? Different cells have different amounts of mRNA; this could be due to differences between cell types or variation within the same cell type depending on how well the chemistry worked in one drop versus another. In either case, we are not interested in comparing these absolute counts between cells. Instead we are interested in comparing concentrations, and scaling helps achieve this.
+
+**2. Transformation**
+
+The next step is a transformation, and it is at this step where we can distinguish the simpler versus complex methods as mentioned above.
+
+**Simple transformations** are those which apply the same function to each individual measurement. Common examples include a **log transform** (which is applied in the original Seurat workflow), or a square root transform (less commonly used).
+
+## Perform Log-normalization
+
+Let's start by creating a new script for the normalization and integration steps. Create a new script (File -> New File -> R script), and save it as `normalization_and_sketch.R`.
+
+For the remainder of the workflow we will be mainly using functions available in the Seurat package. Additionally, we will load in the `seurat_filtered` object we created in the previous lesson.
+
+```{r}
+#| label: set-up_script
+# Normalization and Sketch Subsampling
+# Dec 2025
+
+# Load libraries
+library(Seurat)
+library(tidyverse)
+
+seurat_filtered <- readRDS("data/seurat_filtered.RDS")
+seurat_filtered
+```
+
+Before we make any comparisons across cells, we will **apply a simple normalization** with the `NormalizeData()` function. This is solely for the purpose of exploring the sources of variation in our data.
+
+```{r}
+#| label: normalize_data
+# Normalize the counts
+seurat_sketch <- NormalizeData(seurat_filtered)
+```
+
+After normalization, we can call our Seurat object with:
+
+```{r}
+seurat_sketch
+```
+
+And we can see that there is now a new `data` layer in the Seurat object.
+
+::: callout-tip
+# [**Exercise 1**](05_normalization_Answer-key.qmd#exercise-1)
+
+Exercise 1
+:::
+
+# Highly Variable Genes
+
+Highly variable gene (HVG) selection is extremely important since many downstream steps are computed only on these genes. In this step, we are identifying which genes are changing the most across each one of our bins.
+
+Essentially, we are looking at genes with high levels of variance while also accounting for the average expression. In doing so, we get a list of genes ranked by how much they change across different cell populations.
+
+TODO We calculate these scores to minimize the number of genes that are used for calcluations (downstream) and to emphasize the effect of genes that are changing across our dataset - rather than giving more weight to genes that remain consistent (less interested)
+
+## Calculating HVGs
+
+HVGs are calculated using the `FindVariableFeatures()` function. Some key arguments supplied to this function are:
+
+| Argument | Description |
+|--------------------|----------------------------------------------------|
+| selection.method | How to choose top variable features. `vst`: Fits a line to log(variance) vs. log(mean) using loess, standardizes values, and computes variance after clipping (see clip.max). |
+| nfeatures | Number of features to select as top variable features; used when selection.method is `dispersion` or `vst` |
+
+```{r}
+#| label: find_variable_genes
+# Identify the most variable genes
+seurat_sketch <- FindVariableFeatures(seurat_sketch, 
+                     selection.method = "vst",
+                     nfeatures = 2000)
+```
+
+When we examine our Seurat object, we see that `FindVariableFeatures()` has added 2,000 variable features - just as we specified with `nfeatures`.
+
+```{r}
+seurat_sketch
+```
+
+Seurat allows us to access the ranked highly variable genes with the `VariableFeatures()` function. Here we print the top 15:
+
+```{r}
+# Identify the 15 most highly variable genes
+ranked_variable_genes <- VariableFeatures(seurat_sketch)
+top_genes <- ranked_variable_genes[1:15]
+top_genes
+```
+
+::: callout-tip
+# [**Exercise 2**](05_normalization_Answer-key.qmd#exercise-2)
+
+Using [GeneCards](https://www.genecards.org/), loop up one of the top genes and read more about its function and how it could possible relate to CRC.
+:::
+
+# Sketch Downsampling
+
+As single-cell technologies have evolved, the datasets have grown ever larger. The concept of a "sketch" has become popularized to offset the difficulties of analysis on these large populations. The aim is to generate a subset of cells in the dataset that is representative of each cell state in the samples.
+
+In order to determine which cells to keep, a [leverage score](https://dl.acm.org/doi/pdf/10.1145/3019134) is calculated. The leverage score reflects the magnitude of its contribution to the gene-covariance matrix, and its importance to the overall dataset. Where **TODO write about what this actually does.**
+
+This sketch-based analyses aims to "subsample" large datasets in a way
+that preserves rare populations. The authors of Seurat found that rare
+population, that have fewer cells, have higher leverage scores.
+
+![[Hao et. al, 2024](https://www.nature.com/articles/s41587-023-01767-y), _Supplementary Figure 5H_](../img/ncells_vs_leverage_score.png){width="50%"}
+
+This means that our downsampled cells in the sketch will oversample rare populations, retaining the biological complexity of the sample, while drastically compressing the dataset.
+
+## Downsampling
+
+For our dataset, we are going to downsample our dataset to 10,000 bins using the `SketchData()` function. The function takes a **normalized** single-cell dataset containing a set of **variable features**. 
+
+It returns a Seurat object with a new assay (sketch), consisting of `ncells` bins selected based off a **"leverage score"** for each bin.
+
+```{r}
+# we select 10,000 cells and create a new 'sketch' assay
+seurat_sketch <- SketchData(object = seurat_sketch,
+                            assay = 'Spatial.008um',
+                            ncells = 10000,
+                            method = "LeverageScore",
+                            sketched.assay = "sketch")
+```
+
+## Sketch Assay
+
+We can see that there are four major changes that have taken place:
+
+- The number of features in the second line has double, because we have added a new assay
+- Accordingly, the number of assays has increased from one to two
+- The active assay has change from `Spatial.016um` to `sketch`
+- There is a new line listing additional assays that exist in the Seurat object
+
+```{r}
+seurat_sketch
+```
+We can also see that the `leverage.score` has been added as a column to the metadata of our object.
+
+```{r}
+seurat_sketch@meta.data %>% head() %>% relocate(leverage.score)
+```
+
+
+## Visualizing Leverage Scores
+
+```{r}
+VlnPlot(seurat_sketch, "leverage.score")
+```
+
+::: callout-tip
+# [**Exercise 3**](05_normalization_Answer-key.qmd#exercise-3)
+
+Exercise 3
+:::
+
+# Save!
+
+Now is a great spot to save our `seurat_sketch` object as we have added a new assay to our Seurat object.
+
+```{r}
+#| eval: false
+# Save Seurat object
+saveRDS(seurat_sketch, "data/seurat_sketch.RDS")
+```
