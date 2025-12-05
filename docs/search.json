@@ -1820,7 +1820,7 @@
     "href": "lessons/03_quality-control.html#sub-topic-3",
     "title": "Quality Control",
     "section": "Sub-topic 3",
-    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 1\n\n\n\nExercise 1",
+    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 3\n\n\n\nExercise 3",
     "crumbs": [
       "Day 1 Self-learning:",
       "Quality Control"
@@ -2302,6 +2302,83 @@
     "crumbs": [
       "Day 1:",
       "Pre-processing of Spatial Data"
+    ]
+  },
+  {
+    "objectID": "lessons/03_quality-control.html#number-of-cells",
+    "href": "lessons/03_quality-control.html#number-of-cells",
+    "title": "Quality Control",
+    "section": "Number of Cells",
+    "text": "Number of Cells\n\nggplot(meta) +\n  geom_bar(aes(x = orig.ident, fill = orig.ident),\n           color = \"black\") +\n  geom_text(aes(x = orig.ident, label=after_stat(count)), \n            stat='count', vjust=-1) +\n  theme_classic()",
+    "crumbs": [
+      "Day 1 Self-learning:",
+      "Quality Control"
+    ]
+  },
+  {
+    "objectID": "lessons/03_quality-control.html#umi-counts-transcripts-per-cell",
+    "href": "lessons/03_quality-control.html#umi-counts-transcripts-per-cell",
+    "title": "Quality Control",
+    "section": "UMI Counts (Transcripts) per Cell",
+    "text": "UMI Counts (Transcripts) per Cell\nTODO\n\ntalk about celltypes and how we see clear structure of certain cells with higher nUMIs\nCut-off of 10 for both samples\n\nWe expect to see a bimodal distribution, with one peak representing bins containing lower-quality cells with fewer UMIs and another peak representing bins containing healthy cells with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.\nThis is the number of unique transcripts detected per bin. Because the bins are very small, this number is less than what we would expect for non-spatial scRNA-seq data.\n\nSpatial OverlapBefore Filtration DensityAfter Filtration Density\n\n\n\nSpatialFeaturePlot(seurat_merged, \n                   \"nCount_Spatial.008um\",\n                   pt.size.factor = 3,\n                   image.alpha = 0,\n                   max.cutoff = 2000)\n\n\n\n\n\n\n\n\n\n\n\nggplot(meta) +\n  geom_density(aes(x = nCount_Spatial.008um, fill = orig.ident),\n               alpha = 0.4,\n               color = \"black\") +\n  geom_vline(xintercept = 10, color = \"pink\") +\n  geom_vline(xintercept = 10, color = \"lightblue\") +\n  scale_x_log10() +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\nmeta_filt &lt;- subset(meta,\n  ((orig.ident == \"P5CRC\") & (nCount_Spatial.008um &gt; 10)) |\n  ((orig.ident == \"P5NAT\") & (nCount_Spatial.008um &gt; 10)))\n\nggplot(meta_filt) +\n  geom_density(aes(x = nCount_Spatial.008um,\n                     fill = orig.ident),\n                 alpha = 0.4,\n                 color = \"black\") +\n  geom_vline(xintercept = 10, color = \"pink\") +\n  geom_vline(xintercept = 10, color = \"lightblue\") +\n  scale_x_log10() +\n  theme_classic()",
+    "crumbs": [
+      "Day 1 Self-learning:",
+      "Quality Control"
+    ]
+  },
+  {
+    "objectID": "lessons/03_quality-control.html#genes-detected-per-cell",
+    "href": "lessons/03_quality-control.html#genes-detected-per-cell",
+    "title": "Quality Control",
+    "section": "Genes Detected per Cell",
+    "text": "Genes Detected per Cell\nWe have similar expectations for gene detection as for UMI detection, although it may be a bit lower than UMIs.\nThis is the number of unique genes detected per bin. Again, because the bins are very small, this number is less than what we would expect for non-spatial scRNA-seq data.\n\nSpatial OverlapBefore Filtration DensityAfter Filtration Density\n\n\n\nSpatialFeaturePlot(seurat_merged, \n                   \"nFeature_Spatial.008um\",\n                   pt.size.factor = 3,\n                   image.alpha = 0,\n                   max.cutoff = 1200)\n\n\n\n\n\n\n\n\n\n\n\nggplot(meta) +\n  geom_density(aes(x = nFeature_Spatial.008um,\n                     fill = orig.ident),\n                 alpha = 0.4,\n                 color = \"black\") +\n  geom_vline(xintercept = 15, color = \"pink\") +\n  geom_vline(xintercept = 10, color = \"lightblue\") +\n  scale_x_log10() +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\nmeta_filt &lt;- subset(meta,\n  ((orig.ident == \"P5CRC\") & (nFeature_Spatial.008um &gt; 15)) |\n  ((orig.ident == \"P5NAT\") & (nFeature_Spatial.008um &gt; 10)))\n\nggplot(meta_filt) +\n  geom_density(aes(x = nFeature_Spatial.008um,\n                     fill = orig.ident),\n                 alpha = 0.4,\n                 color = \"black\") +\n  geom_vline(xintercept = 15, color = \"pink\") +\n  geom_vline(xintercept = 10, color = \"lightblue\") +\n  scale_x_log10() +\n  theme_classic()",
+    "crumbs": [
+      "Day 1 Self-learning:",
+      "Quality Control"
+    ]
+  },
+  {
+    "objectID": "lessons/03_quality-control.html#complexity-novelty-score",
+    "href": "lessons/03_quality-control.html#complexity-novelty-score",
+    "title": "Quality Control",
+    "section": "Complexity (Novelty) Score",
+    "text": "Complexity (Novelty) Score\nIf there are many captured transcripts (high nUMI) and a low number of genes detected in a bin, this likely means that you only captured a low number of genes and simply sequenced transcripts from those lower number of genes over and over again. These low complexity (low novelty) bins could represent a specific cell type (i.e. red blood cells, which lack a typical transcriptome), or could be due to an artifact or contamination. Generally, we expect the complexity score to be above 0.80 for good-quality bins.\nThe novelty score is computed as shown below:\n$ = $\n\n# Add number of genes per UMI for each cell to metadata\nseurat_merged$log10GenesPerUMI &lt;- log10(seurat_merged$nFeature_Spatial.008um) / \n                                  log10(seurat_merged$nCount_Spatial.008um)\n\nseurat_merged@meta.data %&gt;% head()\n\n                            orig.ident nCount_Spatial.008um\nP5CRC_s_008um_00602_00290-1      P5CRC                  225\nP5CRC_s_008um_00789_00234-1      P5CRC                   76\nP5CRC_s_008um_00728_00006-1      P5CRC                  215\nP5CRC_s_008um_00526_00291-1      P5CRC                   57\nP5CRC_s_008um_00681_00396-1      P5CRC                   74\nP5CRC_s_008um_00078_00444-1      P5CRC                   65\n                            nFeature_Spatial.008um log10GenesPerUMI\nP5CRC_s_008um_00602_00290-1                    199        0.9773277\nP5CRC_s_008um_00789_00234-1                     71        0.9842859\nP5CRC_s_008um_00728_00006-1                    196        0.9827724\nP5CRC_s_008um_00526_00291-1                     40        0.9123999\nP5CRC_s_008um_00681_00396-1                     71        0.9903846\nP5CRC_s_008um_00078_00444-1                     57        0.9685377\n\n\n\nSpatial OverlapBefore Filtration DensityAfter Filtration Density\n\n\n\nSpatialFeaturePlot(seurat_merged, \n                   \"log10GenesPerUMI\",\n                   pt.size.factor = 3,\n                   image.alpha = 0,\n                   min.cutoff = 0.7)\n\n\n\n\n\n\n\n\n\n\n\nmeta &lt;- seurat_merged@meta.data\nggplot(meta) +\n  geom_density(aes(x = log10GenesPerUMI,\n                   fill = orig.ident),\n                 alpha = 0.4,\n                 color = \"black\") +\n  geom_vline(xintercept = 0.80) +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\nmeta_filt &lt;- subset(meta, log10GenesPerUMI &gt; 0.80)\nggplot(meta_filt) +\n  geom_density(aes(x = log10GenesPerUMI,\n                   fill = orig.ident),\n                 alpha = 0.4,\n                 color = \"black\") +\n  geom_vline(xintercept = 0.80) +\n  theme_classic()",
+    "crumbs": [
+      "Day 1 Self-learning:",
+      "Quality Control"
+    ]
+  },
+  {
+    "objectID": "lessons/03_quality-control.html#mitochondrial-counts-ratio",
+    "href": "lessons/03_quality-control.html#mitochondrial-counts-ratio",
+    "title": "Quality Control",
+    "section": "Mitochondrial Counts Ratio",
+    "text": "Mitochondrial Counts Ratio\nThis metric can identify whether there is a large amount of mitochondrial contamination from dead or dying cells. We define poor-quality samples for mitochondrial counts as bins which surpass the 0.2 mitochondrial ratio threshold, unless of course you are expecting this in your sample. This ratio is computed as:\n\n\n\n\n\n\nThink about your biological question\n\n\n\nWhile using a baseline score of 0.2 is an acceptable threshold for removing high mitochondrial content cells, it is important to always go back to your original biological question. What samples are you working with? Do you expect there to be high values of mitochondria due to your experimental condition?\nFor example, if you were studying renal oncocytomas would you make this same choice? This disease is characterized as having aberrantly high mitochondrial expression, would it make sense to remove cells with high mitochondrial ratio?\n\n\n\n# Compute percent mito ratio\nseurat_merged$mitoRatio &lt;- PercentageFeatureSet(object = seurat_merged, \n                                                pattern = \"^MT-\")\nseurat_merged$mitoRatio &lt;- seurat_merged@meta.data$mitoRatio / 100\n\nseurat_merged@meta.data %&gt;% head() %&gt;% relocate(mitoRatio)\n\n                             mitoRatio orig.ident nCount_Spatial.008um\nP5CRC_s_008um_00602_00290-1 0.04888889      P5CRC                  225\nP5CRC_s_008um_00789_00234-1 0.01315789      P5CRC                   76\nP5CRC_s_008um_00728_00006-1 0.04651163      P5CRC                  215\nP5CRC_s_008um_00526_00291-1 0.36842105      P5CRC                   57\nP5CRC_s_008um_00681_00396-1 0.04054054      P5CRC                   74\nP5CRC_s_008um_00078_00444-1 0.23076923      P5CRC                   65\n                            nFeature_Spatial.008um log10GenesPerUMI\nP5CRC_s_008um_00602_00290-1                    199        0.9773277\nP5CRC_s_008um_00789_00234-1                     71        0.9842859\nP5CRC_s_008um_00728_00006-1                    196        0.9827724\nP5CRC_s_008um_00526_00291-1                     40        0.9123999\nP5CRC_s_008um_00681_00396-1                     71        0.9903846\nP5CRC_s_008um_00078_00444-1                     57        0.9685377\n\n\n\nSpatial OverlapBefore Filtration DensityAfter Filtration Density\n\n\n\nSpatialFeaturePlot(seurat_merged, \n                   \"mitoRatio\",\n                   pt.size.factor = 3,\n                   image.alpha = 0,\n                   max.cutoff = 0.5)\n\n\n\n\n\n\n\n\n\n\n\nmeta &lt;- seurat_merged@meta.data\nggplot(meta) +\n  geom_density(aes(x = mitoRatio,\n                   fill = orig.ident),\n                 alpha = 0.4,\n                 color = \"black\") +\n  geom_vline(xintercept = 0.25) +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\nmeta_filt &lt;- subset(meta, mitoRatio &lt; 0.25)\n\nggplot(meta_filt) +\n  geom_density(aes(x = mitoRatio,\n                   fill = orig.ident),\n                 alpha = 0.4,\n                 color = \"black\") +\n  geom_vline(xintercept = 0.25) +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 1\n\n\n\nExercise 1",
+    "crumbs": [
+      "Day 1 Self-learning:",
+      "Quality Control"
+    ]
+  },
+  {
+    "objectID": "lessons/03_quality-control.html#violin-plots",
+    "href": "lessons/03_quality-control.html#violin-plots",
+    "title": "Quality Control",
+    "section": "Violin Plots",
+    "text": "Violin Plots\nLet’s start with a violin plot to look at the distribution of UMI counts and gene counts. The input is our post-filtered dataset.\n\np_ncount &lt;- VlnPlot(seurat_filtered, \n                    features = \"nCount_Spatial.008um\", \n                    pt.size = 0, group.by = 'orig.ident') +\n  NoLegend()\n\np_nfeats &lt;- VlnPlot(seurat_filtered, \n                    features = \"nFeature_Spatial.008um\", \n                    pt.size = 0, group.by = 'orig.ident') + \n  NoLegend()\n\np_ncount | p_nfeats\n\n\n\n\n\n\n\n\nWe see that both distributions have a similar peak but the nUMI distribution has a much longer tail. This is expected, because while the small physical size of the bins means that most genes will be detected only once or twice, a minority of bins under very transcriptionally active cells may exhibit multiple transcripts of the same gene.",
+    "crumbs": [
+      "Day 1 Self-learning:",
+      "Quality Control"
+    ]
+  },
+  {
+    "objectID": "lessons/03_quality-control.html#spatial-overlay",
+    "href": "lessons/03_quality-control.html#spatial-overlay",
+    "title": "Quality Control",
+    "section": "Spatial Overlay",
+    "text": "Spatial Overlay\nNext, we can look at the same metrics and the distribution on the actual image itself. Note that many spots have very few counts, in part due to low cellular density or cell types with low complexity in certain tissue regions.\n\nSpatialFeaturePlot(seurat_filtered, \n                   c(\"nFeature_Spatial.008um\", \"nCount_Spatial.008um\"),\n                   pt.size.factor = 3,\n                   image.alpha = 0)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 3\n\n\n\nExercise 3",
+    "crumbs": [
+      "Day 1 Self-learning:",
+      "Quality Control"
     ]
   }
 ]

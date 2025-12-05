@@ -9,19 +9,303 @@ editor_options:
 
 Approximate time: XY minutes
 
+```{r}
+#| echo: false
+library(Seurat)
+library(tidyverse)
+
+seurat_merged <- readRDS("intermediates/02_seurat_merged.RDS")
+```
+
 # Learning Objectives
 
--   LO 1
--   LO 2
--   LO 3
+- Construct quality control metrics and visually evaluate the quality of the data
+- Apply appropriate filters to remove low quality cells
+- LO 3
 
-# Topic 1
+# Quality Metrics
 
-## Sub-topic 1
+In Visium HD data, the main challenge is **in delineating bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
 
-## Sub-topic 2
+We will assess a variety of metrics to evaluate which bins are considered low/high quality. **We will apply very permissive filtering here as it has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq.** Various metrics can be used to filter low-quality bins from high-quality ones, including:
 
-## Sub-topic 3
+- Cell counts
+- UMI counts per cell
+- Genes detected per cell
+- Complexity (novelty score)
+- Mitochondrial counts ratio
+
+Some of these values we will calculate throughout this lesson and be added to our metadata dataframe.
+
+```{r}
+meta <- seurat_merged@meta.data
+meta %>% head()
+```
+
+We will be using a variety of visualization methods, including looking at the values on the spatial slide as well as the distribution of values before and after filtration.
+
+::: {.callout-note collapse=true}
+# "Nicer" spatial visualizations
+For "nicer" (subjective) plotting with `SpatialFeaturePlot()` and `SpatialDimPlot()`, we will add some extra parameters to gain a clearer image beyond the default plot.
+
+```{r}
+SpatialFeaturePlot(seurat_merged, 
+                   "nCount_Spatial.008um")
+```
+
+Therefore for the rest of this lesson, we will be using the following arguments:
+
+- `pt.size.factor = 3`: to clearly see each bin on the slide
+- `image.alpha = 0`: to remove the H&E stained image in the background of the image
+- `max.cutoff` and `min.cutoff`: to not allow the color scale to be driven by smaller populations of cells with high/low values
+:::
+
+
+::: callout-note
+# Sample specific values
+A commonly asked question is if you have to use the same threshold values across all your samples. We recommend that you follow what the data is telling you and do it on a per sample basis. The likelihood of the quality of two samples to be perfectly identical is slim.
+:::
+
+## Number of Cells
+
+```{r}
+ggplot(meta) +
+  geom_bar(aes(x = orig.ident, fill = orig.ident),
+           color = "black") +
+  geom_text(aes(x = orig.ident, label=after_stat(count)), 
+            stat='count', vjust=-1) +
+  theme_classic()
+```
+
+## UMI Counts (Transcripts) per Cell
+
+TODO 
+
+- talk about celltypes and how we see clear structure of certain cells with higher nUMIs
+- Cut-off of 10 for both samples
+
+We expect to see a bimodal distribution, with one peak representing bins containing lower-quality cells with fewer UMIs and another peak representing bins containing healthy cells with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.
+
+This is the number of unique transcripts detected per bin. Because the bins are very small, this number is less than what we would expect for non-spatial scRNA-seq data.
+
+::: {.panel-tabset}
+
+### Spatial Overlap
+
+```{r}
+SpatialFeaturePlot(seurat_merged, 
+                   "nCount_Spatial.008um",
+                   pt.size.factor = 3,
+                   image.alpha = 0,
+                   max.cutoff = 2000)
+```
+
+### Before Filtration Density
+
+```{r}
+ggplot(meta) +
+  geom_density(aes(x = nCount_Spatial.008um, fill = orig.ident),
+               alpha = 0.4,
+               color = "black") +
+  geom_vline(xintercept = 10, color = "pink") +
+  geom_vline(xintercept = 10, color = "lightblue") +
+  scale_x_log10() +
+  theme_classic()
+```
+
+
+### After Filtration Density
+
+```{r}
+meta_filt <- subset(meta,
+  ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 10)) |
+  ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 10)))
+
+ggplot(meta_filt) +
+  geom_density(aes(x = nCount_Spatial.008um,
+                     fill = orig.ident),
+                 alpha = 0.4,
+                 color = "black") +
+  geom_vline(xintercept = 10, color = "pink") +
+  geom_vline(xintercept = 10, color = "lightblue") +
+  scale_x_log10() +
+  theme_classic()
+```
+
+:::
+
+## Genes Detected per Cell
+
+We have similar expectations for gene detection as for UMI detection, although it may be a bit lower than UMIs.
+
+This is the number of unique genes detected per bin. Again, because the bins are very small, this number is less than what we would expect for non-spatial scRNA-seq data.
+
+::: {.panel-tabset}
+
+### Spatial Overlap
+
+```{r}
+SpatialFeaturePlot(seurat_merged, 
+                   "nFeature_Spatial.008um",
+                   pt.size.factor = 3,
+                   image.alpha = 0,
+                   max.cutoff = 1200)
+```
+
+### Before Filtration Density
+
+```{r}
+ggplot(meta) +
+  geom_density(aes(x = nFeature_Spatial.008um,
+                     fill = orig.ident),
+                 alpha = 0.4,
+                 color = "black") +
+  geom_vline(xintercept = 15, color = "pink") +
+  geom_vline(xintercept = 10, color = "lightblue") +
+  scale_x_log10() +
+  theme_classic()
+```
+
+
+### After Filtration Density
+
+```{r}
+meta_filt <- subset(meta,
+  ((orig.ident == "P5CRC") & (nFeature_Spatial.008um > 15)) |
+  ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 10)))
+
+ggplot(meta_filt) +
+  geom_density(aes(x = nFeature_Spatial.008um,
+                     fill = orig.ident),
+                 alpha = 0.4,
+                 color = "black") +
+  geom_vline(xintercept = 15, color = "pink") +
+  geom_vline(xintercept = 10, color = "lightblue") +
+  scale_x_log10() +
+  theme_classic()
+```
+
+:::
+
+## Complexity (Novelty) Score
+
+If there are many captured transcripts (high nUMI) and a low number of genes detected in a bin, this likely means that you only captured a low number of genes and simply sequenced transcripts from those lower number of genes over and over again. These low complexity (low novelty) bins could represent a specific cell type (i.e. red blood cells, which lack a typical transcriptome), or could be due to an artifact or contamination. Generally, we expect the complexity score to be above 0.80 for good-quality bins.
+
+The novelty score is computed as shown below:
+
+$ \text{Complexity Score} = \frac{\text{Number of Genes}}{\text{Number of UMIs}} $
+
+```{r}
+# Add number of genes per UMI for each cell to metadata
+seurat_merged$log10GenesPerUMI <- log10(seurat_merged$nFeature_Spatial.008um) / 
+                                  log10(seurat_merged$nCount_Spatial.008um)
+
+seurat_merged@meta.data %>% head()
+```
+
+::: {.panel-tabset}
+
+### Spatial Overlap
+
+```{r}
+SpatialFeaturePlot(seurat_merged, 
+                   "log10GenesPerUMI",
+                   pt.size.factor = 3,
+                   image.alpha = 0,
+                   min.cutoff = 0.7)
+```
+
+### Before Filtration Density
+
+```{r}
+meta <- seurat_merged@meta.data
+ggplot(meta) +
+  geom_density(aes(x = log10GenesPerUMI,
+                   fill = orig.ident),
+                 alpha = 0.4,
+                 color = "black") +
+  geom_vline(xintercept = 0.80) +
+  theme_classic()
+```
+
+
+### After Filtration Density
+
+```{r}
+meta_filt <- subset(meta, log10GenesPerUMI > 0.80)
+ggplot(meta_filt) +
+  geom_density(aes(x = log10GenesPerUMI,
+                   fill = orig.ident),
+                 alpha = 0.4,
+                 color = "black") +
+  geom_vline(xintercept = 0.80) +
+  theme_classic()
+```
+
+:::
+
+## Mitochondrial Counts Ratio
+
+This metric can identify whether there is a large amount of mitochondrial contamination from dead or dying cells. We define poor-quality samples for mitochondrial counts as bins which surpass the 0.2 mitochondrial ratio threshold, unless of course you are expecting this in your sample. This ratio is computed as:
+
+::: callout-note
+# Think about your biological question
+While using a baseline score of 0.2 is an acceptable threshold for removing high mitochondrial content cells, it is important to always go back to your original biological question. What samples are you working with? Do you expect there to be high values of mitochondria due to your experimental condition?
+
+For example, if you were studying renal oncocytomas would you make this same choice? This disease is characterized as having [aberrantly high mitochondrial expression](https://www.nature.com/articles/modpathol2015101), would it make sense to remove cells with high mitochondrial ratio?
+:::
+
+
+```{r}
+# Compute percent mito ratio
+seurat_merged$mitoRatio <- PercentageFeatureSet(object = seurat_merged, 
+                                                pattern = "^MT-")
+seurat_merged$mitoRatio <- seurat_merged@meta.data$mitoRatio / 100
+
+seurat_merged@meta.data %>% head() %>% relocate(mitoRatio)
+```
+
+::: {.panel-tabset}
+
+### Spatial Overlap
+
+```{r}
+SpatialFeaturePlot(seurat_merged, 
+                   "mitoRatio",
+                   pt.size.factor = 3,
+                   image.alpha = 0,
+                   max.cutoff = 0.5)
+```
+
+### Before Filtration Density
+
+```{r}
+meta <- seurat_merged@meta.data
+ggplot(meta) +
+  geom_density(aes(x = mitoRatio,
+                   fill = orig.ident),
+                 alpha = 0.4,
+                 color = "black") +
+  geom_vline(xintercept = 0.25) +
+  theme_classic()
+```
+
+
+### After Filtration Density
+
+```{r}
+meta_filt <- subset(meta, mitoRatio < 0.25)
+
+ggplot(meta_filt) +
+  geom_density(aes(x = mitoRatio,
+                   fill = orig.ident),
+                 alpha = 0.4,
+                 color = "black") +
+  geom_vline(xintercept = 0.25) +
+  theme_classic()
+```
+
+:::
 
 ::: callout-tip
 # [**Exercise 1**](03_quality-control_Answer-key.qmd#exercise-1)
@@ -29,13 +313,32 @@ Approximate time: XY minutes
 Exercise 1
 :::
 
-# Topic 2
+# Filtration
 
-## Sub-topic 1
+We will apply very minimal filtering here. It has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq.
 
-## Sub-topic 2
+```{r}
+# TODO there has to be a cleaner way to do this
+seurat_filtered <- subset(seurat_merged,
+  ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 10)) |
+  ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 10)))
 
-## Sub-topic 3
+seurat_filtered <- subset(seurat_filtered,
+  ((orig.ident == "P5CRC") & (nFeature_Spatial.008um > 15)) |
+  ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 10)))
+  
+seurat_filtered <- subset(seurat_filtered, mitoRatio < 0.25)
+seurat_filtered <- subset(seurat_filtered, log10GenesPerUMI > 0.80)
+
+seurat_filtered
+```
+
+How many cells did we remove in this filtration process?
+
+```{r}
+ncol(seurat_merged) - ncol(seurat_filtered)
+```
+
 
 ::: callout-tip
 # [**Exercise 2**](03_quality-control_Answer-key.qmd#exercise-2)
@@ -43,16 +346,57 @@ Exercise 1
 Exercise 1
 :::
 
-# Topic 3
+# Visualizing Counts Data
 
-## Sub-topic 1
+We can visualize the number of UMIs and gene counts per bin, both as a distribution and layered on top of the tissue image. 
 
-## Sub-topic 2
+## Violin Plots
 
-## Sub-topic 3
+Let’s start with a violin plot to look at the distribution of UMI counts and gene counts. The input is our post-filtered dataset.
+
+```{r}
+p_ncount <- VlnPlot(seurat_filtered, 
+                    features = "nCount_Spatial.008um", 
+                    pt.size = 0, group.by = 'orig.ident') +
+  NoLegend()
+
+p_nfeats <- VlnPlot(seurat_filtered, 
+                    features = "nFeature_Spatial.008um", 
+                    pt.size = 0, group.by = 'orig.ident') + 
+  NoLegend()
+
+p_ncount | p_nfeats
+```
+
+We see that both distributions have a similar peak but the nUMI distribution has a much longer tail. This is expected, because while the small physical size of the bins means that most genes will be detected only once or twice, a minority of bins under very transcriptionally active cells may exhibit multiple transcripts of the same gene.
+
+
+## Spatial Overlay
+
+Next, we can look at the same metrics and the distribution on the actual image itself. Note that many spots have very few counts, in part due to low cellular density or cell types with low complexity in certain tissue regions.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+SpatialFeaturePlot(seurat_filtered, 
+                   c("nFeature_Spatial.008um", "nCount_Spatial.008um"),
+                   pt.size.factor = 3,
+                   image.alpha = 0)
+```
 
 ::: callout-tip
 # [**Exercise 3**](03_quality-control_Answer-key.qmd#exercise-3)
 
 Exercise 3
 :::
+
+
+# Save!
+
+Now is a great spot to save our `seurat_filtered` object as we have finished filtered.
+
+```{r}
+#| eval: false
+# Save Seurat object
+saveRDS(seurat_filtered, "data/seurat_filtered.RDS")
+```
