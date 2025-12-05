@@ -62,6 +62,7 @@ For the remainder of the workflow we will be mainly using functions available in
 # Load libraries
 library(Seurat)
 library(tidyverse)
+library(scales)
 
 seurat_filtered <- readRDS("data/seurat_filtered.RDS")
 seurat_filtered
@@ -153,7 +154,7 @@ This means that our downsampled cells in the sketch will oversample rare populat
 
 For our dataset, we are going to downsample our dataset to 10,000 bins using the `SketchData()` function. The function takes a **normalized** single-cell dataset containing a set of **variable features**. 
 
-It returns a Seurat object with a new assay (sketch), consisting of `ncells` bins selected based off a **"leverage score"** for each bin.
+It returns a Seurat object with a new assay (sketch), consisting of `ncells` bins selected based off a **"leverage score"** for each bin. This step may take a few minutes to run.
 
 ```{r}
 # we select 10,000 cells and create a new 'sketch' assay
@@ -186,7 +187,19 @@ seurat_sketch@meta.data %>% head() %>% relocate(leverage.score)
 ## Visualizing Leverage Scores
 
 ```{r}
-VlnPlot(seurat_sketch, "leverage.score")
+ggplot(seurat_sketch@meta.data) +
+  geom_histogram(aes(x=leverage.score, fill=orig.ident), 
+                 alpha=0.5, bins=100) +
+  theme_classic() +
+  scale_x_log10(labels = scales::label_number())
+```
+
+```{r}
+SpatialFeaturePlot(seurat_sketch,
+                   "leverage.score",
+                   pt.size.factor = 3,
+                   image.alpha = 0,
+                   max.cutoff = 2)
 ```
 
 ::: callout-tip

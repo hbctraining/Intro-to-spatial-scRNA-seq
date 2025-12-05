@@ -2380,5 +2380,61 @@
       "Day 1 Self-learning:",
       "Quality Control"
     ]
+  },
+  {
+    "objectID": "lessons/05_normalization_and_sketch_downsampling.html",
+    "href": "lessons/05_normalization_and_sketch_downsampling.html",
+    "title": "Normalization and Sketch Downsampling",
+    "section": "",
+    "text": "Approximate time: XY minutes"
+  },
+  {
+    "objectID": "lessons/05_normalization_and_sketch_downsampling.html#why-should-we-normalize",
+    "href": "lessons/05_normalization_and_sketch_downsampling.html#why-should-we-normalize",
+    "title": "Normalization and Sketch Downsampling",
+    "section": "Why Should We Normalize?",
+    "text": "Why Should We Normalize?\nAn essential first step in the majority of mRNA expression analyses is normalization, whereby systematic variations are adjusted for to make expression counts comparable across genes and/or samples. The counts of mapped reads for each gene is proportional to the expression of RNA (“interesting”) in addition to many other factors (“uninteresting”). Normalization is the process of adjusting raw count values to account for the “uninteresting” factors.\nThe main factors often considered during normalization are:\nSequencing depth: Accounting for sequencing depth is necessary for comparison of gene expression between cells. In the example below, each gene appears to have doubled in expression in cell 2, however this is a consequence of cell 2 having twice the sequencing depth."
+  },
+  {
+    "objectID": "lessons/05_normalization_and_sketch_downsampling.html#log-normalization-steps",
+    "href": "lessons/05_normalization_and_sketch_downsampling.html#log-normalization-steps",
+    "title": "Normalization and Sketch Downsampling",
+    "section": "Log-normalization Steps",
+    "text": "Log-normalization Steps\nVarious methods have been developed specifically for scRNA-seq normalization. Some simpler methods resemble what we have seen with bulk RNA-seq; the application of global scale factors** adjusting for a count-depth relationship that is assumed common across all genes. However, if those assumptions are not true then this basic normalization can lead to over-correction for lowly and moderately expressed genes and, in some cases, under-normalization of highly expressed genes (Bacher R et al, 2017). More complex methods will apply correction on a per-gene basis. In this lesson we will explore both approaches.\nRegardless of which method is used for normalization, it can be helpful to think of it as a two-step process (even though it is often described as a single step in most papers). The first is a scaling step and the second is a transformation.\n1. Scaling\nThe first step in normalization is to multiply each UMI count by a cell specific factor to get all cells to have the same UMI counts. Why would we want to do this? Different cells have different amounts of mRNA; this could be due to differences between cell types or variation within the same cell type depending on how well the chemistry worked in one drop versus another. In either case, we are not interested in comparing these absolute counts between cells. Instead we are interested in comparing concentrations, and scaling helps achieve this.\n2. Transformation\nThe next step is a transformation, and it is at this step where we can distinguish the simpler versus complex methods as mentioned above.\nSimple transformations are those which apply the same function to each individual measurement. Common examples include a log transform (which is applied in the original Seurat workflow), or a square root transform (less commonly used)."
+  },
+  {
+    "objectID": "lessons/05_normalization_and_sketch_downsampling.html#perform-log-normalization",
+    "href": "lessons/05_normalization_and_sketch_downsampling.html#perform-log-normalization",
+    "title": "Normalization and Sketch Downsampling",
+    "section": "Perform Log-normalization",
+    "text": "Perform Log-normalization\nLet’s start by creating a new script for the normalization and integration steps. Create a new script (File -&gt; New File -&gt; R script), and save it as normalization_and_sketch.R.\nFor the remainder of the workflow we will be mainly using functions available in the Seurat package. Additionally, we will load in the seurat_filtered object we created in the previous lesson.\n\n# Normalization and Sketch Subsampling\n# Dec 2025\n\n# Load libraries\nlibrary(Seurat)\nlibrary(tidyverse)\nlibrary(scales)\n\nseurat_filtered &lt;- readRDS(\"data/seurat_filtered.RDS\")\nseurat_filtered\n\nAn object of class Seurat \n18085 features across 826613 samples within 1 assay \nActive assay: Spatial.008um (18085 features, 0 variable features)\n 1 layer present: counts\n 2 spatial fields of view present: P5CRC.008um P5NAT.008um\n\n\nBefore we make any comparisons across cells, we will apply a simple normalization with the NormalizeData() function. This is solely for the purpose of exploring the sources of variation in our data.\n\n# Normalize the counts\nseurat_sketch &lt;- NormalizeData(seurat_filtered)\n\nAfter normalization, we can call our Seurat object with:\n\nseurat_sketch\n\nAn object of class Seurat \n18085 features across 826613 samples within 1 assay \nActive assay: Spatial.008um (18085 features, 0 variable features)\n 2 layers present: counts, data\n 2 spatial fields of view present: P5CRC.008um P5NAT.008um\n\n\nAnd we can see that there is now a new data layer in the Seurat object.\n\n\n\n\n\n\nExercise 1\n\n\n\nExercise 1"
+  },
+  {
+    "objectID": "lessons/05_normalization_and_sketch_downsampling.html#calculating-hvgs",
+    "href": "lessons/05_normalization_and_sketch_downsampling.html#calculating-hvgs",
+    "title": "Normalization and Sketch Downsampling",
+    "section": "Calculating HVGs",
+    "text": "Calculating HVGs\nHVGs are calculated using the FindVariableFeatures() function. Some key arguments supplied to this function are:\n\n\n\n\n\n\n\nArgument\nDescription\n\n\n\n\nselection.method\nHow to choose top variable features. vst: Fits a line to log(variance) vs. log(mean) using loess, standardizes values, and computes variance after clipping (see clip.max).\n\n\nnfeatures\nNumber of features to select as top variable features; used when selection.method is dispersion or vst\n\n\n\n\n# Identify the most variable genes\nseurat_sketch &lt;- FindVariableFeatures(seurat_sketch, \n                     selection.method = \"vst\",\n                     nfeatures = 2000)\n\nWhen we examine our Seurat object, we see that FindVariableFeatures() has added 2,000 variable features - just as we specified with nfeatures.\n\nseurat_sketch\n\nAn object of class Seurat \n18085 features across 826613 samples within 1 assay \nActive assay: Spatial.008um (18085 features, 2000 variable features)\n 2 layers present: counts, data\n 2 spatial fields of view present: P5CRC.008um P5NAT.008um\n\n\nSeurat allows us to access the ranked highly variable genes with the VariableFeatures() function. Here we print the top 15:\n\n# Identify the 15 most highly variable genes\nranked_variable_genes &lt;- VariableFeatures(seurat_sketch)\ntop_genes &lt;- ranked_variable_genes[1:15]\ntop_genes\n\n [1] \"IGHG3\" \"IGHM\"  \"SPP1\"  \"IGLC7\" \"IGLC1\" \"SST\"   \"IGHG1\" \"INSL5\" \"CHGA\" \n[10] \"VIP\"   \"HBA2\"  \"GCG\"   \"CXCL8\" \"MMP12\" \"PYY\"  \n\n\n\n\n\n\n\n\nExercise 2\n\n\n\nUsing GeneCards, loop up one of the top genes and read more about its function and how it could possible relate to CRC."
+  },
+  {
+    "objectID": "lessons/05_normalization_and_sketch_downsampling.html#downsampling",
+    "href": "lessons/05_normalization_and_sketch_downsampling.html#downsampling",
+    "title": "Normalization and Sketch Downsampling",
+    "section": "Downsampling",
+    "text": "Downsampling\nFor our dataset, we are going to downsample our dataset to 10,000 bins using the SketchData() function. The function takes a normalized single-cell dataset containing a set of variable features.\nIt returns a Seurat object with a new assay (sketch), consisting of ncells bins selected based off a “leverage score” for each bin. This step may take a few minutes to run.\n\n# we select 10,000 cells and create a new 'sketch' assay\nseurat_sketch &lt;- SketchData(object = seurat_sketch,\n                            assay = 'Spatial.008um',\n                            ncells = 10000,\n                            method = \"LeverageScore\",\n                            sketched.assay = \"sketch\")"
+  },
+  {
+    "objectID": "lessons/05_normalization_and_sketch_downsampling.html#sketch-assay",
+    "href": "lessons/05_normalization_and_sketch_downsampling.html#sketch-assay",
+    "title": "Normalization and Sketch Downsampling",
+    "section": "Sketch Assay",
+    "text": "Sketch Assay\nWe can see that there are four major changes that have taken place:\n\nThe number of features in the second line has double, because we have added a new assay\nAccordingly, the number of assays has increased from one to two\nThe active assay has change from Spatial.016um to sketch\nThere is a new line listing additional assays that exist in the Seurat object\n\n\nseurat_sketch\n\nAn object of class Seurat \n36170 features across 826613 samples within 2 assays \nActive assay: sketch (18085 features, 2000 variable features)\n 2 layers present: counts, data\n 1 other assay present: Spatial.008um\n 2 spatial fields of view present: P5CRC.008um P5NAT.008um\n\n\nWe can also see that the leverage.score has been added as a column to the metadata of our object.\n\nseurat_sketch@meta.data %&gt;% head() %&gt;% relocate(leverage.score)\n\n                            leverage.score orig.ident nCount_Spatial.008um\nP5CRC_s_008um_00602_00290-1     0.09142904      P5CRC                  225\nP5CRC_s_008um_00789_00234-1     0.01895360      P5CRC                   76\nP5CRC_s_008um_00728_00006-1     0.20933028      P5CRC                  215\nP5CRC_s_008um_00681_00396-1     0.06665954      P5CRC                   74\nP5CRC_s_008um_00078_00444-1     0.02559120      P5CRC                   65\nP5CRC_s_008um_00128_00278-1     0.17665603      P5CRC                 1300\n                            nFeature_Spatial.008um log10GenesPerUMI  mitoRatio\nP5CRC_s_008um_00602_00290-1                    199        0.9773277 0.04888889\nP5CRC_s_008um_00789_00234-1                     71        0.9842859 0.01315789\nP5CRC_s_008um_00728_00006-1                    196        0.9827724 0.04651163\nP5CRC_s_008um_00681_00396-1                     71        0.9903846 0.04054054\nP5CRC_s_008um_00078_00444-1                     57        0.9685377 0.23076923\nP5CRC_s_008um_00128_00278-1                    906        0.9496410 0.17307692"
+  },
+  {
+    "objectID": "lessons/05_normalization_and_sketch_downsampling.html#visualizing-leverage-scores",
+    "href": "lessons/05_normalization_and_sketch_downsampling.html#visualizing-leverage-scores",
+    "title": "Normalization and Sketch Downsampling",
+    "section": "Visualizing Leverage Scores",
+    "text": "Visualizing Leverage Scores\n\nggplot(seurat_sketch@meta.data) +\n  geom_histogram(aes(x=leverage.score, fill=orig.ident), \n                 alpha=0.5, bins=100) +\n  theme_classic() +\n  scale_x_log10(labels = scales::label_number())\n\n\n\n\n\n\n\n\n\nSpatialFeaturePlot(seurat_sketch,\n                   \"leverage.score\",\n                   pt.size.factor = 3,\n                   image.alpha = 0,\n                   max.cutoff = 2)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 3\n\n\n\nExercise 3"
   }
 ]
