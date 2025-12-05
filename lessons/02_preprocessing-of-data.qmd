@@ -30,6 +30,7 @@ Matched control and cancerous colon sample from 58 year old female in stage IV-A
 -   [Natural (control)](https://www.10xgenomics.com/platforms/visium/product-family/dataset-human-crc)
 -   [Colorectal Cancer](https://www.10xgenomics.com/platforms/visium/product-family/dataset-human-crc)
 
+With the associated [paper](https://www.nature.com/articles/s41588-025-02193-3)
 
 ### Mouse Brain
 
@@ -299,6 +300,15 @@ Additionally, we do not have use the `@meta.data` each time we want to access a 
 ```{r}
 crc$nCount_Spatial.008um %>% head()
 ```
+
+### Idents
+
+TODO
+
+```{r}
+Idents(crc) <- "orig.ident"
+```
+
 :::
 
 ::: callout-tip
@@ -441,6 +451,12 @@ If we look at the metadata of the merged object we should be able to see the pre
 # Check that the merged object has the appropriate sample-specific prefixes
 head(seurat_merged@meta.data)
 tail(seurat_merged@meta.data)
+```
+
+Lastly we want to make sure that the `Idents` of our cells is a useful piece of information, for example like `orig.ident`.
+
+```{r}
+Idents(seurat_merged) <- "orig.ident"
 ```
 
 ::: callout-tip
