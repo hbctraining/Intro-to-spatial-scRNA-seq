@@ -2677,5 +2677,40 @@
     "title": "Clustering Answer Key",
     "section": "",
     "text": "Exercise 1\nQuestion\nAnswer\n\n\nExercise 2\nQuestion\nAnswer\n\n\nExercise 3\nQuestion\nAnswer"
+  },
+  {
+    "objectID": "lessons/07_integration.html",
+    "href": "lessons/07_integration.html",
+    "title": "Integration",
+    "section": "",
+    "text": "Approximate time: XY minutes"
+  },
+  {
+    "objectID": "lessons/07_integration.html#batch-distribution-in-clusters",
+    "href": "lessons/07_integration.html#batch-distribution-in-clusters",
+    "title": "Integration",
+    "section": "Batch Distribution in Clusters",
+    "text": "Batch Distribution in Clusters\nWe do see a clear split in our dataset between our NAT and CRC samples. This is emphasized even more when we look at the distribution of cells in each cluster.\n\n# Barplot of proportion of cells in each cluster by sample\nggplot(seurat_processed@meta.data) +\n    geom_bar(aes(x=seurat_cluster.projected, fill=orig.ident), \n             position=position_fill())  +\n    theme_classic()\n\n\n\n\n\n\n\n\nIn particular, this tells us that we need to zoom in on clusters 1 and 10 to determine if integration is necessary."
+  },
+  {
+    "objectID": "lessons/07_integration.html#possible-explanations",
+    "href": "lessons/07_integration.html#possible-explanations",
+    "title": "Integration",
+    "section": "Possible Explanations",
+    "text": "Possible Explanations\nAt such a low resolution, we expect our clusters to map to larger celltypes. Therefore, before running any single-cell analysis, it is important to come in with some expectations of your cell population. Even better would be to make use of known marker genes curated from previous publications. Here, we have provided a few examples of genes that we would expect to represent some of the cell populations.\n\n\n\n\n\n\n\nCell type\nGenes\n\n\n\n\nGoblet cells\nCLCA1, FCGBP, MUC2\n\n\nGoblet/Entero\nPIGR\n\n\nTumor\nCEACAM6, CEACAM5\n\n\nFibroblasts\nCOL1A1\n\n\nMacrophages\nC1QC, SPP1, SELENOP\n\n\nCAF\nCOL1A1\n\n\nT cells\nTRAC, CD3E\n\n\nEndothelial\nPECAM1\n\n\nPlasma cells\nIGKC\n\n\n\nIt is tempting to jump straight into integration! However, it is best to give a justification why such a step is necessary to unsure that you are not losing real biology in the process of doing so.\n\n\n\n\n\n\nExercise 2\n\n\n\nIs there a population here that could potentially explain the differences between our samples?"
+  },
+  {
+    "objectID": "lessons/07_integration.html#assessing-tumor-cells",
+    "href": "lessons/07_integration.html#assessing-tumor-cells",
+    "title": "Integration",
+    "section": "Assessing Tumor Cells",
+    "text": "Assessing Tumor Cells\nSince we are comparing cancerous versus normal samples, it would make sense that our P5CRC sample will have a unique population of tumor cells. In CRC, CEACAM6 and CEACAM5 are good marker genes for identifying tumor cells.\nAccording to genecards, CEACAM6 is also known as “Carcinoembryonic Antigen-Related Cell Adhesion Molecule 6” where: &gt; Members of this family play a role in cell adhesion and are widely used as tumor markers in serum immunoassay determinations of carcinoma. This gene affects the sensitivity of tumor cells to adenovirus infection.\nTo see if these genes are associated with the clusters we identified previously, we can utilize VlnPlot() to identify clusters with higher expression of these tumor genes.\n\nVlnPlot(seurat_processed, \"CEACAM6\", pt.size = 0) +\n  NoLegend()\n\n\n\n\n\n\n\n\nWe see that clusters 1 and 10 do indeed have higher expression of this tumor marker gene! We can even look at CEACAM5 at the same time with a dotplot to gain more confidence with two marker genes as well:\n\nDotPlot(seurat_processed, c(\"CEACAM5\", \"CEACAM6\"))"
+  },
+  {
+    "objectID": "lessons/07_integration.html#final-integration-decision",
+    "href": "lessons/07_integration.html#final-integration-decision",
+    "title": "Integration",
+    "section": "Final Integration Decision",
+    "text": "Final Integration Decision\nWe can see that the lack of overlap in samples/batch have a biological answer, it would not make sense to try and force the cells together using integration. If we were to try and integrate the dataset at this point, we would be trying to massage the tumor cells to appear more similarly to other populations in the dataset. That is not the end goal of our analysis, where we would want to identify the difference transcriptional differences in tumor cells.\n\n\n\n\n\n\nExercise 2\n\n\n\nExercise 1"
   }
 ]

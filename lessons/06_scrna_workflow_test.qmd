@@ -70,3 +70,71 @@ DimPlot(seurat_processed,
 ```
 
 # Moving on
+
+
+# Celltype markers
+
+```{r}
+#| fig-width: 15
+celltype_markers <- list(
+  goblet = c("CLCA1", "FCGBP", "MUC2"),
+  goblet_enterocyte = c("PIGR"),
+  tumor = c("CEACAM6", "CEACAM5"),
+  fibroblast = c("COL1A1"),
+  macrophage = c("C1QC", "SPP1", "SELENOP"),
+  tcell = c("TRAC", "CD3E"),
+  endothelial = c("PECAM1"),
+  plasma = c("IGKC"))
+
+p <- DotPlot(seurat_processed, celltype_markers)
+p
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+genes <- c("CLCA1", "FCGBP", "MUC2",
+  "PIGR",
+  "CEACAM6", "CEACAM5",
+  "COL1A1",
+  "C1QC", "SPP1", "SELENOP",
+  "TRAC", "CD3E",
+  "PECAM1",
+  "IGKC")
+
+p <- FeaturePlot(seurat_processed, genes, reduction="full.umap.sketch")
+p
+```
+
+| Tumor Type | Genes              |
+|------------|--------------------|
+| Tumor I    | JCHAIN, RGMB       |
+| Tumor II   | MUC17, ANPEP       |
+| Tumor III  | DAB2, MME          |
+| Tumor IV   | LYZ, IGHG1         |
+| Tumor V    | MGST2, LRBA        |
+
+```{r}
+gene_sets <- list(
+  Tumor_I   = c("JCHAIN", "RGMB"),
+  Tumor_II  = c("MUC17", "ANPEP"),
+  Tumor_III = c("DAB2", "MME"),
+  Tumor_IV  = c("LYZ", "IGHG1"),
+  Tumor_V   = c("MGST2", "LRBA")
+)
+
+DotPlot(seurat_processed, gene_sets)
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+genes <- c("JCHAIN", "RGMB",
+           "MUC17", "ANPEP",
+           "DAB2", "MME",
+           "LYZ", "IGHG1",
+           "MGST2", "LRBA")
+
+p <- DotPlot(seurat_processed, genes)
+p
+```
