@@ -42,6 +42,18 @@ A 10 µm section was taken with a cryostat (Epredia CryoStar NX70). Tissue block
 
 The data was subset to a smaller cross-section of the brain in order to make it more manageable on local laptops. The instructions for how to subset a 10X Visium HD slides can be found [here](Aside_subsetting_slide.qmd).
 
+We expect to see the following celltypes in our dataset:
+
+- B cells
+- T cells
+- Tumor
+- Myeloid
+- Fibroblast
+- Endothelial
+- Intestinal Epithelial
+- Smooth Muscle
+- Neuronal
+
 :::
 
 ## Downloading the R Project and Data

@@ -21,8 +21,6 @@ Generally, we always look at our clustering **without integration** before decid
 
 In this lesson, we will cover the integration of our samples across conditions, which is adapted from the [Seurat Guided Integration Tutorial](https://satijalab.org/seurat/articles/integration_introduction.html).
 
-## Before Integration
-
  **Do not just always perform integration because you think there might be differences - explore the data.** If we had performed the normalization on both conditions together in a Seurat object and visualized the similarity between cells, we would have seen in our dataset there is condition-specific clustering:
 
 Condition-specific clustering of the cells indicates that we need to integrate the cells across conditions to ensure that cells of the same cell type cluster together. 
@@ -35,16 +33,7 @@ library(tidyverse)
 seurat_processed <- readRDS("data/seurat_processed.RDS")
 ```
 
-In our case, we have only one batch condition, which is our samples `P5CRC` and `P5NAT`. Here we assess botht the PCA and the UMAP to see if there is a clear split based upon our batch variable.
-
-
-```{r}
-p1 <- FeaturePlot(seurat_processed,
-              "mitoRatio",
-              reduction = "full.pca.sketch") +
-  NoLegend() + ggtitle("PCA (Projected)")
-p1
-```
+In our case, we have only one batch condition, which is our samples `P5CRC` and `P5NAT`. Here we assess both the PCA and the UMAP to see if there is a clear split based upon our batch variable.
 
 ```{r}
 #| fig-width: 10
@@ -66,41 +55,65 @@ p1 | p2
 
 We want to identify  _**cell types which are present in all samples/conditions/modalities**_ within our dataset, and therefore would like to observe a representation of cells from both samples/conditions/modalities in every cluster. This will enable more interpretable results downstream (i.e. DE analysis, ligand-receptor analysis, differential abundance analysis, ...).
 
-## Alternative UMAP Visualization
+::: {.callout-note collapse=true}
+# Alternative UMAP Visualization
+
+Sometimes it can be helpful to look at the UMAP/PCA plots using the `split.by` parameter:
 
 ```{r}
 DimPlot(seurat_processed, group.by = "orig.ident", split.by = "orig.ident" )
 ```
+However it can be difficult to see where the cells are in one condition do not lay in the other condition. So what we can do is make our own custom ggplot where we color all the cells in the background as gray and overlay the condition cells on top. This makes it more clear where the differneces between conditions are.
 
 ```{r}
 df <- FetchData(seurat_processed, c("fullumapsketch_1", 
                                     "fullumapsketch_2", 
                                     "orig.ident"))
 
-
+# gray isn't working 
+# TODO
 p <- ggplot(df) +
   geom_point(aes(x=fullumapsketch_1, 
                  y=fullumapsketch_2),
-             color = "lightgray", alpha=0.5) +
+             color = "lightgray", alpha=0.5, size = 0.1) +
   geom_point(aes(x=fullumapsketch_1, 
                  y=fullumapsketch_2, 
-                 color=orig.ident)) +
+                 color=orig.ident),
+             size = 0.1) +
   theme_void() +
   facet_wrap(~orig.ident)
+p
 ```
+:::
 
-## Barplot
-
-```{r}
-```
 
 ::: callout-tip
 # [**Exercise 1**](07_clustering-quality-control_Answer-key.qmd#exercise-1)
 
-Exercise 1
+1. Do you see a clear split quadrants of the UMAP and PCA? What is an alternative visualization that might make it easier to quantify the difference.
 :::
 
-# Testing Known Marker Genes
+
+# Integration Considerations
+
+Now that we have thought some more about what could be causing our differences, we can start by assessing where the split in dataset originates. One of the clearest way is to take a look at the clusters that were calculated during the `FindClusters()` step of our workflow.
+
+## Batch Distribution in Clusters
+
+We do see a clear split in our dataset between our `NAT` and `CRC` samples. This is emphasized even more when we look at the distribution of cells in each cluster.
+
+```{r}
+#| label: cell_proportion_barplot
+# Barplot of proportion of cells in each cluster by sample
+ggplot(seurat_processed@meta.data) +
+    geom_bar(aes(x=seurat_cluster.projected, fill=orig.ident), 
+             position=position_fill())  +
+    theme_classic()
+```
+
+## Possible Explanations
+
+Before running any single-cell analysis, it is important to come in with some expectations of your cell population. Even better would be to make use of known marker genes curated from previous publications. Here, we have provided a few examples of genes that we would expect to represent some of the cell populations 
 
 | Cell type     | Genes                                                                 |
 |---------------|------------------------------------------------------------------------|
@@ -114,7 +127,16 @@ Exercise 1
 | Endothelial   | PECAM1                                                                 |
 | Plasma cells  | IGKC                                                                   |
 
-## Sub-topic 1
+
+::: callout-tip
+# [**Exercise 2**](07_clustering-quality-control_Answer-key.qmd#exercise-2)
+
+Is there a population here that could potentially explain the differences between our samples?
+:::
+
+## Assessing Tumor Cells
+
+We can use alternative visualizations to more clearly see
 
 ```{r}
 #| fig-width: 15
@@ -177,14 +199,10 @@ genes <- c("JCHAIN", "RGMB",
            "LYZ", "IGHG1",
            "MGST2", "LRBA")
 
-p <- FeaturePlot(seurat_processed, genes, reduction="full.umap.sketch")
+p <- DotPlot(seurat_processed, genes)
 p
 ```
 
-
-## Sub-topic 2
-
-## Sub-topic 3
 
 
 ::: callout-tip
@@ -193,13 +211,27 @@ p
 Exercise 1
 :::
 
-# Topic 3
+# Integration Algorithms
 
-## Sub-topic 1
+While we may not be running integration on our own dataset, it is beneficial to understand some of the basic principles of the tools. Some of the most commonly used algorithms are described here:
 
-## Sub-topic 2
+::: {.panel-tabset}
 
-## Sub-topic 3
+## CCA
+
+::: {.callout-note collapse=true}
+# Code to run CCA
+:::
+
+## Harmony
+
+::: {.callout-note collapse=true}
+# Code to run Harmony
+:::
+
+## Mutual Nearest Neighbors
+
+::: 
 
 ::: callout-tip
 # [**Exercise 3**](07_clustering-quality-control_Answer-key.qmd#exercise-3)
@@ -207,6 +239,3 @@ Exercise 1
 Exercise 3
 :::
 
-
-```{r}
-```

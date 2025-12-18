@@ -204,6 +204,15 @@ DimPlot(seurat_processed,
 
 Ultimately what we have calculated with PCA are values that can represent how similar cells are to one another. We would expect that cells with similar gene expression will have similar PC values. For example, we would anticipate that two Fibroblast cells would have comparable gene expression - which would also results in similar scores in principal components. This is why many of the downstream steps in the remainder of this lesson use PCA as the input.
 
+Also assess the differences in coordinates based on batch variables.
+
+```{r}
+DimPlot(seurat_processed,
+        reduction = "pca.sketch",
+        group.by = "orig.ident",
+        split.by = "orig.ident")
+```
+
 ## Selecting PC Dimensions
 
 To overcome the extensive technical noise in the expression of any single gene for scRNA-seq data, Seurat assigns cells to clusters based on their PCA scores derived from the expression of the integrated most variable genes. Each PC essentially representing a "metagene" that combines information across a correlated gene set. **Determining how many PCs to include in the clustering step is therefore important to ensure that we are capturing the majority of the variation**, or cell types, present in our dataset. 
