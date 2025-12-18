@@ -58,9 +58,9 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 09:30 - 10:00 | Self-learning lessons discussion | All |
-| 10:00 - 11:00| [Normalization and Regressing Out Unwanted Variation](../lessons/05_normalization.qmd) | Noor |
+| 10:00 - 11:00| [Normalization and Regressing Out Unwanted Variation](../lessons/05_normalization_and_sketch_downsampling.qmd) | Noor |
 | 11:00 - 11:05 | Break |
-| 11:05 - 12:00| [Clustering](../lessons/06_clustering.qmd) | Will |
+| 11:05 - 12:00| [Clustering](../lessons/06_scRNAseq_workflow.qmd) | Will |
 
 ### Before the next class:
 I. Please **study the contents** and **work through all the code** within the following lessons:
