@@ -5,6 +5,9 @@ date: "Tuesday, July 22, 2025"
 editor_options: 
   markdown: 
     wrap: 72
+format: 
+  html: 
+    math: mathjax
 ---
 
 Approximate time: XY minutes
@@ -25,9 +28,11 @@ seurat_merged <- readRDS("intermediates/02_seurat_merged.RDS")
 
 # Quality Metrics
 
-In Visium HD data, the main challenge is **in delineating bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
+In Visium HD data, the main challenge is in **delineating bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
 
-We will assess a variety of metrics to evaluate which bins are considered low/high quality. **We will apply very permissive filtering here as it has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq.** Various metrics can be used to filter low-quality bins from high-quality ones, including:
+We will assess a variety of metrics to evaluate which bins are considered low/high quality. **We will apply very permissive filtering here** as it has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq. 
+
+The metrics we will be using to filter low-quality bins from high-quality ones include:
 
 - Cell counts
 - UMI counts per cell
@@ -39,14 +44,25 @@ Some of these values we will calculate throughout this lesson and be added to ou
 
 ```{r}
 meta <- seurat_merged@meta.data
-meta %>% head()
+```
+
+```{r}
+#| eval: false
+View(meta)
+```
+
+```{r}
+#| echo: false
+meta %>% 
+  head(15) %>%
+  DT::datatable()
 ```
 
 We will be using a variety of visualization methods, including looking at the values on the spatial slide as well as the distribution of values before and after filtration.
 
 ::: {.callout-note collapse=true}
 # "Nicer" spatial visualizations
-For "nicer" (subjective) plotting with `SpatialFeaturePlot()` and `SpatialDimPlot()`, we will add some extra parameters to gain a clearer image beyond the default plot.
+For "nicer" (subjective) plotting with `SpatialFeaturePlot()` and `SpatialDimPlot()`, we will add some extra parameters to gain a clearer image beyond the default plot (shown here):
 
 ```{r}
 SpatialFeaturePlot(seurat_merged, 
@@ -58,12 +74,6 @@ Therefore for the rest of this lesson, we will be using the following arguments:
 - `pt.size.factor = 3`: to clearly see each bin on the slide
 - `image.alpha = 0`: to remove the H&E stained image in the background of the image
 - `max.cutoff` and `min.cutoff`: to not allow the color scale to be driven by smaller populations of cells with high/low values
-:::
-
-
-::: callout-note
-# Sample specific values
-A commonly asked question is if you have to use the same threshold values across all your samples. We recommend that you follow what the data is telling you and do it on a per sample basis. The likelihood of the quality of two samples to be perfectly identical is slim.
 :::
 
 ## Number of Cells
@@ -134,6 +144,11 @@ ggplot(meta_filt) +
 
 :::
 
+::: {.callout-note collapse=true}
+# Sample specific values
+A commonly asked question is if you have to use the same threshold values across all your samples. We recommend that you follow what the data is telling you and do it on a per sample basis. Ultimately the end goal is to retain **high-quality bins**, even if that means using different values for each sample.
+:::
+
 ## Genes Detected per Cell
 
 We have similar expectations for gene detection as for UMI detection, although it may be a bit lower than UMIs.
@@ -193,14 +208,14 @@ If there are many captured transcripts (high nUMI) and a low number of genes det
 
 The novelty score is computed as shown below:
 
-$ \text{Complexity Score} = \frac{\text{Number of Genes}}{\text{Number of UMIs}} $
+$$
+\text{Complexity Score} = \frac{\text{Number of Genes}}{\text{Number of UMIs}}
+$$
 
 ```{r}
 # Add number of genes per UMI for each cell to metadata
 seurat_merged$log10GenesPerUMI <- log10(seurat_merged$nFeature_Spatial.008um) / 
                                   log10(seurat_merged$nCount_Spatial.008um)
-
-seurat_merged@meta.data %>% head()
 ```
 
 ::: {.panel-tabset}
@@ -248,7 +263,13 @@ ggplot(meta_filt) +
 
 This metric can identify whether there is a large amount of mitochondrial contamination from dead or dying cells. We define poor-quality samples for mitochondrial counts as bins which surpass the 0.2 mitochondrial ratio threshold, unless of course you are expecting this in your sample. This ratio is computed as:
 
-::: callout-note
+$$
+\text{Mitochondrial Ratio} = 
+\frac{\text{Number of reads aligning to mitochondrial genes}}
+     {\text{Total reads}}
+$$
+
+::: {.callout-note collapse=true}
 # Think about your biological question
 While using a baseline score of 0.2 is an acceptable threshold for removing high mitochondrial content cells, it is important to always go back to your original biological question. What samples are you working with? Do you expect there to be high values of mitochondria due to your experimental condition?
 
@@ -261,8 +282,6 @@ For example, if you were studying renal oncocytomas would you make this same cho
 seurat_merged$mitoRatio <- PercentageFeatureSet(object = seurat_merged, 
                                                 pattern = "^MT-")
 seurat_merged$mitoRatio <- seurat_merged@meta.data$mitoRatio / 100
-
-seurat_merged@meta.data %>% head() %>% relocate(mitoRatio)
 ```
 
 ::: {.panel-tabset}
@@ -313,7 +332,7 @@ ggplot(meta_filt) +
 Exercise 1
 :::
 
-# Filtration
+# Filter
 
 We will apply very minimal filtering here. It has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq.
 
@@ -370,14 +389,13 @@ p_ncount | p_nfeats
 
 We see that both distributions have a similar peak but the nUMI distribution has a much longer tail. This is expected, because while the small physical size of the bins means that most genes will be detected only once or twice, a minority of bins under very transcriptionally active cells may exhibit multiple transcripts of the same gene.
 
-
 ## Spatial Overlay
 
 Next, we can look at the same metrics and the distribution on the actual image itself. Note that many spots have very few counts, in part due to low cellular density or cell types with low complexity in certain tissue regions.
 
 ```{r}
-#| fig-width: 10
-#| fig-height: 10
+#| fig-width: 8
+#| fig-height: 8
 SpatialFeaturePlot(seurat_filtered, 
                    c("nFeature_Spatial.008um", "nCount_Spatial.008um"),
                    pt.size.factor = 3,
