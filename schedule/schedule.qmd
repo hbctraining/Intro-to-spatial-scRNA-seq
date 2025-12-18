@@ -20,7 +20,7 @@ execute:
 | 09:45 - 10:45| [Introduction to Spatial Single Cell RNA-sequencing](../lessons/01_introduction-to-spatial.qmd) | [Dr. Mandovi Chatterjee](https://singlecellcore.hms.harvard.edu/people/mandovi-chatterjee) |
 | 10:45 - 10:50 | Break |
 | 10:50 - 11:15 | scRNA-seq pre-reading discussion | All |
-| 11:00 - 11:45 | [Pre-processing of Spatial Data](../lessons/02_loading-spatial-data.qmd) | Noor |
+| 11:00 - 11:45 | [Loading Spatial Data](../lessons/02_loading-spatial-data.qmd) | Noor |
 | 11:45 - 12:00 | Overview of self-learning materials and homework submission | Will |
 
 ### Before the next class:
@@ -58,9 +58,9 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 09:30 - 10:00 | Self-learning lessons discussion | All |
-| 10:00 - 11:00| [Normalization and Regressing Out Unwanted Variation](../lessons/05_normalization_and_sketch_downsampling.qmd) | Noor |
+| 10:00 - 11:00| [Normalization and Sketch Downsampling](../lessons/05_normalization_and_sketch_downsampling.qmd) | Noor |
 | 11:00 - 11:05 | Break |
-| 11:05 - 12:00| [Clustering](../lessons/06_scRNAseq_workflow.qmd) | Will |
+| 11:05 - 12:00| [scRNA-seq Workflow](../lessons/06_scRNAseq_workflow.qmd) | Will |
 
 ### Before the next class:
 I. Please **study the contents** and **work through all the code** within the following lessons:
