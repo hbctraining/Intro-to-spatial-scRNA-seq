@@ -29,7 +29,7 @@ Approximate time: XY minutes
 Exercise 1
 :::
 
-# Topic 2
+# Image Based Technologies
 
 ## Sub-topic 1
 
@@ -43,7 +43,7 @@ Exercise 1
 Exercise 1
 :::
 
-# Topic 3
+# Transcriptome Based Technologies
 
 ## Sub-topic 1
 
@@ -56,3 +56,10 @@ Exercise 1
 
 Exercise 3
 :::
+
+While the single-digit micron resolution is a big technological improvement over original Visium’s original ∼55μm spots, the higher resolution also presents challenges. 
+
+| Pro                                                         | Con                                                           |
+|-------------------------------------------------------------|---------------------------------------------------------------|
+| Reconstructing single cells from the data, so each spot is one cell | Very small 2µm × 2µm (and 8µm × 8µm) bins may capture very little biological signal |
+| Continuous expression values across the entire tissue        | Large numbers of bins increase computational time and resource requirements |

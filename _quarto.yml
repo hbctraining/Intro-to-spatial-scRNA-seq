@@ -8,7 +8,7 @@ project:
 
 
 website:
-  title: "Introduction to single-cell RNA-seq"
+  title: "Introduction to Spatial Transcriptomics"
   page-footer: >
       This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). <br>
       These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.
@@ -42,7 +42,7 @@ website:
       - section: "Day 1:"
         contents:
           - lessons/01_introduction-to-spatial.qmd
-          - lessons/02_preprocessing-of-data.qmd
+          - lessons/02_loading-spatial-data.qmd
       
       - section: "Day 1 Self-learning:"
         contents:
@@ -51,8 +51,8 @@ website:
           
       - section: "Day 2:"
         contents:
-          - lessons/05_normalization.qmd
-          - lessons/06_clustering.qmd
+          - lessons/05_normalization_and_sketch_downsampling.qmd
+          - lessons/06_scRNAseq_workflow.qmd
           
       - section: "Day 2 Self-learning"
         contents:

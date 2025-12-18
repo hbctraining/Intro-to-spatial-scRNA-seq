@@ -1,5 +1,5 @@
 ---
-title: "scRNA-seq Workflow"
+title: "Identifying Unwanted Variation"
 authors: "Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui"
 date: "Tuesday, July 22, 2025"
 editor_options: 
@@ -12,12 +12,12 @@ Approximate time: XY minutes
 # Learning Objectives
 
 -   LO 1
--   LO 2
--   LO 3
+-   Perform clustering of cells based on significant principal components
+-   LO3
 
 # Single-Cell RNA-seq (scRNA-seq) Workflow
 
-We will be peforming a standard scRNA-seq workflow on our sketch object.
+We will be performing a standard scRNA-seq workflow on our `sketch` assay.
 For more explicit details on each one of these steps, we have materials
 on how to conduct a [scRNA-seq
 analysis](https://hbctraining.github.io/Intro-to-scRNAseq-Quarto/) from
@@ -44,6 +44,7 @@ steps:
     PCA space
 5.  `FindClusters()`: Iteratively group bins together based on
     neighborhood distances. Higher resolution will yield more groups.
+6.  `RunUMAP()`: TODO
 
 With that being said, there are certain elements that are unique to a
 spatial dataset that we will highlight as we go through all of these
@@ -272,7 +273,7 @@ seurat_processed <- FindClusters(seurat_processed,
 If we take a look at the columns in our `@meta.data`, we see that the column `seurat_cluster.sketched` is a new column that was added.
 
 ```{r}
-seurat_processed@meta.data %>% head(120) %>% relocate("seurat_cluster.sketched")
+seurat_processed@meta.data %>% head() %>% relocate("seurat_cluster.sketched")
 ```
 
 ::: callout-tip
@@ -310,9 +311,11 @@ seurat_processed <- RunUMAP(seurat_processed,
 seurat_processed
 ```
 
-These UMAP coordinates are now stored in the `dimensional reductions calculated: pca.sketch, umap.sketch`
+```{r}
+DimPlot(seurat_processed, group.by="orig.ident", reduction="umap.sketch")
+```
 
-Which we can now visualize with the clusters that we calculated earlier using `DimPlot() and adding clearer labels with `LabelClusters()`.
+These UMAP coordinates are now stored in the `dimensional reductions calculated: pca.sketch, umap.sketch`. Now we can visualize with the clusters that we calculated earlier using `DimPlot() and adding clearer labels with `LabelClusters()`.
 
 ```{r}
 # Plot UMAP
@@ -321,6 +324,117 @@ p <- DimPlot(seurat_processed,
   ggtitle("Sketched clustering")
 LabelClusters(p, id = "ident",  fontface = "bold", size = 5, 
               bg.colour = "white", bg.r = .2, force = 0)
+```
+
+# Project Back to Entire Dataset
+
+Now that we have our clusters and dimensional reductions from our sketched dataset, we need to extend these to the full dataset.
+
+## Run `ProjectData()`
+
+The `ProjectData` function projects all the bins in the dataset (the `Spatial.008um` assay) onto the `sketch` assay. 
+
+```{r}
+#| eval: false
+# Increases the size of the default vector
+options(future.globals.maxSize= 2000000000)
+
+seurat_processed <- ProjectData(
+  object = seurat_processed,
+  assay = "Spatial.008um",
+  full.reduction = "full.pca.sketch",
+  sketched.assay = "sketch",
+  sketched.reduction = "pca.sketch",
+  umap.model = "umap.sketch",
+  dims = 1:50,
+  refdata = list(seurat_cluster.projected = "seurat_cluster.sketched"))
+```
+
+Using the sketch PCA and UMAP, the `ProjectData` function returns a Seurat object that includes:
+
+| Category                   | Description                                                                                           |
+|----------------------------|-------------------------------------------------------------------------------------------------------|
+| Dimensional reduction (PCA) | The `full.pca.sketch` reduction extends the PCA from sketched cells to all bins in the dataset        |
+| Dimensional reduction (UMAP)| The `full.umap.sketch` reduction extends the UMAP from sketched cells to all bins in the dataset       |
+| Cluster labels             | The `seurat_cluster.projected` metadata column labels all cells with cluster labels from sketched cells |
+
+
+We can now see the additional full-dataset reductions in the object.
+
+```{r}
+#| echo: false
+seurat_processed <- readRDS("data/seurat_processed.RDS")
+
+# Randomize cluster order for visualization in next step
+rando <- sample(levels(seurat_processed$seurat_cluster.projected))
+seurat_processed$seurat_cluster.projected <- factor(seurat_processed$seurat_cluster.projected, levels=rando)
+```
+
+```{r}
+seurat_processed
+```
+
+Note that a score for the projection of each bin will be saved as a column in the metadata. Now the `seurat_cluster.projected` column shows values for every bin.
+
+```{r}
+head(seurat_processed@meta.data)
+```
+
+## Visualize Projected Clusters
+
+We can now visualize our clusters from the projected assignments. The UMAP plot now contains more points, which is expected because we are now visualizing the full dataset rather than our 10,000 bin sketch. Nonetheless, we can see that the full dataset is still well-represented by the projected dimensional reduction and clustering. 
+
+```{r}
+# switch to full dataset assay
+DefaultAssay(seurat_processed) <- "Spatial.008um"
+
+# Change the idents to the projected cluster assignments
+Idents(seurat_processed) <- "seurat_cluster.projected"
+
+# Plot UMAP
+p <- DimPlot(seurat_processed, 
+        reduction = "full.umap.sketch", label = T) + 
+  ggtitle("Projected clustering")
+LabelClusters(p, id = "ident",  fontface = "bold", size = 5, 
+              bg.colour = "white", bg.r = .2, force = 0)
+```
+
+::: callout-note
+# My cluster labels are all out of order!
+To ensure that our cluster labels are listed in proper numeric order, we are going to make our `seurat_cluster.projected` a factor and set the levels such that the order is correct.
+
+```{r}
+# Arrange so clusters get listed in numerical order
+seurat_processed$seurat_cluster.projected <- seurat_processed$seurat_cluster.projected %>% 
+  as.numeric() %>%
+  as.factor()
+
+seurat_processed$seurat_cluster.projected %>% head()
+```
+
+Now we should see the levels in correct numeric order.
+
+```{r}
+# Change the idents to the projected cluster assignments
+Idents(seurat_processed) <- "seurat_cluster.projected"
+
+# Plot UMAP
+p <- DimPlot(seurat_processed, 
+        reduction = "full.umap.sketch", label = T) + 
+  ggtitle("Projected clustering")
+LabelClusters(p, id = "ident",  fontface = "bold", size = 5, 
+              bg.colour = "white", bg.r = .2, force = 0)
+```
+
+:::
+
+In order to see the clusters superimposed on our image we can use the `SpatialDimPlot()` function. We will also set the color palette and convert the cluster assignments to a factor so they are ordered numerically rather than lexicographically in the figure.
+
+```{r}
+#| fig-width: 10
+SpatialDimPlot(seurat_processed,
+               pt.size.factor = 7,
+               image.alpha = 0)
 ```
 
 # Save!
@@ -333,6 +447,7 @@ Now is a great spot to save our `seurat_processed` object as we have added a lot
 - k-Nearest neighbors
 - Clusters
 - UMAP
+- Projected clusters
 
 ```{r}
 #| eval: false

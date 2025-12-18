@@ -1,0 +1,212 @@
+---
+title: "Integration"
+authors: "Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui"
+date: "Tuesday, July 22, 2025"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Approximate time: XY minutes
+
+# Learning Objectives
+
+-   When is it appropriate to integrate
+-   LO 2
+-   LO 3
+
+# To Integrate or Not to Integrate
+
+Generally, we always look at our clustering **without integration** before deciding whether we need to perform any alignment. It can be helpful to first run through clustering with samples from different sample classes together to see whether there are condition-specific clusters for cell types present in both conditions. Oftentimes, when clustering cells from multiple conditions there are condition-specific clusters and integration can help ensure the same cell types cluster together.
+
+In this lesson, we will cover the integration of our samples across conditions, which is adapted from the [Seurat Guided Integration Tutorial](https://satijalab.org/seurat/articles/integration_introduction.html).
+
+## Before Integration
+
+ **Do not just always perform integration because you think there might be differences - explore the data.** If we had performed the normalization on both conditions together in a Seurat object and visualized the similarity between cells, we would have seen in our dataset there is condition-specific clustering:
+
+Condition-specific clustering of the cells indicates that we need to integrate the cells across conditions to ensure that cells of the same cell type cluster together. 
+_**If cells cluster by sample, condition, batch, dataset, modality, performing integration can help align cells across the groups to greatly improve the clustering and the downstream analyses**._
+
+```{r}
+library(Seurat)
+library(tidyverse)
+
+seurat_processed <- readRDS("data/seurat_processed.RDS")
+```
+
+In our case, we have only one batch condition, which is our samples `P5CRC` and `P5NAT`. Here we assess botht the PCA and the UMAP to see if there is a clear split based upon our batch variable.
+
+
+```{r}
+p1 <- FeaturePlot(seurat_processed,
+              "mitoRatio",
+              reduction = "full.pca.sketch") +
+  NoLegend() + ggtitle("PCA (Projected)")
+p1
+```
+
+```{r}
+#| fig-width: 10
+p1 <- DimPlot(seurat_processed,
+              group.by="orig.ident",
+              reduction = "full.pca.sketch") +
+  NoLegend() + ggtitle("PCA (Projected)")
+
+p2 <- DimPlot(seurat_processed,
+              group.by="orig.ident",
+              reduction = "full.umap.sketch") +
+  ggtitle("UMAP (Projected)")
+
+p1 | p2
+```
+
+
+**Why is it important that cells of the same cell type cluster together?** 
+
+We want to identify  _**cell types which are present in all samples/conditions/modalities**_ within our dataset, and therefore would like to observe a representation of cells from both samples/conditions/modalities in every cluster. This will enable more interpretable results downstream (i.e. DE analysis, ligand-receptor analysis, differential abundance analysis, ...).
+
+## Alternative UMAP Visualization
+
+```{r}
+DimPlot(seurat_processed, group.by = "orig.ident", split.by = "orig.ident" )
+```
+
+```{r}
+df <- FetchData(seurat_processed, c("fullumapsketch_1", 
+                                    "fullumapsketch_2", 
+                                    "orig.ident"))
+
+
+p <- ggplot(df) +
+  geom_point(aes(x=fullumapsketch_1, 
+                 y=fullumapsketch_2),
+             color = "lightgray", alpha=0.5) +
+  geom_point(aes(x=fullumapsketch_1, 
+                 y=fullumapsketch_2, 
+                 color=orig.ident)) +
+  theme_void() +
+  facet_wrap(~orig.ident)
+```
+
+## Barplot
+
+```{r}
+```
+
+::: callout-tip
+# [**Exercise 1**](07_clustering-quality-control_Answer-key.qmd#exercise-1)
+
+Exercise 1
+:::
+
+# Testing Known Marker Genes
+
+| Cell type     | Genes                                                                 |
+|---------------|------------------------------------------------------------------------|
+| Goblet cells  | CLCA1, FCGBP, MUC2                                                     |
+| Goblet/Entero | PIGR                                                                   |
+| Tumor         | CEACAM6, CEACAM5                                                       |
+| Fibroblasts   | COL1A1                                                                 |
+| Macrophages   | C1QC, SPP1, SELENOP                                                    |
+| CAF           | COL1A1                                                                 |
+| T cells       | TRAC, CD3E                                                             |
+| Endothelial   | PECAM1                                                                 |
+| Plasma cells  | IGKC                                                                   |
+
+## Sub-topic 1
+
+```{r}
+#| fig-width: 15
+celltype_markers <- list(
+  goblet = c("CLCA1", "FCGBP", "MUC2"),
+  goblet_enterocyte = c("PIGR"),
+  tumor = c("CEACAM6", "CEACAM5"),
+  fibroblast = c("COL1A1"),
+  macrophage = c("C1QC", "SPP1", "SELENOP"),
+  tcell = c("TRAC", "CD3E"),
+  endothelial = c("PECAM1"),
+  plasma = c("IGKC"))
+
+p <- DotPlot(seurat_processed, celltype_markers)
+p
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+genes <- c("CLCA1", "FCGBP", "MUC2",
+  "PIGR",
+  "CEACAM6", "CEACAM5",
+  "COL1A1",
+  "C1QC", "SPP1", "SELENOP",
+  "TRAC", "CD3E",
+  "PECAM1",
+  "IGKC")
+
+p <- FeaturePlot(seurat_processed, genes, reduction="full.umap.sketch")
+p
+```
+
+| Tumor Type | Genes              |
+|------------|--------------------|
+| Tumor I    | JCHAIN, RGMB       |
+| Tumor II   | MUC17, ANPEP       |
+| Tumor III  | DAB2, MME          |
+| Tumor IV   | LYZ, IGHG1         |
+| Tumor V    | MGST2, LRBA        |
+
+```{r}
+gene_sets <- list(
+  Tumor_I   = c("JCHAIN", "RGMB"),
+  Tumor_II  = c("MUC17", "ANPEP"),
+  Tumor_III = c("DAB2", "MME"),
+  Tumor_IV  = c("LYZ", "IGHG1"),
+  Tumor_V   = c("MGST2", "LRBA")
+)
+
+DotPlot(seurat_processed, gene_sets)
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+genes <- c("JCHAIN", "RGMB",
+           "MUC17", "ANPEP",
+           "DAB2", "MME",
+           "LYZ", "IGHG1",
+           "MGST2", "LRBA")
+
+p <- FeaturePlot(seurat_processed, genes, reduction="full.umap.sketch")
+p
+```
+
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+
+::: callout-tip
+# [**Exercise 2**](07_clustering-quality-control_Answer-key.qmd#exercise-2)
+
+Exercise 1
+:::
+
+# Topic 3
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+::: callout-tip
+# [**Exercise 3**](07_clustering-quality-control_Answer-key.qmd#exercise-3)
+
+Exercise 3
+:::
+
+
+```{r}
+```

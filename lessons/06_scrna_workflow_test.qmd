@@ -1,0 +1,72 @@
+# Regressing Out Unwanted Variation
+
+## Identifying the Unwanted Variation
+
+Here we need to identify what is the variable causing the unwanted variation
+
+Based on the previous representation of PCA, we may think that the variable to regress out would be sample. However, before we make that call, let us evaluate how much overlap there is on a per-sample basis and see if there is a different variable that could explain the differences between `P5CRC` and `P5NAT`.
+
+```{r}
+DimPlot(seurat_processed,
+        group.by = "orig.ident",
+        split.by = "orig.ident",
+        reduction = "pca.sketch")
+```
+
+We see that on the left hand component of the plot, we do not see cells from `P5NAT`.
+
+So let us take a look at the other metadata that we have in our dataset.
+
+```{r}
+FeaturePlot(seurat_processed,
+            c("nCount_Spatial.008um",
+              "nFeature_Spatial.008um",
+              "mitoRatio"),
+            reduction = "pca.sketch")
+```
+
+## Mitochondrial Ratio
+
+Mitochondrial expression is another factor which can greatly influence clustering. Oftentimes, it is useful to regress out variation due to mitochondrial expression. However, if the differences in mitochondrial gene expression represent a biological phenomenon that may help to distinguish cell clusters, then we advise not regressing this out. In this exercise, we can perform a quick check and decide whether or not we want to regress it out.
+
+First, turn the mitochondrial ratio variable into a new categorical variable based on quartiles (using the code below):
+
+```{r}
+# Check quartile values
+summary(seurat_processed@meta.data$mitoRatio)
+```
+
+```{r}
+# Turn mitoRatio into categorical factor vector based on quartile values
+seurat_processed$mitoFr <- cut(seurat_processed$mitoRatio, 
+                   breaks=c(-Inf, 0.03650, 0.07018, 0.13806, Inf), 
+                   labels=c("Low", "Medium", "Medium high", "High"))
+```
+
+
+```{r}
+DimPlot(seurat_processed,
+        group.by = "mitoFr",
+        split.by = "mitoFr",
+        reduction = "pca.sketch")
+```
+
+Based on this plot, we can see that there is a different pattern of scatter for the plot containing cells with “High” mitochondrial expression. We observe that the lobe of cells on the left-hand side of the plot is where most of the cells with high mitochondrial expression are. For all other levels of mitochondrial expression we see a more even distribution of cells across the PCA plot.
+
+Since we see this clear difference, we will **regress out the `mitoRatio`.**
+
+# Regressing Mitochondrial Ratio
+
+We will re-calculate the scaled, log-normalized matrix with regressing `mitoRatio`. Then, with this new counts matrix we will calculate PCA once more.
+
+```{r}
+seurat_processed <- ScaleData(seurat_processed,
+                              vars.to.regress = "nCount_Spatial.008um")
+seurat_processed <- RunPCA(seurat_processed,
+                           reduction.name = "pca.sketch")
+
+DimPlot(seurat_processed,
+        reduction = "pca.sketch")
+```
+
+# Moving on

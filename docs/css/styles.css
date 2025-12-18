@@ -173,3 +173,37 @@ img {
   max-width: 100%;
   width: 100%;
 }
+
+/* --- Styled Markdown Tables --- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #d0d0d0;      /* outer border */
+  border-radius: 6px;
+  overflow: hidden;               /* ensures rounded corners render */
+  margin: 1.2em 0;
+  background: #fff;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.08);   /* subtle lift */
+}
+
+table th,
+table td {
+  border: 1px solid #e5e5e5;      /* internal grid lines */
+  padding: 0.55em 0.75em;
+}
+
+table th {
+  background: #f8f8f8;            /* header band */
+  font-weight: 600;
+  color: #333;
+}
+
+/* --- Crimson-Themed Table Headers (Markdown + kable + DT) --- */
+
+table thead th {
+  background: #a51c30 !important;     /* crimson */
+  color: #ffffff !important;          /* white text */
+  font-weight: 700 !important;        /* bold */
+  border: 1px solid #8b1628 !important;  /* darker crimson border */
+}
