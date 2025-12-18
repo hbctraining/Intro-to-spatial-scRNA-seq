@@ -65,7 +65,7 @@ II. **Submit your work**:
 ### Before the next class:
 I. Please **study the contents** and **work through all the code** within the following lessons:
 
-1. [Clustering Quality Control](../lessons/07_clustering-quality-control.qmd)
+1. [Integration](../lessons/07_integration.qmd)
       <details>
        <summary><i>Click here for a preview of this lesson</i></summary>
          <br>After separating cells into clusters, it is crtical to evaluate whether they are biologically meaningful or not. At this point we can also decide if we need to re-cluster and/or potentialy go back to a previous QC step.
