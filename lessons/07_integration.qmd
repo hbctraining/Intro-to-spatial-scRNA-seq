@@ -88,7 +88,7 @@ p
 
 
 ::: callout-tip
-# [**Exercise 1**](07_clustering-quality-control_Answer-key.qmd#exercise-1)
+# [**Exercise 1**](07_integration_Answer-key.qmd#exercise-1)
 
 1. Do you see a clear split quadrants of the UMAP and PCA? What is an alternative visualization that might make it easier to quantify the difference.
 :::
@@ -133,7 +133,7 @@ At such a low resolution, we expect our clusters to map to larger celltypes. The
 It is tempting to jump straight into integration! However, it is best to give a justification why such a step is necessary to unsure that you are not losing real biology in the process of doing so.
 
 ::: callout-tip
-# [**Exercise 2**](07_clustering-quality-control_Answer-key.qmd#exercise-2)
+# [**Exercise 2**](07_integration_Answer-key.qmd#exercise-2)
 
 Is there a population here that could potentially explain the differences between our samples?
 :::
@@ -143,6 +143,7 @@ Is there a population here that could potentially explain the differences betwee
 Since we are comparing cancerous versus normal samples, it would make sense that our `P5CRC` sample will have a unique population of tumor cells. In CRC, `CEACAM6` and `CEACAM5` are good marker genes for identifying tumor cells. 
 
 According to [genecards](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CEACAM6), `CEACAM6` is also known as "Carcinoembryonic Antigen-Related Cell Adhesion Molecule 6" where:
+
 > Members of this family play a role in cell adhesion and are widely used as tumor markers in serum immunoassay determinations of carcinoma. This gene affects the sensitivity of tumor cells to adenovirus infection.
 
 To see if these genes are associated with the clusters we identified previously, we can utilize `VlnPlot()` to identify clusters with higher expression of these tumor genes.
@@ -158,17 +159,24 @@ We see that clusters 1 and 10 do indeed have higher expression of this tumor mar
 DotPlot(seurat_processed, c("CEACAM5", "CEACAM6"))
 ```
 
+Now we also have the additional knowledge that there are likely some tumor cells among cluster 7.
+
 ## Final Integration Decision
 
 We can see that the lack of overlap in samples/batch have a biological answer, it would not make sense to try and force the cells together using integration. If we were to try and integrate the dataset at this point, we would be trying to massage the tumor cells to appear more similarly to other populations in the dataset. That is not the end goal of our analysis, where we would want to identify the difference transcriptional differences in tumor cells.
 
 ::: callout-tip
-# [**Exercise 2**](07_clustering-quality-control_Answer-key.qmd#exercise-2)
+# [**Exercise 2**](07_integration_Answer-key.qmd#exercise-2)
 
 Exercise 1
 :::
 
 # Integration Algorithms
+
+::: callout-note
+# Anecdote
+Integration typically is not the best way to go for spatial datasets
+:::
 
 While we may not be running integration on our own dataset, it is beneficial to understand some of the basic principles of the tools. Some of the most commonly used algorithms are described here:
 
@@ -262,7 +270,7 @@ For a more detailed breakdown of the `Harmony` algorithm, we recommend checking 
 ::: 
 
 ::: callout-tip
-# [**Exercise 3**](07_clustering-quality-control_Answer-key.qmd#exercise-3)
+# [**Exercise 3**](07_integration_Answer-key.qmd#exercise-3)
 
 Exercise 3
 :::

@@ -2704,7 +2704,7 @@
     "href": "lessons/07_integration.html#assessing-tumor-cells",
     "title": "Integration",
     "section": "Assessing Tumor Cells",
-    "text": "Assessing Tumor Cells\nSince we are comparing cancerous versus normal samples, it would make sense that our P5CRC sample will have a unique population of tumor cells. In CRC, CEACAM6 and CEACAM5 are good marker genes for identifying tumor cells.\nAccording to genecards, CEACAM6 is also known as “Carcinoembryonic Antigen-Related Cell Adhesion Molecule 6” where: &gt; Members of this family play a role in cell adhesion and are widely used as tumor markers in serum immunoassay determinations of carcinoma. This gene affects the sensitivity of tumor cells to adenovirus infection.\nTo see if these genes are associated with the clusters we identified previously, we can utilize VlnPlot() to identify clusters with higher expression of these tumor genes.\n\nVlnPlot(seurat_processed, \"CEACAM6\", pt.size = 0) +\n  NoLegend()\n\n\n\n\n\n\n\n\nWe see that clusters 1 and 10 do indeed have higher expression of this tumor marker gene! We can even look at CEACAM5 at the same time with a dotplot to gain more confidence with two marker genes as well:\n\nDotPlot(seurat_processed, c(\"CEACAM5\", \"CEACAM6\"))"
+    "text": "Assessing Tumor Cells\nSince we are comparing cancerous versus normal samples, it would make sense that our P5CRC sample will have a unique population of tumor cells. In CRC, CEACAM6 and CEACAM5 are good marker genes for identifying tumor cells.\nAccording to genecards, CEACAM6 is also known as “Carcinoembryonic Antigen-Related Cell Adhesion Molecule 6” where:\n\nMembers of this family play a role in cell adhesion and are widely used as tumor markers in serum immunoassay determinations of carcinoma. This gene affects the sensitivity of tumor cells to adenovirus infection.\n\nTo see if these genes are associated with the clusters we identified previously, we can utilize VlnPlot() to identify clusters with higher expression of these tumor genes.\n\nVlnPlot(seurat_processed, \"CEACAM6\", pt.size = 0) +\n  NoLegend()\n\n\n\n\n\n\n\n\nWe see that clusters 1 and 10 do indeed have higher expression of this tumor marker gene! We can even look at CEACAM5 at the same time with a dotplot to gain more confidence with two marker genes as well:\n\nDotPlot(seurat_processed, c(\"CEACAM5\", \"CEACAM6\"))\n\n\n\n\n\n\n\n\nNow we also have the additional knowledge that there are likely some tumor cells among cluster 7."
   },
   {
     "objectID": "lessons/07_integration.html#final-integration-decision",
@@ -2712,5 +2712,12 @@
     "title": "Integration",
     "section": "Final Integration Decision",
     "text": "Final Integration Decision\nWe can see that the lack of overlap in samples/batch have a biological answer, it would not make sense to try and force the cells together using integration. If we were to try and integrate the dataset at this point, we would be trying to massage the tumor cells to appear more similarly to other populations in the dataset. That is not the end goal of our analysis, where we would want to identify the difference transcriptional differences in tumor cells.\n\n\n\n\n\n\nExercise 2\n\n\n\nExercise 1"
+  },
+  {
+    "objectID": "lessons/07_integration_Answer-key.html",
+    "href": "lessons/07_integration_Answer-key.html",
+    "title": "Integration Answer Key",
+    "section": "",
+    "text": "Exercise 1\nQuestion\nAnswer\n\n\nExercise 2\nQuestion\nAnswer\n\n\nExercise 3\nQuestion\nAnswer"
   }
 ]
