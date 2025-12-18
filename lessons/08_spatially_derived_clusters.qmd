@@ -17,16 +17,23 @@ Approximate time: XY minutes
 
 # Spatially Variable Genes
 
-https://www.nature.com/articles/s41467-025-56080-w
 https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371
 
 Spatially variable genes (SVGs) are similar in concept to the highly variable genes that we calculated earlier - but with the added spatial location information. Essentially, identifying genes whose expression patterns change depending on where a cell is located on the tissue.
 
+In doing so, we are able to cluster cells together in a way that represents the different spatial domains
 
+## Use Case of SVGs
 
-## Sub-topic 1
+https://www.nature.com/articles/s41467-025-56080-w
 
-## Sub-topic 2
+> Methods for detecting the three SVG categories serve different purposes (Fig. 2a). First, the detection of overall SVGs screens informative genes for downstream analyses, including the identification of spatial domains and functional gene modules. Second, detecting cell-type-specific SVGs aims to reveal spatial variation within a cell type and help identify distinct cell subpopulations or states within cell types. Third, spatial-domain-marker SVG detection is used to find marker genes to annotate and interpret spatial domains already detected. These markers help understand the molecular mechanisms underlying spatial domains and assist in annotating tissue layers in other datasets.
+
+## Methods
+
+SpatialDE (python)
+MERINGUE
+BinSpect
 
 ## Sub-topic 3
 
@@ -40,14 +47,61 @@ Exercise 1
 
 [BANKSY](https://www.nature.com/articles/s41588-024-01664-3) is another method for performing clustering. Unlike Seurat, BANKSY takes into account not only an individual bin’s expression pattern but also the mean and the gradient of gene expression levels in a bin’s broader neighborhood. This makes it valuable for identifying and defining spatial regions of interest.
 
+To accomplish this, BANKSY calculates two different scores:
+
+- Weighted mean expression of genes in a spatial neighborhood
+- "Azimuthal gabor filter", which is the "gradient of gene expression in each cell’s neighborhood"
+
+In doing so, BANKSY is able to be flexible and not limit celltypes to _only_ be located nearby one another. Even more than that, there is `lambda` value that scales the weight of each of these matrices to give the user flexibility in how strongly the spatial weights should impact clustering.
+
+These new matrices are then concatenated to the counts matrix before running the remainder of a standard scRNA-seq workflow (dimensionality reduction, clustering, integration, etc.). Therefore, the final output of this algorithm is a modulated counts matrix that includes weighted scores that correspond to spatial domains.
+
+```{r}
+library(Seurat)
+# remotes::install_github("prabhakarlab/Banksy")
+library(Banksy)
+library(SeuratWrappers)
+library(tidyverse)
+
+seurat_processed <- readRDS("data/seurat_processed.RDS")
+seurat_processed
+```
+
 ## Set-up
 
-We use the `RunBanksy` function to create a new "BANKSY" assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Two parameters of importance are:
+We use the `RunBanksy` function to create a new "BANKSY" assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Some parameters of importance are:
 
 - `k_geom` - Number of bins to consider for the local neighborhood. Larger values will yield larger domains.
 - `lambda` - Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains. 
+- `group` - allows us to run BANKSY on multiple samples, which will allow the function to understand that if there is overlap in spatial location it is because they come from two different slides
+- `dimx` and `dimy` - the locations on the x,y axis of a spot on the tissue slide
+- `split.scale` - within-group scaling, accounting for minor differences in datasets
+
+To set ourselves up for success, we are going to add the spatial locations for each spot into the metadata. This will allow us to specify `dimx` and `dimy` more easily.
 
 ```{r}
+seurat_processed$cell <- rownames(seurat_processed@meta.data)
+# CRC and NAT sample coordinates
+coords_crc <- GetTissueCoordinates(seurat_processed, image = "P5CRC.008um")
+coords_nat <- GetTissueCoordinates(seurat_processed, image = "P5NAT.008um")
+coords <- rbind(coords_crc, coords_nat)
+
+seurat_processed@meta.data <- left_join(seurat_processed@meta.data, coords, by = "cell")
+rownames(seurat_processed@meta.data) <- seurat_processed$cell
+```
+
+We should see the new BANKSY assay in our object:
+
+```{r}
+# Run Banksy from SeuratWrappers
+seurat_banksy <- RunBanksy(seurat_processed, lambda = 0.8, verbose = T,
+                           assay = 'Spatial.008um', slot = 'data', k_geom = 50,
+                           group = "orig.ident", dimx = 'x', dimy = 'y', split.scale = TRUE)
+seurat_banksy
+```
+
+```{r}
+FetchData(seurat_processed, c('sdimx', 'sdimy'))
 ```
 
 ## Sub-topic 2
