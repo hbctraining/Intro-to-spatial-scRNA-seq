@@ -1,0 +1,72 @@
+---
+title: "Spatially Derived Clusters"
+authors: "Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui"
+date: "Tuesday, July 22, 2025"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Approximate time: XY minutes
+
+# Learning Objectives
+
+-   LO 1
+-   LO 2
+-   LO 3
+
+# Spatially Variable Genes
+
+https://www.nature.com/articles/s41467-025-56080-w
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+::: callout-tip
+# [**Exercise 1**](08_marker-identification_Answer-key.qmd#exercise-1)
+
+Exercise 1
+:::
+
+# BANKSY
+
+[BANKSY](https://www.nature.com/articles/s41588-024-01664-3) is another method for performing clustering. Unlike Seurat, BANKSY takes into account not only an individual bin’s expression pattern but also the mean and the gradient of gene expression levels in a bin’s broader neighborhood. This makes it valuable for identifying and defining spatial regions of interest.
+
+
+
+## Set-up
+
+We use the `RunBanksy` function to create a new "BANKSY" assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Two parameters of importance are:
+
+- `k_geom` - Number of bins to consider for the local neighborhood. Larger values will yield larger domains.
+- `lambda` - Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains. 
+
+```{r}
+```
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+::: callout-tip
+# [**Exercise 2**](08_marker-identification_Answer-key.qmd#exercise-2)
+
+Exercise 1
+:::
+
+# Topic 3
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+::: callout-tip
+# [**Exercise 3**](08_marker-identification_Answer-key.qmd#exercise-3)
+
+Exercise 3
+:::

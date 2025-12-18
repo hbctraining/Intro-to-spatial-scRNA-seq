@@ -75,7 +75,7 @@ I. Please **study the contents** and **work through all the code** within the fo
            - Explore the cell type identities by looking at the expression for known markers across the clusters.<br>
         </details>
 
-2. [Marker Identification](../lessons/08_marker-identification.qmd)
+2. [Marker Identification](../lessons/08_spatially_derived_clusters.qmd)
       <details>
        <summary><i>Click here for a preview of this lesson</i></summary>
        <br>Brief description of the lesson<br><br>In this lesson you will:<br>
