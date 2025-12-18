@@ -1904,14 +1904,14 @@
     "href": "schedule/schedule.html",
     "title": "Introduction to Spatial Single-cell RNA-seq Schedule",
     "section": "",
-    "text": "Pre-reading 1\nPre-reading 2\nPre-reading 3"
+    "text": "Spatial Technology Overview\nPre-reading 2\nPre-reading 3"
   },
   {
     "objectID": "schedule/schedule.html#pre-reading",
     "href": "schedule/schedule.html#pre-reading",
     "title": "Introduction to Spatial Single-cell RNA-seq Schedule",
     "section": "",
-    "text": "Pre-reading 1\nPre-reading 2\nPre-reading 3"
+    "text": "Spatial Technology Overview\nPre-reading 2\nPre-reading 3"
   },
   {
     "objectID": "schedule/schedule.html#day-1",
@@ -1925,7 +1925,7 @@
     "href": "schedule/schedule.html#day-2",
     "title": "Introduction to Spatial Single-cell RNA-seq Schedule",
     "section": "Day 2",
-    "text": "Day 2\n\n\n\nTime\nTopic\nInstructor\n\n\n\n\n09:30 - 10:00\nSelf-learning lessons discussion\nAll\n\n\n10:00 - 11:00\nNormalization and Sketch Downsampling\nNoor\n\n\n11:00 - 11:05\nBreak\n\n\n\n11:05 - 12:00\nscRNA-seq Workflow\nWill\n\n\n\n\nBefore the next class:\nI. Please study the contents and work through all the code within the following lessons:\n\nIntegration\n\n\nClick here for a preview of this lesson\n\nAfter separating cells into clusters, it is crtical to evaluate whether they are biologically meaningful or not. At this point we can also decide if we need to re-cluster and/or potentialy go back to a previous QC step. In this lesson you will: - Check to see that clusters are not influenced by uninteresting sources of variation - Check to see whether the major principal components are driving the different clusters - Explore the cell type identities by looking at the expression for known markers across the clusters.\n\nMarker Identification\n\n\nClick here for a preview of this lesson\n\nBrief description of the lessonIn this lesson you will: - LO 1 - LO 2 - LO 3\n\nIntegration\n\n\nClick here for a preview of this lesson\n\nBrief description of the lessonIn this lesson you will: - LO 1 - LO 2 - LO 3\n\n\n\nSubmit your work:\n\n\nEach lesson above contains exercises; please go through each of them.\nSubmit your answers to the exercises using this Google form(NEED LINK STILL) on the day before the next class.\n\n\n\nQuestions?\n\nIf you get stuck due to an error while running code in the lesson, email us"
+    "text": "Day 2\n\n\n\nTime\nTopic\nInstructor\n\n\n\n\n09:30 - 10:00\nSelf-learning lessons discussion\nAll\n\n\n10:00 - 11:00\nNormalization and Sketch Downsampling\nNoor\n\n\n11:00 - 11:05\nBreak\n\n\n\n11:05 - 12:00\nscRNA-seq Workflow\nWill\n\n\n\n\nBefore the next class:\nI. Please study the contents and work through all the code within the following lessons:\n\nIntegration\nSpatially Derived Clusters\n\n\nClick here for a preview of this lesson\n\nBrief description of the lessonIn this lesson you will: - LO 1 - LO 2 - LO 3"
   },
   {
     "objectID": "schedule/schedule.html#day-3",
@@ -2803,5 +2803,141 @@
     "title": "Spatially Derived Clusters",
     "section": "Set-up",
     "text": "Set-up\nWe use the RunBanksy function to create a new “BANKSY” assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Two parameters of importance are:\n\nk_geom - Number of bins to consider for the local neighborhood. Larger values will yield larger domains.\nlambda - Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains."
+  },
+  {
+    "objectID": "lessons/Pre-reading_01.html#advantages",
+    "href": "lessons/Pre-reading_01.html#advantages",
+    "title": "Spatial Technologies",
+    "section": "Advantages",
+    "text": "Advantages\nAnalyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets.\nCan be run on non-model organisms with more ease.",
+    "crumbs": [
+      "Pre-reading:",
+      "Spatial Technologies"
+    ]
+  },
+  {
+    "objectID": "lessons/Pre-reading_01.html#disadvantage",
+    "href": "lessons/Pre-reading_01.html#disadvantage",
+    "title": "Spatial Technologies",
+    "section": "Disadvantage",
+    "text": "Disadvantage\nHigh resolution experiments (Visium HD) can be very expensive",
+    "crumbs": [
+      "Pre-reading:",
+      "Spatial Technologies"
+    ]
+  },
+  {
+    "objectID": "lessons/Pre-reading_01.html#summary-of-current-methods",
+    "href": "lessons/Pre-reading_01.html#summary-of-current-methods",
+    "title": "Spatial Technologies",
+    "section": "Summary of Current Methods",
+    "text": "Summary of Current Methods\nVisium GeoMX",
+    "crumbs": [
+      "Pre-reading:",
+      "Spatial Technologies"
+    ]
+  },
+  {
+    "objectID": "lessons/Pre-reading_01.html#advantages-1",
+    "href": "lessons/Pre-reading_01.html#advantages-1",
+    "title": "Spatial Technologies",
+    "section": "Advantages",
+    "text": "Advantages\nAs imaging the slide is the foremost part of the method, you are able to annotate subregions of the tissue on a more granular level.",
+    "crumbs": [
+      "Pre-reading:",
+      "Spatial Technologies"
+    ]
+  },
+  {
+    "objectID": "lessons/Pre-reading_01.html#disadvantages",
+    "href": "lessons/Pre-reading_01.html#disadvantages",
+    "title": "Spatial Technologies",
+    "section": "Disadvantages",
+    "text": "Disadvantages\nAs this is a probe-based method, there must be known probes for each gene of interest. This can be particularly challenging for non-model organisms and limits the scale of expression for each cell.",
+    "crumbs": [
+      "Pre-reading:",
+      "Spatial Technologies"
+    ]
+  },
+  {
+    "objectID": "lessons/Pre-reading_01.html#summary-of-current-methods-1",
+    "href": "lessons/Pre-reading_01.html#summary-of-current-methods-1",
+    "title": "Spatial Technologies",
+    "section": "Summary of Current Methods",
+    "text": "Summary of Current Methods\nseqFISH MERFISH Xenium",
+    "crumbs": [
+      "Pre-reading:",
+      "Spatial Technologies"
+    ]
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html",
+    "href": "lessons/spatial_technology_overview.html",
+    "title": "Spatial Technologies",
+    "section": "",
+    "text": "Approximate time: XY minutes"
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#sub-topic-1",
+    "href": "lessons/spatial_technology_overview.html#sub-topic-1",
+    "title": "Spatial Technologies",
+    "section": "Sub-topic 1",
+    "text": "Sub-topic 1"
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#sub-topic-2",
+    "href": "lessons/spatial_technology_overview.html#sub-topic-2",
+    "title": "Spatial Technologies",
+    "section": "Sub-topic 2",
+    "text": "Sub-topic 2"
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#sub-topic-3",
+    "href": "lessons/spatial_technology_overview.html#sub-topic-3",
+    "title": "Spatial Technologies",
+    "section": "Sub-topic 3",
+    "text": "Sub-topic 3"
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#advantages",
+    "href": "lessons/spatial_technology_overview.html#advantages",
+    "title": "Spatial Technologies",
+    "section": "Advantages",
+    "text": "Advantages\nAnalyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets.\nCan be run on non-model organisms with more ease."
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#disadvantage",
+    "href": "lessons/spatial_technology_overview.html#disadvantage",
+    "title": "Spatial Technologies",
+    "section": "Disadvantage",
+    "text": "Disadvantage\nHigh resolution experiments (Visium HD) can be very expensive"
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#summary-of-current-methods",
+    "href": "lessons/spatial_technology_overview.html#summary-of-current-methods",
+    "title": "Spatial Technologies",
+    "section": "Summary of Current Methods",
+    "text": "Summary of Current Methods\nVisium GeoMX"
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#advantages-1",
+    "href": "lessons/spatial_technology_overview.html#advantages-1",
+    "title": "Spatial Technologies",
+    "section": "Advantages",
+    "text": "Advantages\nAs imaging the slide is the foremost part of the method, you are able to annotate subregions of the tissue on a more granular level."
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#disadvantages",
+    "href": "lessons/spatial_technology_overview.html#disadvantages",
+    "title": "Spatial Technologies",
+    "section": "Disadvantages",
+    "text": "Disadvantages\nAs this is a probe-based method, there must be known probes for each gene of interest. This can be particularly challenging for non-model organisms and limits the scale of expression for each cell."
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#summary-of-current-methods-1",
+    "href": "lessons/spatial_technology_overview.html#summary-of-current-methods-1",
+    "title": "Spatial Technologies",
+    "section": "Summary of Current Methods",
+    "text": "Summary of Current Methods\nseqFISH MERFISH Xenium"
   }
 ]

@@ -8,7 +8,7 @@ execute:
 
 ## Pre-reading
 
-- [Pre-reading 1](../lessons/Pre-reading_01.qmd)
+- [Spatial Technology Overview](../lessons/spatial_technology_overview.qmd)
 - [Pre-reading 2](../lessons/Pre-reading_02.qmd)
 - [Pre-reading 3](../lessons/Pre-reading_03.qmd)
 
@@ -66,16 +66,8 @@ II. **Submit your work**:
 I. Please **study the contents** and **work through all the code** within the following lessons:
 
 1. [Integration](../lessons/07_integration.qmd)
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-         <br>After separating cells into clusters, it is crtical to evaluate whether they are biologically meaningful or not. At this point we can also decide if we need to re-cluster and/or potentialy go back to a previous QC step.
-         <br><br>In this lesson you will:<br>
-           - Check to see that clusters are not influenced by uninteresting sources of variation<br>
-           - Check to see whether the major principal components are driving the different clusters<br>
-           - Explore the cell type identities by looking at the expression for known markers across the clusters.<br>
-        </details>
 
-2. [Marker Identification](../lessons/08_spatially_derived_clusters.qmd)
+2. [Spatially Derived Clusters](../lessons/08_spatially_derived_clusters.qmd)
       <details>
        <summary><i>Click here for a preview of this lesson</i></summary>
        <br>Brief description of the lesson<br><br>In this lesson you will:<br>
@@ -84,68 +76,68 @@ I. Please **study the contents** and **work through all the code** within the fo
              - LO 3<br><br>
         </details>
         
-3. [Integration](../lessons/09_integration.qmd)
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-       <br>Brief description of the lesson<br><br>In this lesson you will:<br>
-             - LO 1<br>
-             - LO 2<br>
-             - LO 3<br><br>
-        </details>
+<!-- 3. [Integration](../lessons/09_integration.qmd) -->
+<!--       <details> -->
+<!--        <summary><i>Click here for a preview of this lesson</i></summary> -->
+<!--        <br>Brief description of the lesson<br><br>In this lesson you will:<br> -->
+<!--              - LO 1<br> -->
+<!--              - LO 2<br> -->
+<!--              - LO 3<br><br> -->
+<!--         </details> -->
 
 
-II. **Submit your work**:
-   * Each lesson above contains exercises; please go through each of them.
-   * **Submit your answers** to the exercises using [this Google form]()(**NEED LINK STILL**) on **the day *before* the next class**.
+<!-- II. **Submit your work**: -->
+<!--    * Each lesson above contains exercises; please go through each of them. -->
+<!--    * **Submit your answers** to the exercises using [this Google form]()(**NEED LINK STILL**) on **the day *before* the next class**. -->
 
-### Questions?
-* ***If you get stuck due to an error*** while running code in the lesson, [email us](mailto:hbctraining@hsph.harvard.edu) 
-
-
-***
+<!-- ### Questions? -->
+<!-- * ***If you get stuck due to an error*** while running code in the lesson, [email us](mailto:hbctraining@hsph.harvard.edu)  -->
 
 
-## Day 3
+<!-- *** -->
 
-| Time |  Topic  | Instructor |
-|:-----------:|:----------:|:--------:|
-| 9:30 - 10:15 | Self-learning lessons discussion | All |
-| 10:15 - 11:00 | [Spatially Derived Values](../lessons/10_spatially-derived-values.qmd) | Noor |
-| 11:00 - 11:05 | Break |
-| 11:05 - 12:00 | [Deconvolution](../lessons/11_deconvolution.qmd) | Will |
 
-### Before the next class:
-I. Please **study the contents** and **work through all the code** within the following lessons:
+<!-- ## Day 3 -->
 
-1. [Differential Gene Expression](../lessons/12_dge.qmd)
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-       <br>Brief description of the lesson<br><br>In this lesson you will:<br>
-             - LO 1<br>
-             - LO 2<br>
-             - LO 3<br><br>
-        </details>
+<!-- | Time |  Topic  | Instructor | -->
+<!-- |:-----------:|:----------:|:--------:| -->
+<!-- | 9:30 - 10:15 | Self-learning lessons discussion | All | -->
+<!-- | 10:15 - 11:00 | [Spatially Derived Values](../lessons/10_spatially-derived-values.qmd) | Noor | -->
+<!-- | 11:00 - 11:05 | Break | -->
+<!-- | 11:05 - 12:00 | [Deconvolution](../lessons/11_deconvolution.qmd) | Will | -->
 
-2. [Seurat Cheatsheet](../lessons/Cheatsheet_seurat.qmd) 
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-         <br>At this point, we have populated our seurat object with many different pieces of information. Knowing how to access different values will allow you to interact more efficiently with your dataset.
-         <br><br>In this lesson you will:<br>
-           - Explore the different parts of a seurat object.<br>
-           - Use the built-in functions from the Seurat package for visualizations and grabbing data.<br>
-        </details>
+<!-- ### Before the next class: -->
+<!-- I. Please **study the contents** and **work through all the code** within the following lessons: -->
 
-***
+<!-- 1. [Differential Gene Expression](../lessons/12_dge.qmd) -->
+<!--       <details> -->
+<!--        <summary><i>Click here for a preview of this lesson</i></summary> -->
+<!--        <br>Brief description of the lesson<br><br>In this lesson you will:<br> -->
+<!--              - LO 1<br> -->
+<!--              - LO 2<br> -->
+<!--              - LO 3<br><br> -->
+<!--         </details> -->
 
-## Day 4
+<!-- 2. [Seurat Cheatsheet](../lessons/Cheatsheet_seurat.qmd)  -->
+<!--       <details> -->
+<!--        <summary><i>Click here for a preview of this lesson</i></summary> -->
+<!--          <br>At this point, we have populated our seurat object with many different pieces of information. Knowing how to access different values will allow you to interact more efficiently with your dataset. -->
+<!--          <br><br>In this lesson you will:<br> -->
+<!--            - Explore the different parts of a seurat object.<br> -->
+<!--            - Use the built-in functions from the Seurat package for visualizations and grabbing data.<br> -->
+<!--         </details> -->
 
-| Time |  Topic  | Instructor |
-|:-----------:|:----------:|:--------:|
-| 9:30 - 10:15 | Self-learning lessons discussion | All |
-| 10:15 - 11:15 | [Cell-Cell Comunication](../lessons/13_cell-cell-communication.qmd) | Noor |
-| 11:15 - 11:20 | Break |
-| 11:20 - 11:45 | Overview and Final Q & A | All |
-| 11:45- 12:00 | [Wrap up](../slides/Workshop_wrapup.pdf) | Will |
+<!-- *** -->
+
+<!-- ## Day 4 -->
+
+<!-- | Time |  Topic  | Instructor | -->
+<!-- |:-----------:|:----------:|:--------:| -->
+<!-- | 9:30 - 10:15 | Self-learning lessons discussion | All | -->
+<!-- | 10:15 - 11:15 | [Cell-Cell Comunication](../lessons/13_cell-cell-communication.qmd) | Noor | -->
+<!-- | 11:15 - 11:20 | Break | -->
+<!-- | 11:20 - 11:45 | Overview and Final Q & A | All | -->
+<!-- | 11:45- 12:00 | [Wrap up](../slides/Workshop_wrapup.pdf) | Will | -->
 
 
 ***

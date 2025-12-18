@@ -1,0 +1,76 @@
+---
+title: Spatial Technologies
+authors: Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui
+date: "Tuesday, July 22, 2025"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Approximate time: XY minutes
+
+# Learning Objectives
+
+-   LO 1
+-   LO 2
+-   LO 3
+
+https://www.nature.com/articles/s41581-024-00841-1
+
+# Overview of Spatial Technologies
+
+This field is ever-changing with new technologies appearing everyday. Here we will summarize the most well defined and used technologies as of 2025.
+
+## Sub-topic 1
+
+## Sub-topic 2
+
+## Sub-topic 3
+
+
+# Sequencing-based Technologies
+
+Sequencing-based methods focus on capturing the full transcriptome of the cells in the dataset. To accomplish this, the tissue is "binned" into different spots which are then sequenced to measure expression levels. In some times, the spot can sometime be comprised of multiple cells (not single-cell level). As the technology has evolved, the bins sizes have become ever smaller, allowing for near single-cell levels.
+
+## Advantages
+
+Analyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets.
+
+Can be run on non-model organisms with more ease.
+
+## Disadvantage
+
+High resolution experiments (Visium HD) can be very expensive
+
+
+
+## Summary of Current Methods
+
+Visium
+GeoMX
+
+# Imaging-based Technologies
+
+These methods utilize floresence to quantify gene expression on a tissue slide. Specifically utlizing fluoresence in situ hybridization (FISH) to measure expression of a select panel of genes (selected by the researcher) using a probes. Therefore we are able to evaluate the expression for each individual cell after segmentation.
+
+## Advantages
+
+As imaging the slide is the foremost part of the method, you are able to annotate subregions of the tissue on a more granular level.
+
+## Disadvantages
+
+As this is a probe-based method, there must be known probes for each gene of interest. This can be particularly challenging for non-model organisms and limits the scale of expression for each cell.
+
+## Summary of Current Methods
+
+seqFISH
+MERFISH
+Xenium
+
+# Comparing Methods
+
+| Sequencing-based                                              | Imaging-based                                           |
+|--------------------------------------------------------------|---------------------------------------------------------|
+| Transcriptome-wide sequencing                                | Probe-based sequencing from a panel of genes           |
+| Spots/bins resolution depends on bin size (not always single-cell) | Single-cell resolution                           |
+| More accessible to non-model organisms                       | Can be challenging to find probes for non-model organisms |

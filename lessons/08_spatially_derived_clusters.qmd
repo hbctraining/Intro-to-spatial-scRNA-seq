@@ -18,6 +18,11 @@ Approximate time: XY minutes
 # Spatially Variable Genes
 
 https://www.nature.com/articles/s41467-025-56080-w
+https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371
+
+Spatially variable genes (SVGs) are similar in concept to the highly variable genes that we calculated earlier - but with the added spatial location information. Essentially, identifying genes whose expression patterns change depending on where a cell is located on the tissue.
+
+
 
 ## Sub-topic 1
 
@@ -34,8 +39,6 @@ Exercise 1
 # BANKSY
 
 [BANKSY](https://www.nature.com/articles/s41588-024-01664-3) is another method for performing clustering. Unlike Seurat, BANKSY takes into account not only an individual bin’s expression pattern but also the mean and the gradient of gene expression levels in a bin’s broader neighborhood. This makes it valuable for identifying and defining spatial regions of interest.
-
-
 
 ## Set-up
 
