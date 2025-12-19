@@ -15,34 +15,6 @@ Approximate time: XY minutes
 -   LO 2
 -   LO 3
 
-# Spatially Variable Genes
-
-https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371
-
-Spatially variable genes (SVGs) are similar in concept to the highly variable genes that we calculated earlier - but with the added spatial location information. Essentially, identifying genes whose expression patterns change depending on where a cell is located on the tissue.
-
-In doing so, we are able to cluster cells together in a way that represents the different spatial domains
-
-## Use Case of SVGs
-
-https://www.nature.com/articles/s41467-025-56080-w
-
-> Methods for detecting the three SVG categories serve different purposes (Fig. 2a). First, the detection of overall SVGs screens informative genes for downstream analyses, including the identification of spatial domains and functional gene modules. Second, detecting cell-type-specific SVGs aims to reveal spatial variation within a cell type and help identify distinct cell subpopulations or states within cell types. Third, spatial-domain-marker SVG detection is used to find marker genes to annotate and interpret spatial domains already detected. These markers help understand the molecular mechanisms underlying spatial domains and assist in annotating tissue layers in other datasets.
-
-## Methods
-
-SpatialDE (python)
-MERINGUE
-BinSpect
-
-## Sub-topic 3
-
-::: callout-tip
-# [**Exercise 1**](08_marker-identification_Answer-key.qmd#exercise-1)
-
-Exercise 1
-:::
-
 # BANKSY
 
 [BANKSY](https://www.nature.com/articles/s41588-024-01664-3) is another method for performing clustering. Unlike Seurat, BANKSY takes into account not only an individual bin’s expression pattern but also the mean and the gradient of gene expression levels in a bin’s broader neighborhood. This makes it valuable for identifying and defining spatial regions of interest.
@@ -71,11 +43,13 @@ seurat_processed
 
 We use the `RunBanksy` function to create a new "BANKSY" assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Some parameters of importance are:
 
-- `k_geom` - Number of bins to consider for the local neighborhood. Larger values will yield larger domains.
-- `lambda` - Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains. 
-- `group` - allows us to run BANKSY on multiple samples, which will allow the function to understand that if there is overlap in spatial location it is because they come from two different slides
-- `dimx` and `dimy` - the locations on the x,y axis of a spot on the tissue slide
-- `split.scale` - within-group scaling, accounting for minor differences in datasets
+| Parameter      | Description                                                                                                                                                |
+|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `k_geom`       | Number of bins to consider for the local neighborhood. Larger values will yield larger domains.                                                           |
+| `lambda`       | Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains. |
+| `group`        | Allows us to run BANKSY on multiple samples, enabling the function to understand that overlapping spatial locations can come from different slides.       |
+| `dimx`, `dimy` | The x and y coordinates of a spot on the tissue slide.                                                                                                    |
+| `split.scale`  | Within-group scaling parameter, accounting for minor differences between datasets.                                                                        |
 
 To set ourselves up for success, we are going to add the spatial locations for each spot into the metadata. This will allow us to specify `dimx` and `dimy` more easily.
 
@@ -90,23 +64,89 @@ seurat_processed@meta.data <- left_join(seurat_processed@meta.data, coords, by =
 rownames(seurat_processed@meta.data) <- seurat_processed$cell
 ```
 
-We should see the new BANKSY assay in our object:
+Which we can now use to calculate the new BANKSY matrix. This step can take a while to compute (TODO time estimate)
 
 ```{r}
+#| eval: false
 # Run Banksy from SeuratWrappers
 seurat_banksy <- RunBanksy(seurat_processed, lambda = 0.8, verbose = T,
                            assay = 'Spatial.008um', slot = 'data', k_geom = 50,
-                           group = "orig.ident", dimx = 'x', dimy = 'y', split.scale = TRUE)
-seurat_banksy
+                           group = "orig.ident", dimx = 'x', dimy = 'y', 
+                           split.scale = TRUE)
 ```
 
 ```{r}
-FetchData(seurat_processed, c('sdimx', 'sdimy'))
+#| echo: false
+# saveRDS(seurat_banksy, "data/seurat_banksy_1.RDS")
+seurat_banksy <- readRDS("data/seurat_banksy_1.RDS")
 ```
 
-## Sub-topic 2
+With a new `Active assay: BANKSY`
 
-## Sub-topic 3
+```{r}
+seurat_banksy
+```
+
+## New BANKSY Matrix
+
+At this point, we have our new counts matrix that includes our neighborhood weighted scores. We can see this more clearly if we investigate the `Features()` that exist in our BANKSY assay. Where teh first few features are our original counts matrix with genes
+
+```{r}
+Features(seurat_banksy) %>% head()
+```
+
+Where we also have "new genes" that are our `lambda` scaled neighborhood weighted values, with an appended `*.m0` to make the distinction clear.
+
+```{r}
+Features(seurat_banksy) %>% tail()
+```
+
+## Calculation on BANKSY Matrix
+
+With these weights, we can now run through a simplified clustering workflow - using many of the same functions we used in the previous lesson on the scRNA workflow. The only distinction here is that these values are going to be calculated on our new BANKSY count matrix.
+
+```{r}
+#| eval: false
+# Increases the size of the default vector
+options(future.globals.maxSize= 200000000000)
+
+# PCA
+seurat_banksy <- RunPCA(seurat_banksy, 
+                        assay = "BANKSY", 
+                        reduction.name = "pca.banksy", 
+                        features = rownames(seurat_banksy), 
+                        npcs = 30)
+# Find k-Nearest Neighbors
+seurat_banksy <- FindNeighbors(seurat_banksy, 
+                               reduction = "pca.banksy", 
+                               dims = 1:30)
+# Louvain clustering
+seurat_banksy <- FindClusters(seurat_banksy, 
+                              cluster.name = "banksy_cluster",
+                              resolution = 0.5)
+```
+
+At this point, we no longer need access to the BANKSY assay as all the relevant information has now been stored as:
+
+- `banksy_clusters` in `@meta.data`
+- `pca.banksy` in `@reductions`
+
+So to conserve memory, we are going to delete the BANKSY assay from our seurat object.
+
+```{r}
+#| eval: false
+# Change default asasy from BANKSY
+DefaultAssay(seurat_banksy) <- "Spatial.008um"
+
+# Delete BANKSY assay by setting it to NULL
+seurat_banksy[["BANKSY"]] <- NULL
+```
+
+```{r}
+#| echo: false
+# saveRDS(seurat_banksy, "data/seurat_banksy_2.RDS")
+seurat_banksy <- readRDS("data/seurat_banksy_2.RDS")
+```
 
 ::: callout-tip
 # [**Exercise 2**](08_marker-identification_Answer-key.qmd#exercise-2)
@@ -127,3 +167,32 @@ Exercise 1
 
 Exercise 3
 :::
+
+# Spatially Variable Genes
+
+https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371
+
+Spatially variable genes (SVGs) are similar in concept to the highly variable genes that we calculated earlier - but with the added spatial location information. Essentially, identifying genes whose expression patterns change depending on where a cell is located on the tissue.
+
+In doing so, we are able to cluster cells together in a way that represents the different spatial domains
+
+## Use Case of SVGs
+
+https://www.nature.com/articles/s41467-025-56080-w
+
+> Methods for detecting the three SVG categories serve different purposes (Fig. 2a). First, the detection of overall SVGs screens informative genes for downstream analyses, including the identification of spatial domains and functional gene modules. Second, detecting cell-type-specific SVGs aims to reveal spatial variation within a cell type and help identify distinct cell subpopulations or states within cell types. Third, spatial-domain-marker SVG detection is used to find marker genes to annotate and interpret spatial domains already detected. These markers help understand the molecular mechanisms underlying spatial domains and assist in annotating tissue layers in other datasets.
+
+## Methods
+
+- SpatialDE (python)
+- MERINGUE
+- BinSpect
+
+## Sub-topic 3
+
+::: callout-tip
+# [**Exercise 3**](08_marker-identification_Answer-key.qmd#exercise-3)
+
+Exercise 1
+:::
+

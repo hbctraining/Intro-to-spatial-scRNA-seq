@@ -1,5 +1,5 @@
 ---
-title: "Pre-processing of Spatial Data Answer Key"
+title: "Loading Spatial Data Answer Key"
 authors: "Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui"
 date: "Tuesday, July 22, 2025"
 editor_options: 
@@ -7,27 +7,30 @@ editor_options:
     wrap: 72
 ---
 
-```{r}
-#| echo: false
-# Items to pre-load
-
-```
-
-
 # Exercise 1
 
-Question
+**1. Given the information that we know from the metadata, what might be some questions that we are interested in interrogating using our data?**
 
-Answer
+- Identify and characterize tumor cells in `CRC`
+- Construct cell-communication networks, using spatial locations to constrain our results
+- What are unique subtypes/cell states that are found in `CRC` vs. `NAT`
+- Associate cell states with spatial locations 
+- Establish domains and niches of cell populations in quadrants of the slides
+- etc.
 
 # Exercise 2
 
-Question
+**2. What differences do you see between `8um` and `16um` bins?**
 
-Answer
+There are more cells in the `8um` compared to the `16um`. The number of features/genes remain the same.
+
+This is why the bin value matters, it determines how many "cells" are ultimately generated. A smaller bin size results in more spots. This is because we are taking smaller sections of the same data, meaning we use more bins to cover the same area as a large bin size.
 
 # Exercise 3
 
-Question
+**3. What function can we use to double check that we have a singular `counts` _layer_?**
 
-Answer
+```{r}
+#| eval: false
+Layers(seurat_merged)
+```
