@@ -165,8 +165,6 @@ crc
 
 As we can see from our Seurat callout, there are a lot of different slots inside our object. Here, we will go through each of the major components of a Seurat object and how you would access key pieces of information.
 
-::: {.panel-tabset}
-
 ### Assays
 
 `Assays` are where we can store different counts matrices - we are not forced to keep the same features and variable genes across assays. Each assay will contain it's own `Layers` that can be distinct from other assays in the object. This is useful in several different cases:
@@ -357,7 +355,6 @@ TODO
 Idents(crc) <- "orig.ident"
 ```
 
-:::
 
 ::: callout-tip
 # [**Exercise 2**](02_loading-spatial-data_Answer-key.qmd#exercise-2)

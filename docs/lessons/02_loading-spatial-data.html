@@ -7491,11 +7491,8 @@ border: 1px solid #8b1628 !important;
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../lessons/Pre-reading_01.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Pre-reading 2</span></a>
-  </div>
-</li>
+ <span class="menu-text">lessons/Pre-reading_01.qmd</span>
+  </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../lessons/Pre-reading_02.html" class="sidebar-item-text sidebar-link">
@@ -7592,11 +7589,8 @@ border: 1px solid #8b1628 !important;
  <span class="menu-text">lessons/07_clustering-quality-control.qmd</span>
   </li>
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../lessons/08_marker-identification.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Marker Identification</span></a>
-  </div>
-</li>
+ <span class="menu-text">lessons/08_marker-identification.qmd</span>
+  </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../lessons/09_integration.html" class="sidebar-item-text sidebar-link">
@@ -7688,7 +7682,15 @@ border: 1px solid #8b1628 !important;
   <ul class="collapse">
   <li><a href="#data-files" id="toc-data-files" class="nav-link" data-scroll-target="#data-files">Data Files</a></li>
   <li><a href="#creating-the-seurat-object" id="toc-creating-the-seurat-object" class="nav-link" data-scroll-target="#creating-the-seurat-object">Creating the Seurat Object</a></li>
-  <li><a href="#anatomy-of-a-seurat-object" id="toc-anatomy-of-a-seurat-object" class="nav-link" data-scroll-target="#anatomy-of-a-seurat-object">Anatomy of a Seurat Object</a></li>
+  <li><a href="#anatomy-of-a-seurat-object" id="toc-anatomy-of-a-seurat-object" class="nav-link" data-scroll-target="#anatomy-of-a-seurat-object">Anatomy of a Seurat Object</a>
+  <ul class="collapse">
+  <li><a href="#assays" id="toc-assays" class="nav-link" data-scroll-target="#assays">Assays</a></li>
+  <li><a href="#features-and-cells" id="toc-features-and-cells" class="nav-link" data-scroll-target="#features-and-cells">Features and Cells</a></li>
+  <li><a href="#layers" id="toc-layers" class="nav-link" data-scroll-target="#layers">Layers</a></li>
+  <li><a href="#spatial-fields" id="toc-spatial-fields" class="nav-link" data-scroll-target="#spatial-fields">Spatial Fields</a></li>
+  <li><a href="#metadata-1" id="toc-metadata-1" class="nav-link" data-scroll-target="#metadata-1">Metadata</a></li>
+  <li><a href="#idents" id="toc-idents" class="nav-link" data-scroll-target="#idents">Idents</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#loading-multiple-samples-into-seurat" id="toc-loading-multiple-samples-into-seurat" class="nav-link" data-scroll-target="#loading-multiple-samples-into-seurat">Loading Multiple Samples into Seurat</a>
   <ul class="collapse">
@@ -7930,10 +7932,8 @@ Active assay: Spatial.008um (18085 features, 0 variable features)
 <section id="anatomy-of-a-seurat-object" class="level2">
 <h2 class="anchored" data-anchor-id="anatomy-of-a-seurat-object">Anatomy of a Seurat Object</h2>
 <p>As we can see from our Seurat callout, there are a lot of different slots inside our object. Here, we will go through each of the major components of a Seurat object and how you would access key pieces of information.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Assays</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Features and Cells</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Layers</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false">Spatial Fields</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false">Metadata</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-6" role="tab" aria-controls="tabset-2-6" aria-selected="false">Idents</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<section id="assays" class="level3">
+<h3 class="anchored" data-anchor-id="assays">Assays</h3>
 <p><code>Assays</code> are where we can store different counts matrices - we are not forced to keep the same features and variable genes across assays. Each assay will contain it’s own <code>Layers</code> that can be distinct from other assays in the object. This is useful in several different cases:</p>
 <ul>
 <li>Multi-modal assays, where you can keep the expression matrices for RNA, ATAC, or protein in a single Seurat object</li>
@@ -7969,8 +7969,9 @@ Active assay: Spatial.016um (18085 features, 0 variable features)
 </div>
 </div>
 <p>Now we see that the callout says: <code>Active assay: Spatial.016um</code></p>
-</div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+</section>
+<section id="features-and-cells" class="level3">
+<h3 class="anchored" data-anchor-id="features-and-cells">Features and Cells</h3>
 <p>Our count matrices function as any other matrix does, with rows and columns.</p>
 <p>In Seurat, the <strong>rows</strong> correspond to <code>Features</code>. In the case of spatial transcriptomics, our features are genes. In other experiments, features could refer to chromatin peaks or proteins. The important thing to keep in mind is what technology you are using. Since this is a Visium HD dataset, we are quantifying RNA expression (genes).</p>
 <p>We can see what the first few genes/features in our count matrix are:</p>
@@ -8025,8 +8026,9 @@ Bin size
 <p>This is why the bin value matters, it determines how many “cells” are ultimately generated. Where a smaller bin size results in more spots.</p>
 </div>
 </div>
-</div>
-<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+</section>
+<section id="layers" class="level3">
+<h3 class="anchored" data-anchor-id="layers">Layers</h3>
 <p>Layers are our count matrices.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Layers</span>(crc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -8131,8 +8133,9 @@ Bin size
 </div>
 </div>
 <p>By printing the first 5 features and cells in our object (for easier visualization). We can see that we are working with <strong>whole numbers</strong> which reinforces the idea that this is the <strong>raw data</strong>, with no transformations having been applied.</p>
-</div>
-<div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
+</section>
+<section id="spatial-fields" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-fields">Spatial Fields</h3>
 <p>We do not just have expression data associated with our sample, we also have the spatial slide that comes with its own set of values and information.</p>
 <p>For example we can grab the x,y coordinates of each bin using the <code>GetTissueCoordinates()</code> function.</p>
 <div class="cell">
@@ -8140,8 +8143,8 @@ Bin size
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-46e999c703b5127917ff" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-46e999c703b5127917ff">{"x":{"filter":"none","vertical":false,"data":[["s_016um_00052_00082-1","s_016um_00396_00063-1","s_016um_00297_00147-1","s_016um_00347_00254-1","s_016um_00299_00088-1","s_016um_00050_00315-1","s_016um_00408_00217-1","s_016um_00225_00065-1","s_016um_00036_00081-1","s_016um_00414_00255-1","s_016um_00188_00060-1","s_016um_00360_00091-1","s_016um_00360_00235-1","s_016um_00135_00034-1","s_016um_00269_00119-1"],[60930.62131813784,40823.44824204585,46628.73782408788,43732.53545148989,46497.71965957843,61103.61677064034,40159.07282962127,50816.55863472218,61865.43121892589,39817.55021540177,52977.56594500432,42933.82688746791,42968.30968936222,56068.56763813558,48258.26417041345],[49099.33635195174,48072.16160865937,52957.08749532418,59222.15750200907,49509.66900158569,62715.75626099607,57074.56908042479,48147.68500381296,49037.02825733014,59296.70029579302,47846.54031770426,49699.72419831985,58114.92898604082,46314.28995124483,51314.03191669229],["s_016um_00052_00082-1","s_016um_00396_00063-1","s_016um_00297_00147-1","s_016um_00347_00254-1","s_016um_00299_00088-1","s_016um_00050_00315-1","s_016um_00408_00217-1","s_016um_00225_00065-1","s_016um_00036_00081-1","s_016um_00414_00255-1","s_016um_00188_00060-1","s_016um_00360_00091-1","s_016um_00360_00235-1","s_016um_00135_00034-1","s_016um_00269_00119-1"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>x<\/th>\n      <th>y<\/th>\n      <th>cell<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"x","targets":1},{"name":"y","targets":2},{"name":"cell","targets":3}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-40f0b98d99f520a8b6d7" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-40f0b98d99f520a8b6d7">{"x":{"filter":"none","vertical":false,"data":[["s_016um_00052_00082-1","s_016um_00396_00063-1","s_016um_00297_00147-1","s_016um_00347_00254-1","s_016um_00299_00088-1","s_016um_00050_00315-1","s_016um_00408_00217-1","s_016um_00225_00065-1","s_016um_00036_00081-1","s_016um_00414_00255-1","s_016um_00188_00060-1","s_016um_00360_00091-1","s_016um_00360_00235-1","s_016um_00135_00034-1","s_016um_00269_00119-1"],[60930.62131813784,40823.44824204585,46628.73782408788,43732.53545148989,46497.71965957843,61103.61677064034,40159.07282962127,50816.55863472218,61865.43121892589,39817.55021540177,52977.56594500432,42933.82688746791,42968.30968936222,56068.56763813558,48258.26417041345],[49099.33635195174,48072.16160865937,52957.08749532418,59222.15750200907,49509.66900158569,62715.75626099607,57074.56908042479,48147.68500381296,49037.02825733014,59296.70029579302,47846.54031770426,49699.72419831985,58114.92898604082,46314.28995124483,51314.03191669229],["s_016um_00052_00082-1","s_016um_00396_00063-1","s_016um_00297_00147-1","s_016um_00347_00254-1","s_016um_00299_00088-1","s_016um_00050_00315-1","s_016um_00408_00217-1","s_016um_00225_00065-1","s_016um_00036_00081-1","s_016um_00414_00255-1","s_016um_00188_00060-1","s_016um_00360_00091-1","s_016um_00360_00235-1","s_016um_00135_00034-1","s_016um_00269_00119-1"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>x<\/th>\n      <th>y<\/th>\n      <th>cell<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"x","targets":1},{"name":"y","targets":2},{"name":"cell","targets":3}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>Or visualize what our slide looks like with <code>SpatialDimPlot()</code>:</p>
@@ -8155,16 +8158,17 @@ Bin size
 </div>
 </div>
 </div>
-</div>
-<div id="tabset-2-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-5-tab">
+</section>
+<section id="metadata-1" class="level3">
+<h3 class="anchored" data-anchor-id="metadata-1">Metadata</h3>
 <p><strong>Seurat automatically creates some metadata</strong> for each of the cells when the object is created. This information is stored in the <code>@meta.data</code> slot within the Seurat object. The rownames are automatically set to be the cell names.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-fcc9e6de50fc389e97cc" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-fcc9e6de50fc389e97cc">{"x":{"filter":"none","vertical":false,"data":[["s_008um_00602_00290-1","s_008um_00789_00234-1","s_008um_00728_00006-1","s_008um_00526_00291-1","s_008um_00681_00396-1","s_008um_00078_00444-1","s_008um_00128_00278-1","s_008um_00052_00559-1","s_008um_00121_00413-1","s_008um_00771_00579-1","s_008um_00504_00410-1","s_008um_00672_00240-1","s_008um_00516_00369-1","s_008um_00447_00253-1","s_008um_00455_00433-1"],["s","s","s","s","s","s","s","s","s","s","s","s","s","s","s"],[225,76,215,57,74,65,1300,128,538,183,412,701,74,201,164],[199,71,196,40,71,57,906,121,326,140,273,335,55,166,128],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>orig.ident<\/th>\n      <th>nCount_Spatial.008um<\/th>\n      <th>nFeature_Spatial.008um<\/th>\n      <th>nCount_Spatial.016um<\/th>\n      <th>nFeature_Spatial.016um<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"orig.ident","targets":1},{"name":"nCount_Spatial.008um","targets":2},{"name":"nFeature_Spatial.008um","targets":3},{"name":"nCount_Spatial.016um","targets":4},{"name":"nFeature_Spatial.016um","targets":5}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-ece2f991073a28a1ce50" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-ece2f991073a28a1ce50">{"x":{"filter":"none","vertical":false,"data":[["s_008um_00602_00290-1","s_008um_00789_00234-1","s_008um_00728_00006-1","s_008um_00526_00291-1","s_008um_00681_00396-1","s_008um_00078_00444-1","s_008um_00128_00278-1","s_008um_00052_00559-1","s_008um_00121_00413-1","s_008um_00771_00579-1","s_008um_00504_00410-1","s_008um_00672_00240-1","s_008um_00516_00369-1","s_008um_00447_00253-1","s_008um_00455_00433-1"],["s","s","s","s","s","s","s","s","s","s","s","s","s","s","s"],[225,76,215,57,74,65,1300,128,538,183,412,701,74,201,164],[199,71,196,40,71,57,906,121,326,140,273,335,55,166,128],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>orig.ident<\/th>\n      <th>nCount_Spatial.008um<\/th>\n      <th>nFeature_Spatial.008um<\/th>\n      <th>nCount_Spatial.016um<\/th>\n      <th>nFeature_Spatial.016um<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"orig.ident","targets":1},{"name":"nCount_Spatial.008um","targets":2},{"name":"nFeature_Spatial.008um","targets":3},{"name":"nCount_Spatial.016um","targets":4},{"name":"nFeature_Spatial.016um","targets":5}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>What does each column represent?</p>
@@ -8199,8 +8203,8 @@ Bin size
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-537da47aa7ea5a7e161e" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-537da47aa7ea5a7e161e">{"x":{"filter":"none","vertical":false,"data":[["s_008um_00602_00290-1","s_008um_00789_00234-1","s_008um_00728_00006-1","s_008um_00526_00291-1","s_008um_00681_00396-1","s_008um_00078_00444-1","s_008um_00128_00278-1","s_008um_00052_00559-1","s_008um_00121_00413-1","s_008um_00771_00579-1","s_008um_00504_00410-1","s_008um_00672_00240-1","s_008um_00516_00369-1","s_008um_00447_00253-1","s_008um_00455_00433-1"],["P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC"],[225,76,215,57,74,65,1300,128,538,183,412,701,74,201,164],[199,71,196,40,71,57,906,121,326,140,273,335,55,166,128],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>orig.ident<\/th>\n      <th>nCount_Spatial.008um<\/th>\n      <th>nFeature_Spatial.008um<\/th>\n      <th>nCount_Spatial.016um<\/th>\n      <th>nFeature_Spatial.016um<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"orig.ident","targets":1},{"name":"nCount_Spatial.008um","targets":2},{"name":"nFeature_Spatial.008um","targets":3},{"name":"nCount_Spatial.016um","targets":4},{"name":"nFeature_Spatial.016um","targets":5}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-68c66ab19f8c03d57bed" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-68c66ab19f8c03d57bed">{"x":{"filter":"none","vertical":false,"data":[["s_008um_00602_00290-1","s_008um_00789_00234-1","s_008um_00728_00006-1","s_008um_00526_00291-1","s_008um_00681_00396-1","s_008um_00078_00444-1","s_008um_00128_00278-1","s_008um_00052_00559-1","s_008um_00121_00413-1","s_008um_00771_00579-1","s_008um_00504_00410-1","s_008um_00672_00240-1","s_008um_00516_00369-1","s_008um_00447_00253-1","s_008um_00455_00433-1"],["P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC"],[225,76,215,57,74,65,1300,128,538,183,412,701,74,201,164],[199,71,196,40,71,57,906,121,326,140,273,335,55,166,128],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>orig.ident<\/th>\n      <th>nCount_Spatial.008um<\/th>\n      <th>nFeature_Spatial.008um<\/th>\n      <th>nCount_Spatial.016um<\/th>\n      <th>nFeature_Spatial.016um<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"orig.ident","targets":1},{"name":"nCount_Spatial.008um","targets":2},{"name":"nFeature_Spatial.008um","targets":3},{"name":"nCount_Spatial.016um","targets":4},{"name":"nFeature_Spatial.016um","targets":5}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>Additionally, we do not have use the <code>@meta.data</code> each time we want to access a single column. We can use the <code>$</code> follow by the column name as a shorthand.</p>
@@ -8213,14 +8217,12 @@ s_008um_00526_00291-1 s_008um_00681_00396-1 s_008um_00078_00444-1
                    57                    74                    65 </code></pre>
 </div>
 </div>
-</div>
-<div id="tabset-2-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-6-tab">
+</section>
+<section id="idents" class="level3">
+<h3 class="anchored" data-anchor-id="idents">Idents</h3>
 <p>TODO</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(crc) <span class="ot">&lt;-</span> <span class="st">&quot;orig.ident&quot;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -8235,6 +8237,7 @@ s_008um_00526_00291-1 s_008um_00681_00396-1 s_008um_00078_00444-1
 <p>TODO Exercise 1</p>
 </div>
 </div>
+</section>
 </section>
 </section>
 <section id="loading-multiple-samples-into-seurat" class="level1">
@@ -8429,8 +8432,8 @@ Active assay: Spatial.008um (18085 features, 0 variable features)
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-b019d98803ae612cb425" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-b019d98803ae612cb425">{"x":{"filter":"none","vertical":false,"data":[["P5CRC_s_008um_00602_00290-1","P5CRC_s_008um_00789_00234-1","P5CRC_s_008um_00728_00006-1","P5CRC_s_008um_00526_00291-1","P5CRC_s_008um_00681_00396-1","P5CRC_s_008um_00078_00444-1","P5CRC_s_008um_00128_00278-1","P5CRC_s_008um_00052_00559-1","P5CRC_s_008um_00121_00413-1","P5CRC_s_008um_00771_00579-1","P5CRC_s_008um_00504_00410-1","P5CRC_s_008um_00672_00240-1","P5CRC_s_008um_00516_00369-1","P5CRC_s_008um_00447_00253-1","P5CRC_s_008um_00455_00433-1"],["P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC"],[225,76,215,57,74,65,1300,128,538,183,412,701,74,201,164],[199,71,196,40,71,57,906,121,326,140,273,335,55,166,128]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>orig.ident<\/th>\n      <th>nCount_Spatial.008um<\/th>\n      <th>nFeature_Spatial.008um<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"orig.ident","targets":1},{"name":"nCount_Spatial.008um","targets":2},{"name":"nFeature_Spatial.008um","targets":3}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-66ee391041c140a80726" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-66ee391041c140a80726">{"x":{"filter":"none","vertical":false,"data":[["P5CRC_s_008um_00602_00290-1","P5CRC_s_008um_00789_00234-1","P5CRC_s_008um_00728_00006-1","P5CRC_s_008um_00526_00291-1","P5CRC_s_008um_00681_00396-1","P5CRC_s_008um_00078_00444-1","P5CRC_s_008um_00128_00278-1","P5CRC_s_008um_00052_00559-1","P5CRC_s_008um_00121_00413-1","P5CRC_s_008um_00771_00579-1","P5CRC_s_008um_00504_00410-1","P5CRC_s_008um_00672_00240-1","P5CRC_s_008um_00516_00369-1","P5CRC_s_008um_00447_00253-1","P5CRC_s_008um_00455_00433-1"],["P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC","P5CRC"],[225,76,215,57,74,65,1300,128,538,183,412,701,74,201,164],[199,71,196,40,71,57,906,121,326,140,273,335,55,166,128]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>orig.ident<\/th>\n      <th>nCount_Spatial.008um<\/th>\n      <th>nFeature_Spatial.008um<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"orig.ident","targets":1},{"name":"nCount_Spatial.008um","targets":2},{"name":"nFeature_Spatial.008um","targets":3}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="cell">
@@ -8438,8 +8441,8 @@ Active assay: Spatial.008um (18085 features, 0 variable features)
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-2a6bca8056639afbfdfc" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-2a6bca8056639afbfdfc">{"x":{"filter":"none","vertical":false,"data":[["P5NAT_s_008um_00306_00792-1","P5NAT_s_008um_00415_00143-1","P5NAT_s_008um_00197_00639-1","P5NAT_s_008um_00629_00591-1","P5NAT_s_008um_00414_00032-1","P5NAT_s_008um_00131_00787-1","P5NAT_s_008um_00252_00421-1","P5NAT_s_008um_00095_00025-1","P5NAT_s_008um_00384_00793-1","P5NAT_s_008um_00536_00521-1","P5NAT_s_008um_00148_00248-1","P5NAT_s_008um_00353_00477-1","P5NAT_s_008um_00797_00672-1","P5NAT_s_008um_00373_00222-1","P5NAT_s_008um_00595_00611-1"],["P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT"],[46,100,487,26,803,587,94,96,65,158,252,284,1,514,101],[45,25,253,26,459,407,65,93,60,116,222,210,1,436,91]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>orig.ident<\/th>\n      <th>nCount_Spatial.008um<\/th>\n      <th>nFeature_Spatial.008um<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"orig.ident","targets":1},{"name":"nCount_Spatial.008um","targets":2},{"name":"nFeature_Spatial.008um","targets":3}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-981a3f6440b1f9fc570c" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-981a3f6440b1f9fc570c">{"x":{"filter":"none","vertical":false,"data":[["P5NAT_s_008um_00306_00792-1","P5NAT_s_008um_00415_00143-1","P5NAT_s_008um_00197_00639-1","P5NAT_s_008um_00629_00591-1","P5NAT_s_008um_00414_00032-1","P5NAT_s_008um_00131_00787-1","P5NAT_s_008um_00252_00421-1","P5NAT_s_008um_00095_00025-1","P5NAT_s_008um_00384_00793-1","P5NAT_s_008um_00536_00521-1","P5NAT_s_008um_00148_00248-1","P5NAT_s_008um_00353_00477-1","P5NAT_s_008um_00797_00672-1","P5NAT_s_008um_00373_00222-1","P5NAT_s_008um_00595_00611-1"],["P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT","P5NAT"],[46,100,487,26,803,587,94,96,65,158,252,284,1,514,101],[45,25,253,26,459,407,65,93,60,116,222,210,1,436,91]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>orig.ident<\/th>\n      <th>nCount_Spatial.008um<\/th>\n      <th>nFeature_Spatial.008um<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"orig.ident","targets":1},{"name":"nCount_Spatial.008um","targets":2},{"name":"nFeature_Spatial.008um","targets":3}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>Lastly we want to make sure that the <code>Idents</code> of our cells is a useful piece of information, for example like <code>orig.ident</code>, which contains our sample IDs.</p>
@@ -9114,398 +9117,395 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb59-177"><a href="#cb59-177" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-178"><a href="#cb59-178" aria-hidden="true" tabindex="-1"></a>As we can see from our Seurat callout, there are a lot of different slots inside our object. Here, we will go through each of the major components of a Seurat object and how you would access key pieces of information.</span>
 <span id="cb59-179"><a href="#cb59-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-180"><a href="#cb59-180" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset}</span>
+<span id="cb59-180"><a href="#cb59-180" aria-hidden="true" tabindex="-1"></a><span class="fu">### Assays</span></span>
 <span id="cb59-181"><a href="#cb59-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-182"><a href="#cb59-182" aria-hidden="true" tabindex="-1"></a><span class="fu">### Assays</span></span>
+<span id="cb59-182"><a href="#cb59-182" aria-hidden="true" tabindex="-1"></a><span class="in">`Assays`</span> are where we can store different counts matrices - we are not forced to keep the same features and variable genes across assays. Each assay will contain it&#39;s own <span class="in">`Layers`</span> that can be distinct from other assays in the object. This is useful in several different cases:</span>
 <span id="cb59-183"><a href="#cb59-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-184"><a href="#cb59-184" aria-hidden="true" tabindex="-1"></a><span class="in">`Assays`</span> are where we can store different counts matrices - we are not forced to keep the same features and variable genes across assays. Each assay will contain it&#39;s own <span class="in">`Layers`</span> that can be distinct from other assays in the object. This is useful in several different cases:</span>
-<span id="cb59-185"><a href="#cb59-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-186"><a href="#cb59-186" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Multi-modal assays, where you can keep the expression matrices for RNA, ATAC, or protein in a single Seurat object</span>
-<span id="cb59-187"><a href="#cb59-187" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Storing counts matrices from a variety of different normalization techniques</span>
-<span id="cb59-188"><a href="#cb59-188" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Batch integration methods will sometimes generate a transformed counts matrix</span>
+<span id="cb59-184"><a href="#cb59-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Multi-modal assays, where you can keep the expression matrices for RNA, ATAC, or protein in a single Seurat object</span>
+<span id="cb59-185"><a href="#cb59-185" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Storing counts matrices from a variety of different normalization techniques</span>
+<span id="cb59-186"><a href="#cb59-186" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Batch integration methods will sometimes generate a transformed counts matrix</span>
+<span id="cb59-187"><a href="#cb59-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-188"><a href="#cb59-188" aria-hidden="true" tabindex="-1"></a>Here we can print the different assays that exist within our <span class="in">`crc`</span> object:</span>
 <span id="cb59-189"><a href="#cb59-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-190"><a href="#cb59-190" aria-hidden="true" tabindex="-1"></a>Here we can print the different assays that exist within our <span class="in">`crc`</span> object:</span>
-<span id="cb59-191"><a href="#cb59-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-194"><a href="#cb59-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-195"><a href="#cb59-195" aria-hidden="true" tabindex="-1"></a><span class="fu">Assays</span>(crc)</span>
-<span id="cb59-196"><a href="#cb59-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-192"><a href="#cb59-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-193"><a href="#cb59-193" aria-hidden="true" tabindex="-1"></a><span class="fu">Assays</span>(crc)</span>
+<span id="cb59-194"><a href="#cb59-194" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-195"><a href="#cb59-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-196"><a href="#cb59-196" aria-hidden="true" tabindex="-1"></a>We have 2 distinct assays for the different bin sizes, which makes sense because we have different count matrices for our cells based upon the bin size that was selected.</span>
 <span id="cb59-197"><a href="#cb59-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-198"><a href="#cb59-198" aria-hidden="true" tabindex="-1"></a>We have 2 distinct assays for the different bin sizes, which makes sense because we have different count matrices for our cells based upon the bin size that was selected.</span>
+<span id="cb59-198"><a href="#cb59-198" aria-hidden="true" tabindex="-1"></a>The <span class="in">`DefaultAssay()`</span> function shows us which assay information will be used in other Seurat function calls, unless explicitly specified otherwise.</span>
 <span id="cb59-199"><a href="#cb59-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-200"><a href="#cb59-200" aria-hidden="true" tabindex="-1"></a>The <span class="in">`DefaultAssay()`</span> function shows us which assay information will be used in other Seurat function calls, unless explicitly specified otherwise.</span>
-<span id="cb59-201"><a href="#cb59-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-204"><a href="#cb59-204" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-205"><a href="#cb59-205" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(crc)</span>
-<span id="cb59-206"><a href="#cb59-206" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-202"><a href="#cb59-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-203"><a href="#cb59-203" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(crc)</span>
+<span id="cb59-204"><a href="#cb59-204" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-205"><a href="#cb59-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-206"><a href="#cb59-206" aria-hidden="true" tabindex="-1"></a>We can also change what our default assay is. Let&#39;s set it to the <span class="in">`016um`</span> bins:</span>
 <span id="cb59-207"><a href="#cb59-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-208"><a href="#cb59-208" aria-hidden="true" tabindex="-1"></a>We can also change what our default assay is. Let&#39;s set it to the <span class="in">`016um`</span> bins:</span>
-<span id="cb59-209"><a href="#cb59-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-212"><a href="#cb59-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-213"><a href="#cb59-213" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(crc) <span class="ot">&lt;-</span> <span class="st">&quot;Spatial.016um&quot;</span></span>
-<span id="cb59-214"><a href="#cb59-214" aria-hidden="true" tabindex="-1"></a>crc</span>
-<span id="cb59-215"><a href="#cb59-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-210"><a href="#cb59-210" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-211"><a href="#cb59-211" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(crc) <span class="ot">&lt;-</span> <span class="st">&quot;Spatial.016um&quot;</span></span>
+<span id="cb59-212"><a href="#cb59-212" aria-hidden="true" tabindex="-1"></a>crc</span>
+<span id="cb59-213"><a href="#cb59-213" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-214"><a href="#cb59-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-215"><a href="#cb59-215" aria-hidden="true" tabindex="-1"></a>Now we see that the callout says: <span class="in">`Active assay: Spatial.016um `</span></span>
 <span id="cb59-216"><a href="#cb59-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-217"><a href="#cb59-217" aria-hidden="true" tabindex="-1"></a>Now we see that the callout says: <span class="in">`Active assay: Spatial.016um `</span></span>
+<span id="cb59-217"><a href="#cb59-217" aria-hidden="true" tabindex="-1"></a><span class="fu">### Features and Cells</span></span>
 <span id="cb59-218"><a href="#cb59-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-219"><a href="#cb59-219" aria-hidden="true" tabindex="-1"></a><span class="fu">### Features and Cells</span></span>
+<span id="cb59-219"><a href="#cb59-219" aria-hidden="true" tabindex="-1"></a>Our count matrices function as any other matrix does, with rows and columns. </span>
 <span id="cb59-220"><a href="#cb59-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-221"><a href="#cb59-221" aria-hidden="true" tabindex="-1"></a>Our count matrices function as any other matrix does, with rows and columns. </span>
+<span id="cb59-221"><a href="#cb59-221" aria-hidden="true" tabindex="-1"></a>In Seurat, the **rows** correspond to <span class="in">`Features`</span>. In the case of spatial transcriptomics, our features are genes. In other experiments, features could refer to chromatin peaks or proteins. The important thing to keep in mind is what technology you are using. Since this is a Visium HD dataset, we are quantifying RNA expression (genes).</span>
 <span id="cb59-222"><a href="#cb59-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-223"><a href="#cb59-223" aria-hidden="true" tabindex="-1"></a>In Seurat, the **rows** correspond to <span class="in">`Features`</span>. In the case of spatial transcriptomics, our features are genes. In other experiments, features could refer to chromatin peaks or proteins. The important thing to keep in mind is what technology you are using. Since this is a Visium HD dataset, we are quantifying RNA expression (genes).</span>
+<span id="cb59-223"><a href="#cb59-223" aria-hidden="true" tabindex="-1"></a>We can see what the first few genes/features in our count matrix are:</span>
 <span id="cb59-224"><a href="#cb59-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-225"><a href="#cb59-225" aria-hidden="true" tabindex="-1"></a>We can see what the first few genes/features in our count matrix are:</span>
-<span id="cb59-226"><a href="#cb59-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-229"><a href="#cb59-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-230"><a href="#cb59-230" aria-hidden="true" tabindex="-1"></a><span class="fu">Features</span>(crc) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb59-231"><a href="#cb59-231" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-227"><a href="#cb59-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-228"><a href="#cb59-228" aria-hidden="true" tabindex="-1"></a><span class="fu">Features</span>(crc) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb59-229"><a href="#cb59-229" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-230"><a href="#cb59-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-231"><a href="#cb59-231" aria-hidden="true" tabindex="-1"></a>As well as see the number of genes that are found in each of our assays:</span>
 <span id="cb59-232"><a href="#cb59-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-233"><a href="#cb59-233" aria-hidden="true" tabindex="-1"></a>As well as see the number of genes that are found in each of our assays:</span>
-<span id="cb59-234"><a href="#cb59-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-237"><a href="#cb59-237" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-238"><a href="#cb59-238" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(crc[[<span class="st">&quot;Spatial.008um&quot;</span>]])</span>
-<span id="cb59-239"><a href="#cb59-239" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(crc[[<span class="st">&quot;Spatial.016um&quot;</span>]])</span>
-<span id="cb59-240"><a href="#cb59-240" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-235"><a href="#cb59-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-236"><a href="#cb59-236" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(crc[[<span class="st">&quot;Spatial.008um&quot;</span>]])</span>
+<span id="cb59-237"><a href="#cb59-237" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(crc[[<span class="st">&quot;Spatial.016um&quot;</span>]])</span>
+<span id="cb59-238"><a href="#cb59-238" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-239"><a href="#cb59-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-240"><a href="#cb59-240" aria-hidden="true" tabindex="-1"></a>The **columns** correspond to <span class="in">`Cells`</span> (or samples as it appears in the callout). </span>
 <span id="cb59-241"><a href="#cb59-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-242"><a href="#cb59-242" aria-hidden="true" tabindex="-1"></a>The **columns** correspond to <span class="in">`Cells`</span> (or samples as it appears in the callout). </span>
+<span id="cb59-242"><a href="#cb59-242" aria-hidden="true" tabindex="-1"></a>We can see what the first few cells in our count matrix are:</span>
 <span id="cb59-243"><a href="#cb59-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-244"><a href="#cb59-244" aria-hidden="true" tabindex="-1"></a>We can see what the first few cells in our count matrix are:</span>
-<span id="cb59-245"><a href="#cb59-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-248"><a href="#cb59-248" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-249"><a href="#cb59-249" aria-hidden="true" tabindex="-1"></a><span class="fu">Cells</span>(crc) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb59-250"><a href="#cb59-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-246"><a href="#cb59-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-247"><a href="#cb59-247" aria-hidden="true" tabindex="-1"></a><span class="fu">Cells</span>(crc) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb59-248"><a href="#cb59-248" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-249"><a href="#cb59-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-250"><a href="#cb59-250" aria-hidden="true" tabindex="-1"></a>As well as see the number of cells that are found in each of our assays:</span>
 <span id="cb59-251"><a href="#cb59-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-252"><a href="#cb59-252" aria-hidden="true" tabindex="-1"></a>As well as see the number of cells that are found in each of our assays:</span>
-<span id="cb59-253"><a href="#cb59-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-256"><a href="#cb59-256" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-257"><a href="#cb59-257" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(crc[[<span class="st">&quot;Spatial.008um&quot;</span>]])</span>
-<span id="cb59-258"><a href="#cb59-258" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(crc[[<span class="st">&quot;Spatial.016um&quot;</span>]])</span>
-<span id="cb59-259"><a href="#cb59-259" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-260"><a href="#cb59-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-261"><a href="#cb59-261" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb59-262"><a href="#cb59-262" aria-hidden="true" tabindex="-1"></a><span class="fu"># Bin size</span></span>
-<span id="cb59-263"><a href="#cb59-263" aria-hidden="true" tabindex="-1"></a>Did you notice that the number of cells is different between our <span class="in">`8um`</span> and <span class="in">`16um`</span> bins?</span>
-<span id="cb59-264"><a href="#cb59-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-265"><a href="#cb59-265" aria-hidden="true" tabindex="-1"></a>This is why the bin value matters, it determines how many &quot;cells&quot; are ultimately generated. Where a smaller bin size results in more spots.</span>
-<span id="cb59-266"><a href="#cb59-266" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb59-254"><a href="#cb59-254" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-255"><a href="#cb59-255" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(crc[[<span class="st">&quot;Spatial.008um&quot;</span>]])</span>
+<span id="cb59-256"><a href="#cb59-256" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(crc[[<span class="st">&quot;Spatial.016um&quot;</span>]])</span>
+<span id="cb59-257"><a href="#cb59-257" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-258"><a href="#cb59-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-259"><a href="#cb59-259" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb59-260"><a href="#cb59-260" aria-hidden="true" tabindex="-1"></a><span class="fu"># Bin size</span></span>
+<span id="cb59-261"><a href="#cb59-261" aria-hidden="true" tabindex="-1"></a>Did you notice that the number of cells is different between our <span class="in">`8um`</span> and <span class="in">`16um`</span> bins?</span>
+<span id="cb59-262"><a href="#cb59-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-263"><a href="#cb59-263" aria-hidden="true" tabindex="-1"></a>This is why the bin value matters, it determines how many &quot;cells&quot; are ultimately generated. Where a smaller bin size results in more spots.</span>
+<span id="cb59-264"><a href="#cb59-264" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb59-265"><a href="#cb59-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-266"><a href="#cb59-266" aria-hidden="true" tabindex="-1"></a><span class="fu">### Layers</span></span>
 <span id="cb59-267"><a href="#cb59-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-268"><a href="#cb59-268" aria-hidden="true" tabindex="-1"></a><span class="fu">### Layers</span></span>
+<span id="cb59-268"><a href="#cb59-268" aria-hidden="true" tabindex="-1"></a>Layers are our count matrices. </span>
 <span id="cb59-269"><a href="#cb59-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-270"><a href="#cb59-270" aria-hidden="true" tabindex="-1"></a>Layers are our count matrices. </span>
-<span id="cb59-271"><a href="#cb59-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-274"><a href="#cb59-274" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-275"><a href="#cb59-275" aria-hidden="true" tabindex="-1"></a><span class="fu">Layers</span>(crc)</span>
-<span id="cb59-276"><a href="#cb59-276" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-272"><a href="#cb59-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-273"><a href="#cb59-273" aria-hidden="true" tabindex="-1"></a><span class="fu">Layers</span>(crc)</span>
+<span id="cb59-274"><a href="#cb59-274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-275"><a href="#cb59-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-276"><a href="#cb59-276" aria-hidden="true" tabindex="-1"></a>By default, Seurat uses the following naming convention for the counts matrices within an <span class="in">`Assay`</span>: </span>
 <span id="cb59-277"><a href="#cb59-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-278"><a href="#cb59-278" aria-hidden="true" tabindex="-1"></a>By default, Seurat uses the following naming convention for the counts matrices within an <span class="in">`Assay`</span>: </span>
-<span id="cb59-279"><a href="#cb59-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-280"><a href="#cb59-280" aria-hidden="true" tabindex="-1"></a>| Layer       | Description                     |</span>
-<span id="cb59-281"><a href="#cb59-281" aria-hidden="true" tabindex="-1"></a>|-------------|---------------------------------|</span>
-<span id="cb59-282"><a href="#cb59-282" aria-hidden="true" tabindex="-1"></a>| counts      | Raw counts                      |</span>
-<span id="cb59-283"><a href="#cb59-283" aria-hidden="true" tabindex="-1"></a>| data        | Normalized counts               |</span>
-<span id="cb59-284"><a href="#cb59-284" aria-hidden="true" tabindex="-1"></a>| scale.data  | Scaled‑normalized counts        |</span>
+<span id="cb59-278"><a href="#cb59-278" aria-hidden="true" tabindex="-1"></a>| Layer       | Description                     |</span>
+<span id="cb59-279"><a href="#cb59-279" aria-hidden="true" tabindex="-1"></a>|-------------|---------------------------------|</span>
+<span id="cb59-280"><a href="#cb59-280" aria-hidden="true" tabindex="-1"></a>| counts      | Raw counts                      |</span>
+<span id="cb59-281"><a href="#cb59-281" aria-hidden="true" tabindex="-1"></a>| data        | Normalized counts               |</span>
+<span id="cb59-282"><a href="#cb59-282" aria-hidden="true" tabindex="-1"></a>| scale.data  | Scaled‑normalized counts        |</span>
+<span id="cb59-283"><a href="#cb59-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-284"><a href="#cb59-284" aria-hidden="true" tabindex="-1"></a>You may notice that our Seurat object only contains <span class="in">`counts`</span> right now. This is because we have not run any normalization steps yet (we will discuss how to do so in future lessons).</span>
 <span id="cb59-285"><a href="#cb59-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-286"><a href="#cb59-286" aria-hidden="true" tabindex="-1"></a>You may notice that our Seurat object only contains <span class="in">`counts`</span> right now. This is because we have not run any normalization steps yet (we will discuss how to do so in future lessons).</span>
+<span id="cb59-286"><a href="#cb59-286" aria-hidden="true" tabindex="-1"></a>Using the <span class="in">`LayerData()`</span> function we can access the entire counts matrix. Furthermore, we can specify the <span class="in">`assay`</span> if we would prefer to not use the <span class="in">`DefaultAssay`</span>.</span>
 <span id="cb59-287"><a href="#cb59-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-288"><a href="#cb59-288" aria-hidden="true" tabindex="-1"></a>Using the <span class="in">`LayerData()`</span> function we can access the entire counts matrix. Furthermore, we can specify the <span class="in">`assay`</span> if we would prefer to not use the <span class="in">`DefaultAssay`</span>.</span>
-<span id="cb59-289"><a href="#cb59-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-292"><a href="#cb59-292" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-293"><a href="#cb59-293" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-294"><a href="#cb59-294" aria-hidden="true" tabindex="-1"></a><span class="fu">LayerData</span>(crc, </span>
-<span id="cb59-295"><a href="#cb59-295" aria-hidden="true" tabindex="-1"></a>          <span class="at">assay =</span> <span class="st">&quot;Spatial.016um&quot;</span>, </span>
-<span id="cb59-296"><a href="#cb59-296" aria-hidden="true" tabindex="-1"></a>          <span class="at">layer =</span> <span class="st">&quot;count&quot;</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
-<span id="cb59-297"><a href="#cb59-297" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-298"><a href="#cb59-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-301"><a href="#cb59-301" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-302"><a href="#cb59-302" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb59-303"><a href="#cb59-303" aria-hidden="true" tabindex="-1"></a><span class="fu">LayerData</span>(crc, </span>
-<span id="cb59-304"><a href="#cb59-304" aria-hidden="true" tabindex="-1"></a>          <span class="at">assay =</span> <span class="st">&quot;Spatial.016um&quot;</span>, </span>
-<span id="cb59-305"><a href="#cb59-305" aria-hidden="true" tabindex="-1"></a>          <span class="at">layer =</span> <span class="st">&quot;count&quot;</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="sc">%&gt;%</span></span>
-<span id="cb59-306"><a href="#cb59-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb59-307"><a href="#cb59-307" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
-<span id="cb59-308"><a href="#cb59-308" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-290"><a href="#cb59-290" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-291"><a href="#cb59-291" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-292"><a href="#cb59-292" aria-hidden="true" tabindex="-1"></a><span class="fu">LayerData</span>(crc, </span>
+<span id="cb59-293"><a href="#cb59-293" aria-hidden="true" tabindex="-1"></a>          <span class="at">assay =</span> <span class="st">&quot;Spatial.016um&quot;</span>, </span>
+<span id="cb59-294"><a href="#cb59-294" aria-hidden="true" tabindex="-1"></a>          <span class="at">layer =</span> <span class="st">&quot;count&quot;</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb59-295"><a href="#cb59-295" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-296"><a href="#cb59-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-299"><a href="#cb59-299" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-300"><a href="#cb59-300" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb59-301"><a href="#cb59-301" aria-hidden="true" tabindex="-1"></a><span class="fu">LayerData</span>(crc, </span>
+<span id="cb59-302"><a href="#cb59-302" aria-hidden="true" tabindex="-1"></a>          <span class="at">assay =</span> <span class="st">&quot;Spatial.016um&quot;</span>, </span>
+<span id="cb59-303"><a href="#cb59-303" aria-hidden="true" tabindex="-1"></a>          <span class="at">layer =</span> <span class="st">&quot;count&quot;</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="sc">%&gt;%</span></span>
+<span id="cb59-304"><a href="#cb59-304" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb59-305"><a href="#cb59-305" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb59-306"><a href="#cb59-306" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-307"><a href="#cb59-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-308"><a href="#cb59-308" aria-hidden="true" tabindex="-1"></a>By printing the first 5 features and cells in our object (for easier visualization). We can see that we are working with **whole numbers** which reinforces the idea that this is the **raw data**, with no transformations having been applied.</span>
 <span id="cb59-309"><a href="#cb59-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-310"><a href="#cb59-310" aria-hidden="true" tabindex="-1"></a>By printing the first 5 features and cells in our object (for easier visualization). We can see that we are working with **whole numbers** which reinforces the idea that this is the **raw data**, with no transformations having been applied.</span>
+<span id="cb59-310"><a href="#cb59-310" aria-hidden="true" tabindex="-1"></a><span class="fu">### Spatial Fields</span></span>
 <span id="cb59-311"><a href="#cb59-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-312"><a href="#cb59-312" aria-hidden="true" tabindex="-1"></a><span class="fu">### Spatial Fields</span></span>
+<span id="cb59-312"><a href="#cb59-312" aria-hidden="true" tabindex="-1"></a>We do not just have expression data associated with our sample, we also have the spatial slide that comes with its own set of values and information.</span>
 <span id="cb59-313"><a href="#cb59-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-314"><a href="#cb59-314" aria-hidden="true" tabindex="-1"></a>We do not just have expression data associated with our sample, we also have the spatial slide that comes with its own set of values and information.</span>
+<span id="cb59-314"><a href="#cb59-314" aria-hidden="true" tabindex="-1"></a>For example we can grab the x,y coordinates of each bin using the <span class="in">`GetTissueCoordinates()`</span> function.</span>
 <span id="cb59-315"><a href="#cb59-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-316"><a href="#cb59-316" aria-hidden="true" tabindex="-1"></a>For example we can grab the x,y coordinates of each bin using the <span class="in">`GetTissueCoordinates()`</span> function.</span>
-<span id="cb59-317"><a href="#cb59-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-320"><a href="#cb59-320" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-321"><a href="#cb59-321" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-322"><a href="#cb59-322" aria-hidden="true" tabindex="-1"></a><span class="fu">GetTissueCoordinates</span>(crc) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb59-323"><a href="#cb59-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-324"><a href="#cb59-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-327"><a href="#cb59-327" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-328"><a href="#cb59-328" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb59-329"><a href="#cb59-329" aria-hidden="true" tabindex="-1"></a><span class="fu">GetTissueCoordinates</span>(crc) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-330"><a href="#cb59-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb59-331"><a href="#cb59-331" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
-<span id="cb59-332"><a href="#cb59-332" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-318"><a href="#cb59-318" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-319"><a href="#cb59-319" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-320"><a href="#cb59-320" aria-hidden="true" tabindex="-1"></a><span class="fu">GetTissueCoordinates</span>(crc) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb59-321"><a href="#cb59-321" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-322"><a href="#cb59-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-325"><a href="#cb59-325" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-326"><a href="#cb59-326" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb59-327"><a href="#cb59-327" aria-hidden="true" tabindex="-1"></a><span class="fu">GetTissueCoordinates</span>(crc) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-328"><a href="#cb59-328" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb59-329"><a href="#cb59-329" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
+<span id="cb59-330"><a href="#cb59-330" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-331"><a href="#cb59-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-332"><a href="#cb59-332" aria-hidden="true" tabindex="-1"></a>Or visualize what our slide looks like with <span class="in">`SpatialDimPlot()`</span>:</span>
 <span id="cb59-333"><a href="#cb59-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-334"><a href="#cb59-334" aria-hidden="true" tabindex="-1"></a>Or visualize what our slide looks like with <span class="in">`SpatialDimPlot()`</span>:</span>
-<span id="cb59-335"><a href="#cb59-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-338"><a href="#cb59-338" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-339"><a href="#cb59-339" aria-hidden="true" tabindex="-1"></a><span class="fu">SpatialDimPlot</span>(crc)</span>
-<span id="cb59-340"><a href="#cb59-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-336"><a href="#cb59-336" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-337"><a href="#cb59-337" aria-hidden="true" tabindex="-1"></a><span class="fu">SpatialDimPlot</span>(crc)</span>
+<span id="cb59-338"><a href="#cb59-338" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-339"><a href="#cb59-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-340"><a href="#cb59-340" aria-hidden="true" tabindex="-1"></a><span class="fu">### Metadata</span></span>
 <span id="cb59-341"><a href="#cb59-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-342"><a href="#cb59-342" aria-hidden="true" tabindex="-1"></a><span class="fu">### Metadata</span></span>
+<span id="cb59-342"><a href="#cb59-342" aria-hidden="true" tabindex="-1"></a>**Seurat automatically creates some metadata** for each of the cells when the object is created. This information is stored in the <span class="in">`@meta.data`</span> slot within the Seurat object. The rownames are automatically set to be the cell names.</span>
 <span id="cb59-343"><a href="#cb59-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-344"><a href="#cb59-344" aria-hidden="true" tabindex="-1"></a>**Seurat automatically creates some metadata** for each of the cells when the object is created. This information is stored in the <span class="in">`@meta.data`</span> slot within the Seurat object. The rownames are automatically set to be the cell names.</span>
-<span id="cb59-345"><a href="#cb59-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-348"><a href="#cb59-348" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-349"><a href="#cb59-349" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-350"><a href="#cb59-350" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb59-351"><a href="#cb59-351" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-352"><a href="#cb59-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-355"><a href="#cb59-355" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-356"><a href="#cb59-356" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb59-357"><a href="#cb59-357" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
-<span id="cb59-358"><a href="#cb59-358" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb59-359"><a href="#cb59-359" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
-<span id="cb59-360"><a href="#cb59-360" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-346"><a href="#cb59-346" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-347"><a href="#cb59-347" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-348"><a href="#cb59-348" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb59-349"><a href="#cb59-349" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-350"><a href="#cb59-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-353"><a href="#cb59-353" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-354"><a href="#cb59-354" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb59-355"><a href="#cb59-355" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
+<span id="cb59-356"><a href="#cb59-356" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb59-357"><a href="#cb59-357" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
+<span id="cb59-358"><a href="#cb59-358" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-359"><a href="#cb59-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-360"><a href="#cb59-360" aria-hidden="true" tabindex="-1"></a>What does each column represent?</span>
 <span id="cb59-361"><a href="#cb59-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-362"><a href="#cb59-362" aria-hidden="true" tabindex="-1"></a>What does each column represent?</span>
-<span id="cb59-363"><a href="#cb59-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-364"><a href="#cb59-364" aria-hidden="true" tabindex="-1"></a>| Column        | Description                                   |</span>
-<span id="cb59-365"><a href="#cb59-365" aria-hidden="true" tabindex="-1"></a>|---------------|-----------------------------------------------|</span>
-<span id="cb59-366"><a href="#cb59-366" aria-hidden="true" tabindex="-1"></a>| orig.ident    | Sample identity if known; defaults to “s”     |</span>
-<span id="cb59-367"><a href="#cb59-367" aria-hidden="true" tabindex="-1"></a>| nCount_RNA    | Number of UMIs per cell                       |</span>
-<span id="cb59-368"><a href="#cb59-368" aria-hidden="true" tabindex="-1"></a>| nFeature_RNA  | Number of genes detected per cell             |</span>
+<span id="cb59-362"><a href="#cb59-362" aria-hidden="true" tabindex="-1"></a>| Column        | Description                                   |</span>
+<span id="cb59-363"><a href="#cb59-363" aria-hidden="true" tabindex="-1"></a>|---------------|-----------------------------------------------|</span>
+<span id="cb59-364"><a href="#cb59-364" aria-hidden="true" tabindex="-1"></a>| orig.ident    | Sample identity if known; defaults to “s”     |</span>
+<span id="cb59-365"><a href="#cb59-365" aria-hidden="true" tabindex="-1"></a>| nCount_RNA    | Number of UMIs per cell                       |</span>
+<span id="cb59-366"><a href="#cb59-366" aria-hidden="true" tabindex="-1"></a>| nFeature_RNA  | Number of genes detected per cell             |</span>
+<span id="cb59-367"><a href="#cb59-367" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-368"><a href="#cb59-368" aria-hidden="true" tabindex="-1"></a>While it may seem intimidating at first, the important thing to remember is that this is a dataframe. Therefore can modify and work with this dataframe just like we would any other in R! For example, we can set our <span class="in">`orig.ident`</span> column to be our sample name rather than &quot;s&quot;.</span>
 <span id="cb59-369"><a href="#cb59-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-370"><a href="#cb59-370" aria-hidden="true" tabindex="-1"></a>While it may seem intimidating at first, the important thing to remember is that this is a dataframe. Therefore can modify and work with this dataframe just like we would any other in R! For example, we can set our <span class="in">`orig.ident`</span> column to be our sample name rather than &quot;s&quot;.</span>
-<span id="cb59-371"><a href="#cb59-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-374"><a href="#cb59-374" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-375"><a href="#cb59-375" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data<span class="sc">$</span>orig.ident <span class="ot">&lt;-</span> <span class="st">&quot;P5CRC&quot;</span></span>
-<span id="cb59-376"><a href="#cb59-376" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-377"><a href="#cb59-377" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-380"><a href="#cb59-380" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-381"><a href="#cb59-381" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-382"><a href="#cb59-382" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb59-383"><a href="#cb59-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-384"><a href="#cb59-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-387"><a href="#cb59-387" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-388"><a href="#cb59-388" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb59-389"><a href="#cb59-389" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
-<span id="cb59-390"><a href="#cb59-390" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb59-391"><a href="#cb59-391" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
-<span id="cb59-392"><a href="#cb59-392" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-372"><a href="#cb59-372" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-373"><a href="#cb59-373" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data<span class="sc">$</span>orig.ident <span class="ot">&lt;-</span> <span class="st">&quot;P5CRC&quot;</span></span>
+<span id="cb59-374"><a href="#cb59-374" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-375"><a href="#cb59-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-378"><a href="#cb59-378" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-379"><a href="#cb59-379" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-380"><a href="#cb59-380" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb59-381"><a href="#cb59-381" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-382"><a href="#cb59-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-385"><a href="#cb59-385" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-386"><a href="#cb59-386" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb59-387"><a href="#cb59-387" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
+<span id="cb59-388"><a href="#cb59-388" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb59-389"><a href="#cb59-389" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
+<span id="cb59-390"><a href="#cb59-390" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-391"><a href="#cb59-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-392"><a href="#cb59-392" aria-hidden="true" tabindex="-1"></a>Additionally, we do not have use the <span class="in">`@meta.data`</span> each time we want to access a single column. We can use the <span class="in">`$`</span> follow by the column name as a shorthand.</span>
 <span id="cb59-393"><a href="#cb59-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-394"><a href="#cb59-394" aria-hidden="true" tabindex="-1"></a>Additionally, we do not have use the <span class="in">`@meta.data`</span> each time we want to access a single column. We can use the <span class="in">`$`</span> follow by the column name as a shorthand.</span>
-<span id="cb59-395"><a href="#cb59-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-398"><a href="#cb59-398" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-399"><a href="#cb59-399" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">$</span>nCount_Spatial<span class="fl">.008</span>um <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb59-400"><a href="#cb59-400" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-396"><a href="#cb59-396" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-397"><a href="#cb59-397" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">$</span>nCount_Spatial<span class="fl">.008</span>um <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb59-398"><a href="#cb59-398" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-399"><a href="#cb59-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-400"><a href="#cb59-400" aria-hidden="true" tabindex="-1"></a><span class="fu">### Idents</span></span>
 <span id="cb59-401"><a href="#cb59-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-402"><a href="#cb59-402" aria-hidden="true" tabindex="-1"></a><span class="fu">### Idents</span></span>
+<span id="cb59-402"><a href="#cb59-402" aria-hidden="true" tabindex="-1"></a>TODO</span>
 <span id="cb59-403"><a href="#cb59-403" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-404"><a href="#cb59-404" aria-hidden="true" tabindex="-1"></a>TODO</span>
-<span id="cb59-405"><a href="#cb59-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-408"><a href="#cb59-408" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-409"><a href="#cb59-409" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(crc) <span class="ot">&lt;-</span> <span class="st">&quot;orig.ident&quot;</span></span>
-<span id="cb59-410"><a href="#cb59-410" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-411"><a href="#cb59-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-412"><a href="#cb59-412" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb59-413"><a href="#cb59-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-414"><a href="#cb59-414" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb59-415"><a href="#cb59-415" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 2**](02_loading-spatial-data_Answer-key.qmd#exercise-2)</span></span>
-<span id="cb59-416"><a href="#cb59-416" aria-hidden="true" tabindex="-1"></a>TODO</span>
-<span id="cb59-417"><a href="#cb59-417" aria-hidden="true" tabindex="-1"></a>Exercise 1</span>
-<span id="cb59-418"><a href="#cb59-418" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb59-419"><a href="#cb59-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-420"><a href="#cb59-420" aria-hidden="true" tabindex="-1"></a><span class="fu"># Loading Multiple Samples into Seurat</span></span>
-<span id="cb59-421"><a href="#cb59-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-422"><a href="#cb59-422" aria-hidden="true" tabindex="-1"></a>Now that we have a better understanding of how to create a Seurat object from SpaceRanger outpus, let&#39;s go through how we can load multiple samples at once. In this case we want to represent both samples <span class="in">`P5CRC`</span> and <span class="in">`P5NAT`</span> in a singular Seurat object.</span>
-<span id="cb59-423"><a href="#cb59-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-424"><a href="#cb59-424" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using a `for` Loop </span></span>
-<span id="cb59-425"><a href="#cb59-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-426"><a href="#cb59-426" aria-hidden="true" tabindex="-1"></a>In practice, you will likely have several samples that you will need to read in data for, and that can get tedious and error-prone if you do it one at a time. So, to make the data import into R more efficient we can use a <span class="in">`for`</span> loop, which will iterate over a series of commands for each of the inputs given and create Seurat objects for each of our samples. </span>
+<span id="cb59-406"><a href="#cb59-406" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-407"><a href="#cb59-407" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(crc) <span class="ot">&lt;-</span> <span class="st">&quot;orig.ident&quot;</span></span>
+<span id="cb59-408"><a href="#cb59-408" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-409"><a href="#cb59-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-410"><a href="#cb59-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-411"><a href="#cb59-411" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb59-412"><a href="#cb59-412" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 2**](02_loading-spatial-data_Answer-key.qmd#exercise-2)</span></span>
+<span id="cb59-413"><a href="#cb59-413" aria-hidden="true" tabindex="-1"></a>TODO</span>
+<span id="cb59-414"><a href="#cb59-414" aria-hidden="true" tabindex="-1"></a>Exercise 1</span>
+<span id="cb59-415"><a href="#cb59-415" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb59-416"><a href="#cb59-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-417"><a href="#cb59-417" aria-hidden="true" tabindex="-1"></a><span class="fu"># Loading Multiple Samples into Seurat</span></span>
+<span id="cb59-418"><a href="#cb59-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-419"><a href="#cb59-419" aria-hidden="true" tabindex="-1"></a>Now that we have a better understanding of how to create a Seurat object from SpaceRanger outpus, let&#39;s go through how we can load multiple samples at once. In this case we want to represent both samples <span class="in">`P5CRC`</span> and <span class="in">`P5NAT`</span> in a singular Seurat object.</span>
+<span id="cb59-420"><a href="#cb59-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-421"><a href="#cb59-421" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using a `for` Loop </span></span>
+<span id="cb59-422"><a href="#cb59-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-423"><a href="#cb59-423" aria-hidden="true" tabindex="-1"></a>In practice, you will likely have several samples that you will need to read in data for, and that can get tedious and error-prone if you do it one at a time. So, to make the data import into R more efficient we can use a <span class="in">`for`</span> loop, which will iterate over a series of commands for each of the inputs given and create Seurat objects for each of our samples. </span>
+<span id="cb59-424"><a href="#cb59-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-425"><a href="#cb59-425" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
+<span id="cb59-426"><a href="#cb59-426" aria-hidden="true" tabindex="-1"></a><span class="fu"># `for` loop syntax</span></span>
 <span id="cb59-427"><a href="#cb59-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-428"><a href="#cb59-428" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
-<span id="cb59-429"><a href="#cb59-429" aria-hidden="true" tabindex="-1"></a><span class="fu"># `for` loop syntax</span></span>
-<span id="cb59-430"><a href="#cb59-430" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-431"><a href="#cb59-431" aria-hidden="true" tabindex="-1"></a>In R, the <span class="in">`for`</span> loop has the following structure/syntax:</span>
-<span id="cb59-432"><a href="#cb59-432" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-435"><a href="#cb59-435" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-436"><a href="#cb59-436" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: for_loop_example</span></span>
-<span id="cb59-437"><a href="#cb59-437" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-438"><a href="#cb59-438" aria-hidden="true" tabindex="-1"></a><span class="do">## DO NOT RUN</span></span>
-<span id="cb59-439"><a href="#cb59-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-440"><a href="#cb59-440" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (variable <span class="cf">in</span> input){</span>
-<span id="cb59-441"><a href="#cb59-441" aria-hidden="true" tabindex="-1"></a>    command1</span>
-<span id="cb59-442"><a href="#cb59-442" aria-hidden="true" tabindex="-1"></a>    command2</span>
-<span id="cb59-443"><a href="#cb59-443" aria-hidden="true" tabindex="-1"></a>    command3</span>
-<span id="cb59-444"><a href="#cb59-444" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb59-445"><a href="#cb59-445" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-446"><a href="#cb59-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-447"><a href="#cb59-447" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb59-448"><a href="#cb59-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-449"><a href="#cb59-449" aria-hidden="true" tabindex="-1"></a>Today we will use it to **iterate over the two sample folders** and execute commands for each sample as we did above for a single sample:</span>
+<span id="cb59-428"><a href="#cb59-428" aria-hidden="true" tabindex="-1"></a>In R, the <span class="in">`for`</span> loop has the following structure/syntax:</span>
+<span id="cb59-429"><a href="#cb59-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-432"><a href="#cb59-432" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-433"><a href="#cb59-433" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: for_loop_example</span></span>
+<span id="cb59-434"><a href="#cb59-434" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-435"><a href="#cb59-435" aria-hidden="true" tabindex="-1"></a><span class="do">## DO NOT RUN</span></span>
+<span id="cb59-436"><a href="#cb59-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-437"><a href="#cb59-437" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (variable <span class="cf">in</span> input){</span>
+<span id="cb59-438"><a href="#cb59-438" aria-hidden="true" tabindex="-1"></a>    command1</span>
+<span id="cb59-439"><a href="#cb59-439" aria-hidden="true" tabindex="-1"></a>    command2</span>
+<span id="cb59-440"><a href="#cb59-440" aria-hidden="true" tabindex="-1"></a>    command3</span>
+<span id="cb59-441"><a href="#cb59-441" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-442"><a href="#cb59-442" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-443"><a href="#cb59-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-444"><a href="#cb59-444" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb59-445"><a href="#cb59-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-446"><a href="#cb59-446" aria-hidden="true" tabindex="-1"></a>Today we will use it to **iterate over the two sample folders** and execute commands for each sample as we did above for a single sample:</span>
+<span id="cb59-447"><a href="#cb59-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-448"><a href="#cb59-448" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Create the Seurat objects from the SpaceRanger data (<span class="in">`Load10X_Spatial()`</span>)</span>
+<span id="cb59-449"><a href="#cb59-449" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Set <span class="in">`orig.ident`</span> to be our sample</span>
 <span id="cb59-450"><a href="#cb59-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-451"><a href="#cb59-451" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Create the Seurat objects from the SpaceRanger data (<span class="in">`Load10X_Spatial()`</span>)</span>
-<span id="cb59-452"><a href="#cb59-452" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Set <span class="in">`orig.ident`</span> to be our sample</span>
-<span id="cb59-453"><a href="#cb59-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-454"><a href="#cb59-454" aria-hidden="true" tabindex="-1"></a>Once those steps run, we will store the newly generated Seurat object to a list called <span class="in">`list_seurat`</span> so that we can eventually merge both samples together.</span>
-<span id="cb59-455"><a href="#cb59-455" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-456"><a href="#cb59-456" aria-hidden="true" tabindex="-1"></a>**We will be using a bin size of 8um for the remainder of this workshop**</span>
-<span id="cb59-457"><a href="#cb59-457" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-460"><a href="#cb59-460" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-461"><a href="#cb59-461" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-462"><a href="#cb59-462" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;P5CRC&quot;</span>, <span class="st">&quot;P5NAT&quot;</span>)</span>
-<span id="cb59-463"><a href="#cb59-463" aria-hidden="true" tabindex="-1"></a>list_seurat <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb59-464"><a href="#cb59-464" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-465"><a href="#cb59-465" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (sample <span class="cf">in</span> samples) {</span>
-<span id="cb59-466"><a href="#cb59-466" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb59-467"><a href="#cb59-467" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to data directory</span></span>
-<span id="cb59-468"><a href="#cb59-468" aria-hidden="true" tabindex="-1"></a>  data_dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;data/&quot;</span>, sample)</span>
-<span id="cb59-469"><a href="#cb59-469" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create seurat object and set orig ident to be sample</span></span>
-<span id="cb59-470"><a href="#cb59-470" aria-hidden="true" tabindex="-1"></a>  seurat <span class="ot">&lt;-</span> <span class="fu">Load10X_Spatial</span>(<span class="at">data.dir =</span> data_dir,</span>
-<span id="cb59-471"><a href="#cb59-471" aria-hidden="true" tabindex="-1"></a>                            <span class="at">bin.size =</span> <span class="fu">c</span>(<span class="dv">8</span>),</span>
-<span id="cb59-472"><a href="#cb59-472" aria-hidden="true" tabindex="-1"></a>                            <span class="at">slice =</span> sample)</span>
-<span id="cb59-473"><a href="#cb59-473" aria-hidden="true" tabindex="-1"></a>  seurat<span class="sc">$</span>orig.ident <span class="ot">&lt;-</span> sample</span>
-<span id="cb59-474"><a href="#cb59-474" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb59-475"><a href="#cb59-475" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store seurat object in our list</span></span>
-<span id="cb59-476"><a href="#cb59-476" aria-hidden="true" tabindex="-1"></a>  list_seurat[[sample]] <span class="ot">&lt;-</span> seurat</span>
-<span id="cb59-477"><a href="#cb59-477" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb59-478"><a href="#cb59-478" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-479"><a href="#cb59-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-480"><a href="#cb59-480" aria-hidden="true" tabindex="-1"></a>To confirm that we succesfully loaded both samples in, we can take a look at the contents of <span class="in">`list_seurat`</span>. We should see that there are two Seurat objects in our list that correspond to each sample.</span>
-<span id="cb59-481"><a href="#cb59-481" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-484"><a href="#cb59-484" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-485"><a href="#cb59-485" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb59-486"><a href="#cb59-486" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(list_seurat, &quot;data/list_seurat.RDS&quot;)</span></span>
-<span id="cb59-487"><a href="#cb59-487" aria-hidden="true" tabindex="-1"></a>list_seurat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/list_seurat.RDS&quot;</span>)</span>
-<span id="cb59-488"><a href="#cb59-488" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-489"><a href="#cb59-489" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-492"><a href="#cb59-492" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-493"><a href="#cb59-493" aria-hidden="true" tabindex="-1"></a>list_seurat</span>
-<span id="cb59-494"><a href="#cb59-494" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-495"><a href="#cb59-495" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-496"><a href="#cb59-496" aria-hidden="true" tabindex="-1"></a>This is exactly what we had hoped to see! So now we can move on to the next step which is merging the sample together into a singular Seurat object.</span>
-<span id="cb59-497"><a href="#cb59-497" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-498"><a href="#cb59-498" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
-<span id="cb59-499"><a href="#cb59-499" aria-hidden="true" tabindex="-1"></a><span class="fu"># Merging vs. Integration</span></span>
-<span id="cb59-500"><a href="#cb59-500" aria-hidden="true" tabindex="-1"></a>A common point of confusion is the distinction between **integration** and merging. In the field, integration is considered to be modifying either your counts or latent space in a way to correct for a batch variable. Whereas what we are doing now is **merging** or concatenating multiple samples together. This process of merging does not transform the values in the count matrices.</span>
-<span id="cb59-501"><a href="#cb59-501" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb59-502"><a href="#cb59-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-503"><a href="#cb59-503" aria-hidden="true" tabindex="-1"></a><span class="fu">## Merge Datasets Together</span></span>
-<span id="cb59-504"><a href="#cb59-504" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-505"><a href="#cb59-505" aria-hidden="true" tabindex="-1"></a>We merge samples together because it make it easier to run the QC steps for both sample groups together. It also enables us to easily compare the data quality for all cells at one time</span>
-<span id="cb59-506"><a href="#cb59-506" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-507"><a href="#cb59-507" aria-hidden="true" tabindex="-1"></a>To create this combined Seurat object, we use the <span class="in">`merge()`</span> function. Because the same cell IDs can be used for different samples, we add a **sample-specific prefix** to each of our cell IDs using the <span class="in">`add.cell.id`</span> argument to ensure the cell names are unique.</span>
-<span id="cb59-508"><a href="#cb59-508" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-511"><a href="#cb59-511" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-512"><a href="#cb59-512" aria-hidden="true" tabindex="-1"></a>seurat_merged <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> list_seurat[[<span class="st">&quot;P5CRC&quot;</span>]],</span>
-<span id="cb59-513"><a href="#cb59-513" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> list_seurat[[<span class="st">&quot;P5NAT&quot;</span>]],</span>
-<span id="cb59-514"><a href="#cb59-514" aria-hidden="true" tabindex="-1"></a>                       <span class="at">add.cell.id =</span> <span class="fu">c</span>(<span class="st">&quot;P5CRC&quot;</span>, <span class="st">&quot;P5NAT&quot;</span>))</span>
-<span id="cb59-515"><a href="#cb59-515" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
-<span id="cb59-516"><a href="#cb59-516" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-517"><a href="#cb59-517" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-518"><a href="#cb59-518" aria-hidden="true" tabindex="-1"></a>From the callout we can see that we now have: <span class="in">`2 layers present: counts.1, counts.2`</span></span>
-<span id="cb59-519"><a href="#cb59-519" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-520"><a href="#cb59-520" aria-hidden="true" tabindex="-1"></a>Which we also see represented if we look at our <span class="in">`Layers()`</span></span>
-<span id="cb59-521"><a href="#cb59-521" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-524"><a href="#cb59-524" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-525"><a href="#cb59-525" aria-hidden="true" tabindex="-1"></a><span class="fu">Layers</span>(seurat_merged)</span>
-<span id="cb59-526"><a href="#cb59-526" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-527"><a href="#cb59-527" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-528"><a href="#cb59-528" aria-hidden="true" tabindex="-1"></a>However, we do not want to have two distinct raw counts matrices (<span class="in">`counts.1`</span> and <span class="in">`counts.2`</span>). We want the counts for each sample to be concatenated together. This would be a single, large count matrix that represent each cell in the dataset. Seurat&#39;s function <span class="in">`JoinLayers()`</span> allows us to do just this.</span>
-<span id="cb59-529"><a href="#cb59-529" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-532"><a href="#cb59-532" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-533"><a href="#cb59-533" aria-hidden="true" tabindex="-1"></a>seurat_merged <span class="ot">&lt;-</span> <span class="fu">JoinLayers</span>(seurat_merged)</span>
-<span id="cb59-534"><a href="#cb59-534" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
-<span id="cb59-535"><a href="#cb59-535" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-536"><a href="#cb59-536" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-537"><a href="#cb59-537" aria-hidden="true" tabindex="-1"></a>Now we have a singular <span class="in">`counts`</span> matrix.</span>
+<span id="cb59-451"><a href="#cb59-451" aria-hidden="true" tabindex="-1"></a>Once those steps run, we will store the newly generated Seurat object to a list called <span class="in">`list_seurat`</span> so that we can eventually merge both samples together.</span>
+<span id="cb59-452"><a href="#cb59-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-453"><a href="#cb59-453" aria-hidden="true" tabindex="-1"></a>**We will be using a bin size of 8um for the remainder of this workshop**</span>
+<span id="cb59-454"><a href="#cb59-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-457"><a href="#cb59-457" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-458"><a href="#cb59-458" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-459"><a href="#cb59-459" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;P5CRC&quot;</span>, <span class="st">&quot;P5NAT&quot;</span>)</span>
+<span id="cb59-460"><a href="#cb59-460" aria-hidden="true" tabindex="-1"></a>list_seurat <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb59-461"><a href="#cb59-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-462"><a href="#cb59-462" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (sample <span class="cf">in</span> samples) {</span>
+<span id="cb59-463"><a href="#cb59-463" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb59-464"><a href="#cb59-464" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to data directory</span></span>
+<span id="cb59-465"><a href="#cb59-465" aria-hidden="true" tabindex="-1"></a>  data_dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;data/&quot;</span>, sample)</span>
+<span id="cb59-466"><a href="#cb59-466" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create seurat object and set orig ident to be sample</span></span>
+<span id="cb59-467"><a href="#cb59-467" aria-hidden="true" tabindex="-1"></a>  seurat <span class="ot">&lt;-</span> <span class="fu">Load10X_Spatial</span>(<span class="at">data.dir =</span> data_dir,</span>
+<span id="cb59-468"><a href="#cb59-468" aria-hidden="true" tabindex="-1"></a>                            <span class="at">bin.size =</span> <span class="fu">c</span>(<span class="dv">8</span>),</span>
+<span id="cb59-469"><a href="#cb59-469" aria-hidden="true" tabindex="-1"></a>                            <span class="at">slice =</span> sample)</span>
+<span id="cb59-470"><a href="#cb59-470" aria-hidden="true" tabindex="-1"></a>  seurat<span class="sc">$</span>orig.ident <span class="ot">&lt;-</span> sample</span>
+<span id="cb59-471"><a href="#cb59-471" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb59-472"><a href="#cb59-472" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store seurat object in our list</span></span>
+<span id="cb59-473"><a href="#cb59-473" aria-hidden="true" tabindex="-1"></a>  list_seurat[[sample]] <span class="ot">&lt;-</span> seurat</span>
+<span id="cb59-474"><a href="#cb59-474" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-475"><a href="#cb59-475" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-476"><a href="#cb59-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-477"><a href="#cb59-477" aria-hidden="true" tabindex="-1"></a>To confirm that we succesfully loaded both samples in, we can take a look at the contents of <span class="in">`list_seurat`</span>. We should see that there are two Seurat objects in our list that correspond to each sample.</span>
+<span id="cb59-478"><a href="#cb59-478" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-481"><a href="#cb59-481" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-482"><a href="#cb59-482" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb59-483"><a href="#cb59-483" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(list_seurat, &quot;data/list_seurat.RDS&quot;)</span></span>
+<span id="cb59-484"><a href="#cb59-484" aria-hidden="true" tabindex="-1"></a>list_seurat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/list_seurat.RDS&quot;</span>)</span>
+<span id="cb59-485"><a href="#cb59-485" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-486"><a href="#cb59-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-489"><a href="#cb59-489" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-490"><a href="#cb59-490" aria-hidden="true" tabindex="-1"></a>list_seurat</span>
+<span id="cb59-491"><a href="#cb59-491" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-492"><a href="#cb59-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-493"><a href="#cb59-493" aria-hidden="true" tabindex="-1"></a>This is exactly what we had hoped to see! So now we can move on to the next step which is merging the sample together into a singular Seurat object.</span>
+<span id="cb59-494"><a href="#cb59-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-495"><a href="#cb59-495" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
+<span id="cb59-496"><a href="#cb59-496" aria-hidden="true" tabindex="-1"></a><span class="fu"># Merging vs. Integration</span></span>
+<span id="cb59-497"><a href="#cb59-497" aria-hidden="true" tabindex="-1"></a>A common point of confusion is the distinction between **integration** and merging. In the field, integration is considered to be modifying either your counts or latent space in a way to correct for a batch variable. Whereas what we are doing now is **merging** or concatenating multiple samples together. This process of merging does not transform the values in the count matrices.</span>
+<span id="cb59-498"><a href="#cb59-498" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb59-499"><a href="#cb59-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-500"><a href="#cb59-500" aria-hidden="true" tabindex="-1"></a><span class="fu">## Merge Datasets Together</span></span>
+<span id="cb59-501"><a href="#cb59-501" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-502"><a href="#cb59-502" aria-hidden="true" tabindex="-1"></a>We merge samples together because it make it easier to run the QC steps for both sample groups together. It also enables us to easily compare the data quality for all cells at one time</span>
+<span id="cb59-503"><a href="#cb59-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-504"><a href="#cb59-504" aria-hidden="true" tabindex="-1"></a>To create this combined Seurat object, we use the <span class="in">`merge()`</span> function. Because the same cell IDs can be used for different samples, we add a **sample-specific prefix** to each of our cell IDs using the <span class="in">`add.cell.id`</span> argument to ensure the cell names are unique.</span>
+<span id="cb59-505"><a href="#cb59-505" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-508"><a href="#cb59-508" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-509"><a href="#cb59-509" aria-hidden="true" tabindex="-1"></a>seurat_merged <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> list_seurat[[<span class="st">&quot;P5CRC&quot;</span>]],</span>
+<span id="cb59-510"><a href="#cb59-510" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> list_seurat[[<span class="st">&quot;P5NAT&quot;</span>]],</span>
+<span id="cb59-511"><a href="#cb59-511" aria-hidden="true" tabindex="-1"></a>                       <span class="at">add.cell.id =</span> <span class="fu">c</span>(<span class="st">&quot;P5CRC&quot;</span>, <span class="st">&quot;P5NAT&quot;</span>))</span>
+<span id="cb59-512"><a href="#cb59-512" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
+<span id="cb59-513"><a href="#cb59-513" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-514"><a href="#cb59-514" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-515"><a href="#cb59-515" aria-hidden="true" tabindex="-1"></a>From the callout we can see that we now have: <span class="in">`2 layers present: counts.1, counts.2`</span></span>
+<span id="cb59-516"><a href="#cb59-516" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-517"><a href="#cb59-517" aria-hidden="true" tabindex="-1"></a>Which we also see represented if we look at our <span class="in">`Layers()`</span></span>
+<span id="cb59-518"><a href="#cb59-518" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-521"><a href="#cb59-521" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-522"><a href="#cb59-522" aria-hidden="true" tabindex="-1"></a><span class="fu">Layers</span>(seurat_merged)</span>
+<span id="cb59-523"><a href="#cb59-523" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-524"><a href="#cb59-524" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-525"><a href="#cb59-525" aria-hidden="true" tabindex="-1"></a>However, we do not want to have two distinct raw counts matrices (<span class="in">`counts.1`</span> and <span class="in">`counts.2`</span>). We want the counts for each sample to be concatenated together. This would be a single, large count matrix that represent each cell in the dataset. Seurat&#39;s function <span class="in">`JoinLayers()`</span> allows us to do just this.</span>
+<span id="cb59-526"><a href="#cb59-526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-529"><a href="#cb59-529" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-530"><a href="#cb59-530" aria-hidden="true" tabindex="-1"></a>seurat_merged <span class="ot">&lt;-</span> <span class="fu">JoinLayers</span>(seurat_merged)</span>
+<span id="cb59-531"><a href="#cb59-531" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
+<span id="cb59-532"><a href="#cb59-532" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-533"><a href="#cb59-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-534"><a href="#cb59-534" aria-hidden="true" tabindex="-1"></a>Now we have a singular <span class="in">`counts`</span> matrix.</span>
+<span id="cb59-535"><a href="#cb59-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-536"><a href="#cb59-536" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
+<span id="cb59-537"><a href="#cb59-537" aria-hidden="true" tabindex="-1"></a><span class="fu"># What if I am merging more than two samples?</span></span>
 <span id="cb59-538"><a href="#cb59-538" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-539"><a href="#cb59-539" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
-<span id="cb59-540"><a href="#cb59-540" aria-hidden="true" tabindex="-1"></a><span class="fu"># What if I am merging more than two samples?</span></span>
-<span id="cb59-541"><a href="#cb59-541" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-542"><a href="#cb59-542" aria-hidden="true" tabindex="-1"></a>Seurat has functionality to merge many samples together. You can do this quite easily by adding all sample objects to the <span class="in">`y`</span> argument in a vector format. An example is provided below, assuming you use the list structured we used previously: </span>
-<span id="cb59-543"><a href="#cb59-543" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-546"><a href="#cb59-546" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-547"><a href="#cb59-547" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: merging_multiple_objects</span></span>
-<span id="cb59-548"><a href="#cb59-548" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-549"><a href="#cb59-549" aria-hidden="true" tabindex="-1"></a><span class="do">## DO NOT RUN</span></span>
-<span id="cb59-550"><a href="#cb59-550" aria-hidden="true" tabindex="-1"></a>merged_seurat <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> seurat_list[[<span class="dv">1</span>]], </span>
-<span id="cb59-551"><a href="#cb59-551" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> seurat_list[[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(seurat_list)]],</span>
-<span id="cb59-552"><a href="#cb59-552" aria-hidden="true" tabindex="-1"></a>                       <span class="at">add.cell.id =</span> <span class="fu">names</span>(seurat_list))</span>
-<span id="cb59-553"><a href="#cb59-553" aria-hidden="true" tabindex="-1"></a><span class="in">```</span>       </span>
-<span id="cb59-554"><a href="#cb59-554" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb59-555"><a href="#cb59-555" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-556"><a href="#cb59-556" aria-hidden="true" tabindex="-1"></a><span class="fu">## Evaluating `merged_seurat`</span></span>
-<span id="cb59-557"><a href="#cb59-557" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-558"><a href="#cb59-558" aria-hidden="true" tabindex="-1"></a>Let’s also double check that we have the correct number of cells. First, let us see what the number of cells was for each sample:</span>
-<span id="cb59-559"><a href="#cb59-559" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-562"><a href="#cb59-562" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-563"><a href="#cb59-563" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(list_seurat[[<span class="st">&quot;P5CRC&quot;</span>]])</span>
-<span id="cb59-564"><a href="#cb59-564" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(list_seurat[[<span class="st">&quot;P5NAT&quot;</span>]])</span>
-<span id="cb59-565"><a href="#cb59-565" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-566"><a href="#cb59-566" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-567"><a href="#cb59-567" aria-hidden="true" tabindex="-1"></a>The sum of these values is:</span>
-<span id="cb59-568"><a href="#cb59-568" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-571"><a href="#cb59-571" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-572"><a href="#cb59-572" aria-hidden="true" tabindex="-1"></a><span class="dv">541968</span> <span class="sc">+</span> <span class="dv">435773</span></span>
-<span id="cb59-573"><a href="#cb59-573" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-574"><a href="#cb59-574" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-575"><a href="#cb59-575" aria-hidden="true" tabindex="-1"></a>Which is the same as the number of samples in our Seurat callout!</span>
-<span id="cb59-576"><a href="#cb59-576" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-579"><a href="#cb59-579" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-580"><a href="#cb59-580" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
-<span id="cb59-581"><a href="#cb59-581" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-582"><a href="#cb59-582" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-583"><a href="#cb59-583" aria-hidden="true" tabindex="-1"></a>If we look at the metadata of the merged object we should be able to see the prefixes in the rownames (<span class="in">`Cells`</span>) as well as the updated <span class="in">`orig.ident`</span> we set in the for loop earlier.</span>
-<span id="cb59-584"><a href="#cb59-584" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-587"><a href="#cb59-587" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-588"><a href="#cb59-588" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: inspect_seurat_object</span></span>
-<span id="cb59-589"><a href="#cb59-589" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-590"><a href="#cb59-590" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the merged object has the appropriate sample-specific prefixes</span></span>
-<span id="cb59-591"><a href="#cb59-591" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(seurat_merged<span class="sc">@</span>meta.data)</span>
-<span id="cb59-592"><a href="#cb59-592" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-593"><a href="#cb59-593" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-596"><a href="#cb59-596" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-597"><a href="#cb59-597" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb59-598"><a href="#cb59-598" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
-<span id="cb59-599"><a href="#cb59-599" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb59-600"><a href="#cb59-600" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
-<span id="cb59-601"><a href="#cb59-601" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-602"><a href="#cb59-602" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-605"><a href="#cb59-605" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-606"><a href="#cb59-606" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-607"><a href="#cb59-607" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(seurat_merged<span class="sc">@</span>meta.data)</span>
-<span id="cb59-608"><a href="#cb59-608" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-609"><a href="#cb59-609" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-612"><a href="#cb59-612" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-613"><a href="#cb59-613" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb59-614"><a href="#cb59-614" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
-<span id="cb59-615"><a href="#cb59-615" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb59-616"><a href="#cb59-616" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
-<span id="cb59-617"><a href="#cb59-617" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-618"><a href="#cb59-618" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-619"><a href="#cb59-619" aria-hidden="true" tabindex="-1"></a>Lastly we want to make sure that the <span class="in">`Idents`</span> of our cells is a useful piece of information, for example like <span class="in">`orig.ident`</span>, which contains our sample IDs.</span>
-<span id="cb59-620"><a href="#cb59-620" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-623"><a href="#cb59-623" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-624"><a href="#cb59-624" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(seurat_merged) <span class="ot">&lt;-</span> <span class="st">&quot;orig.ident&quot;</span></span>
-<span id="cb59-625"><a href="#cb59-625" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-626"><a href="#cb59-626" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-627"><a href="#cb59-627" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb59-628"><a href="#cb59-628" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 3**](02_loading-spatial-data_Answer-key.qmd#exercise-3)</span></span>
-<span id="cb59-629"><a href="#cb59-629" aria-hidden="true" tabindex="-1"></a>TODO</span>
-<span id="cb59-630"><a href="#cb59-630" aria-hidden="true" tabindex="-1"></a>Exercise 3</span>
-<span id="cb59-631"><a href="#cb59-631" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb59-632"><a href="#cb59-632" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-633"><a href="#cb59-633" aria-hidden="true" tabindex="-1"></a><span class="fu"># Save!</span></span>
-<span id="cb59-634"><a href="#cb59-634" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-635"><a href="#cb59-635" aria-hidden="true" tabindex="-1"></a>Now is a great spot to save our <span class="in">`seurat_merged`</span> object as the next step is going to be filtering. </span>
-<span id="cb59-636"><a href="#cb59-636" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-639"><a href="#cb59-639" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-640"><a href="#cb59-640" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb59-641"><a href="#cb59-641" aria-hidden="true" tabindex="-1"></a><span class="co"># Save integrated Seurat object</span></span>
-<span id="cb59-642"><a href="#cb59-642" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(seurat_merged, <span class="st">&quot;data/seurat_merged.RDS&quot;</span>)</span>
-<span id="cb59-643"><a href="#cb59-643" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-644"><a href="#cb59-644" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-645"><a href="#cb59-645" aria-hidden="true" tabindex="-1"></a>A good rule of thumb is to save your intermediate objects before doing any filtration or after running a computational step that takes a long time to run.</span>
+<span id="cb59-539"><a href="#cb59-539" aria-hidden="true" tabindex="-1"></a>Seurat has functionality to merge many samples together. You can do this quite easily by adding all sample objects to the <span class="in">`y`</span> argument in a vector format. An example is provided below, assuming you use the list structured we used previously: </span>
+<span id="cb59-540"><a href="#cb59-540" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-543"><a href="#cb59-543" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-544"><a href="#cb59-544" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: merging_multiple_objects</span></span>
+<span id="cb59-545"><a href="#cb59-545" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-546"><a href="#cb59-546" aria-hidden="true" tabindex="-1"></a><span class="do">## DO NOT RUN</span></span>
+<span id="cb59-547"><a href="#cb59-547" aria-hidden="true" tabindex="-1"></a>merged_seurat <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> seurat_list[[<span class="dv">1</span>]], </span>
+<span id="cb59-548"><a href="#cb59-548" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> seurat_list[[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(seurat_list)]],</span>
+<span id="cb59-549"><a href="#cb59-549" aria-hidden="true" tabindex="-1"></a>                       <span class="at">add.cell.id =</span> <span class="fu">names</span>(seurat_list))</span>
+<span id="cb59-550"><a href="#cb59-550" aria-hidden="true" tabindex="-1"></a><span class="in">```</span>       </span>
+<span id="cb59-551"><a href="#cb59-551" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb59-552"><a href="#cb59-552" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-553"><a href="#cb59-553" aria-hidden="true" tabindex="-1"></a><span class="fu">## Evaluating `merged_seurat`</span></span>
+<span id="cb59-554"><a href="#cb59-554" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-555"><a href="#cb59-555" aria-hidden="true" tabindex="-1"></a>Let’s also double check that we have the correct number of cells. First, let us see what the number of cells was for each sample:</span>
+<span id="cb59-556"><a href="#cb59-556" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-559"><a href="#cb59-559" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-560"><a href="#cb59-560" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(list_seurat[[<span class="st">&quot;P5CRC&quot;</span>]])</span>
+<span id="cb59-561"><a href="#cb59-561" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(list_seurat[[<span class="st">&quot;P5NAT&quot;</span>]])</span>
+<span id="cb59-562"><a href="#cb59-562" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-563"><a href="#cb59-563" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-564"><a href="#cb59-564" aria-hidden="true" tabindex="-1"></a>The sum of these values is:</span>
+<span id="cb59-565"><a href="#cb59-565" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-568"><a href="#cb59-568" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-569"><a href="#cb59-569" aria-hidden="true" tabindex="-1"></a><span class="dv">541968</span> <span class="sc">+</span> <span class="dv">435773</span></span>
+<span id="cb59-570"><a href="#cb59-570" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-571"><a href="#cb59-571" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-572"><a href="#cb59-572" aria-hidden="true" tabindex="-1"></a>Which is the same as the number of samples in our Seurat callout!</span>
+<span id="cb59-573"><a href="#cb59-573" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-576"><a href="#cb59-576" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-577"><a href="#cb59-577" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
+<span id="cb59-578"><a href="#cb59-578" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-579"><a href="#cb59-579" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-580"><a href="#cb59-580" aria-hidden="true" tabindex="-1"></a>If we look at the metadata of the merged object we should be able to see the prefixes in the rownames (<span class="in">`Cells`</span>) as well as the updated <span class="in">`orig.ident`</span> we set in the for loop earlier.</span>
+<span id="cb59-581"><a href="#cb59-581" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-584"><a href="#cb59-584" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-585"><a href="#cb59-585" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: inspect_seurat_object</span></span>
+<span id="cb59-586"><a href="#cb59-586" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-587"><a href="#cb59-587" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the merged object has the appropriate sample-specific prefixes</span></span>
+<span id="cb59-588"><a href="#cb59-588" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(seurat_merged<span class="sc">@</span>meta.data)</span>
+<span id="cb59-589"><a href="#cb59-589" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-590"><a href="#cb59-590" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-593"><a href="#cb59-593" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-594"><a href="#cb59-594" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb59-595"><a href="#cb59-595" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
+<span id="cb59-596"><a href="#cb59-596" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb59-597"><a href="#cb59-597" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
+<span id="cb59-598"><a href="#cb59-598" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-599"><a href="#cb59-599" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-602"><a href="#cb59-602" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-603"><a href="#cb59-603" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-604"><a href="#cb59-604" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(seurat_merged<span class="sc">@</span>meta.data)</span>
+<span id="cb59-605"><a href="#cb59-605" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-606"><a href="#cb59-606" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-609"><a href="#cb59-609" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-610"><a href="#cb59-610" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb59-611"><a href="#cb59-611" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
+<span id="cb59-612"><a href="#cb59-612" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb59-613"><a href="#cb59-613" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>()</span>
+<span id="cb59-614"><a href="#cb59-614" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-615"><a href="#cb59-615" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-616"><a href="#cb59-616" aria-hidden="true" tabindex="-1"></a>Lastly we want to make sure that the <span class="in">`Idents`</span> of our cells is a useful piece of information, for example like <span class="in">`orig.ident`</span>, which contains our sample IDs.</span>
+<span id="cb59-617"><a href="#cb59-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-620"><a href="#cb59-620" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-621"><a href="#cb59-621" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(seurat_merged) <span class="ot">&lt;-</span> <span class="st">&quot;orig.ident&quot;</span></span>
+<span id="cb59-622"><a href="#cb59-622" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-623"><a href="#cb59-623" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-624"><a href="#cb59-624" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb59-625"><a href="#cb59-625" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 3**](02_loading-spatial-data_Answer-key.qmd#exercise-3)</span></span>
+<span id="cb59-626"><a href="#cb59-626" aria-hidden="true" tabindex="-1"></a>TODO</span>
+<span id="cb59-627"><a href="#cb59-627" aria-hidden="true" tabindex="-1"></a>Exercise 3</span>
+<span id="cb59-628"><a href="#cb59-628" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb59-629"><a href="#cb59-629" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-630"><a href="#cb59-630" aria-hidden="true" tabindex="-1"></a><span class="fu"># Save!</span></span>
+<span id="cb59-631"><a href="#cb59-631" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-632"><a href="#cb59-632" aria-hidden="true" tabindex="-1"></a>Now is a great spot to save our <span class="in">`seurat_merged`</span> object as the next step is going to be filtering. </span>
+<span id="cb59-633"><a href="#cb59-633" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-636"><a href="#cb59-636" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-637"><a href="#cb59-637" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb59-638"><a href="#cb59-638" aria-hidden="true" tabindex="-1"></a><span class="co"># Save integrated Seurat object</span></span>
+<span id="cb59-639"><a href="#cb59-639" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(seurat_merged, <span class="st">&quot;data/seurat_merged.RDS&quot;</span>)</span>
+<span id="cb59-640"><a href="#cb59-640" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-641"><a href="#cb59-641" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-642"><a href="#cb59-642" aria-hidden="true" tabindex="-1"></a>A good rule of thumb is to save your intermediate objects before doing any filtration or after running a computational step that takes a long time to run.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
