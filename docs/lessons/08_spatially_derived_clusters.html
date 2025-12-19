@@ -4972,23 +4972,23 @@ border: 1px solid #8b1628 !important;
    
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
-  <li><a href="#spatially-variable-genes" id="toc-spatially-variable-genes" class="nav-link" data-scroll-target="#spatially-variable-genes">Spatially Variable Genes</a>
+  <li><a href="#banksy" id="toc-banksy" class="nav-link" data-scroll-target="#banksy">BANKSY</a>
+  <ul class="collapse">
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">Set-up</a></li>
+  <li><a href="#new-banksy-matrix" id="toc-new-banksy-matrix" class="nav-link" data-scroll-target="#new-banksy-matrix">New BANKSY Matrix</a></li>
+  <li><a href="#calculation-on-banksy-matrix" id="toc-calculation-on-banksy-matrix" class="nav-link" data-scroll-target="#calculation-on-banksy-matrix">Calculation on BANKSY Matrix</a></li>
+  </ul></li>
+  <li><a href="#topic-3" id="toc-topic-3" class="nav-link" data-scroll-target="#topic-3">Topic 3</a>
   <ul class="collapse">
   <li><a href="#sub-topic-1" id="toc-sub-topic-1" class="nav-link" data-scroll-target="#sub-topic-1">Sub-topic 1</a></li>
   <li><a href="#sub-topic-2" id="toc-sub-topic-2" class="nav-link" data-scroll-target="#sub-topic-2">Sub-topic 2</a></li>
   <li><a href="#sub-topic-3" id="toc-sub-topic-3" class="nav-link" data-scroll-target="#sub-topic-3">Sub-topic 3</a></li>
   </ul></li>
-  <li><a href="#banksy" id="toc-banksy" class="nav-link" data-scroll-target="#banksy">BANKSY</a>
+  <li><a href="#spatially-variable-genes" id="toc-spatially-variable-genes" class="nav-link" data-scroll-target="#spatially-variable-genes">Spatially Variable Genes</a>
   <ul class="collapse">
-  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">Set-up</a></li>
-  <li><a href="#sub-topic-2-1" id="toc-sub-topic-2-1" class="nav-link" data-scroll-target="#sub-topic-2-1">Sub-topic 2</a></li>
+  <li><a href="#use-case-of-svgs" id="toc-use-case-of-svgs" class="nav-link" data-scroll-target="#use-case-of-svgs">Use Case of SVGs</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
   <li><a href="#sub-topic-3-1" id="toc-sub-topic-3-1" class="nav-link" data-scroll-target="#sub-topic-3-1">Sub-topic 3</a></li>
-  </ul></li>
-  <li><a href="#topic-3" id="toc-topic-3" class="nav-link" data-scroll-target="#topic-3">Topic 3</a>
-  <ul class="collapse">
-  <li><a href="#sub-topic-1-1" id="toc-sub-topic-1-1" class="nav-link" data-scroll-target="#sub-topic-1-1">Sub-topic 1</a></li>
-  <li><a href="#sub-topic-2-2" id="toc-sub-topic-2-2" class="nav-link" data-scroll-target="#sub-topic-2-2">Sub-topic 2</a></li>
-  <li><a href="#sub-topic-3-2" id="toc-sub-topic-3-2" class="nav-link" data-scroll-target="#sub-topic-3-2">Sub-topic 3</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -5036,48 +5036,157 @@ border: 1px solid #8b1628 !important;
 <li>LO 3</li>
 </ul>
 </section>
-<section id="spatially-variable-genes" class="level1">
-<h1>Spatially Variable Genes</h1>
-<p>https://www.nature.com/articles/s41467-025-56080-w</p>
-<section id="sub-topic-1" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-1">Sub-topic 1</h2>
-</section>
-<section id="sub-topic-2" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-2">Sub-topic 2</h2>
-</section>
-<section id="sub-topic-3" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-3">Sub-topic 3</h2>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<a href="08_marker-identification_Answer-key.qmd#exercise-1"><strong>Exercise 1</strong></a>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Exercise 1</p>
-</div>
-</div>
-</section>
-</section>
 <section id="banksy" class="level1">
 <h1>BANKSY</h1>
 <p><a href="https://www.nature.com/articles/s41588-024-01664-3">BANKSY</a> is another method for performing clustering. Unlike Seurat, BANKSY takes into account not only an individual bin’s expression pattern but also the mean and the gradient of gene expression levels in a bin’s broader neighborhood. This makes it valuable for identifying and defining spatial regions of interest.</p>
+<p>To accomplish this, BANKSY calculates two different scores:</p>
+<ul>
+<li>Weighted mean expression of genes in a spatial neighborhood</li>
+<li>“Azimuthal gabor filter”, which is the “gradient of gene expression in each cell’s neighborhood”</li>
+</ul>
+<p>In doing so, BANKSY is able to be flexible and not limit celltypes to <em>only</em> be located nearby one another. Even more than that, there is <code>lambda</code> value that scales the weight of each of these matrices to give the user flexibility in how strongly the spatial weights should impact clustering.</p>
+<p>These new matrices are then concatenated to the counts matrix before running the remainder of a standard scRNA-seq workflow (dimensionality reduction, clustering, integration, etc.). Therefore, the final output of this algorithm is a modulated counts matrix that includes weighted scores that correspond to spatial domains.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;prabhakarlab/Banksy&quot;)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Banksy)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SeuratWrappers)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>seurat_processed <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/seurat_processed.RDS&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>seurat_processed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>An object of class Seurat 
+36170 features across 826613 samples within 2 assays 
+Active assay: Spatial.008um (18085 features, 2000 variable features)
+ 2 layers present: counts, data
+ 1 other assay present: sketch
+ 4 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch
+ 2 spatial fields of view present: P5CRC.008um P5NAT.008um</code></pre>
+</div>
+</div>
 <section id="set-up" class="level2">
 <h2 class="anchored" data-anchor-id="set-up">Set-up</h2>
-<p>We use the <code>RunBanksy</code> function to create a new “BANKSY” assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Two parameters of importance are:</p>
+<p>We use the <code>RunBanksy</code> function to create a new “BANKSY” assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Some parameters of importance are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 90%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>k_geom</code></td>
+<td>Number of bins to consider for the local neighborhood. Larger values will yield larger domains.</td>
+</tr>
+<tr class="even">
+<td><code>lambda</code></td>
+<td>Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains.</td>
+</tr>
+<tr class="odd">
+<td><code>group</code></td>
+<td>Allows us to run BANKSY on multiple samples, enabling the function to understand that overlapping spatial locations can come from different slides.</td>
+</tr>
+<tr class="even">
+<td><code>dimx</code>, <code>dimy</code></td>
+<td>The x and y coordinates of a spot on the tissue slide.</td>
+</tr>
+<tr class="odd">
+<td><code>split.scale</code></td>
+<td>Within-group scaling parameter, accounting for minor differences between datasets.</td>
+</tr>
+</tbody>
+</table>
+<p>To set ourselves up for success, we are going to add the spatial locations for each spot into the metadata. This will allow us to specify <code>dimx</code> and <code>dimy</code> more easily.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>seurat_processed<span class="sc">$</span>cell <span class="ot">&lt;-</span> <span class="fu">rownames</span>(seurat_processed<span class="sc">@</span>meta.data)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># CRC and NAT sample coordinates</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>coords_crc <span class="ot">&lt;-</span> <span class="fu">GetTissueCoordinates</span>(seurat_processed, <span class="at">image =</span> <span class="st">&quot;P5CRC.008um&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>coords_nat <span class="ot">&lt;-</span> <span class="fu">GetTissueCoordinates</span>(seurat_processed, <span class="at">image =</span> <span class="st">&quot;P5NAT.008um&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">rbind</span>(coords_crc, coords_nat)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>seurat_processed<span class="sc">@</span>meta.data <span class="ot">&lt;-</span> <span class="fu">left_join</span>(seurat_processed<span class="sc">@</span>meta.data, coords, <span class="at">by =</span> <span class="st">&quot;cell&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(seurat_processed<span class="sc">@</span>meta.data) <span class="ot">&lt;-</span> seurat_processed<span class="sc">$</span>cell</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Which we can now use to calculate the new BANKSY matrix. This step can take a while to compute (TODO time estimate)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run Banksy from SeuratWrappers</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">RunBanksy</span>(seurat_processed, <span class="at">lambda =</span> <span class="fl">0.8</span>, <span class="at">verbose =</span> T,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">assay =</span> <span class="st">&#39;Spatial.008um&#39;</span>, <span class="at">slot =</span> <span class="st">&#39;data&#39;</span>, <span class="at">k_geom =</span> <span class="dv">50</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">group =</span> <span class="st">&quot;orig.ident&quot;</span>, <span class="at">dimx =</span> <span class="st">&#39;x&#39;</span>, <span class="at">dimy =</span> <span class="st">&#39;y&#39;</span>, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">split.scale =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With a new <code>Active assay: BANKSY</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>seurat_banksy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>An object of class Seurat 
+40170 features across 826613 samples within 3 assays 
+Active assay: BANKSY (4000 features, 0 variable features)
+ 2 layers present: data, scale.data
+ 2 other assays present: Spatial.008um, sketch
+ 4 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch
+ 2 spatial fields of view present: P5CRC.008um P5NAT.008um</code></pre>
+</div>
+</div>
+</section>
+<section id="new-banksy-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="new-banksy-matrix">New BANKSY Matrix</h2>
+<p>At this point, we have our new counts matrix that includes our neighborhood weighted scores. We can see this more clearly if we investigate the <code>Features()</code> that exist in our BANKSY assay. Where teh first few features are our original counts matrix with genes</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Features</span>(seurat_banksy) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;IGHG3&quot; &quot;IGHM&quot;  &quot;SPP1&quot;  &quot;IGLC7&quot; &quot;IGLC1&quot; &quot;SST&quot;  </code></pre>
+</div>
+</div>
+<p>Where we also have “new genes” that are our <code>lambda</code> scaled neighborhood weighted values, with an appended <code>*.m0</code> to make the distinction clear.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Features</span>(seurat_banksy) <span class="sc">%&gt;%</span> <span class="fu">tail</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;CD6.m0&quot;    &quot;C1QBP.m0&quot;  &quot;CHL1.m0&quot;   &quot;PRSS8.m0&quot;  &quot;MTCH2.m0&quot;  &quot;THSD7A.m0&quot;</code></pre>
+</div>
+</div>
+</section>
+<section id="calculation-on-banksy-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="calculation-on-banksy-matrix">Calculation on BANKSY Matrix</h2>
+<p>With these weights, we can now run through a simplified clustering workflow - using many of the same functions we used in the previous lesson on the scRNA workflow. The only distinction here is that these values are going to be calculated on our new BANKSY count matrix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Increases the size of the default vector</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">future.globals.maxSize=</span> <span class="dv">200000000000</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># PCA</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(seurat_banksy, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">assay =</span> <span class="st">&quot;BANKSY&quot;</span>, </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">reduction.name =</span> <span class="st">&quot;pca.banksy&quot;</span>, </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">features =</span> <span class="fu">rownames</span>(seurat_banksy), </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">npcs =</span> <span class="dv">30</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Find k-Nearest Neighbors</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(seurat_banksy, </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                               <span class="at">reduction =</span> <span class="st">&quot;pca.banksy&quot;</span>, </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                               <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Louvain clustering</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(seurat_banksy, </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>                              <span class="at">cluster.name =</span> <span class="st">&quot;banksy_cluster&quot;</span>,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>                              <span class="at">resolution =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>At this point, we no longer need access to the BANKSY assay as all the relevant information has now been stored as:</p>
 <ul>
-<li><code>k_geom</code> - Number of bins to consider for the local neighborhood. Larger values will yield larger domains.</li>
-<li><code>lambda</code> - Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains.</li>
+<li><code>banksy_clusters</code> in <code>@meta.data</code></li>
+<li><code>pca.banksy</code> in <code>@reductions</code></li>
 </ul>
-</section>
-<section id="sub-topic-2-1" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-2-1">Sub-topic 2</h2>
-</section>
-<section id="sub-topic-3-1" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-3-1">Sub-topic 3</h2>
+<p>So to conserve memory, we are going to delete the BANKSY assay from our seurat object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Change default asasy from BANKSY</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(seurat_banksy) <span class="ot">&lt;-</span> <span class="st">&quot;Spatial.008um&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete BANKSY assay by setting it to NULL</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>seurat_banksy[[<span class="st">&quot;BANKSY&quot;</span>]] <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -5095,14 +5204,14 @@ border: 1px solid #8b1628 !important;
 </section>
 <section id="topic-3" class="level1">
 <h1>Topic 3</h1>
-<section id="sub-topic-1-1" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-1-1">Sub-topic 1</h2>
+<section id="sub-topic-1" class="level2">
+<h2 class="anchored" data-anchor-id="sub-topic-1">Sub-topic 1</h2>
 </section>
-<section id="sub-topic-2-2" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-2-2">Sub-topic 2</h2>
+<section id="sub-topic-2" class="level2">
+<h2 class="anchored" data-anchor-id="sub-topic-2">Sub-topic 2</h2>
 </section>
-<section id="sub-topic-3-2" class="level2">
-<h2 class="anchored" data-anchor-id="sub-topic-3-2">Sub-topic 3</h2>
+<section id="sub-topic-3" class="level2">
+<h2 class="anchored" data-anchor-id="sub-topic-3">Sub-topic 3</h2>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -5114,6 +5223,43 @@ border: 1px solid #8b1628 !important;
 </div>
 <div class="callout-body-container callout-body">
 <p>Exercise 3</p>
+</div>
+</div>
+</section>
+</section>
+<section id="spatially-variable-genes" class="level1">
+<h1>Spatially Variable Genes</h1>
+<p>https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371</p>
+<p>Spatially variable genes (SVGs) are similar in concept to the highly variable genes that we calculated earlier - but with the added spatial location information. Essentially, identifying genes whose expression patterns change depending on where a cell is located on the tissue.</p>
+<p>In doing so, we are able to cluster cells together in a way that represents the different spatial domains</p>
+<section id="use-case-of-svgs" class="level2">
+<h2 class="anchored" data-anchor-id="use-case-of-svgs">Use Case of SVGs</h2>
+<p>https://www.nature.com/articles/s41467-025-56080-w</p>
+<blockquote class="blockquote">
+<p>Methods for detecting the three SVG categories serve different purposes (Fig. 2a). First, the detection of overall SVGs screens informative genes for downstream analyses, including the identification of spatial domains and functional gene modules. Second, detecting cell-type-specific SVGs aims to reveal spatial variation within a cell type and help identify distinct cell subpopulations or states within cell types. Third, spatial-domain-marker SVG detection is used to find marker genes to annotate and interpret spatial domains already detected. These markers help understand the molecular mechanisms underlying spatial domains and assist in annotating tissue layers in other datasets.</p>
+</blockquote>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<ul>
+<li>SpatialDE (python)</li>
+<li>MERINGUE</li>
+<li>BinSpect</li>
+</ul>
+</section>
+<section id="sub-topic-3-1" class="level2">
+<h2 class="anchored" data-anchor-id="sub-topic-3-1">Sub-topic 3</h2>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<a href="08_marker-identification_Answer-key.qmd#exercise-3"><strong>Exercise 3</strong></a>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Exercise 1</p>
 </div>
 </div>
 
@@ -5595,78 +5741,203 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Spatially Derived Clusters&quot;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">authors:</span><span class="co"> &quot;Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui&quot;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;Tuesday, July 22, 2025&quot;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>Approximate time: XY minutes</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu"># Learning Objectives</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>LO 1</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>LO 2</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>LO 3</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu"># Spatially Variable Genes</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>https://www.nature.com/articles/s41467-025-56080-w</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 1</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 2</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 3</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 1**](08_marker-identification_Answer-key.qmd#exercise-1)</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>Exercise 1</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="fu"># BANKSY</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">BANKSY</span><span class="co">](https://www.nature.com/articles/s41588-024-01664-3)</span> is another method for performing clustering. Unlike Seurat, BANKSY takes into account not only an individual bin’s expression pattern but also the mean and the gradient of gene expression levels in a bin’s broader neighborhood. This makes it valuable for identifying and defining spatial regions of interest.</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Set-up</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>We use the <span class="in">`RunBanksy`</span> function to create a new &quot;BANKSY&quot; assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Two parameters of importance are:</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`k_geom`</span> - Number of bins to consider for the local neighborhood. Larger values will yield larger domains.</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`lambda`</span> - Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains. </span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 2</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 3</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 2**](08_marker-identification_Answer-key.qmd#exercise-2)</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>Exercise 1</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="fu"># Topic 3</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 1</span></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 2</span></span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 3</span></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 3**](08_marker-identification_Answer-key.qmd#exercise-3)</span></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>Exercise 3</span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>:::</span>
+<div class="sourceCode" id="cb13" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Spatially Derived Clusters&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="an">authors:</span><span class="co"> &quot;Will Gammerdinger, Noor Sohail, Zhu Zhuo, James Billingsley, Shannan Ho Sui&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;Tuesday, July 22, 2025&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>Approximate time: XY minutes</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu"># Learning Objectives</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>LO 1</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>LO 2</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>LO 3</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu"># BANKSY</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">BANKSY</span><span class="co">](https://www.nature.com/articles/s41588-024-01664-3)</span> is another method for performing clustering. Unlike Seurat, BANKSY takes into account not only an individual bin’s expression pattern but also the mean and the gradient of gene expression levels in a bin’s broader neighborhood. This makes it valuable for identifying and defining spatial regions of interest.</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>To accomplish this, BANKSY calculates two different scores:</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Weighted mean expression of genes in a spatial neighborhood</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&quot;Azimuthal gabor filter&quot;, which is the &quot;gradient of gene expression in each cell’s neighborhood&quot;</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>In doing so, BANKSY is able to be flexible and not limit celltypes to _only_ be located nearby one another. Even more than that, there is <span class="in">`lambda`</span> value that scales the weight of each of these matrices to give the user flexibility in how strongly the spatial weights should impact clustering.</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>These new matrices are then concatenated to the counts matrix before running the remainder of a standard scRNA-seq workflow (dimensionality reduction, clustering, integration, etc.). Therefore, the final output of this algorithm is a modulated counts matrix that includes weighted scores that correspond to spatial domains.</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;prabhakarlab/Banksy&quot;)</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Banksy)</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SeuratWrappers)</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>seurat_processed <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/seurat_processed.RDS&quot;</span>)</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>seurat_processed</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## Set-up</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>We use the <span class="in">`RunBanksy`</span> function to create a new &quot;BANKSY&quot; assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Some parameters of importance are:</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>| Parameter      | Description                                                                                                                                                |</span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|</span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>| <span class="in">`k_geom`</span>       | Number of bins to consider for the local neighborhood. Larger values will yield larger domains.                                                           |</span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>| <span class="in">`lambda`</span>       | Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains. |</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>| <span class="in">`group`</span>        | Allows us to run BANKSY on multiple samples, enabling the function to understand that overlapping spatial locations can come from different slides.       |</span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>| <span class="in">`dimx`</span>, <span class="in">`dimy`</span> | The x and y coordinates of a spot on the tissue slide.                                                                                                    |</span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>| <span class="in">`split.scale`</span>  | Within-group scaling parameter, accounting for minor differences between datasets.                                                                        |</span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>To set ourselves up for success, we are going to add the spatial locations for each spot into the metadata. This will allow us to specify <span class="in">`dimx`</span> and <span class="in">`dimy`</span> more easily.</span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>seurat_processed<span class="sc">$</span>cell <span class="ot">&lt;-</span> <span class="fu">rownames</span>(seurat_processed<span class="sc">@</span>meta.data)</span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a><span class="co"># CRC and NAT sample coordinates</span></span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>coords_crc <span class="ot">&lt;-</span> <span class="fu">GetTissueCoordinates</span>(seurat_processed, <span class="at">image =</span> <span class="st">&quot;P5CRC.008um&quot;</span>)</span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>coords_nat <span class="ot">&lt;-</span> <span class="fu">GetTissueCoordinates</span>(seurat_processed, <span class="at">image =</span> <span class="st">&quot;P5NAT.008um&quot;</span>)</span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">rbind</span>(coords_crc, coords_nat)</span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>seurat_processed<span class="sc">@</span>meta.data <span class="ot">&lt;-</span> <span class="fu">left_join</span>(seurat_processed<span class="sc">@</span>meta.data, coords, <span class="at">by =</span> <span class="st">&quot;cell&quot;</span>)</span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(seurat_processed<span class="sc">@</span>meta.data) <span class="ot">&lt;-</span> seurat_processed<span class="sc">$</span>cell</span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>Which we can now use to calculate the new BANKSY matrix. This step can take a while to compute (TODO time estimate)</span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Run Banksy from SeuratWrappers</span></span>
+<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">RunBanksy</span>(seurat_processed, <span class="at">lambda =</span> <span class="fl">0.8</span>, <span class="at">verbose =</span> T,</span>
+<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>                           <span class="at">assay =</span> <span class="st">&#39;Spatial.008um&#39;</span>, <span class="at">slot =</span> <span class="st">&#39;data&#39;</span>, <span class="at">k_geom =</span> <span class="dv">50</span>,</span>
+<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a>                           <span class="at">group =</span> <span class="st">&quot;orig.ident&quot;</span>, <span class="at">dimx =</span> <span class="st">&#39;x&#39;</span>, <span class="at">dimy =</span> <span class="st">&#39;y&#39;</span>, </span>
+<span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a>                           <span class="at">split.scale =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-82"><a href="#cb13-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-86"><a href="#cb13-86" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-87"><a href="#cb13-87" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb13-88"><a href="#cb13-88" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(seurat_banksy, &quot;data/seurat_banksy_1.RDS&quot;)</span></span>
+<span id="cb13-89"><a href="#cb13-89" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/seurat_banksy_1.RDS&quot;</span>)</span>
+<span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-91"><a href="#cb13-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-92"><a href="#cb13-92" aria-hidden="true" tabindex="-1"></a>With a new <span class="in">`Active assay: BANKSY`</span></span>
+<span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-96"><a href="#cb13-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-97"><a href="#cb13-97" aria-hidden="true" tabindex="-1"></a>seurat_banksy</span>
+<span id="cb13-98"><a href="#cb13-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-99"><a href="#cb13-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-100"><a href="#cb13-100" aria-hidden="true" tabindex="-1"></a><span class="fu">## New BANKSY Matrix</span></span>
+<span id="cb13-101"><a href="#cb13-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-102"><a href="#cb13-102" aria-hidden="true" tabindex="-1"></a>At this point, we have our new counts matrix that includes our neighborhood weighted scores. We can see this more clearly if we investigate the <span class="in">`Features()`</span> that exist in our BANKSY assay. Where teh first few features are our original counts matrix with genes</span>
+<span id="cb13-103"><a href="#cb13-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-106"><a href="#cb13-106" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-107"><a href="#cb13-107" aria-hidden="true" tabindex="-1"></a><span class="fu">Features</span>(seurat_banksy) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb13-108"><a href="#cb13-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-109"><a href="#cb13-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-110"><a href="#cb13-110" aria-hidden="true" tabindex="-1"></a>Where we also have &quot;new genes&quot; that are our <span class="in">`lambda`</span> scaled neighborhood weighted values, with an appended <span class="in">`*.m0`</span> to make the distinction clear.</span>
+<span id="cb13-111"><a href="#cb13-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-114"><a href="#cb13-114" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a><span class="fu">Features</span>(seurat_banksy) <span class="sc">%&gt;%</span> <span class="fu">tail</span>()</span>
+<span id="cb13-116"><a href="#cb13-116" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-117"><a href="#cb13-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-118"><a href="#cb13-118" aria-hidden="true" tabindex="-1"></a><span class="fu">## Calculation on BANKSY Matrix</span></span>
+<span id="cb13-119"><a href="#cb13-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-120"><a href="#cb13-120" aria-hidden="true" tabindex="-1"></a>With these weights, we can now run through a simplified clustering workflow - using many of the same functions we used in the previous lesson on the scRNA workflow. The only distinction here is that these values are going to be calculated on our new BANKSY count matrix.</span>
+<span id="cb13-121"><a href="#cb13-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-125"><a href="#cb13-125" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a><span class="co"># Increases the size of the default vector</span></span>
+<span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">future.globals.maxSize=</span> <span class="dv">200000000000</span>)</span>
+<span id="cb13-128"><a href="#cb13-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-129"><a href="#cb13-129" aria-hidden="true" tabindex="-1"></a><span class="co"># PCA</span></span>
+<span id="cb13-130"><a href="#cb13-130" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(seurat_banksy, </span>
+<span id="cb13-131"><a href="#cb13-131" aria-hidden="true" tabindex="-1"></a>                        <span class="at">assay =</span> <span class="st">&quot;BANKSY&quot;</span>, </span>
+<span id="cb13-132"><a href="#cb13-132" aria-hidden="true" tabindex="-1"></a>                        <span class="at">reduction.name =</span> <span class="st">&quot;pca.banksy&quot;</span>, </span>
+<span id="cb13-133"><a href="#cb13-133" aria-hidden="true" tabindex="-1"></a>                        <span class="at">features =</span> <span class="fu">rownames</span>(seurat_banksy), </span>
+<span id="cb13-134"><a href="#cb13-134" aria-hidden="true" tabindex="-1"></a>                        <span class="at">npcs =</span> <span class="dv">30</span>)</span>
+<span id="cb13-135"><a href="#cb13-135" aria-hidden="true" tabindex="-1"></a><span class="co"># Find k-Nearest Neighbors</span></span>
+<span id="cb13-136"><a href="#cb13-136" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(seurat_banksy, </span>
+<span id="cb13-137"><a href="#cb13-137" aria-hidden="true" tabindex="-1"></a>                               <span class="at">reduction =</span> <span class="st">&quot;pca.banksy&quot;</span>, </span>
+<span id="cb13-138"><a href="#cb13-138" aria-hidden="true" tabindex="-1"></a>                               <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>)</span>
+<span id="cb13-139"><a href="#cb13-139" aria-hidden="true" tabindex="-1"></a><span class="co"># Louvain clustering</span></span>
+<span id="cb13-140"><a href="#cb13-140" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(seurat_banksy, </span>
+<span id="cb13-141"><a href="#cb13-141" aria-hidden="true" tabindex="-1"></a>                              <span class="at">cluster.name =</span> <span class="st">&quot;banksy_cluster&quot;</span>,</span>
+<span id="cb13-142"><a href="#cb13-142" aria-hidden="true" tabindex="-1"></a>                              <span class="at">resolution =</span> <span class="fl">0.5</span>)</span>
+<span id="cb13-143"><a href="#cb13-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-144"><a href="#cb13-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-145"><a href="#cb13-145" aria-hidden="true" tabindex="-1"></a>At this point, we no longer need access to the BANKSY assay as all the relevant information has now been stored as:</span>
+<span id="cb13-146"><a href="#cb13-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-147"><a href="#cb13-147" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`banksy_clusters`</span> in <span class="in">`@meta.data`</span></span>
+<span id="cb13-148"><a href="#cb13-148" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`pca.banksy`</span> in <span class="in">`@reductions`</span></span>
+<span id="cb13-149"><a href="#cb13-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-150"><a href="#cb13-150" aria-hidden="true" tabindex="-1"></a>So to conserve memory, we are going to delete the BANKSY assay from our seurat object.</span>
+<span id="cb13-151"><a href="#cb13-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-154"><a href="#cb13-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-155"><a href="#cb13-155" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb13-156"><a href="#cb13-156" aria-hidden="true" tabindex="-1"></a><span class="co"># Change default asasy from BANKSY</span></span>
+<span id="cb13-157"><a href="#cb13-157" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(seurat_banksy) <span class="ot">&lt;-</span> <span class="st">&quot;Spatial.008um&quot;</span></span>
+<span id="cb13-158"><a href="#cb13-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-159"><a href="#cb13-159" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete BANKSY assay by setting it to NULL</span></span>
+<span id="cb13-160"><a href="#cb13-160" aria-hidden="true" tabindex="-1"></a>seurat_banksy[[<span class="st">&quot;BANKSY&quot;</span>]] <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb13-161"><a href="#cb13-161" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-162"><a href="#cb13-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-165"><a href="#cb13-165" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-166"><a href="#cb13-166" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb13-167"><a href="#cb13-167" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(seurat_banksy, &quot;data/seurat_banksy_2.RDS&quot;)</span></span>
+<span id="cb13-168"><a href="#cb13-168" aria-hidden="true" tabindex="-1"></a>seurat_banksy <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/seurat_banksy_2.RDS&quot;</span>)</span>
+<span id="cb13-169"><a href="#cb13-169" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-170"><a href="#cb13-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-171"><a href="#cb13-171" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb13-172"><a href="#cb13-172" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 2**](08_marker-identification_Answer-key.qmd#exercise-2)</span></span>
+<span id="cb13-173"><a href="#cb13-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-174"><a href="#cb13-174" aria-hidden="true" tabindex="-1"></a>Exercise 1</span>
+<span id="cb13-175"><a href="#cb13-175" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-176"><a href="#cb13-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-177"><a href="#cb13-177" aria-hidden="true" tabindex="-1"></a><span class="fu"># Topic 3</span></span>
+<span id="cb13-178"><a href="#cb13-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-179"><a href="#cb13-179" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 1</span></span>
+<span id="cb13-180"><a href="#cb13-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-181"><a href="#cb13-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 2</span></span>
+<span id="cb13-182"><a href="#cb13-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-183"><a href="#cb13-183" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 3</span></span>
+<span id="cb13-184"><a href="#cb13-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-185"><a href="#cb13-185" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb13-186"><a href="#cb13-186" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 3**](08_marker-identification_Answer-key.qmd#exercise-3)</span></span>
+<span id="cb13-187"><a href="#cb13-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-188"><a href="#cb13-188" aria-hidden="true" tabindex="-1"></a>Exercise 3</span>
+<span id="cb13-189"><a href="#cb13-189" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-190"><a href="#cb13-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-191"><a href="#cb13-191" aria-hidden="true" tabindex="-1"></a><span class="fu"># Spatially Variable Genes</span></span>
+<span id="cb13-192"><a href="#cb13-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-193"><a href="#cb13-193" aria-hidden="true" tabindex="-1"></a>https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371</span>
+<span id="cb13-194"><a href="#cb13-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-195"><a href="#cb13-195" aria-hidden="true" tabindex="-1"></a>Spatially variable genes (SVGs) are similar in concept to the highly variable genes that we calculated earlier - but with the added spatial location information. Essentially, identifying genes whose expression patterns change depending on where a cell is located on the tissue.</span>
+<span id="cb13-196"><a href="#cb13-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-197"><a href="#cb13-197" aria-hidden="true" tabindex="-1"></a>In doing so, we are able to cluster cells together in a way that represents the different spatial domains</span>
+<span id="cb13-198"><a href="#cb13-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-199"><a href="#cb13-199" aria-hidden="true" tabindex="-1"></a><span class="fu">## Use Case of SVGs</span></span>
+<span id="cb13-200"><a href="#cb13-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-201"><a href="#cb13-201" aria-hidden="true" tabindex="-1"></a>https://www.nature.com/articles/s41467-025-56080-w</span>
+<span id="cb13-202"><a href="#cb13-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-203"><a href="#cb13-203" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Methods for detecting the three SVG categories serve different purposes (Fig. 2a). First, the detection of overall SVGs screens informative genes for downstream analyses, including the identification of spatial domains and functional gene modules. Second, detecting cell-type-specific SVGs aims to reveal spatial variation within a cell type and help identify distinct cell subpopulations or states within cell types. Third, spatial-domain-marker SVG detection is used to find marker genes to annotate and interpret spatial domains already detected. These markers help understand the molecular mechanisms underlying spatial domains and assist in annotating tissue layers in other datasets.</span></span>
+<span id="cb13-204"><a href="#cb13-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-205"><a href="#cb13-205" aria-hidden="true" tabindex="-1"></a><span class="fu">## Methods</span></span>
+<span id="cb13-206"><a href="#cb13-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-207"><a href="#cb13-207" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>SpatialDE (python)</span>
+<span id="cb13-208"><a href="#cb13-208" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>MERINGUE</span>
+<span id="cb13-209"><a href="#cb13-209" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>BinSpect</span>
+<span id="cb13-210"><a href="#cb13-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-211"><a href="#cb13-211" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sub-topic 3</span></span>
+<span id="cb13-212"><a href="#cb13-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-213"><a href="#cb13-213" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb13-214"><a href="#cb13-214" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 3**](08_marker-identification_Answer-key.qmd#exercise-3)</span></span>
+<span id="cb13-215"><a href="#cb13-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-216"><a href="#cb13-216" aria-hidden="true" tabindex="-1"></a>Exercise 1</span>
+<span id="cb13-217"><a href="#cb13-217" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

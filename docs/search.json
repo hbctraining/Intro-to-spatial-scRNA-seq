@@ -2746,7 +2746,7 @@
     "href": "lessons/08_spatially_derived_clusters.html#sub-topic-3",
     "title": "Spatially Derived Clusters",
     "section": "Sub-topic 3",
-    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 1\n\n\n\nExercise 1"
+    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 3\n\n\n\nExercise 3"
   },
   {
     "objectID": "lessons/08_spatially_derived_clusters.html#sub-topic-1-1",
@@ -2767,7 +2767,7 @@
     "href": "lessons/08_spatially_derived_clusters.html#sub-topic-3-1",
     "title": "Spatially Derived Clusters",
     "section": "Sub-topic 3",
-    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 2\n\n\n\nExercise 1"
+    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 3\n\n\n\nExercise 1"
   },
   {
     "objectID": "lessons/08_spatially_derived_clusters.html#sub-topic-1-2",
@@ -2802,7 +2802,7 @@
     "href": "lessons/08_spatially_derived_clusters.html#set-up",
     "title": "Spatially Derived Clusters",
     "section": "Set-up",
-    "text": "Set-up\nWe use the RunBanksy function to create a new “BANKSY” assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Two parameters of importance are:\n\nk_geom - Number of bins to consider for the local neighborhood. Larger values will yield larger domains.\nlambda - Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains."
+    "text": "Set-up\nWe use the RunBanksy function to create a new “BANKSY” assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Some parameters of importance are:\n\n\n\n\n\n\n\nParameter\nDescription\n\n\n\n\nk_geom\nNumber of bins to consider for the local neighborhood. Larger values will yield larger domains.\n\n\nlambda\nInfluence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains.\n\n\ngroup\nAllows us to run BANKSY on multiple samples, enabling the function to understand that overlapping spatial locations can come from different slides.\n\n\ndimx, dimy\nThe x and y coordinates of a spot on the tissue slide.\n\n\nsplit.scale\nWithin-group scaling parameter, accounting for minor differences between datasets.\n\n\n\nTo set ourselves up for success, we are going to add the spatial locations for each spot into the metadata. This will allow us to specify dimx and dimy more easily.\n\nseurat_processed$cell &lt;- rownames(seurat_processed@meta.data)\n# CRC and NAT sample coordinates\ncoords_crc &lt;- GetTissueCoordinates(seurat_processed, image = \"P5CRC.008um\")\ncoords_nat &lt;- GetTissueCoordinates(seurat_processed, image = \"P5NAT.008um\")\ncoords &lt;- rbind(coords_crc, coords_nat)\n\nseurat_processed@meta.data &lt;- left_join(seurat_processed@meta.data, coords, by = \"cell\")\nrownames(seurat_processed@meta.data) &lt;- seurat_processed$cell\n\nWhich we can now use to calculate the new BANKSY matrix. This step can take a while to compute (TODO time estimate)\n\n# Run Banksy from SeuratWrappers\nseurat_banksy &lt;- RunBanksy(seurat_processed, lambda = 0.8, verbose = T,\n                           assay = 'Spatial.008um', slot = 'data', k_geom = 50,\n                           group = \"orig.ident\", dimx = 'x', dimy = 'y', \n                           split.scale = TRUE)\n\nWith a new Active assay: BANKSY\n\nseurat_banksy\n\nAn object of class Seurat \n40170 features across 826613 samples within 3 assays \nActive assay: BANKSY (4000 features, 0 variable features)\n 2 layers present: data, scale.data\n 2 other assays present: Spatial.008um, sketch\n 4 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch\n 2 spatial fields of view present: P5CRC.008um P5NAT.008um"
   },
   {
     "objectID": "lessons/Pre-reading_01.html#advantages",
@@ -2939,5 +2939,33 @@
     "title": "Spatial Technologies",
     "section": "Summary of Current Methods",
     "text": "Summary of Current Methods\nseqFISH MERFISH Xenium"
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#new-banksy-matrix",
+    "href": "lessons/08_spatially_derived_clusters.html#new-banksy-matrix",
+    "title": "Spatially Derived Clusters",
+    "section": "New BANKSY Matrix",
+    "text": "New BANKSY Matrix\nAt this point, we have our new counts matrix that includes our neighborhood weighted scores. We can see this more clearly if we investigate the Features() that exist in our BANKSY assay. Where teh first few features are our original counts matrix with genes\n\nFeatures(seurat_banksy) %&gt;% head()\n\n[1] \"IGHG3\" \"IGHM\"  \"SPP1\"  \"IGLC7\" \"IGLC1\" \"SST\"  \n\n\nWhere we also have “new genes” that are our lambda scaled neighborhood weighted values, with an appended *.m0 to make the distinction clear.\n\nFeatures(seurat_banksy) %&gt;% tail()\n\n[1] \"CD6.m0\"    \"C1QBP.m0\"  \"CHL1.m0\"   \"PRSS8.m0\"  \"MTCH2.m0\"  \"THSD7A.m0\""
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#calculation-on-banksy-matrix",
+    "href": "lessons/08_spatially_derived_clusters.html#calculation-on-banksy-matrix",
+    "title": "Spatially Derived Clusters",
+    "section": "Calculation on BANKSY Matrix",
+    "text": "Calculation on BANKSY Matrix\nWith these weights, we can now run through a simplified clustering workflow - using many of the same functions we used in the previous lesson on the scRNA workflow. The only distinction here is that these values are going to be calculated on our new BANKSY count matrix.\n\n# Increases the size of the default vector\noptions(future.globals.maxSize= 200000000000)\n\n# PCA\nseurat_banksy &lt;- RunPCA(seurat_banksy, \n                        assay = \"BANKSY\", \n                        reduction.name = \"pca.banksy\", \n                        features = rownames(seurat_banksy), \n                        npcs = 30)\n# Find k-Nearest Neighbors\nseurat_banksy &lt;- FindNeighbors(seurat_banksy, \n                               reduction = \"pca.banksy\", \n                               dims = 1:30)\n# Louvain clustering\nseurat_banksy &lt;- FindClusters(seurat_banksy, \n                              cluster.name = \"banksy_cluster\",\n                              resolution = 0.5)\n\nAt this point, we no longer need access to the BANKSY assay as all the relevant information has now been stored as:\n\nbanksy_clusters in @meta.data\npca.banksy in @reductions\n\nSo to conserve memory, we are going to delete the BANKSY assay from our seurat object.\n\n# Change default asasy from BANKSY\nDefaultAssay(seurat_banksy) &lt;- \"Spatial.008um\"\n\n# Delete BANKSY assay by setting it to NULL\nseurat_banksy[[\"BANKSY\"]] &lt;- NULL\n\n\n\n\n\n\n\nExercise 2\n\n\n\nExercise 1"
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#use-case-of-svgs",
+    "href": "lessons/08_spatially_derived_clusters.html#use-case-of-svgs",
+    "title": "Spatially Derived Clusters",
+    "section": "Use Case of SVGs",
+    "text": "Use Case of SVGs\nhttps://www.nature.com/articles/s41467-025-56080-w\n\nMethods for detecting the three SVG categories serve different purposes (Fig. 2a). First, the detection of overall SVGs screens informative genes for downstream analyses, including the identification of spatial domains and functional gene modules. Second, detecting cell-type-specific SVGs aims to reveal spatial variation within a cell type and help identify distinct cell subpopulations or states within cell types. Third, spatial-domain-marker SVG detection is used to find marker genes to annotate and interpret spatial domains already detected. These markers help understand the molecular mechanisms underlying spatial domains and assist in annotating tissue layers in other datasets."
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#methods",
+    "href": "lessons/08_spatially_derived_clusters.html#methods",
+    "title": "Spatially Derived Clusters",
+    "section": "Methods",
+    "text": "Methods\n\nSpatialDE (python)\nMERINGUE\nBinSpect"
   }
 ]
