@@ -39,9 +39,9 @@ seurat_processed <- readRDS("data/seurat_processed.RDS")
 seurat_processed
 ```
 
-## Set-up
+## Running BANKSY
 
-We use the `RunBanksy` function to create a new "BANKSY" assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Some parameters of importance are:
+We use the `RunBanksy` function to create a new "BANKSY" assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Some parameters of importance for `RunBanksy()` are:
 
 | Parameter      | Description                                                                                                                                                |
 |----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -69,10 +69,10 @@ Which we can now use to calculate the new BANKSY matrix. This step can take a wh
 ```{r}
 #| eval: false
 # Run Banksy from SeuratWrappers
-seurat_banksy <- RunBanksy(seurat_processed, lambda = 0.8, verbose = T,
+seurat_banksy <- RunBanksy(seurat_processed, lambda = 0.6, verbose = T,
                            assay = 'Spatial.008um', slot = 'data', k_geom = 50,
-                           group = "orig.ident", dimx = 'x', dimy = 'y', 
-                           split.scale = TRUE)
+                           dimx = 'x', dimy = 'y', 
+                           group = "orig.ident", split.scale = FALSE)
 ```
 
 ```{r}
@@ -89,19 +89,19 @@ seurat_banksy
 
 ## New BANKSY Matrix
 
-At this point, we have our new counts matrix that includes our neighborhood weighted scores. We can see this more clearly if we investigate the `Features()` that exist in our BANKSY assay. Where teh first few features are our original counts matrix with genes
+At this point, we have our new counts matrix that includes our neighborhood weighted scores. We can see this more clearly if we investigate the `Features()` that exist in our BANKSY assay. Where teh first few features are our original counts matrix with genes.
 
 ```{r}
 Features(seurat_banksy) %>% head()
 ```
 
-Where we also have "new genes" that are our `lambda` scaled neighborhood weighted values, with an appended `*.m0` to make the distinction clear.
+Where we also have "new features" that are our `lambda` scaled neighborhood weighted values, with an appended `*.m0` to make the distinction clear.
 
 ```{r}
 Features(seurat_banksy) %>% tail()
 ```
 
-## Calculation on BANKSY Matrix
+## Calculations on BANKSY Matrix
 
 With these weights, we can now run through a simplified clustering workflow - using many of the same functions we used in the previous lesson on the scRNA workflow. The only distinction here is that these values are going to be calculated on our new BANKSY count matrix.
 
@@ -148,22 +148,66 @@ seurat_banksy[["BANKSY"]] <- NULL
 seurat_banksy <- readRDS("data/seurat_banksy_2.RDS")
 ```
 
-::: callout-tip
-# [**Exercise 2**](08_marker-identification_Answer-key.qmd#exercise-2)
+## BANKSY Clusters
 
-Exercise 1
+```{r}
+#| fig-width: 10
+SpatialDimPlot(seurat_banksy, 
+               group.by = "banksy_cluster", 
+               pt.size.factor = 7, 
+               image.alpha = 0)
+```
+
+::: callout-tip
+# [**Exercise 2**](08_spatially_derived_clusters_Answer-key.qmd#exercise-2)
+
+Run BANKSY with a `lambda` of 0.2, how do the results differ from a value of 0.8?
 :::
 
-# Topic 3
+# Comparing Clustering Methods
 
-## Sub-topic 1
+At this point, we have two different results for our clusters - BANKSY and RNA-based clusters. Let us take a moment to compare and contrast what the differences are between the two.
 
-## Sub-topic 2
+## Spatial Overlay
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+SpatialDimPlot(seurat_banksy, 
+               group.by = c("banksy_cluster",
+                            "seurat_cluster.projected"), 
+               pt.size.factor = 7, 
+               image.alpha = 0)
+```
+
+## UMAP
+
+```{r}
+#| fig-width: 10
+DimPlot(seurat_banksy, 
+        group.by = c("banksy_cluster",
+                     "seurat_cluster.projected"))
+```
 
 ## Sub-topic 3
 
+```{r}
+# Barplot of proportion of cells in each cluster by sample
+ggplot(seurat_banksy@meta.data) +
+    geom_bar(aes(x=seurat_cluster.projected, fill=orig.ident), 
+             position=position_fill())  +
+    theme_classic()
+```
+
+```{r}
+ggplot(seurat_banksy@meta.data) +
+    geom_bar(aes(x=banksy_cluster, fill=orig.ident), 
+             position=position_fill())  +
+    theme_classic()
+```
+
 ::: callout-tip
-# [**Exercise 3**](08_marker-identification_Answer-key.qmd#exercise-3)
+# [**Exercise 3**](08_spatially_derived_clusters_Answer-key.qmd#exercise-3)
 
 Exercise 3
 :::
@@ -191,7 +235,7 @@ https://www.nature.com/articles/s41467-025-56080-w
 ## Sub-topic 3
 
 ::: callout-tip
-# [**Exercise 3**](08_marker-identification_Answer-key.qmd#exercise-3)
+# [**Exercise 3**](08_spatially_derived_clusters_Answer-key.qmd#exercise-3)
 
 Exercise 1
 :::

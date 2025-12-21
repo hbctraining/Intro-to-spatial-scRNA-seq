@@ -13,6 +13,7 @@ format:
 Approximate time: XY minutes
 
 ```{r}
+#| label: load_data
 #| echo: false
 library(Seurat)
 library(tidyverse)
@@ -24,7 +25,7 @@ seurat_merged <- readRDS("intermediates/02_seurat_merged.RDS")
 
 - Construct quality control metrics and visually evaluate the quality of the data
 - Apply appropriate filters to remove low quality cells
-- LO 3
+- Create a filtered seurat object
 
 # Quality Metrics
 
@@ -43,18 +44,21 @@ The metrics we will be using to filter low-quality bins from high-quality ones i
 Some of these values we will calculate throughout this lesson and be added to our metadata dataframe.
 
 ```{r}
+#| label: create_meta
 meta <- seurat_merged@meta.data
 ```
 
 ```{r}
+#| label: meta_view
 #| eval: false
 View(meta)
 ```
 
 ```{r}
+#| label: meta_dt
 #| echo: false
 meta %>% 
-  head(15) %>%
+  head(5) %>%
   DT::datatable()
 ```
 
@@ -65,6 +69,8 @@ We will be using a variety of visualization methods, including looking at the va
 For "nicer" (subjective) plotting with `SpatialFeaturePlot()` and `SpatialDimPlot()`, we will add some extra parameters to gain a clearer image beyond the default plot (shown here):
 
 ```{r}
+#| label: fig-nCount_spatial_default
+#| fig-cap: Default `SpatialFeaturePlot()` visualization parameters
 SpatialFeaturePlot(seurat_merged, 
                    "nCount_Spatial.008um")
 ```
@@ -79,6 +85,8 @@ Therefore for the rest of this lesson, we will be using the following arguments:
 ## Number of Cells
 
 ```{r}
+#| label: fig-n_cells
+#| fig-cap: Number of cells in the dataset, split by sample
 ggplot(meta) +
   geom_bar(aes(x = orig.ident, fill = orig.ident),
            color = "black") +
@@ -100,9 +108,11 @@ This is the number of unique transcripts detected per bin. Because the bins are 
 
 ::: {.panel-tabset}
 
-### Spatial Overlap
+### Spatial Overlay
 
 ```{r}
+#| label: fig-nCount_spatial
+#| fig-cap: Number of UMIs overlaid over spatial slide
 SpatialFeaturePlot(seurat_merged, 
                    "nCount_Spatial.008um",
                    pt.size.factor = 3,
@@ -113,6 +123,8 @@ SpatialFeaturePlot(seurat_merged,
 ### Before Filtration Density
 
 ```{r}
+#| label: fig-nCount_density
+#| fig-cap: Number of UMIs density
 ggplot(meta) +
   geom_density(aes(x = nCount_Spatial.008um, fill = orig.ident),
                alpha = 0.4,
@@ -127,6 +139,8 @@ ggplot(meta) +
 ### After Filtration Density
 
 ```{r}
+#| label: fig-nCount_density_filt
+#| fig-cap: Number of UMIs density after filtration
 meta_filt <- subset(meta,
   ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 10)) |
   ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 10)))
@@ -157,9 +171,11 @@ This is the number of unique genes detected per bin. Again, because the bins are
 
 ::: {.panel-tabset}
 
-### Spatial Overlap
+### Spatial Overlay
 
 ```{r}
+#| label: fig-nFeature_spatial
+#| fig-cap: Number of features overlaid over spatial slide
 SpatialFeaturePlot(seurat_merged, 
                    "nFeature_Spatial.008um",
                    pt.size.factor = 3,
@@ -170,6 +186,8 @@ SpatialFeaturePlot(seurat_merged,
 ### Before Filtration Density
 
 ```{r}
+#| label: fig-nFeature_density
+#| fig-cap: Number of features density
 ggplot(meta) +
   geom_density(aes(x = nFeature_Spatial.008um,
                      fill = orig.ident),
@@ -185,6 +203,8 @@ ggplot(meta) +
 ### After Filtration Density
 
 ```{r}
+#| label: fig-nFeature_density_filt
+#| fig-cap: Number of features density after filtration
 meta_filt <- subset(meta,
   ((orig.ident == "P5CRC") & (nFeature_Spatial.008um > 15)) |
   ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 10)))
@@ -212,7 +232,10 @@ $$
 \text{Complexity Score} = \frac{\text{Number of Genes}}{\text{Number of UMIs}}
 $$
 
+Which we can now calculate using R and store in our `@meta.data`:
+
 ```{r}
+#| label: calc_log10GenesPerUMI
 # Add number of genes per UMI for each cell to metadata
 seurat_merged$log10GenesPerUMI <- log10(seurat_merged$nFeature_Spatial.008um) / 
                                   log10(seurat_merged$nCount_Spatial.008um)
@@ -220,9 +243,11 @@ seurat_merged$log10GenesPerUMI <- log10(seurat_merged$nFeature_Spatial.008um) /
 
 ::: {.panel-tabset}
 
-### Spatial Overlap
+### Spatial Overlay
 
 ```{r}
+#| label: fig-log10GenesPerUMI_spatial
+#| fig-cap: Complexity score overlaid over spatial slide
 SpatialFeaturePlot(seurat_merged, 
                    "log10GenesPerUMI",
                    pt.size.factor = 3,
@@ -233,6 +258,8 @@ SpatialFeaturePlot(seurat_merged,
 ### Before Filtration Density
 
 ```{r}
+#| label: fig-log10GenesPerUMI_density
+#| fig-cap: Complexity score density
 meta <- seurat_merged@meta.data
 ggplot(meta) +
   geom_density(aes(x = log10GenesPerUMI,
@@ -247,6 +274,8 @@ ggplot(meta) +
 ### After Filtration Density
 
 ```{r}
+#| label: fig-log10GenesPerUMI_density_filt
+#| fig-cap: Complexity score density after filtration
 meta_filt <- subset(meta, log10GenesPerUMI > 0.80)
 ggplot(meta_filt) +
   geom_density(aes(x = log10GenesPerUMI,
@@ -278,6 +307,7 @@ For example, if you were studying renal oncocytomas would you make this same cho
 
 
 ```{r}
+#| label: calc_mitoRatio
 # Compute percent mito ratio
 seurat_merged$mitoRatio <- PercentageFeatureSet(object = seurat_merged, 
                                                 pattern = "^MT-")
@@ -286,9 +316,11 @@ seurat_merged$mitoRatio <- seurat_merged@meta.data$mitoRatio / 100
 
 ::: {.panel-tabset}
 
-### Spatial Overlap
+### Spatial Overlay
 
 ```{r}
+#| label: fig-mitoRatio_spatial
+#| fig-cap: Mitochondrial ratio overlaid over spatial slide
 SpatialFeaturePlot(seurat_merged, 
                    "mitoRatio",
                    pt.size.factor = 3,
@@ -299,6 +331,8 @@ SpatialFeaturePlot(seurat_merged,
 ### Before Filtration Density
 
 ```{r}
+#| label: fig-mitoRatio_density
+#| fig-cap: Mitochondrial ratio density
 meta <- seurat_merged@meta.data
 ggplot(meta) +
   geom_density(aes(x = mitoRatio,
@@ -313,6 +347,8 @@ ggplot(meta) +
 ### After Filtration Density
 
 ```{r}
+#| label: fig-mitoRatio_density_filt
+#| fig-cap: Mitochondrial ratio density after filtration
 meta_filt <- subset(meta, mitoRatio < 0.25)
 
 ggplot(meta_filt) +
@@ -329,7 +365,26 @@ ggplot(meta_filt) +
 ::: callout-tip
 # [**Exercise 1**](03_quality-control_Answer-key.qmd#exercise-1)
 
-Exercise 1
+1. Do you notice a pattern in cells in regards to the number of UMIs and feature? Make a `geom_point` plots to compare these values on a per-cell basis and color each point by the mitochondrial ratio following the structure provided here:
+
+```{r}
+#| label: exercise_geom_point
+#| eval: false
+# Structure for making geom_point plot
+# Fill in values to answer the question
+seurat_merged@meta.data %>%
+  # Sorting by mitoRatio to make high scores appear on top of the plot
+  arrange(mitoRatio) %>%
+  ggplot() +
+  geom_point(aes(x = ?, 
+                 y = ?,
+                 color = ?),
+             size = 0.5) +
+  # Setting limits so that outliers don't determine scale of the plot
+  ylim(0, 3500) + xlim(0, 3500) +
+  theme_bw()
+```
+
 :::
 
 # Filter
@@ -337,6 +392,7 @@ Exercise 1
 We will apply very minimal filtering here. It has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq.
 
 ```{r}
+#| label: filter_cells
 # TODO there has to be a cleaner way to do this
 seurat_filtered <- subset(seurat_merged,
   ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 10)) |
@@ -355,6 +411,7 @@ seurat_filtered
 How many cells did we remove in this filtration process?
 
 ```{r}
+#| label: calc_ncells_filtered
 ncol(seurat_merged) - ncol(seurat_filtered)
 ```
 
@@ -362,7 +419,7 @@ ncol(seurat_merged) - ncol(seurat_filtered)
 ::: callout-tip
 # [**Exercise 2**](03_quality-control_Answer-key.qmd#exercise-2)
 
-Exercise 1
+2. How many bins do we have per sample after this filtration step?
 :::
 
 # Visualizing Counts Data
@@ -374,6 +431,8 @@ We can visualize the number of UMIs and gene counts per bin, both as a distribut
 Let’s start with a violin plot to look at the distribution of UMI counts and gene counts. The input is our post-filtered dataset.
 
 ```{r}
+#| label: fig-vln_ncount_nfeature
+#| fig-cap: Violin plot of nCounts and nFeatures after filtration
 p_ncount <- VlnPlot(seurat_filtered, 
                     features = "nCount_Spatial.008um", 
                     pt.size = 0, group.by = 'orig.ident') +
@@ -394,6 +453,8 @@ We see that both distributions have a similar peak but the nUMI distribution has
 Next, we can look at the same metrics and the distribution on the actual image itself. Note that many spots have very few counts, in part due to low cellular density or cell types with low complexity in certain tissue regions.
 
 ```{r}
+#| label: fig-nFeature_nCount_spatial
+#| fig-cap: Number of features and counts overlaid over spatial slide
 #| fig-width: 8
 #| fig-height: 8
 SpatialFeaturePlot(seurat_filtered, 
@@ -402,18 +463,13 @@ SpatialFeaturePlot(seurat_filtered,
                    image.alpha = 0)
 ```
 
-::: callout-tip
-# [**Exercise 3**](03_quality-control_Answer-key.qmd#exercise-3)
-
-Exercise 3
-:::
-
 
 # Save!
 
 Now is a great spot to save our `seurat_filtered` object as we have finished filtered.
 
 ```{r}
+#| label: save_seurat_filtered
 #| eval: false
 # Save Seurat object
 saveRDS(seurat_filtered, "data/seurat_filtered.RDS")

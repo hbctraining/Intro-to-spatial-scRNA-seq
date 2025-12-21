@@ -8,26 +8,57 @@ editor_options:
 ---
 
 ```{r}
+#| label: load
 #| echo: false
 # Items to pre-load
+library(Seurat)
+library(tidyverse)
 
+seurat_merged <- readRDS("intermediates/02_seurat_merged.RDS")
+seurat_merged$mitoRatio <- PercentageFeatureSet(object = seurat_merged, 
+                                                pattern = "^MT-")
+seurat_merged$mitoRatio <- seurat_merged@meta.data$mitoRatio / 100
+
+seurat_filtered <- readRDS("data/seurat_filtered.RDS")
 ```
 
 
 # Exercise 1
 
-Question
+**1. Do you notice a pattern in cells in regards to the number of UMIs and feature? Make a `geom_point` plots to compare these values on a per-cell basis and color each point by the mitochondrial ratio following the structure provided here**
 
-Answer
+Considering any of these QC metrics in isolation can lead to misinterpretation of cellular signals. For example, cells with a comparatively high fraction of mitochondrial counts may be involved in respiratory processes and may be cells that you would like to keep. Likewise, other metrics can have other biological interpretations.  A general rule of thumb when performing QC is to **set thresholds for individual metrics to be as permissive as possible, and always consider the joint effects** of these metrics. 
+
+```{r}
+#| label: fig-joint_effect
+#| fig-cap: Joint effect of nUMIs, nGenes, and mitoRatio
+#| fig-width: 10
+seurat_merged@meta.data %>%
+  arrange(mitoRatio) %>%
+  ggplot() +
+  geom_point(aes(x = nCount_Spatial.008um, 
+                 y = nFeature_Spatial.008um,
+                 color = mitoRatio),
+             size = 0.5) +
+  ylim(0, 3500) + xlim(0, 3500) +
+  theme_bw()
+```
+
+**Good cells will generally exhibit both higher number of genes per cell and higher numbers of UMIs (upper right quadrant of the plot). Cells that are poor quality are likely to have low genes and UMIs per cell (bottom left quadrant of the plot).** With this plot we also evaluate the slope of the line, and any scatter of data points in the bottom right hand quadrant of the plot. These cells have a high number of UMIs but only a few number of genes. These could be dying cells, but also could represent a population of a low complexity celltype.
+
+**Mitochondrial read fractions are only high in particularly low count cells with few detected genes**. This could be indicative of damaged/dying cells whose cytoplasmic mRNA has leaked out through a broken membrane, and thus, only mRNA located in the mitochondria is still conserved.
 
 # Exercise 2
 
-Question
+**2. How many bins do we have per sample after this filtration step?**
 
-Answer
-
-# Exercise 3
-
-Question
-
-Answer
+```{r}
+#| label: fig-ncells
+#| fig-cap: Number of cells per sample after filtration
+ggplot(seurat_filtered@meta.data) +
+  geom_bar(aes(x = orig.ident, fill = orig.ident),
+           color = "black") +
+  geom_text(aes(x = orig.ident, label=after_stat(count)), 
+            stat='count', vjust=-1) +
+  theme_classic()
+```
