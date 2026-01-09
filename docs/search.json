@@ -822,5 +822,126 @@
     "title": "Introduction to Spatial Single-cell RNA-seq Schedule",
     "section": "Resources",
     "text": "Resources\nWe have covered the analysis steps in quite a bit of detail for scRNA-seq exploration of cellular heterogeneity using the Seurat package. For more information on topics covered, we encourage you to take a look at the following resources:\n\nSeurat-focused\n\nSeurat vignettes\nSeurat cheatsheet\nSatija Lab: Single Cell Genomics Day\n\n\n\nScaling up: analysis on HPC\n\nUsing RStudio on O2\n\nHMSRC wiki page\nHBC RStudio on O2 tutorial\n\n\n\n\nHighlighted papers\n\n\nOther online courses:"
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html",
+    "href": "lessons/08_spatially_derived_clusters.html",
+    "title": "Spatially Derived Clusters",
+    "section": "",
+    "text": "Approximate time: XY minutes",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#running-banksy",
+    "href": "lessons/08_spatially_derived_clusters.html#running-banksy",
+    "title": "Spatially Derived Clusters",
+    "section": "Running BANKSY",
+    "text": "Running BANKSY\nWe use the RunBanksy function to create a new “BANKSY” assay based on a default of the 4,000 most highly variable features, which can be used for dimensionality reduction and clustering. Some parameters of importance for RunBanksy() are:\n\n\n\n\n\n\n\nParameter\nDescription\n\n\n\n\nk_geom\nNumber of bins to consider for the local neighborhood. Larger values will yield larger domains.\n\n\nlambda\nInfluence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains.\n\n\ngroup\nAllows us to run BANKSY on multiple samples, enabling the function to understand that overlapping spatial locations can come from different slides.\n\n\ndimx, dimy\nThe x and y coordinates of a spot on the tissue slide.\n\n\nsplit.scale\nWithin-group scaling parameter, accounting for minor differences between datasets.\n\n\n\nTo set ourselves up for success, we are going to add the spatial locations for each spot into the metadata. This will allow us to specify dimx and dimy more easily.\n\nseurat_processed$cell &lt;- rownames(seurat_processed@meta.data)\n# CRC and NAT sample coordinates\ncoords_crc &lt;- GetTissueCoordinates(seurat_processed, image = \"P5CRC.016um\")\ncoords_nat &lt;- GetTissueCoordinates(seurat_processed, image = \"P5NAT.016um\")\ncoords &lt;- rbind(coords_crc, coords_nat)\n\nseurat_processed@meta.data &lt;- left_join(seurat_processed@meta.data, coords, by = \"cell\")\nrownames(seurat_processed@meta.data) &lt;- seurat_processed$cell\n\nWhich we can now use to calculate the new BANKSY matrix. This step can take a while to compute (TODO time estimate)\n\n# Run Banksy from SeuratWrappers\nseurat_banksy &lt;- RunBanksy(seurat_processed, lambda = 0.6, verbose = T,\n                           assay = 'Spatial.016um', slot = 'data', k_geom = 15,\n                           dimx = 'x', dimy = 'y', \n                           group = \"orig.ident\", split.scale = T)\n\nWith a new Active assay: BANKSY\n\nseurat_banksy\n\nAn object of class Seurat \n40170 features across 67660 samples within 3 assays \nActive assay: BANKSY (4000 features, 0 variable features)\n 2 layers present: data, scale.data\n 2 other assays present: Spatial.016um, sketch\n 4 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch\n 2 spatial fields of view present: P5CRC.016um P5NAT.016um",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#new-banksy-matrix",
+    "href": "lessons/08_spatially_derived_clusters.html#new-banksy-matrix",
+    "title": "Spatially Derived Clusters",
+    "section": "New BANKSY Matrix",
+    "text": "New BANKSY Matrix\nAt this point, we have our new counts matrix that includes our neighborhood weighted scores. We can see this more clearly if we investigate the Features() that exist in our BANKSY assay. Where teh first few features are our original counts matrix with genes.\n\nFeatures(seurat_banksy) %&gt;% head()\n\n[1] \"SPP1\"  \"IGHG1\" \"IGHM\"  \"IGHG3\" \"CXCL8\" \"INSL5\"\n\n\nWhere we also have “new features” that are our lambda scaled neighborhood weighted values, with an appended *.m0 to make the distinction clear.\n\nFeatures(seurat_banksy) %&gt;% tail()\n\n[1] \"PRKAR1B.m0\" \"PCID2.m0\"   \"RAD54L.m0\"  \"COL8A1.m0\"  \"PDSS1.m0\"  \n[6] \"EIPR1.m0\"",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#calculations-on-banksy-matrix",
+    "href": "lessons/08_spatially_derived_clusters.html#calculations-on-banksy-matrix",
+    "title": "Spatially Derived Clusters",
+    "section": "Calculations on BANKSY Matrix",
+    "text": "Calculations on BANKSY Matrix\nWith these weights, we can now run through a simplified clustering workflow - using many of the same functions we used in the previous lesson on the scRNA workflow. The only distinction here is that these values are going to be calculated on our new BANKSY count matrix.\n\n# Increases the size of the default vector\noptions(future.globals.maxSize = 200000000000)\n\n# PCA\nseurat_banksy &lt;- RunPCA(seurat_banksy, \n                        assay = \"BANKSY\", \n                        reduction.name = \"pca.banksy\", \n                        features = rownames(seurat_banksy), \n                        npcs = 30)\n# Find k-Nearest Neighbors\nseurat_banksy &lt;- FindNeighbors(seurat_banksy, \n                               reduction = \"pca.banksy\", \n                               dims = 1:30)\n# Louvain clustering\nseurat_banksy &lt;- FindClusters(seurat_banksy, \n                              cluster.name = \"banksy_cluster\",\n                              resolution = 0.8)\n\nAt this point, we no longer need access to the BANKSY assay as all the relevant information has now been stored as:\n\nbanksy_clusters in @meta.data\npca.banksy in @reductions\n\nSo to conserve memory, we are going to delete the BANKSY assay from our seurat object.\n\n# Change default asasy from BANKSY\nDefaultAssay(seurat_banksy) &lt;- \"Spatial.016um\"\n\n# Delete BANKSY assay by setting it to NULL\nseurat_banksy[[\"BANKSY\"]] &lt;- NULL",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#banksy-clusters",
+    "href": "lessons/08_spatially_derived_clusters.html#banksy-clusters",
+    "title": "Spatially Derived Clusters",
+    "section": "BANKSY Clusters",
+    "text": "BANKSY Clusters\n\nSpatialDimPlot(seurat_banksy, \n               group.by = \"banksy_cluster\", \n               pt.size.factor = 13, \n               image.alpha = 0)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 2\n\n\n\nRun BANKSY with a lambda of 0.2, how do the results differ from a value of 0.8?",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#spatial-overlay",
+    "href": "lessons/08_spatially_derived_clusters.html#spatial-overlay",
+    "title": "Spatially Derived Clusters",
+    "section": "Spatial Overlay",
+    "text": "Spatial Overlay\n\nSpatialDimPlot(seurat_banksy, \n               group.by = c(\"banksy_cluster\",\n                            \"seurat_cluster.projected\"), \n               pt.size.factor = 13, \n               image.alpha = 0)",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#umap",
+    "href": "lessons/08_spatially_derived_clusters.html#umap",
+    "title": "Spatially Derived Clusters",
+    "section": "UMAP",
+    "text": "UMAP\n\nDimPlot(seurat_banksy, \n        group.by = c(\"banksy_cluster\",\n                     \"seurat_cluster.projected\"))",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#sub-topic-3",
+    "href": "lessons/08_spatially_derived_clusters.html#sub-topic-3",
+    "title": "Spatially Derived Clusters",
+    "section": "Sub-topic 3",
+    "text": "Sub-topic 3\n\n# Barplot of proportion of cells in each cluster by sample\nggplot(seurat_banksy@meta.data) +\n    geom_bar(aes(x=seurat_cluster.projected, fill=orig.ident), \n             position=position_fill())  +\n    theme_classic()\n\n\n\n\n\n\n\n\n\nggplot(seurat_banksy@meta.data) +\n    geom_bar(aes(x=banksy_cluster, fill=orig.ident), \n             position=position_fill())  +\n    theme_classic()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 3\n\n\n\nExercise 3",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#use-case-of-svgs",
+    "href": "lessons/08_spatially_derived_clusters.html#use-case-of-svgs",
+    "title": "Spatially Derived Clusters",
+    "section": "Use Case of SVGs",
+    "text": "Use Case of SVGs\nhttps://www.nature.com/articles/s41467-025-56080-w\n\nMethods for detecting the three SVG categories serve different purposes (Fig. 2a). First, the detection of overall SVGs screens informative genes for downstream analyses, including the identification of spatial domains and functional gene modules. Second, detecting cell-type-specific SVGs aims to reveal spatial variation within a cell type and help identify distinct cell subpopulations or states within cell types. Third, spatial-domain-marker SVG detection is used to find marker genes to annotate and interpret spatial domains already detected. These markers help understand the molecular mechanisms underlying spatial domains and assist in annotating tissue layers in other datasets.",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#methods",
+    "href": "lessons/08_spatially_derived_clusters.html#methods",
+    "title": "Spatially Derived Clusters",
+    "section": "Methods",
+    "text": "Methods\n\nSpatialDE (python)\nMERINGUE\nBinSpect",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/08_spatially_derived_clusters.html#sub-topic-3-1",
+    "href": "lessons/08_spatially_derived_clusters.html#sub-topic-3-1",
+    "title": "Spatially Derived Clusters",
+    "section": "Sub-topic 3",
+    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 3\n\n\n\nExercise 1",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
   }
 ]

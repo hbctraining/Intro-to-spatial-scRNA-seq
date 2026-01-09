@@ -123,7 +123,7 @@ seurat_banksy <- FindNeighbors(seurat_banksy,
 # Louvain clustering
 seurat_banksy <- FindClusters(seurat_banksy, 
                               cluster.name = "banksy_cluster",
-                              resolution = 0.2)
+                              resolution = 0.8)
 ```
 
 At this point, we no longer need access to the BANKSY assay as all the relevant information has now been stored as:
@@ -154,7 +154,7 @@ seurat_banksy <- readRDS("data/seurat_banksy_2.RDS")
 #| fig-width: 10
 SpatialDimPlot(seurat_banksy, 
                group.by = "banksy_cluster", 
-               pt.size.factor = 7, 
+               pt.size.factor = 13, 
                image.alpha = 0)
 ```
 
@@ -176,7 +176,7 @@ At this point, we have two different results for our clusters - BANKSY and RNA-b
 SpatialDimPlot(seurat_banksy, 
                group.by = c("banksy_cluster",
                             "seurat_cluster.projected"), 
-               pt.size.factor = 7, 
+               pt.size.factor = 13, 
                image.alpha = 0)
 ```
 
