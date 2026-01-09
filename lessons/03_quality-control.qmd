@@ -55,7 +55,8 @@ View(meta)
 ```
 
 ```{r}
-#| label: meta_dt
+#| label: tbl-meta_dt
+#| tbl-cap: View `@meta.data` dataframe
 #| echo: false
 meta %>% 
   head(5) %>%

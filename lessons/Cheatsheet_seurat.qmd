@@ -2,6 +2,9 @@
 title: "Seurat Cheatsheet"
 author: "Noor Sohail"
 date: Thursday, June 25th 2024
+
+execute: 
+  eval: false
 ---
 
 

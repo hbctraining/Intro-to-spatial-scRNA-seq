@@ -54,8 +54,10 @@ For the remainder of the workflow we will be mainly using functions available in
 
 ```{r}
 #| label: set-up_script
-# Normalization and Sketch Subsampling
-# Dec 2025
+# Normalization and sketch downsampling
+# Visium HD spatial transcriptomics workshop
+# Author: Harvard Chan Bioinformatics Core
+# Created: December 2025
 
 # Load libraries
 library(Seurat)

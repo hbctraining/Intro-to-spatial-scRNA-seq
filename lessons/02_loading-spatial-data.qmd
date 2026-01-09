@@ -57,6 +57,12 @@ A 10 µm section was taken with a cryostat (Epredia CryoStar NX70). Tissue block
 The data was subset to a smaller cross-section of the brain in order to make it more manageable on local laptops. The instructions for how to subset a 10X Visium HD slides can be found [here](Aside_subsetting_slide.qmd).
 :::
 
+::: callout-tip
+# [**Exercise 1**](02_loading-spatial-data_Answer-key.qmd#exercise-1)
+
+1. Given the information that we know from the metadata, what might be some questions that we want to answer using our data?
+:::
+
 ## Downloading the R Project and Data
 
 We have assembled an R Project for you to download that includes the data along with a basic file structure for maintain good data management. It can be quite easy when starting a new analysis to want to dive right in and start analyzing your data. However, good data management practices occur at each step of data's lifecycle. It is a good habit to begin by creating a basic directory structure to hold your data. Let's start by download this R Project and data from [here](). Left-click on the link and select `Save Link As..` or `Download Linked File As..`, then select a place on your computer where you would like to place this R Project.
@@ -76,18 +82,11 @@ If your R Project looks like below, then you are ready to start!
 
 TODO: **Insert picture of what the R Project will look when it is ready to start**
 
-::: callout-tip
-# [**Exercise 1**](02_loading-spatial-data_Answer-key.qmd#exercise-1)
-
-1. Given the information that we know from the metadata, what might be some questions that we want to answer using our data?
-:::
-
-
 ```{r}
 #| label: header_libraries
 # Creating Seurat object from SpaceRanger output
 # Visium HD spatial transcriptomics workshop
-# Author: Harvard Chan Bioinformatic Core
+# Author: Harvard Chan Bioinformatics Core
 # Created: December 2025
 
 library(tidyverse)
@@ -464,22 +463,6 @@ list_seurat
 
 This is exactly what we had hoped to see! So now we can move on to the next step which is merging the sample together into a singular Seurat object.
 
-::: {.callout-note collapse=true}
-# What if I am merging more than two samples?
-
-Seurat has functionality to merge many samples together. You can do this quite easily by adding all sample objects to the `y` argument in a vector format. An example is provided below, assuming you use the list structured we used previously: 
-
-```{r}
-#| label: merging_multiple_objects
-#| eval: false
-## DO NOT RUN
-merged_seurat <- merge(x = seurat_list[[1]], 
-                       y = seurat_list[[2:length(seurat_list)]],
-                       add.cell.id = names(seurat_list))
-```       
-:::
-
-
 ## Merge Datasets Together
 
 We merge samples together because it make it easier to run the QC steps for both sample groups together. It also enables us to easily compare the data quality for all cells at one time
@@ -495,6 +478,21 @@ seurat_merged
 ```
 
 From the callout we can see that we now have: `2 layers present: counts.1, counts.2` 
+
+::: {.callout-note collapse=true}
+# What if I am merging more than two samples?
+
+Seurat has functionality to merge many samples together. You can do this quite easily by adding all sample objects to the `y` argument in a vector format. An example is provided below, assuming you use the list structured we used previously: 
+
+```{r}
+#| label: merging_multiple_objects
+#| eval: false
+## DO NOT RUN
+merged_seurat <- merge(x = seurat_list[[1]], 
+                       y = seurat_list[[2:length(seurat_list)]],
+                       add.cell.id = names(seurat_list))
+```       
+:::
 
 However, we do not want to have two distinct raw counts matrices (`counts.1` and `counts.2`). We want the counts for each sample to be concatenated together. This would be a single, large count matrix that represent each cell in the dataset. Seurat's function `JoinLayers()` allows us to do just this.
 

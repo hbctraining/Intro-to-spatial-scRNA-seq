@@ -70,9 +70,9 @@ Which we can now use to calculate the new BANKSY matrix. This step can take a wh
 #| eval: false
 # Run Banksy from SeuratWrappers
 seurat_banksy <- RunBanksy(seurat_processed, lambda = 0.6, verbose = T,
-                           assay = 'Spatial.008um', slot = 'data', k_geom = 50,
+                           assay = 'Spatial.008um', slot = 'data', k_geom = 15,
                            dimx = 'x', dimy = 'y', 
-                           group = "orig.ident", split.scale = FALSE)
+                           group = "orig.ident", split.scale = T)
 ```
 
 ```{r}
@@ -123,7 +123,7 @@ seurat_banksy <- FindNeighbors(seurat_banksy,
 # Louvain clustering
 seurat_banksy <- FindClusters(seurat_banksy, 
                               cluster.name = "banksy_cluster",
-                              resolution = 0.5)
+                              resolution = 0.2)
 ```
 
 At this point, we no longer need access to the BANKSY assay as all the relevant information has now been stored as:
