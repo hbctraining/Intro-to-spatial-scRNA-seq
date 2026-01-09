@@ -154,7 +154,7 @@ It returns a Seurat object with a new assay (sketch), consisting of `ncells` bin
 ```{r}
 # we select 10,000 cells and create a new 'sketch' assay
 seurat_sketch <- SketchData(object = seurat_sketch,
-                            assay = 'Spatial.008um',
+                            assay = 'Spatial.016um',
                             ncells = 10000,
                             method = "LeverageScore",
                             sketched.assay = "sketch")
@@ -200,7 +200,7 @@ ggplot(seurat_sketch@meta.data) +
 ```{r}
 SpatialFeaturePlot(seurat_sketch,
                    "leverage.score",
-                   pt.size.factor = 3,
+                   pt.size.factor = 11,
                    image.alpha = 0,
                    max.cutoff = 2)
 ```
