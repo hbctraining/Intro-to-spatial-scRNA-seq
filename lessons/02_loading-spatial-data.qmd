@@ -24,7 +24,20 @@ TODO
 
 ::: {.panel-tabset}
 
+
+### Mouse Brain
+
+A mouse brain (fresh frozen) was obtained from Charles River Laboratories.
+
+Strain: C57BL/6 Sex: Male Age: 8 weeks Sample preparation
+
+A 10 µm section was taken with a cryostat (Epredia CryoStar NX70). Tissue block preparation, sectioning, H&E staining, and imaging followed the Visium HD Fresh Frozen Tissue Preparation Handbook (CG000763).
+
+The data was subset to a smaller cross-section of the brain in order to make it more manageable on local laptops. The instructions for how to subset a 10X Visium HD slides can be found [here](Aside_subsetting_slide.qmd).
+
 ### Human CRC
+
+Human colorectal cancer sample
 
 Matched control and cancerous colon sample from 58 year old female in stage IV-A.
 
@@ -45,16 +58,6 @@ We expect to see the following celltypes in our dataset:
 - Smooth Muscle
 - Neuronal
 
-
-### Mouse Brain
-
-A mouse brain (fresh frozen) was obtained from Charles River Laboratories.
-
-Strain: C57BL/6 Sex: Male Age: 8 weeks Sample preparation
-
-A 10 µm section was taken with a cryostat (Epredia CryoStar NX70). Tissue block preparation, sectioning, H&E staining, and imaging followed the Visium HD Fresh Frozen Tissue Preparation Handbook (CG000763).
-
-The data was subset to a smaller cross-section of the brain in order to make it more manageable on local laptops. The instructions for how to subset a 10X Visium HD slides can be found [here](Aside_subsetting_slide.qmd).
 :::
 
 ::: callout-tip
@@ -128,13 +131,13 @@ There are 3 main arguments that we will be utilizing for this step:
 
 : `Load10X_Spatial()` arguments {#tbl-Load10X_Spatial_arguments}
 
-Before loading in the data, let us take a look at the files we will supplying to the function. In particular, let us take a look at sample `data/P5CRC` which is the path would supply as `data.dir` in the `Load10X_Spatial()` function.
+Before loading in the data, let us take a look at the files we will supplying to the function. In particular, let us take a look at sample `data/fresh_frozen_cropped` which is the path would supply as `data.dir` in the `Load10X_Spatial()` function.
  
 ```{r}
 #| label: fig-spaceranger_outs
 #| fig-cap: File structure of SpaceRanger output
 #| echo: false
-dir_tree("data/P5CRC/", recurse = 1)
+dir_tree("data/fresh_frozen_cropped/", recurse = 1)
 ```
 
 In the Visium HD assay, SpaceRanger bins the image into 2µm x 2µm, 8µm x 8µm, and 16µm x 16µm bins. **The output from each of these resolution is found in the `binned_outputs` folder.**
@@ -155,17 +158,17 @@ Now that we understand the input needed for the `Load10X_Spatial()` function, le
 **Typically you would only load in one bin size**, but for the purposes of better understanding bins and our Seurat data structure, we will load both here.
 
 ```{r}
-#| label: crc_Load10X_Spatial
-crc <- Load10X_Spatial(data.dir = "data/P5CRC/",
+#| label: fresh_frozen_Load10X_Spatial
+fresh <- Load10X_Spatial(data.dir = "data/fresh_frozen_cropped//",
                        bin.size = c(8, 16),
-                       slice = "P5CRC")
+                       slice = "fresh_frozen")
 ```
 
 We can print out some basic information of our Seurat object to examine its data structure. We will do this frequently throughout the workshop to understand how our the Seurat data structure changes with each step of the workflow.
 
 ```{r}
-#| label: crc_callout
-crc
+#| label: fresh_frozen_callout
+fresh
 ```
 
 ## Anatomy of a Seurat Object
@@ -180,11 +183,11 @@ As we can see from our Seurat callout, there are a lot of different slots inside
 - Storing counts matrices from a variety of different normalization techniques
 - Batch integration methods will sometimes generate a transformed counts matrix
 
-Here we can print the different assays that exist within our `crc` object:
+Here we can print the different assays that exist within our `fresh` object:
 
 ```{r}
-#| label: crc_assays
-Assays(crc)
+#| label: fresh_frozen_assays
+Assays(fresh)
 ```
 
 We have 2 distinct assays for the different bin sizes, which makes sense because we have different count matrices for our cells based upon the bin size that was selected.
@@ -192,16 +195,16 @@ We have 2 distinct assays for the different bin sizes, which makes sense because
 The `DefaultAssay()` function shows us which assay information will be used in other Seurat function calls, unless explicitly specified otherwise.
 
 ```{r}
-#| label: crc_DefaultAssay
-DefaultAssay(crc)
+#| label: fresh_frozen_DefaultAssay
+DefaultAssay(fresh)
 ```
 
 We can also change what our default assay is. Let's set it to the `016um` bins:
 
 ```{r}
-#| label: crc_DefaultAssay_callout
-DefaultAssay(crc) <- "Spatial.016um"
-crc
+#| label: fresh_frozen_DefaultAssay_callout
+DefaultAssay(fresh) <- "Spatial.016um"
+fresh
 ```
 
 Now we see that the callout says: `Active assay: Spatial.016um `
@@ -215,31 +218,31 @@ In Seurat, the **rows** correspond to `Features`. In the case of spatial transcr
 We can see what the first few genes/features in our count matrix are:
 
 ```{r}
-#| label: crc_features
-Features(crc) %>% head()
+#| label: fresh_frozen_features
+Features(fresh) %>% head()
 ```
 
 As well as see the number of genes that are found in each of our assays:
 
 ```{r}
-#| label: crc_nrow
-nrow(crc[["Spatial.008um"]])
-nrow(crc[["Spatial.016um"]])
+#| label: fresh_frozen_nrow
+nrow(fresh[["Spatial.008um"]])
+nrow(fresh[["Spatial.016um"]])
 ```
 
 The **columns** correspond to `Cells` (or samples as it appears in the callout). We can see what the first few cells in our count matrix are:
 
 ```{r}
-#| label: crc_cells
-Cells(crc) %>% head()
+#| label: fresh_frozen_cells
+Cells(fresh) %>% head()
 ```
 
 As well as see the number of cells that are found in each of our assays:
 
 ```{r}
-#| label: crc_ncol
-ncol(crc[["Spatial.008um"]])
-ncol(crc[["Spatial.016um"]])
+#| label: fresh_frozen_ncol
+ncol(fresh[["Spatial.008um"]])
+ncol(fresh[["Spatial.016um"]])
 ```
 
 ::: callout-tip
@@ -252,8 +255,8 @@ ncol(crc[["Spatial.016um"]])
 Layers are our count matrices. 
 
 ```{r}
-#| label: crc_layers
-Layers(crc)
+#| label: fresh_frozen_layers
+Layers(fresh)
 ```
 
 By default, Seurat uses the following naming convention for the counts matrices within an `Assay`: 
@@ -271,18 +274,18 @@ You may notice that our Seurat object only contains `counts` right now. This is 
 Using the `LayerData()` function we can access the entire counts matrix. Furthermore, we can specify the `assay` if we would prefer to not use the `DefaultAssay`.
 
 ```{r}
-#| label: crc_LayerData
+#| label: fresh_frozen_LayerData
 #| eval: false
-LayerData(crc, 
+LayerData(fresh, 
           assay = "Spatial.016um", 
           layer = "count")[1:5, 1:5]
 ```
 
 ```{r}
-#| label: tbl-crc_LayerData_kable
+#| label: tbl-fresh_frozen_LayerData_kable
 #| tbl-cap: First 5 rows and columns of raw counts matrix
 #| echo: false
-LayerData(crc, 
+LayerData(fresh, 
           assay = "Spatial.016um", 
           layer = "count")[1:5, 1:5] %>%
   as.data.frame() %>%
@@ -298,16 +301,16 @@ We do not just have expression data associated with our sample, we also have the
 For example we can grab the x,y coordinates of each bin using the `GetTissueCoordinates()` function.
 
 ```{r}
-#| label: crc_GetTissueCoordinates
+#| label: fresh_frozen_GetTissueCoordinates
 #| eval: false
-GetTissueCoordinates(crc) %>% View()
+GetTissueCoordinates(fresh) %>% View()
 ```
 
 ```{r}
-#| label: tbl-crc_GetTissueCoordinates_dt
+#| label: tbl-fresh_frozen_GetTissueCoordinates_dt
 #| tbl-cap: Coordinates on spatial slide for each cell
 #| echo: false
-GetTissueCoordinates(crc) %>% 
+GetTissueCoordinates(fresh) %>% 
   head(5) %>%
   DT::datatable()
 ```
@@ -315,9 +318,9 @@ GetTissueCoordinates(crc) %>%
 Or visualize what our slide looks like with `SpatialDimPlot()`:
 
 ```{r}
-#| label: fig-crc_SpatialDimPlot
+#| label: fig-fresh_frozen_SpatialDimPlot
 #| fig-cap: Spatial visualization of spots with `SpatialDimPlot()`
-SpatialDimPlot(crc)
+SpatialDimPlot(fresh)
 ```
 
 ### Metadata
@@ -325,16 +328,16 @@ SpatialDimPlot(crc)
 **Seurat automatically creates some metadata** for each of the cells when the object is created. This information is stored in the `@meta.data` slot within the Seurat object. The rownames are automatically set to be the cell names.
 
 ```{r}
-#| label: crc_meta_data_1
+#| label: fresh_frozen_meta_data_1
 #| eval: false
-crc@meta.data %>% View()
+fresh@meta.data %>% View()
 ```
 
 ```{r}
-#| label: tbl-crc_meta_data_1_dt
+#| label: tbl-fresh_frozen_meta_data_1_dt
 #| tbl-cap: Seurat default `@meta.data`
 #| echo: false
-crc@meta.data %>% 
+fresh@meta.data %>% 
   head(5) %>%
   DT::datatable()
 ```
@@ -352,21 +355,21 @@ What does each column represent?
 While it may seem intimidating at first, the important thing to remember is that this is a dataframe. Therefore can modify and work with this dataframe just like we would any other in R! For example, we can set our `orig.ident` column to be our sample name rather than "s".
 
 ```{r}
-#| label: crc_meta_data_orig_ident
-crc@meta.data$orig.ident <- "P5CRC"
+#| label: fresh_frozen_meta_data_orig_ident
+fresh@meta.data$orig.ident <- "fresh_frozen"
 ```
 
 ```{r}
-#| label: crc_meta_data_2
+#| label: fresh_frozen_meta_data_2
 #| eval: false
-crc@meta.data %>% View()
+fresh@meta.data %>% View()
 ```
 
 ```{r}
-#| label: tbl-crc_meta_data_2_dt
+#| label: tbl-fresh_frozen_meta_data_2_dt
 #| tbl-cap: Seurat default `@meta.data` after updating `orig.ident`
 #| echo: false
-crc@meta.data %>% 
+fresh@meta.data %>% 
   head(5) %>%
   DT::datatable()
 ```
@@ -374,8 +377,8 @@ crc@meta.data %>%
 Additionally, we do not have use the `@meta.data` each time we want to access a single column. We can use the `$` follow by the column name as a shorthand.
 
 ```{r}
-#| label: crc_dollar_notation
-crc$nCount_Spatial.008um %>% head()
+#| label: fresh_frozen_dollar_notation
+fresh$nCount_Spatial.008um %>% head()
 ```
 
 ### Idents
@@ -383,16 +386,22 @@ crc$nCount_Spatial.008um %>% head()
 The cell identities are stored as `Idents()`, which contain the default way to label cells. For example, if we wanted to label each cell by which sample they came from we could run:
 
 ```{r}
-#| label: crc_idents
-Idents(crc) <- "orig.ident"
-Idents(crc) %>% head()
+#| label: fresh_frozen_idents
+Idents(fresh) <- "orig.ident"
+Idents(fresh) %>% head()
 ```
 
 Where we see that the identities of the cells are the value stored in the `@meta.data` column `orig.ident`.
 
 # Loading Multiple Samples into Seurat
 
-Now that we have a better understanding of how to create a Seurat object from SpaceRanger outpus, let's go through how we can load multiple samples at once. In this case we want to represent both samples `P5CRC` and `P5NAT` in a singular Seurat object.
+Now that we have a better understanding of how to create a Seurat object from SpaceRanger outpus, let's go through how we can load multiple samples at once. In this case we want to represent both samples `fresh_frozen` and `fixed_frozen` in a singular Seurat object.
+
+Before we get started, we are going to remove `fresh` from our environment to save space on our computers!
+
+```{r}
+rm(fresh)
+```
 
 ## Using a `for` Loop 
 
@@ -424,21 +433,21 @@ Today we will use it to **iterate over the two sample folders** and execute comm
 
 Once those steps run, we will store the newly generated Seurat object to a list called `list_seurat` so that we can eventually merge both samples together.
 
-**We will be using a bin size of 8um for the remainder of this workshop**
+**We will be using a bin size of 16um for the remainder of this workshop.** Realistically, we can assume that this size will contain more than one cell in each spot, but due to limitation of RAM and computational power, we will be using this size as an example since the basics still remain true.
 
 ```{r}
 #| label: for_loop_Load10X_Spatial
 #| eval: false
-samples <- c("P5CRC", "P5NAT")
+samples <- c("fresh_frozen", "fixed_frozen")
 list_seurat <- list()
 
 for (sample in samples) {
   
   # Path to data directory
-  data_dir <- paste0("data/", sample)
+  data_dir <- paste0("data/", sample, "_cropped")
   # Create seurat object and set orig ident to be sample
   seurat <- Load10X_Spatial(data.dir = data_dir,
-                            bin.size = c(8),
+                            bin.size = c(16),
                             slice = sample)
   seurat$orig.ident <- sample
   
@@ -471,9 +480,9 @@ To create this combined Seurat object, we use the `merge()` function. Because th
 
 ```{r}
 #| label: list_seurat_merge
-seurat_merged <- merge(x = list_seurat[["P5CRC"]],
-                       y = list_seurat[["P5NAT"]],
-                       add.cell.id = c("P5CRC", "P5NAT"))
+seurat_merged <- merge(x = list_seurat[["fresh_frozen"]],
+                       y = list_seurat[["fixed_frozen"]],
+                       add.cell.id = c("fresh_frozen", "fixed_frozen"))
 seurat_merged
 ```
 
@@ -518,7 +527,7 @@ Let’s also double check that we have the correct number of cells. First, let u
 
 ```{r}
 #| label: ncells_math
-ncol(list_seurat[["P5CRC"]]) + ncol(list_seurat[["P5NAT"]])
+ncol(list_seurat[[1]]) + ncol(list_seurat[[2]])
 ```
 
 Which is the same as the number of samples in our Seurat callout!
