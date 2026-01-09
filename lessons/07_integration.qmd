@@ -156,9 +156,9 @@ According to [genecards](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CEAC
 
 > Members of this family play a role in cell adhesion and are widely used as tumor markers in serum immunoassay determinations of carcinoma. This gene affects the sensitivity of tumor cells to adenovirus infection.
 
-To see if these genes are associated with the clusters we identified previously, we can utilize `VlnPlot()` to identify clusters with higher expression of these tumor genes.
+To see if these genes are associated with the clusters we identified previously, we can utilize `VlnPlot()` and `FeaturePlot()` to identify clusters with higher expression of these tumor genes.
 
-::: {.panel_tabset}
+::: {.panel-tabset}
 
 ### CEACAM5
 
@@ -167,11 +167,19 @@ VlnPlot(seurat_processed, "CEACAM5", pt.size = 0) +
   NoLegend()
 ```
 
+```{r}
+FeaturePlot(seurat_processed, "CEACAM5")
+```
+
 ### CEACAM6
 
 ```{r}
 VlnPlot(seurat_processed, "CEACAM6", pt.size = 0) +
   NoLegend()
+```
+
+```{r}
+FeaturePlot(seurat_processed, "CEACAM6")
 ```
 
 :::
