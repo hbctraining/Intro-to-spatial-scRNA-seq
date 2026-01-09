@@ -111,7 +111,17 @@ ggplot(seurat_processed@meta.data) +
     theme_classic()
 ```
 
-In particular, this tells us that we need to zoom in on clusters 1 and 10 to determine if integration is necessary. 
+In particular, this tells us that we need to zoom in on clusters 1, 6, and 10 to determine if integration is necessary. 
+
+```{r}
+# Plot UMAP
+p <- DimPlot(seurat_processed, 
+        reduction = "full.umap.sketch", label = T) + 
+  ggtitle("Projected clustering")
+LabelClusters(p, id = "ident",  fontface = "bold", size = 5, 
+              bg.colour = "white", bg.r = .2, force = 0)
+```
+
 
 ## Possible Explanations
 
@@ -148,10 +158,23 @@ According to [genecards](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CEAC
 
 To see if these genes are associated with the clusters we identified previously, we can utilize `VlnPlot()` to identify clusters with higher expression of these tumor genes.
 
+::: {.panel_tabset}
+
+### CEACAM5
+
+```{r}
+VlnPlot(seurat_processed, "CEACAM5", pt.size = 0) +
+  NoLegend()
+```
+
+### CEACAM6
+
 ```{r}
 VlnPlot(seurat_processed, "CEACAM6", pt.size = 0) +
   NoLegend()
 ```
+
+:::
 
 We see that clusters 1 and 10 do indeed have higher expression of this tumor marker gene! We can even look at `CEACAM5` at the same time with a dotplot to gain more confidence with two marker genes as well:
 

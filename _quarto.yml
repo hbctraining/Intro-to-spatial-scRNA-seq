@@ -56,8 +56,8 @@ website:
           
       - section: "Day 2 Self-learning"
         contents:
-          - lessons/07_clustering-quality-control.qmd
-          - lessons/08_marker-identification.qmd
+          - lessons/07_integration.qmd
+          - lessons/08_spatially_derived_clusters.qmd
           - lessons/09_integration.qmd
           
       - section: "Day 3:"

@@ -66,7 +66,7 @@ following genes to be the most variable:
 
 ```{r}
 # Identify the 15 most highly variable genes
-ranked_variable_genes <- VariableFeatures(seurat_sketch, assay="Spatial.008um")
+ranked_variable_genes <- VariableFeatures(seurat_sketch, assay="Spatial.016um")
 top_genes <- ranked_variable_genes[1:15]
 top_genes
 ```
@@ -199,6 +199,7 @@ plot that in a 2D way.
 
 ```{r}
 DimPlot(seurat_processed,
+        group.by = "orig.ident",
         reduction = "pca.sketch")
 ```
 
@@ -341,7 +342,7 @@ Now that we have our clusters and dimensional reductions from our sketched datas
 
 ## Run `ProjectData()`
 
-The `ProjectData` function projects all the bins in the dataset (the `Spatial.008um` assay) onto the `sketch` assay. 
+The `ProjectData` function projects all the bins in the dataset (the `Spatial.016um` assay) onto the `sketch` assay. 
 
 ```{r}
 #| eval: false
@@ -350,7 +351,7 @@ options(future.globals.maxSize= 2000000000)
 
 seurat_processed <- ProjectData(
   object = seurat_processed,
-  assay = "Spatial.008um",
+  assay = "Spatial.016um",
   full.reduction = "full.pca.sketch",
   sketched.assay = "sketch",
   sketched.reduction = "pca.sketch",
@@ -395,7 +396,7 @@ We can now visualize our clusters from the projected assignments. The UMAP plot 
 
 ```{r}
 # switch to full dataset assay
-DefaultAssay(seurat_processed) <- "Spatial.008um"
+DefaultAssay(seurat_processed) <- "Spatial.016um"
 
 # Change the idents to the projected cluster assignments
 Idents(seurat_processed) <- "seurat_cluster.projected"
@@ -442,7 +443,7 @@ In order to see the clusters superimposed on our image we can use the `SpatialDi
 ```{r}
 #| fig-width: 10
 SpatialDimPlot(seurat_processed,
-               pt.size.factor = 7,
+               pt.size.factor = 12,
                image.alpha = 0)
 ```
 

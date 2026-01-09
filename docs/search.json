@@ -582,5 +582,210 @@
       "Day 2:",
       "Normalization and Sketch Downsampling"
     ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html",
+    "href": "lessons/06_scRNAseq_workflow.html",
+    "title": "Identifying Unwanted Variation",
+    "section": "",
+    "text": "Approximate time: XY minutes",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#identify-highly-variable-features",
+    "href": "lessons/06_scRNAseq_workflow.html#identify-highly-variable-features",
+    "title": "Identifying Unwanted Variation",
+    "section": "Identify Highly Variable Features",
+    "text": "Identify Highly Variable Features\nRecall that when we were working with the entire dataset, we found the following genes to be the most variable:\n\n# Identify the 15 most highly variable genes\nranked_variable_genes &lt;- VariableFeatures(seurat_sketch, assay=\"Spatial.016um\")\ntop_genes &lt;- ranked_variable_genes[1:15]\ntop_genes\n\n [1] \"SPP1\"  \"IGHG1\" \"IGHM\"  \"IGHG3\" \"CXCL8\" \"INSL5\" \"IGLC1\" \"MMP12\" \"CHGA\" \n[10] \"VIP\"   \"SST\"   \"GCG\"   \"REG3A\" \"HBA2\"  \"PYY\"  \n\n\nWe are going to run FindVariableFeatures() once more, but this time on our smaller dataset of 10,000 bins.\n\n# Identify the most variable genes\nseurat_processed &lt;- FindVariableFeatures(seurat_sketch, \n                                         selection.method = \"vst\",\n                                         nfeatures = 2000,\n                                         assay=\"sketch\")\nseurat_processed\n\nAn object of class Seurat \n36170 features across 67660 samples within 2 assays \nActive assay: sketch (18085 features, 2000 variable features)\n 2 layers present: counts, data\n 1 other assay present: Spatial.016um\n 2 spatial fields of view present: P5CRC.016um P5NAT.016um\n\n\n\n\n\n\n\n\nExercise 1\n\n\n\nDo you seen any differences when we calculated HVGs for the entire dataset versus the sketch assay?\n\n# Identify the 15 most highly variable genes\nranked_variable_genes &lt;- VariableFeatures(seurat_processed, assay=\"sketch\")\nranked_variable_genes[1:15]\n\n [1] \"IGHG1\" \"IGHM\"  \"CXCL8\" \"SPP1\"  \"IGLC1\" \"CHGA\"  \"VIP\"   \"HBA2\"  \"REG3A\"\n[10] \"MMP12\" \"INSL5\" \"GCG\"   \"CALB2\" \"PYY\"   \"MMP9\"",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#visualize-highly-variable-genes",
+    "href": "lessons/06_scRNAseq_workflow.html#visualize-highly-variable-genes",
+    "title": "Identifying Unwanted Variation",
+    "section": "Visualize Highly Variable Genes",
+    "text": "Visualize Highly Variable Genes\nWe can visualize the dispersion of all genes using Seurat’s VariableFeaturePlot(), which shows a gene’s average expression across all cells on the x-axis and variance on the y-axis. Ideally we would see genes lay across the entire x-axis, as we want to ensure that we are using genes that are both lowly and highly expressed.\nFor the visualization, we are adding labels using LabelPoints() to help us better understand which genes are driving the shape of our data.\n\n# Identify the 15 most highly variable genes\nranked_variable_genes &lt;- VariableFeatures(seurat_processed,\n                                          assay = \"sketch\")\ntop_genes &lt;- ranked_variable_genes[1:15]\n\n# Plot the average expression and variance of these genes\n# With labels to indicate which genes are in the top 15\np &lt;- VariableFeaturePlot(seurat_processed)\nLabelPoints(plot = p, points = top_genes, repel = TRUE)\n\n\n\n\n\n\n\n\nNow we are primed to run the next step of the workflow, which is Principal Component Analysis.",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#pca",
+    "href": "lessons/06_scRNAseq_workflow.html#pca",
+    "title": "Identifying Unwanted Variation",
+    "section": "PCA",
+    "text": "PCA\nPrincipal Component Analysis (PCA) is a technique used to emphasize variation as well as similarity, and to bring out strong patterns in a dataset; it is one of the methods used for “dimensionality reduction”.\n\n\n\n\n\n\nVideo on how PCA is calculated\n\n\n\n\n\nFor a more detailed explanation on PCA, please look over this lesson (adapted from StatQuests/Josh Starmer’s YouTube video). We also strongly encourage you to explore the video StatQuest’s video for a more thorough understanding.\n\n\n\nLet’s say you are working with a single-cell RNA-seq dataset with 12,000 cells and you have quantified the expression of 20,000 genes. The schematic below demonstrates how you would go from a cell x gene matrix to principal component (PC) scores for each individual cell.\n\nTo perform PCA, we need to first choose the most variable features, then scale the data. Since highly expressed genes exhibit the highest amount of variation and we don’t want our ‘highly variable genes’ only to reflect high expression, we need to scale the data to scale variation with expression level. The Seurat ScaleData() function will scale the data by:\n\nAdjusting the expression of each gene to give a mean expression across cells to be 0\nScaling expression of each gene to give a variance across cells to be 1\n\n\n# Scale the data counts\nseurat_processed &lt;- ScaleData(seurat_processed)\nseurat_processed\n\nAn object of class Seurat \n36170 features across 67660 samples within 2 assays \nActive assay: sketch (18085 features, 2000 variable features)\n 3 layers present: counts, data, scale.data\n 1 other assay present: Spatial.016um\n 2 spatial fields of view present: P5CRC.016um P5NAT.016um\n\n\nWe have calculated a new layer titled sale.data, where our scaled log-normalized counts now exist. So now we can proceed in calculating our Principal Components with RunPCA().\n\n# Run PCA\nseurat_processed &lt;- RunPCA(seurat_processed,\n                           assay = \"sketch\",\n                           reduction.name = \"pca.sketch\")\n\nThe information printed out show the top genes that influence a cell’s score for each component. This includes genes that have both a positive and negative weight.\nIf we look at our updated seurat_processed object:\n\nseurat_processed\n\nAn object of class Seurat \n36170 features across 67660 samples within 2 assays \nActive assay: sketch (18085 features, 2000 variable features)\n 3 layers present: counts, data, scale.data\n 1 other assay present: Spatial.016um\n 1 dimensional reduction calculated: pca.sketch\n 2 spatial fields of view present: P5CRC.016um P5NAT.016um\n\n\nWe see that we have stored our PCA results: dimensional reduction calculated: pca.sketch",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#visualize-pca",
+    "href": "lessons/06_scRNAseq_workflow.html#visualize-pca",
+    "title": "Identifying Unwanted Variation",
+    "section": "Visualize PCA",
+    "text": "Visualize PCA\nAfter the PC scores have been calculated, you are looking at a matrix of 12,000 x 12,000 that represents the information about relative gene expression in all the cells. You can select the PC1 and PC2 columns and plot that in a 2D way.\n\n\nDimPlot(seurat_processed,\n        group.by = \"orig.ident\",\n        reduction = \"pca.sketch\")\n\n\n\n\n\n\n\n\nUltimately what we have calculated with PCA are values that can represent how similar cells are to one another. We would expect that cells with similar gene expression will have similar PC values. For example, we would anticipate that two Fibroblast cells would have comparable gene expression - which would also results in similar scores in principal components. This is why many of the downstream steps in the remainder of this lesson use PCA as the input.\nAlso assess the differences in coordinates based on batch variables.\n\nDimPlot(seurat_processed,\n        reduction = \"pca.sketch\",\n        group.by = \"orig.ident\",\n        split.by = \"orig.ident\")",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#selecting-pc-dimensions",
+    "href": "lessons/06_scRNAseq_workflow.html#selecting-pc-dimensions",
+    "title": "Identifying Unwanted Variation",
+    "section": "Selecting PC Dimensions",
+    "text": "Selecting PC Dimensions\nTo overcome the extensive technical noise in the expression of any single gene for scRNA-seq data, Seurat assigns cells to clusters based on their PCA scores derived from the expression of the integrated most variable genes. Each PC essentially representing a “metagene” that combines information across a correlated gene set. Determining how many PCs to include in the clustering step is therefore important to ensure that we are capturing the majority of the variation, or cell types, present in our dataset.\nIt is useful to explore the PCs prior to deciding which PCs to include for the downstream clustering analysis.\nThe elbow plot is a helpful way to determine how many PCs to use for clustering so that we are capturing majority of the variation in the data. The elbow plot visualizes the standard deviation of each PC, and we are looking for where the standard deviations begins to plateau. Essentially, where the elbow appears is usually the threshold for identifying the majority of the variation. However, this method can be quite subjective.\nLet’s draw an elbow plot using the top 50 PCs:\n\n# Plot the elbow plot\nElbowPlot(object = seurat_processed,\n          reduction = \"pca.sketch\",\n          ndims = 50)\n\n\n\n\n\n\n\n\nBased on this plot, we could roughly determine the majority of the variation by where the elbow occurs around PC8 - PC10, or one could argue that it should be when the data points start to get close to the X-axis, PC30 or so. This gives us a very rough idea of the number of PCs needed to be included.\nWe will be using 50 PCs for our downstream steps.",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#k-nearest-neighbors",
+    "href": "lessons/06_scRNAseq_workflow.html#k-nearest-neighbors",
+    "title": "Identifying Unwanted Variation",
+    "section": "k-Nearest Neighbors",
+    "text": "k-Nearest Neighbors\nThe first step is to construct a K-nearest neighbor (KNN) graph based on the euclidean distance in PCA space.\n Image source: Analysis of Single cell RNA-seq data\n\nEdges are drawn between cells with similar features expression patterns.\nEdge weights are refined between any two cells based on shared overlap in their local neighborhoods.\n\nThis is done in Seurat by using the FindNeighbors() function. We also specify the reduction we want to use as well as which components (dims) will be used for the calculation. In this case, we will be using the first 50.\n\n# Determine the K-nearest neighbor graph\nseurat_processed &lt;- FindNeighbors(seurat_processed, \n                                  assay = \"sketch\", \n                                  reduction = \"pca.sketch\",\n                                  dims = 1:50)",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#clustering",
+    "href": "lessons/06_scRNAseq_workflow.html#clustering",
+    "title": "Identifying Unwanted Variation",
+    "section": "Clustering",
+    "text": "Clustering\nNext, Seurat will iteratively group cells together with the goal of optimizing the standard modularity function.\nWe will use the FindClusters() function to perform the graph-based clustering. The resolution is an important argument that sets the “granularity” of the downstream clustering and will need to be optimized for every individual experiment. For datasets of 3,000 - 5,000 cells, the resolution set between 0.4-1.4 generally yields good clustering. Increased resolution values lead to a greater number of clusters, which is often required for larger datasets.\nThe FindClusters() function allows us to enter a series of resolutions and will calculate the “granularity” of the clustering. This is very helpful for testing which resolution works for moving forward without having to run the function for each resolution.\n\n\n\n\n\n\nTesting different resolution values\n\n\n\nTypically we would recommend using a variety of different resolutions and select a resolution that best suits your dataset. However, for the sake of time, we will proceed with a resolution = 0.65. We have more detailed explanations of how to test a variety of resolutions at one time.\n\n\n\nseurat_processed &lt;- FindClusters(seurat_processed, \n                                 cluster.name = \"seurat_cluster.sketched\", \n                                 resolution = 0.65)\n\nModularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck\n\nNumber of nodes: 10000\nNumber of edges: 415959\n\nRunning Louvain algorithm...\nMaximum modularity in 10 random starts: 0.8844\nNumber of communities: 18\nElapsed time: 1 seconds\n\n\nIf we take a look at the columns in our @meta.data, we see that the column seurat_cluster.sketched is a new column that was added.\n\nseurat_processed@meta.data %&gt;% head() %&gt;% relocate(\"seurat_cluster.sketched\")\n\n                            seurat_cluster.sketched orig.ident\nP5CRC_s_016um_00050_00315-1                    &lt;NA&gt;      P5CRC\nP5CRC_s_016um_00204_00145-1                    &lt;NA&gt;      P5CRC\nP5CRC_s_016um_00237_00273-1                    &lt;NA&gt;      P5CRC\nP5CRC_s_016um_00224_00126-1                    &lt;NA&gt;      P5CRC\nP5CRC_s_016um_00191_00159-1                       8      P5CRC\nP5CRC_s_016um_00064_00214-1                    &lt;NA&gt;      P5CRC\n                            nCount_Spatial.016um nFeature_Spatial.016um\nP5CRC_s_016um_00050_00315-1                   80                     75\nP5CRC_s_016um_00204_00145-1                   81                     73\nP5CRC_s_016um_00237_00273-1                  278                    225\nP5CRC_s_016um_00224_00126-1                  692                    511\nP5CRC_s_016um_00191_00159-1                   35                     34\nP5CRC_s_016um_00064_00214-1                 1250                    724\n                            mitoRatio log10GenesPerUMI leverage.score\nP5CRC_s_016um_00050_00315-1 0.1000000        0.9852720      0.6907727\nP5CRC_s_016um_00204_00145-1 0.1234568        0.9763361      0.4799947\nP5CRC_s_016um_00237_00273-1 0.0323741        0.9624138      0.3291851\nP5CRC_s_016um_00224_00126-1 0.2095376        0.9536337      1.4497517\nP5CRC_s_016um_00191_00159-1 0.1142857        0.9918468      6.8221965\nP5CRC_s_016um_00064_00214-1 0.2176000        0.9234167      0.6191210\n                            seurat_clusters\nP5CRC_s_016um_00050_00315-1            &lt;NA&gt;\nP5CRC_s_016um_00204_00145-1            &lt;NA&gt;\nP5CRC_s_016um_00237_00273-1            &lt;NA&gt;\nP5CRC_s_016um_00224_00126-1            &lt;NA&gt;\nP5CRC_s_016um_00191_00159-1               8\nP5CRC_s_016um_00064_00214-1            &lt;NA&gt;\n\n\n\n\n\n\n\n\nExercise 2\n\n\n\nWhen we looked at the first few rows of our metadata, it appeared that there were many cells that do not have a cluster value.\nCount how many NA’s are found for our cluster with table() function and use the argument (useNA = \"ifany\"):\n\ntable(seurat_processed$seurat_cluster.sketched, useNA = \"ifany\")\n\n\n    0     1     2     3     4     5     6     7     8     9    10    11    12 \n 1357  1274  1079   898   828   624   579   545   497   495   463   402   300 \n   13    14    15    16    17  &lt;NA&gt; \n  272   127   106    80    74 57660 \n\n\nWhy do you think there are so many NA values?\n\n\nFindClusters() tends to automatically change the Idents() to the cluster values that were just calculated. If we take a look at our Idents we can see if that it has changed from orig.ident to seurat_cluster.sketched\n\nIdents(seurat_processed) %&gt;% head()\n\nP5CRC_s_016um_00050_00315-1 P5CRC_s_016um_00204_00145-1 \n                       &lt;NA&gt;                        &lt;NA&gt; \nP5CRC_s_016um_00237_00273-1 P5CRC_s_016um_00224_00126-1 \n                       &lt;NA&gt;                        &lt;NA&gt; \nP5CRC_s_016um_00191_00159-1 P5CRC_s_016um_00064_00214-1 \n                          8                        &lt;NA&gt; \nLevels: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#umap",
+    "href": "lessons/06_scRNAseq_workflow.html#umap",
+    "title": "Identifying Unwanted Variation",
+    "section": "UMAP",
+    "text": "UMAP\nTo visualize the cell clusters, there are a few different dimensionality reduction techniques that can be helpful. The most popular methods include t-distributed stochastic neighbor embedding (t-SNE) and Uniform Manifold Approximation and Projection (UMAP) techniques.\nBoth methods aim to place cells with similar local neighborhoods in high-dimensional space together in low-dimensional space. These methods will require you to input number of PCA dimentions to use for the visualization, we suggest using the same number of PCs as input to the clustering analysis. Here, we will proceed with the UMAP method for visualizing the clusters.\n\nseurat_processed &lt;- RunUMAP(seurat_processed, \n                            reduction = \"pca.sketch\", \n                            reduction.name = \"umap.sketch\", \n                            return.model = T, dims = 1:50)\nseurat_processed\n\nAn object of class Seurat \n36170 features across 67660 samples within 2 assays \nActive assay: sketch (18085 features, 2000 variable features)\n 3 layers present: counts, data, scale.data\n 1 other assay present: Spatial.016um\n 2 dimensional reductions calculated: pca.sketch, umap.sketch\n 2 spatial fields of view present: P5CRC.016um P5NAT.016um\n\n\n\nDimPlot(seurat_processed, group.by=\"orig.ident\", reduction=\"umap.sketch\")\n\n\n\n\n\n\n\n\nThese UMAP coordinates are now stored in the dimensional reductions calculated: pca.sketch, umap.sketch. Now we can visualize with the clusters that we calculated earlier using DimPlot() and adding clearer labels withLabelClusters()`.\n\n# Plot UMAP\np &lt;- DimPlot(seurat_processed, \n        reduction = \"umap.sketch\", label = T) + \n  ggtitle(\"Sketched clustering\")\nLabelClusters(p, id = \"ident\",  fontface = \"bold\", size = 5, \n              bg.colour = \"white\", bg.r = .2, force = 0)",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#run-projectdata",
+    "href": "lessons/06_scRNAseq_workflow.html#run-projectdata",
+    "title": "Identifying Unwanted Variation",
+    "section": "Run ProjectData()",
+    "text": "Run ProjectData()\nThe ProjectData function projects all the bins in the dataset (the Spatial.016um assay) onto the sketch assay.\n\n# Increases the size of the default vector\noptions(future.globals.maxSize= 2000000000)\n\nseurat_processed &lt;- ProjectData(\n  object = seurat_processed,\n  assay = \"Spatial.016um\",\n  full.reduction = \"full.pca.sketch\",\n  sketched.assay = \"sketch\",\n  sketched.reduction = \"pca.sketch\",\n  umap.model = \"umap.sketch\",\n  dims = 1:50,\n  refdata = list(seurat_cluster.projected = \"seurat_cluster.sketched\"))\n\nUsing the sketch PCA and UMAP, the ProjectData function returns a Seurat object that includes:\n\n\n\n\n\n\n\nCategory\nDescription\n\n\n\n\nDimensional reduction (PCA)\nThe full.pca.sketch reduction extends the PCA from sketched cells to all bins in the dataset\n\n\nDimensional reduction (UMAP)\nThe full.umap.sketch reduction extends the UMAP from sketched cells to all bins in the dataset\n\n\nCluster labels\nThe seurat_cluster.projected metadata column labels all cells with cluster labels from sketched cells\n\n\n\nWe can now see the additional full-dataset reductions in the object.\n\nseurat_processed\n\nAn object of class Seurat \n36170 features across 67660 samples within 2 assays \nActive assay: Spatial.016um (18085 features, 2000 variable features)\n 2 layers present: counts, data\n 1 other assay present: sketch\n 4 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch\n 2 spatial fields of view present: P5CRC.016um P5NAT.016um\n\n\nNote that a score for the projection of each bin will be saved as a column in the metadata. Now the seurat_cluster.projected column shows values for every bin.\n\nhead(seurat_processed@meta.data)\n\n                            orig.ident nCount_Spatial.016um\nP5CRC_s_016um_00050_00315-1      P5CRC                   80\nP5CRC_s_016um_00204_00145-1      P5CRC                   81\nP5CRC_s_016um_00237_00273-1      P5CRC                  278\nP5CRC_s_016um_00224_00126-1      P5CRC                  692\nP5CRC_s_016um_00191_00159-1      P5CRC                   35\nP5CRC_s_016um_00064_00214-1      P5CRC                 1250\n                            nFeature_Spatial.016um mitoRatio log10GenesPerUMI\nP5CRC_s_016um_00050_00315-1                     75 0.1000000        0.9852720\nP5CRC_s_016um_00204_00145-1                     73 0.1234568        0.9763361\nP5CRC_s_016um_00237_00273-1                    225 0.0323741        0.9624138\nP5CRC_s_016um_00224_00126-1                    511 0.2095376        0.9536337\nP5CRC_s_016um_00191_00159-1                     34 0.1142857        0.9918468\nP5CRC_s_016um_00064_00214-1                    724 0.2176000        0.9234167\n                            leverage.score seurat_cluster.sketched\nP5CRC_s_016um_00050_00315-1      0.6907727                    &lt;NA&gt;\nP5CRC_s_016um_00204_00145-1      0.4799947                    &lt;NA&gt;\nP5CRC_s_016um_00237_00273-1      0.3291851                    &lt;NA&gt;\nP5CRC_s_016um_00224_00126-1      1.4497517                    &lt;NA&gt;\nP5CRC_s_016um_00191_00159-1      6.8221965                       8\nP5CRC_s_016um_00064_00214-1      0.6191210                    &lt;NA&gt;\n                            seurat_clusters seurat_cluster.projected\nP5CRC_s_016um_00050_00315-1            &lt;NA&gt;                        8\nP5CRC_s_016um_00204_00145-1            &lt;NA&gt;                        8\nP5CRC_s_016um_00237_00273-1            &lt;NA&gt;                       11\nP5CRC_s_016um_00224_00126-1            &lt;NA&gt;                       12\nP5CRC_s_016um_00191_00159-1               8                        8\nP5CRC_s_016um_00064_00214-1            &lt;NA&gt;                        2\n                            seurat_cluster.projected.score\nP5CRC_s_016um_00050_00315-1                              1\nP5CRC_s_016um_00204_00145-1                              1\nP5CRC_s_016um_00237_00273-1                              1\nP5CRC_s_016um_00224_00126-1                              1\nP5CRC_s_016um_00191_00159-1                              1\nP5CRC_s_016um_00064_00214-1                              1",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/06_scRNAseq_workflow.html#visualize-projected-clusters",
+    "href": "lessons/06_scRNAseq_workflow.html#visualize-projected-clusters",
+    "title": "Identifying Unwanted Variation",
+    "section": "Visualize Projected Clusters",
+    "text": "Visualize Projected Clusters\nWe can now visualize our clusters from the projected assignments. The UMAP plot now contains more points, which is expected because we are now visualizing the full dataset rather than our 10,000 bin sketch. Nonetheless, we can see that the full dataset is still well-represented by the projected dimensional reduction and clustering.\n\n# switch to full dataset assay\nDefaultAssay(seurat_processed) &lt;- \"Spatial.016um\"\n\n# Change the idents to the projected cluster assignments\nIdents(seurat_processed) &lt;- \"seurat_cluster.projected\"\n\n# Plot UMAP\np &lt;- DimPlot(seurat_processed, \n        reduction = \"full.umap.sketch\", label = T) + \n  ggtitle(\"Projected clustering\")\nLabelClusters(p, id = \"ident\",  fontface = \"bold\", size = 5, \n              bg.colour = \"white\", bg.r = .2, force = 0)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMy cluster labels are all out of order!\n\n\n\nTo ensure that our cluster labels are listed in proper numeric order, we are going to make our seurat_cluster.projected a factor and set the levels such that the order is correct.\n\n# Arrange so clusters get listed in numerical order\nseurat_processed$seurat_cluster.projected &lt;- seurat_processed$seurat_cluster.projected %&gt;% \n  as.numeric() %&gt;%\n  as.factor()\n\nseurat_processed$seurat_cluster.projected %&gt;% head()\n\nP5CRC_s_016um_00050_00315-1 P5CRC_s_016um_00204_00145-1 \n                         12                          12 \nP5CRC_s_016um_00237_00273-1 P5CRC_s_016um_00224_00126-1 \n                          5                          14 \nP5CRC_s_016um_00191_00159-1 P5CRC_s_016um_00064_00214-1 \n                         12                           2 \nLevels: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18\n\n\nNow we should see the levels in correct numeric order.\n\n# Change the idents to the projected cluster assignments\nIdents(seurat_processed) &lt;- \"seurat_cluster.projected\"\n\n# Plot UMAP\np &lt;- DimPlot(seurat_processed, \n        reduction = \"full.umap.sketch\", label = T) + \n  ggtitle(\"Projected clustering\")\nLabelClusters(p, id = \"ident\",  fontface = \"bold\", size = 5, \n              bg.colour = \"white\", bg.r = .2, force = 0)\n\n\n\n\n\n\n\n\n\n\nIn order to see the clusters superimposed on our image we can use the SpatialDimPlot() function. We will also set the color palette and convert the cluster assignments to a factor so they are ordered numerically rather than lexicographically in the figure.\n\nSpatialDimPlot(seurat_processed,\n               pt.size.factor = 12,\n               image.alpha = 0)",
+    "crumbs": [
+      "Day 2:",
+      "Identifying Unwanted Variation"
+    ]
+  },
+  {
+    "objectID": "lessons/07_integration.html",
+    "href": "lessons/07_integration.html",
+    "title": "Integration",
+    "section": "",
+    "text": "Approximate time: XY minutes",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Integration"
+    ]
+  },
+  {
+    "objectID": "lessons/07_integration.html#batch-distribution-in-clusters",
+    "href": "lessons/07_integration.html#batch-distribution-in-clusters",
+    "title": "Integration",
+    "section": "Batch Distribution in Clusters",
+    "text": "Batch Distribution in Clusters\nWe do see a clear split in our dataset between our NAT and CRC samples. This is emphasized even more when we look at the distribution of cells in each cluster.\n\n# Barplot of proportion of cells in each cluster by sample\nggplot(seurat_processed@meta.data) +\n    geom_bar(aes(x=seurat_cluster.projected, fill=orig.ident), \n             position=position_fill())  +\n    theme_classic()\n\n\n\n\n\n\n\n\nIn particular, this tells us that we need to zoom in on clusters 1, 6, and 10 to determine if integration is necessary.\n\n# Plot UMAP\np &lt;- DimPlot(seurat_processed, \n        reduction = \"full.umap.sketch\", label = T) + \n  ggtitle(\"Projected clustering\")\nLabelClusters(p, id = \"ident\",  fontface = \"bold\", size = 5, \n              bg.colour = \"white\", bg.r = .2, force = 0)",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Integration"
+    ]
+  },
+  {
+    "objectID": "lessons/07_integration.html#possible-explanations",
+    "href": "lessons/07_integration.html#possible-explanations",
+    "title": "Integration",
+    "section": "Possible Explanations",
+    "text": "Possible Explanations\nAt such a low resolution, we expect our clusters to map to larger celltypes. Therefore, before running any single-cell analysis, it is important to come in with some expectations of your cell population. Even better would be to make use of known marker genes curated from previous publications. Here, we have provided a few examples of genes that we would expect to represent some of the cell populations.\n\n\n\n\n\n\n\nCell type\nGenes\n\n\n\n\nGoblet cells\nCLCA1, FCGBP, MUC2\n\n\nGoblet/Entero\nPIGR\n\n\nTumor\nCEACAM6, CEACAM5\n\n\nFibroblasts\nCOL1A1\n\n\nMacrophages\nC1QC, SPP1, SELENOP\n\n\nCAF\nCOL1A1\n\n\nT cells\nTRAC, CD3E\n\n\nEndothelial\nPECAM1\n\n\nPlasma cells\nIGKC\n\n\n\nIt is tempting to jump straight into integration! However, it is best to give a justification why such a step is necessary to unsure that you are not losing real biology in the process of doing so.\n\n\n\n\n\n\nExercise 2\n\n\n\nIs there a population here that could potentially explain the differences between our samples?",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Integration"
+    ]
+  },
+  {
+    "objectID": "lessons/07_integration.html#assessing-tumor-cells",
+    "href": "lessons/07_integration.html#assessing-tumor-cells",
+    "title": "Integration",
+    "section": "Assessing Tumor Cells",
+    "text": "Assessing Tumor Cells\nSince we are comparing cancerous versus normal samples, it would make sense that our P5CRC sample will have a unique population of tumor cells. In CRC, CEACAM6 and CEACAM5 are good marker genes for identifying tumor cells.\nAccording to genecards, CEACAM6 is also known as “Carcinoembryonic Antigen-Related Cell Adhesion Molecule 6” where:\n\nMembers of this family play a role in cell adhesion and are widely used as tumor markers in serum immunoassay determinations of carcinoma. This gene affects the sensitivity of tumor cells to adenovirus infection.\n\nTo see if these genes are associated with the clusters we identified previously, we can utilize VlnPlot() to identify clusters with higher expression of these tumor genes.\n\n\nCEACAM5\n\nVlnPlot(seurat_processed, \"CEACAM5\", pt.size = 0) +\n  NoLegend()\n\n\n\n\n\n\n\n\n\n\nCEACAM6\n\nVlnPlot(seurat_processed, \"CEACAM6\", pt.size = 0) +\n  NoLegend()\n\n\n\n\n\n\n\n\n\n\nWe see that clusters 1 and 10 do indeed have higher expression of this tumor marker gene! We can even look at CEACAM5 at the same time with a dotplot to gain more confidence with two marker genes as well:\n\nDotPlot(seurat_processed, c(\"CEACAM5\", \"CEACAM6\"))\n\n\n\n\n\n\n\n\nNow we also have the additional knowledge that there are likely some tumor cells among cluster 7.",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Integration"
+    ]
+  },
+  {
+    "objectID": "lessons/07_integration.html#ceacam5",
+    "href": "lessons/07_integration.html#ceacam5",
+    "title": "Integration",
+    "section": "CEACAM5",
+    "text": "CEACAM5\n\nVlnPlot(seurat_processed, \"CEACAM5\", pt.size = 0) +\n  NoLegend()",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Integration"
+    ]
+  },
+  {
+    "objectID": "lessons/07_integration.html#ceacam6",
+    "href": "lessons/07_integration.html#ceacam6",
+    "title": "Integration",
+    "section": "CEACAM6",
+    "text": "CEACAM6\n\nVlnPlot(seurat_processed, \"CEACAM6\", pt.size = 0) +\n  NoLegend()",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Integration"
+    ]
+  },
+  {
+    "objectID": "lessons/07_integration.html#final-integration-decision",
+    "href": "lessons/07_integration.html#final-integration-decision",
+    "title": "Integration",
+    "section": "Final Integration Decision",
+    "text": "Final Integration Decision\nWe can see that the lack of overlap in samples/batch have a biological answer, it would not make sense to try and force the cells together using integration. If we were to try and integrate the dataset at this point, we would be trying to massage the tumor cells to appear more similarly to other populations in the dataset. That is not the end goal of our analysis, where we would want to identify the difference transcriptional differences in tumor cells.\n\n\n\n\n\n\nExercise 2\n\n\n\nExercise 1",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Integration"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "",
+    "section": "",
+    "text": "Code\n\n\n\n\n\nIntroduction to Spatial Single-cell RNA-seq\n\n\n\nAudience\nComputational skills required\nDuration\n\n\n\n\nBiologists\nIntroduction to R\n4-session online workshop (~7.5 hours of trainer-led time)\n\n\n\n\nDescription\nThis repository has teaching materials for a hands-on Introduction to Spatial Single-cell RNA-seq workshop. ADD DESCRIPTION HERE STILL Working knowledge of R is required or completion of the Introduction to R workshop.\nNote for Trainers: Please note that the schedule linked below assumes that learners will spend between 3-4 hours on reading through, and completing exercises from selected lessons between classes. The online component of the workshop focuses on more exercises and discussion/Q & A.\n\n\n\n\n\n\nNote\n\n\n\nThese materials were developed for a trainer-led workshop, but are also amenable to self-guided learning.\n\n\n\n\nLearning Objectives\n\nLO 1\nLO 2\nLO 3\nLO 4\n\n\n\nLessons\n\nWorkshop schedule (trainer-led learning)\nSelf-learning\n\n\n\nInstallation Requirements\n\nApplications\nDownload the most recent versions of R and RStudio for your laptop:\n\nR (version 4.0.0 or above)\nRStudio\n\n\n\nPackages for R\n\n\n\n\n\n\nNotes\n\n\n\nNote 1: Install the packages in the order listed below.\nNote 2: All the package names listed below are case sensitive!\nNote 3: If you have a Mac with an M1 chip, download and install this tool before intalling your packages: https://mac.r-project.org/tools/gfortran-12.2-universal.pkg\nNote 4: At any point (especially if you’ve used R/Bioconductor in the past), in the console R may ask you if you want to update any old packages by asking Update all/some/none? [a/s/n]:. If you see this, type “a” at the prompt and hit Enter to update any old packages. Updating packages can sometimes take quite a bit of time to run, so please account for that before you start with these installations.\nNote 5: If you see a message in your console along the lines of “binary version available but the source version is later”, followed by a question, “Do you want to install from sources the package which needs compilation? y/n”, type n for no, and hit enter.\n\n\n(1) Install the X packages listed below from Bioconductor using the the BiocManager::install() function.\n\npackage_1\npackage_2\npackage_3\npackage_4\n\nPlease install them one-by-one as follows:\n\nBiocManager::install(\"package_1\")\nBiocManager::install(\"package_2\")\nBiocManager::install(\"package_3\")\nBiocManager::install(\"package_4\")\n\n(2) Install the Y packages listed below from CRAN using the install.packages() function.\n\narrow\nhdf5r\nSeurat\npackage_8\npackage_9\npackage_10\npackage_11\n\nPlease install them one-by-one as follows:\n\ninstall.packages(\"package_5\")\ninstall.packages(\"package_6\")\ninstall.packages(\"package_7\")\ninstall.packages(\"package_8\")\ninstall.packages(\"package_9\")\ninstall.packages(\"package_10\")\ninstall.packages(\"package_11\")\n\n(3) Finally, please check that all the packages were installed successfully by loading them one at a time using the library() function.\n\nlibrary(package_1)\nlibrary(package_2)\nlibrary(package_3)\nlibrary(package_4)\nlibrary(package_5)\nlibrary(package_6)\nlibrary(package_7)\nlibrary(package_8)\nlibrary(package_9)\nlibrary(package_10)\nlibrary(package_11)\n\n(4) Once all packages have been loaded, run sessionInfo().\n\nsessionInfo()\n\n\n\n\n\nCitation\nTo cite material from this course in your publications, please use:\n\n\n\n\n\n\nCitation\n\n\n\nCreate Zenodo citation\n\n\nA lot of time and effort went into the preparation of these materials. Citations help us understand the needs of the community, gain recognition for our work, and attract further funding to support our teaching activities. Thank you for citing this material if it helped you in your data analysis."
   }
 ]
