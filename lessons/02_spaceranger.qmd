@@ -1,5 +1,5 @@
 ---
-title: "Lesson 01"
+title: "SpaceRanger Processing"
 description: |
   Write a description of the lesson here. 
 author:
@@ -51,12 +51,7 @@ When doing XYZ...
 
 ### Subsection 1B
 
-:::{.callout-tip}
-# [**Exercise 1**](01_lesson-Answer_key.qmd#exercise-1)
-1. A question to evaluate Learning Objective 1
-2. A followup question to question #1
-3. ...
-:::
+
 
 ## Topic 2
 
@@ -64,12 +59,7 @@ When doing XYZ...
 
 ### Subsection 2B
 
-:::{.callout-tip}
-# [**Exercise 2**](01_lesson-Answer_key.qmd#exercise-2)
-1. A question to evaluate Learning Objective 2
-2. A followup question to question #1
-3. ...
-:::
+
 
 ## Topic 3
 
@@ -77,15 +67,10 @@ When doing XYZ...
 
 ### Subsection 3B
 
-:::{.callout-tip}
-# [**Exercise 3**](01_lesson-Answer_key.qmd#exercise-3)
-1. A question to evaluate Learning Objective 3
-2. A followup question to question #1
-3. ...
-:::
+
 
 ***
 
-[Next Lesson >>](02_lesson.qmd)
+[Next Lesson >>](03_lesson.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)

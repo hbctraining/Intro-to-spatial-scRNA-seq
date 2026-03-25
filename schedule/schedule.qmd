@@ -8,7 +8,6 @@ toc: false
 
 - [Spatial Technology Overview](../lessons/tmp.qmd)
 - [SpaceRanger](../lessons/tmp.qmd)
-- [Segmentation](../lessons/tmp.qmd)
 
 ## Day 1
 
