@@ -99,7 +99,7 @@ Many of the challenges that arise in single-cell experiments are also present in
 These technologies can be broadly categorized into two groups: sequencing-based and imaging-based. We will now discuss the different technologies within each of these categories, and their advantages and disadvantages.
 
 ::: {#fig-seq_vs_img .figure}
-![](../img/img_vs_seq_tech.jpg){width=700}
+![](../img/img_vs_seq_tech.jpg){height=900}
 
 Showcasing the differences between sequencing- and imaging-based spatial transcriptomics technologies (spots vs. cells).<br>
 _Image source: [Kazmi et al., 2025](https://www.sciencedirect.com/science/article/pii/S1044532325000302)_
@@ -125,6 +125,10 @@ Table: Summary of popular sequencing-based methods for spatial transcriptomics. 
 | **tissue preservation** | FFPE and fresh frozen | Primarily FFPE; FF also supported | Fresh frozen          | Fresh frozen        |
 | **year released**    | 2019                | 2023–2024            | 2022 (atlas)        | 2019               |
 
+::: callout-important
+# Visium HD 
+We will be using Visium HD for the hands-on portion of this workshop.
+:::
 
 ### Advantages and disadvantages
 

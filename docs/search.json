@@ -11,14 +11,14 @@
     "href": "schedule/schedule.html",
     "title": "Schedule - Spatial Transcriptomics",
     "section": "",
-    "text": "Spatial Technology Overview\nSpaceRanger\nSegmentation"
+    "text": "Spatial Technology Overview\nSpaceRanger\nDownload Project"
   },
   {
     "objectID": "schedule/schedule.html#pre-reading",
     "href": "schedule/schedule.html#pre-reading",
     "title": "Schedule - Spatial Transcriptomics",
     "section": "",
-    "text": "Spatial Technology Overview\nSpaceRanger\nSegmentation"
+    "text": "Spatial Technology Overview\nSpaceRanger\nDownload Project"
   },
   {
     "objectID": "schedule/schedule.html#day-1",
@@ -102,7 +102,7 @@
     "href": "lessons/01_spatial_technologies.html#sequencing-based-technologies",
     "title": "Comparison of Spatial Transcriptomics Technologies",
     "section": "Sequencing-based technologies",
-    "text": "Sequencing-based technologies\nSequencing-based methods focus on capturing the full transcriptome of the cells in the dataset. To accomplish this, the tissue is “binned” into different spots which are then sequenced to measure expression levels. In some times, the spot can sometime be comprised of multiple cells (not single-cell level). As the technology has evolved, the bins sizes have become ever smaller, allowing for near single-cell levels.\n\nSummary of popular methods\nIn essence, these methods allow you apply a grid to the tissue and quanitify thousands of genes according to each square on the grid. Some popular technologies that belong to this category include:\n\n\n\nTable 1: Summary of popular sequencing-based methods for spatial transcriptomics.\n\n\n\n\n\n\n\n\n\n\n\n\n\nVisium\nVisium HD\nStereo-seq\nSlide-seq\n\n\n\n\nvendor\n10x Genomics\n10x Genomics\nBGI Group\nCurio Biosciences*\n\n\ncapture size\n~6.5 × 6.5 mm capture area (×4 per slide)\n~11 × 11 mm–scale capture area (single array)\nUp to ~1 × 1 cm chip (cm²‑scale field of view)\n~1 cm diameter puck (~80 mm²)\n\n\nresolution\n55 µm spot diameter; multicellular\n~2 µm “pixel” size; near single‑cell\n220 nm DNA nanoball spacing; subcellular\n10 µm beads; near single‑cell\n\n\nH&E\nYes (same section)\nYes (same section)\nNo\nNo\n\n\ntissue preservation\nFFPE and fresh frozen\nPrimarily FFPE; FF also supported\nFresh frozen\nFresh frozen\n\n\nyear released\n2019\n2023–2024\n2022 (atlas)\n2019\n\n\n\n\n\n\n\n\nAdvantages and disadvantages\nAdvantages:\n\nAnalyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets as you are sequencing the entire transcriptome instead a gene panel.\nCan be run on non-model organisms with more ease.\n\nDisadvantages:\n\nHigh resolution experiments (Visium HD) can be very expensive\nSpots are not guaranteed to be a single-cell (can be multiple cells, or no cells at all)"
+    "text": "Sequencing-based technologies\nSequencing-based methods focus on capturing the full transcriptome of the cells in the dataset. To accomplish this, the tissue is “binned” into different spots which are then sequenced to measure expression levels. In some times, the spot can sometime be comprised of multiple cells (not single-cell level). As the technology has evolved, the bins sizes have become ever smaller, allowing for near single-cell levels.\n\nSummary of popular methods\nIn essence, these methods allow you apply a grid to the tissue and quanitify thousands of genes according to each square on the grid. Some popular technologies that belong to this category include:\n\n\n\nTable 1: Summary of popular sequencing-based methods for spatial transcriptomics.\n\n\n\n\n\n\n\n\n\n\n\n\n\nVisium\nVisium HD\nStereo-seq\nSlide-seq\n\n\n\n\nvendor\n10x Genomics\n10x Genomics\nBGI Group\nCurio Biosciences*\n\n\ncapture size\n~6.5 × 6.5 mm capture area (×4 per slide)\n~11 × 11 mm–scale capture area (single array)\nUp to ~1 × 1 cm chip (cm²‑scale field of view)\n~1 cm diameter puck (~80 mm²)\n\n\nresolution\n55 µm spot diameter; multicellular\n~2 µm “pixel” size; near single‑cell\n220 nm DNA nanoball spacing; subcellular\n10 µm beads; near single‑cell\n\n\nH&E\nYes (same section)\nYes (same section)\nNo\nNo\n\n\ntissue preservation\nFFPE and fresh frozen\nPrimarily FFPE; FF also supported\nFresh frozen\nFresh frozen\n\n\nyear released\n2019\n2023–2024\n2022 (atlas)\n2019\n\n\n\n\n\n\n\n\n\n\n\n\nVisium HD\n\n\n\nWe will be using Visium HD for the hands-on portion of this workshop.\n\n\n\n\nAdvantages and disadvantages\nAdvantages:\n\nAnalyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets as you are sequencing the entire transcriptome instead a gene panel.\nCan be run on non-model organisms with more ease.\n\nDisadvantages:\n\nHigh resolution experiments (Visium HD) can be very expensive\nSpots are not guaranteed to be a single-cell (can be multiple cells, or no cells at all)"
   },
   {
     "objectID": "lessons/01_spatial_technologies.html#imaging-based-technologies",
@@ -180,5 +180,26 @@
     "title": "SpaceRanger Processing",
     "section": "Topic 3",
     "text": "Topic 3\n\nSubsection 3A\n\n\nSubsection 3B\n\nNext Lesson &gt;&gt;\nBack to Schedule"
+  },
+  {
+    "objectID": "lessons/02_spaceranger.html#space-ranger-overview",
+    "href": "lessons/02_spaceranger.html#space-ranger-overview",
+    "title": "SpaceRanger Processing",
+    "section": "Space Ranger overview",
+    "text": "Space Ranger overview\nSpace Ranger is a free software created by 10X genomics to process raw spatial transcriptomics data.\n\nInput\nSequencing facilities often output scRNA-seq data, including spatial scRNA-seq data, in FASTQ format. Because this is Visium HD data from 10X Genomics, we used their proprietary pre-processing software Space Ranger to process the FASTQ files into a count matrix and other images. The spaceranger count command aligns the reads in the FASTQ files against a reference genome and provides their spatial location using the oligonucleotide barcode.\nhttps://www.10xgenomics.com/support/software/space-ranger/latest/analysis/inputs/input-overview\nNote that Space Ranger requires a Linux system with at least 32 cores, 64GB of RAM, and 1TB of disk space.\n\n\n\n\n\n\nExample spaceranger count command\n\n\n\n\n\nA sample command for running spaceranger count is:\n\n# DO NOT RUN\ncd /home/jdoe/runs\nspaceranger count --id=sample345 \\ #Output directory\n                  --transcriptome=/home/jdoe/refdata/GRCh38-2020-A \\ #Path to Reference\n                  --fastqs=/home/jdoe/runs/HAWT7ADXX/outs/fastq_path \\ #Path to FASTQs\n                  --sample=mysample \\ #Sample name from FASTQ filename\n                  --image=/home/jdoe/runs/images/sample345.tiff \\ #Path to brightfield image\n                  --slide=V19J01-123 \\ #Slide ID\n                  --area=A1 \\ #Capture area\n                  --localcores=8 \\ #Allowed cores in localmode\n                  --localmem=64  #Allowed memory (GB) in localmode\n\n\n\n\n\n\nOutput\nWhen spaceranger count completes successfully, it will generate a variety of outputs (seen below), which will enable the analyst to perform further analysis in R/Python or using the proprietary Loupe browser from 10X Genomics. A good starting point is to take a look at the QC of the sample in the web summary, which we have provided in reports/ folder that you downloaded.\n\n\n\n\n\n\nFigure 1: Example of the different outputs generated by spaceranger count. Image source: 10X Genomics Space Ranger Documentation\n\n\n\nIn the Visium HD assay, Space Ranger aggregates transcript counts into square spatial bins of different sizes, typically:\n\n2µm x 2µm\n8µm x 8µm\n16µm x 16µm\n\nHaving access to 2μm bins, along with matched high-resolution tissue morphology, provides a great opportunity to reconstruct single cells from the data. However, because the 2µm x 2µm bins (and even the 8µm x 8µm bins) are very small, there is a potential for very little biological signal to be captured per bin. Additionally, the sheer number of bins at these higher resolutions can substantially increase computational demands in terms of memory usage and processing time."
+  },
+  {
+    "objectID": "lessons/02_spaceranger.html#space-ranger-algorithm",
+    "href": "lessons/02_spaceranger.html#space-ranger-algorithm",
+    "title": "SpaceRanger Processing",
+    "section": "Space Ranger algorithm",
+    "text": "Space Ranger algorithm\n\nRead processing\nhttps://www.10xgenomics.com/support/software/space-ranger/latest/algorithms-overview/gene-expression\n\n\nImage processing\nhttps://www.10xgenomics.com/support/software/space-ranger/latest/algorithms-overview/image-processing"
+  },
+  {
+    "objectID": "lessons/02_spaceranger.html#segmentation",
+    "href": "lessons/02_spaceranger.html#segmentation",
+    "title": "SpaceRanger Processing",
+    "section": "Segmentation",
+    "text": "Segmentation\n\nStarDist\nBaysor\n\n\nSubsection 3A\n\n\nSubsection 3B\n\nNext Lesson &gt;&gt;\nBack to Schedule"
   }
 ]

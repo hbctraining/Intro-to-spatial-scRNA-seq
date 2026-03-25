@@ -6,8 +6,9 @@ toc: false
 
 ## Pre-reading
 
-- [Spatial Technology Overview](../lessons/tmp.qmd)
-- [SpaceRanger](../lessons/tmp.qmd)
+1. [Spatial Technology Overview](../lessons/tmp.qmd)
+2. [SpaceRanger](../lessons/tmp.qmd)
+3. [Download Project](../lessons/tmp.qmd)
 
 ## Day 1
 
