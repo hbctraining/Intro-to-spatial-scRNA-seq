@@ -186,6 +186,13 @@ Table: Summary of popular imaging-based methods for spatial transcriptomics. {#t
 | **Cost**                   | More cost-effective at scale                        | Higher per sample                    |
 | **Best for…**              | Discovery projects                                  | Validation projects                  |
 
+## Experimental design considerations
+
+When designing a spatial transcriptomics experiment, there are several factors to consider:
+
+::: callout-warning
+TODO: Talk with single-cell core about good design
+:::
 
 ## References
 
