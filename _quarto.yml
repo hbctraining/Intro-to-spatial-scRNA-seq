@@ -9,7 +9,7 @@ project:
 
 
 website:
-  title: "Introduction to Python"
+  title: "Spatial Transcriptomics"
   google-analytics: G-68JBPLLNLG
   page-footer: >
       This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). <br>
@@ -23,7 +23,7 @@ website:
       - text: "HBC"
         href: https://bioinformatics.sph.harvard.edu/
       - text: "GitHub"
-        href: https://github.com/hbctraining/Intro-to-Python
+        href: https://github.com/hbctraining/Intro-to-spatial-scRNA-seq/
       - text: "Contact us"
         href: mailto:hbctraining@hsph.harvard.edu
   
