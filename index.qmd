@@ -1,4 +1,5 @@
 ---
+title: Spatial Transcriptomics
 sidebar: false
 toc: false
 execute: 
@@ -6,7 +7,7 @@ execute:
 ---
 
 
-# Introduction to Spatial Single-cell RNA-seq
+# Spatial Transcriptomics
 
 | Audience | Computational skills required| Duration |
 :----------|:----------|:----------|
@@ -14,11 +15,14 @@ execute:
 
 ### Description
 
-This repository has teaching materials for a hands-on **Introduction to Spatial Single-cell RNA-seq** workshop. **ADD DESCRIPTION HERE STILL** Working knowledge of R is required or completion of the [Introduction to R workshop](https://hbctraining.github.io/Intro-to-R-flipped/). 
+This repository has teaching materials for a hands-on **Introduction to Spatial Transcriptomics** workshop. **ADD DESCRIPTION HERE STILL** 
 
-**Note for Trainers:** Please note that the schedule linked below assumes that learners will spend between 3-4 hours on reading through, and completing exercises from selected lessons between classes. The online component of the workshop focuses on more exercises and discussion/Q & A.
+Working knowledge of R is required or completion of the [Introduction to R workshop](https://hbctraining.github.io/Intro-to-R-flipped/). 
 
 ::: callout-note
+# Length of workshop
+Please note that the schedule linked below assumes that learners will spend between 3-4 hours on reading through, and completing exercises from selected lessons between classes. The online component of the workshop focuses on more exercises and discussion/Q & A.
+
 These materials were developed for a trainer-led workshop, but are also amenable to self-guided learning.
 :::
 

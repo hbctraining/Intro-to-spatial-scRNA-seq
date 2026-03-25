@@ -15,7 +15,7 @@ library(qs)
 # Load processed Seurat object
 ############################################################
 
-seurat_processed <- qread("")
+seurat_processed <- qread("intermediates/04_seurat_processed.qs")
 seurat_processed
 
 ############################################################
@@ -42,22 +42,22 @@ rownames(seurat_processed@meta.data) <- seurat_processed$cell
 ############################################################
 
 # Example full run (can take a while):
-# seurat_banksy <- RunBanksy(
-#   seurat_processed,
-#   lambda       = 0.6,
-#   verbose      = TRUE,
-#   assay        = "Spatial.008um",
-#   slot         = "data",
-#   k_geom       = 15,
-#   dimx         = "x",
-#   dimy         = "y",
-#   group        = "orig.ident",
-#   split.scale  = TRUE
-# )
+seurat_banksy <- RunBanksy(
+  seurat_processed,
+  lambda       = 0.6,
+  verbose      = TRUE,
+  assay        = "Spatial.008um",
+  slot         = "data",
+  k_geom       = 15,
+  dimx         = "x",
+  dimy         = "y",
+  group        = "orig.ident",
+  split.scale  = TRUE
+)
 
 # For convenience, load precomputed object instead:
-# saveRDS(seurat_banksy, "data/seurat_banksy_1.RDS")
-seurat_banksy <- readRDS("data/seurat_banksy_1.RDS")
+qsave(seurat_banksy, "intermediates/06_seurat_banksy_1.RDS")
+# seurat_banksy <- qread("data/intermediates/06_seurat_banksy_1.RDS")
 
 # BANKSY is now the active assay
 seurat_banksy
@@ -77,39 +77,39 @@ Features(seurat_banksy) %>% tail()
 ############################################################
 
 # Example full pipeline:
-# options(future.globals.maxSize = 200000000000)
-#
-# seurat_banksy <- RunPCA(
-#   seurat_banksy,
-#   assay          = "BANKSY",
-#   reduction.name = "pca.banksy",
-#   features       = rownames(seurat_banksy),
-#   npcs           = 30
-# )
-#
-# seurat_banksy <- FindNeighbors(
-#   seurat_banksy,
-#   reduction = "pca.banksy",
-#   dims      = 1:30
-# )
-#
-# seurat_banksy <- FindClusters(
-#   seurat_banksy,
-#   cluster.name = "banksy_cluster",
-#   resolution   = 0.8
-# )
+options(future.globals.maxSize = 200000000000)
+
+seurat_banksy <- RunPCA(
+  seurat_banksy,
+  assay          = "BANKSY",
+  reduction.name = "pca.banksy",
+  features       = rownames(seurat_banksy),
+  npcs           = 30
+)
+
+seurat_banksy <- FindNeighbors(
+  seurat_banksy,
+  reduction = "pca.banksy",
+  dims      = 1:30
+)
+
+seurat_banksy <- FindClusters(
+  seurat_banksy,
+  cluster.name = "banksy_cluster",
+  resolution   = 0.8
+)
 
 # After this, the important outputs are:
 # - banksy_cluster in @meta.data
 # - pca.banksy in @reductions
 
 # Once done, we can drop the BANKSY assay to save memory:
-# DefaultAssay(seurat_banksy) <- "Spatial.008um"
-# seurat_banksy[["BANKSY"]] <- NULL
+DefaultAssay(seurat_banksy) <- "Spatial.008um"
+seurat_banksy[["BANKSY"]] <- NULL
 
 # For convenience, load post-processing object:
-# saveRDS(seurat_banksy, "data/seurat_banksy_2.RDS")
-seurat_banksy <- readRDS("data/seurat_banksy_2.RDS")
+qsave(seurat_banksy, "intermediates/06_seurat_banksy_2.RDS")
+# seurat_banksy <- readRDS("data/seurat_banksy_2.RDS")
 
 ############################################################
 # Visualize BANKSY clusters on tissue
