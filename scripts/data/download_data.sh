@@ -82,3 +82,18 @@ mkdir flex_reference
 mv DeconvolutionResults_P5CRC.csv flex_reference/
 mv SingleCell_MetaData.csv flex_reference/
 mv P5CRC_Metadata.parquet flex_reference/
+
+
+### Download CRC flex counts dataset
+cd flex_reference
+# Input Files
+
+curl -O https://cf.10xgenomics.com/samples/cell-exp/8.0.0/HumanColonCancer_Flex_Multiplex/HumanColonCancer_Flex_Multiplex_aggregation.csv
+curl -O https://cf.10xgenomics.com/samples/cell-exp/8.0.0/HumanColonCancer_Flex_Multiplex/HumanColonCancer_Flex_Multiplex_count_feature_reference.csv
+
+# Output Files
+curl -O https://cf.10xgenomics.com/samples/cell-exp/8.0.0/HumanColonCancer_Flex_Multiplex/HumanColonCancer_Flex_Multiplex_count_analysis.tar.gz
+curl -O https://cf.10xgenomics.com/samples/cell-exp/8.0.0/HumanColonCancer_Flex_Multiplex/HumanColonCancer_Flex_Multiplex_count_filtered_feature_bc_matrix.h5
+curl -O https://cf.10xgenomics.com/samples/cell-exp/8.0.0/HumanColonCancer_Flex_Multiplex/HumanColonCancer_Flex_Multiplex_count_filtered_feature_bc_matrix.tar.gz
+curl -O https://cf.10xgenomics.com/samples/cell-exp/8.0.0/HumanColonCancer_Flex_Multiplex/HumanColonCancer_Flex_Multiplex_count_cloupe.cloupe
+curl -O https://cf.10xgenomics.com/samples/cell-exp/8.0.0/HumanColonCancer_Flex_Multiplex/HumanColonCancer_Flex_Multiplex_count_summary.json
