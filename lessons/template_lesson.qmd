@@ -33,7 +33,7 @@ editor_options:
 
 Approximate time: XX minutes
 
-## Learning Objectives 
+## Learning objectives 
 
 In this lesson, we will:
 

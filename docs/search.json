@@ -1,0 +1,184 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "",
+    "section": "",
+    "text": "Code\n\n\n\n\n\nSpatial Transcriptomics\n\n\n\nAudience\nComputational skills required\nDuration\n\n\n\n\nBiologists\nIntroduction to R\n4-session online workshop (~7.5 hours of trainer-led time)\n\n\n\n\nDescription\nThis repository has teaching materials for a hands-on Introduction to Spatial Transcriptomics workshop. ADD DESCRIPTION HERE STILL\nWorking knowledge of R is required or completion of the Introduction to R workshop.\n\n\n\n\n\n\nLength of workshop\n\n\n\nPlease note that the schedule linked below assumes that learners will spend between 3-4 hours on reading through, and completing exercises from selected lessons between classes. The online component of the workshop focuses on more exercises and discussion/Q & A.\nThese materials were developed for a trainer-led workshop, but are also amenable to self-guided learning.\n\n\n\n\nLearning Objectives\n\nLO 1\nLO 2\nLO 3\nLO 4\n\n\n\nLessons\n\nWorkshop schedule (trainer-led learning)\nSelf-learning\n\n\n\nInstallation Requirements\n\nApplications\nDownload the most recent versions of R and RStudio for your laptop:\n\nR (version 4.0.0 or above)\nRStudio\n\n\n\nPackages for R\n\n\n\n\n\n\nInstructions for installing R packages\n\n\n\n\nInstall the packages in the order listed below.\nAll the package names listed below are case sensitive.\nMac with Apple Silicon (M1/M2/etc.):\nDownload and install the gfortran tool before installing your packages:\nhttps://mac.r-project.org/tools/gfortran-12.2-universal.pkg\nUpdating old packages:\nIf R asks in the console:\nUpdate all/some/none? [a/s/n]:\ntype a and press Enter to update any old packages.\nNote: Updating can take a while, so allow extra time before starting.\n“Binary version available but the source version is later” message:\nIf you see:\nDo you want to install from sources the package which needs compilation? y/n\ntype n (no) and press Enter.\n\n\n\n(1) Install the X packages listed below from Bioconductor using the the BiocManager::install() function.\nPlease install them one-by-one as follows:\n\nBiocManager::install(\"package_1\")\nBiocManager::install(\"package_2\")\nBiocManager::install(\"package_3\")\nBiocManager::install(\"package_4\")\n\n(2) Install the Y packages listed below from CRAN using the install.packages() function.\nPlease install them one-by-one as follows:\n\ninstall.packages(\"arrow\")\ninstall.packages(\"hdf5r\")\ninstall.packages(\"Seurat\")\ninstall.packages(\"package_8\")\ninstall.packages(\"package_9\")\ninstall.packages(\"package_10\")\ninstall.packages(\"package_11\")\n\n(3) Finally, please check that all the packages were installed successfully by loading them one at a time using the library() function.\n\nlibrary(package_1)\nlibrary(package_2)\nlibrary(package_3)\nlibrary(package_4)\nlibrary(package_5)\nlibrary(package_6)\nlibrary(package_7)\nlibrary(package_8)\nlibrary(package_9)\nlibrary(package_10)\nlibrary(package_11)\n\n(4) Once all packages have been loaded, run sessionInfo().\n\nsessionInfo()\n\n\n\n\n\nCitation\nTo cite material from this course in your publications, please use:\n\n\n\n\n\n\nCitation\n\n\n\nCreate Zenodo citation\n\n\nA lot of time and effort went into the preparation of these materials. Citations help us understand the needs of the community, gain recognition for our work, and attract further funding to support our teaching activities. Thank you for citing this material if it helped you in your data analysis."
+  },
+  {
+    "objectID": "schedule/schedule.html",
+    "href": "schedule/schedule.html",
+    "title": "Schedule - Spatial Transcriptomics",
+    "section": "",
+    "text": "Spatial Technology Overview\nSpaceRanger\nSegmentation"
+  },
+  {
+    "objectID": "schedule/schedule.html#pre-reading",
+    "href": "schedule/schedule.html#pre-reading",
+    "title": "Schedule - Spatial Transcriptomics",
+    "section": "",
+    "text": "Spatial Technology Overview\nSpaceRanger\nSegmentation"
+  },
+  {
+    "objectID": "schedule/schedule.html#day-1",
+    "href": "schedule/schedule.html#day-1",
+    "title": "Schedule - Spatial Transcriptomics",
+    "section": "Day 1",
+    "text": "Day 1\n\n\n\nTime\nTopic\nInstructor\n\n\n\n\n10:00 - 10:15\nWorkshop introduction\nInstructor_name\n\n\n10:45 - 11:45\nIntroduction to Spatial Transcriptomics\nDr. Mandovi Chatterjee\n\n\n10:45 - 10:50\nBreak\n\n\n\n10:50 - 11:25\nLoad Visium HD Data\nInstructor_name\n\n\n11:55 - 12:00\nOverview of self-learning materials and homework submission\nInstructor_name\n\n\n\n\nBefore the next class:\nI. Please study the contents and work through all the code within the following lessons:\n\nPrincipal Component Analysis (PCA)\n\n\n\n\n\n\nClick here for a preview of this lesson\n\n\n\n\n\nBrief description of the lesson.\nIn this lesson, you will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3\n\n\n\n\n\n\nSubmit your work:\n\n\nEach lesson above contains exercises; please go through each of them.\nSubmit your answers to the exercises using this Google form on the day before the next class.\n\n\n\nQuestions?\n\nIf you get stuck due to an error while running code in the lesson, email us"
+  },
+  {
+    "objectID": "schedule/schedule.html#day-2",
+    "href": "schedule/schedule.html#day-2",
+    "title": "Schedule - Spatial Transcriptomics",
+    "section": "Day 2",
+    "text": "Day 2\n\n\n\nTime\nTopic\nInstructor\n\n\n\n\n10:00 - 10:30\nSelf-learning lessons discussion\nAll\n\n\n10:30 - 10:55\nQuality Control\nInstructor_name\n\n\n10:55 - 11:00\nBreak\n\n\n\n11:00 - 11:55\nSketch Downsampling and Dimensionality Reduction\nInstructor_name\n\n\n11:55 - 12:00\nOverview of self-learning materials and homework submission\nInstructor_name\n\n\n\n\nBefore the next class:\nI. Please study the contents and work through all the code within the following lessons:\n\nClustering and Projection\n\n\n\n\n\n\nClick here for a preview of this lesson\n\n\n\n\n\nBrief description of the lesson.\nIn this lesson, you will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3\n\n\n\n\nBANKSY Spatial Clustering\n\n\n\n\n\n\nClick here for a preview of this lesson\n\n\n\n\n\nBrief description of the lesson.\nIn this lesson, you will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3\n\n\n\n\nSeurat Cheatsheet\n\n\n\n\n\n\nClick here for a preview of this lesson\n\n\n\n\n\nBrief description of the lesson.\nIn this lesson, you will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3\n\n\n\n\n\n\nSubmit your work:\n\n\nEach lesson above contains exercises; please go through each of them.\nSubmit your answers to the exercises using this Google form on the day before the next class.\n\n\n\nQuestions?\n\nIf you get stuck due to an error while running code in the lesson, email us"
+  },
+  {
+    "objectID": "schedule/schedule.html#day-3",
+    "href": "schedule/schedule.html#day-3",
+    "title": "Schedule - Spatial Transcriptomics",
+    "section": "Day 3",
+    "text": "Day 3\n\n\n\nTime\nTopic\nInstructor\n\n\n\n\n10:00 - 10:30\nSelf-learning lessons discussion\nAll\n\n\n10:30 - 10:55\nIntegration\nInstructor_name\n\n\n10:55 - 11:00\nBreak\n\n\n\n11:00 - 11:55\nDeconvolution\nInstructor_name\n\n\n11:55 - 12:00\nOverview of self-learning materials and homework submission\nInstructor_name\n\n\n\n\nBefore the next class:\nI. Please study the contents and work through all the code within the following lessons:\n\nDifferential Expression and Pathway Analysis\n\n\n\n\n\n\nClick here for a preview of this lesson\n\n\n\n\n\nBrief description of the lesson.\nIn this lesson, you will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3\n\n\n\n\nSpatially Variable Genes\n\n\n\n\n\n\nClick here for a preview of this lesson\n\n\n\n\n\nBrief description of the lesson.\nIn this lesson, you will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3\n\n\n\n\n\n\nSubmit your work:\n\n\nEach lesson above contains exercises; please go through each of them.\nSubmit your answers to the exercises using this Google form on the day before the next class.\n\n\n\nQuestions?\n\nIf you get stuck due to an error while running code in the lesson, email us"
+  },
+  {
+    "objectID": "schedule/schedule.html#day-4",
+    "href": "schedule/schedule.html#day-4",
+    "title": "Schedule - Spatial Transcriptomics",
+    "section": "Day 4",
+    "text": "Day 4\n\n\n\nTime\nTopic\nInstructor\n\n\n\n\n10:00 - 10:30\nSelf-learning lessons discussion\nAll\n\n\n10:30 - 11:25\nCell-Cell Communication\nInstructor_name\n\n\n11:25 - 11:30\nBreak\n\n\n\n11:30 - 11:45\nDiscussion, Q & A\nInstructor_name\n\n\n11:45 - 12:00\nWrap Up\nInstructor_name"
+  },
+  {
+    "objectID": "schedule/schedule.html#resources",
+    "href": "schedule/schedule.html#resources",
+    "title": "Schedule - Spatial Transcriptomics",
+    "section": "Resources",
+    "text": "Resources\n\nAdditional Resource 1\nAdditional Resource 2\nAdditional Resource 3"
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html",
+    "href": "lessons/01_spatial_technologies.html",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "",
+    "text": "Approximate time: XX minutes"
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#learning-objectives",
+    "href": "lessons/01_spatial_technologies.html#learning-objectives",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nIn this lesson, we will:\n\nFollow the evolution of high-throughput sequencing\nDescribe the differences in sequencing- and imaging-based technologies\nDefine the advantages and disadvantages of different spatial transcriptomics technologies"
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#overview-of-lesson",
+    "href": "lessons/01_spatial_technologies.html#overview-of-lesson",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "Overview of lesson",
+    "text": "Overview of lesson\nWhen doing XYZ…"
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#overview-of-high-throughput-sequencing",
+    "href": "lessons/01_spatial_technologies.html#overview-of-high-throughput-sequencing",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "Overview of high-throughput sequencing",
+    "text": "Overview of high-throughput sequencing\nOver the years, transcriptomics technologies have evolved rapids from bulk sequencing, to single-cell sequencing, all the way to the current spatial transcriptomics methods.\n\n\n\n\n\n\nFigure 1: Lego representation of the evolution of sequencing technologies, showing more specificity and structure with each advancement. Image source: Bo Xia Lab\n\n\n\n\nBulk and single-cell sequencing\nBulk RNA-seq is a method for comparing the averages of cellular expression for a population of cells. This method can be a good choice if looking at comparative transcriptomics (e.g. samples of the same tissue from different species), and for quantifying expression signatures in disease studies. It also has potential for the discovery of disease biomarkers if you are not expecting or not concerned about cellular heterogeneity in the sample.\nTo contrast, single-cell sequencing is a method for measuring gene expression on a per-cell basis. This method is ideal for studies of cellular heterogeneity where the differences between celltypes or cell states are the primary focus.\n\n\n\n\n\n\nFigure 2: Comparison of bulk and single-cell RNA sequencing approaches, showcasing loss of cellular resolution in bulk due to averaging. Image source: Trapnell, 2015\n\n\n\nTo give an example, if we look at the image above, we can see that there are two cell types (blue and green) that have different expression patterns for genes A and B. If we were to analyze this data in bulk (left), we would not be able to detect the correct association between the genes. However, if we properly group the cells by cell type (right), we can see the correct correlation between the genes.\n\n\nSpatial transcriptomics\nSpatial transcriptomics extends the concept of single-cell sequencing further by adding the coordinates for each cell or spot on a grid/slide. This allows us to understand both the moleular and spatial context for gene expression. Many of the challenges of scRNA-seq are also present in spatial transcriptomics.\nStudies that focus on the tissue microenvironment benefit from the context of cellular location, as nearby cells are more likely to interact with one another. Another potential application is the ability to annotate key areas of a tissue based upon the histological features of the tissue, which can be particularly useful for studies of cancer and other diseases.\n\n\n\n\n\n\nFigure 3: Example of histology slide from a liver biopsy, annotated by a pathologist. Image source: Holzinger et al., 2019\n\n\n\nMany of the challenges that arise in single-cell experiments are also present in spatial, for example:\n\nLarge volume of data\nLow depth of sequencing per cell\nTechnical variability across cells/samples\nBiological variability across cells/samples\n\nThese technologies can be broadly categorized into two groups: sequencing-based and imaging-based. We will now discuss the different technologies within each of these categories, and their advantages and disadvantages."
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#topic-2",
+    "href": "lessons/01_spatial_technologies.html#topic-2",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "Topic 2",
+    "text": "Topic 2\n\nSubsection 2A\n\n\nSubsection 2B\n\n\n\n\n\n\nExercise 2\n\n\n\n\nA question to evaluate Learning Objective 2\nA followup question to question #1\n…"
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#topic-3",
+    "href": "lessons/01_spatial_technologies.html#topic-3",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "Topic 3",
+    "text": "Topic 3\n\nSubsection 3A\n\n\nSubsection 3B\n\n\n\n\n\n\nExercise 3\n\n\n\n\nA question to evaluate Learning Objective 3\nA followup question to question #1\n…"
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#sequencing-based-technologies",
+    "href": "lessons/01_spatial_technologies.html#sequencing-based-technologies",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "Sequencing-based technologies",
+    "text": "Sequencing-based technologies\nSequencing-based methods focus on capturing the full transcriptome of the cells in the dataset. To accomplish this, the tissue is “binned” into different spots which are then sequenced to measure expression levels. In some times, the spot can sometime be comprised of multiple cells (not single-cell level). As the technology has evolved, the bins sizes have become ever smaller, allowing for near single-cell levels.\n\nSummary of popular methods\nIn essence, these methods allow you apply a grid to the tissue and quanitify thousands of genes according to each square on the grid. Some popular technologies that belong to this category include:\n\n\n\nTable 1: Summary of popular sequencing-based methods for spatial transcriptomics.\n\n\n\n\n\n\n\n\n\n\n\n\n\nVisium\nVisium HD\nStereo-seq\nSlide-seq\n\n\n\n\nvendor\n10x Genomics\n10x Genomics\nBGI Group\nCurio Biosciences*\n\n\ncapture size\n~6.5 × 6.5 mm capture area (×4 per slide)\n~11 × 11 mm–scale capture area (single array)\nUp to ~1 × 1 cm chip (cm²‑scale field of view)\n~1 cm diameter puck (~80 mm²)\n\n\nresolution\n55 µm spot diameter; multicellular\n~2 µm “pixel” size; near single‑cell\n220 nm DNA nanoball spacing; subcellular\n10 µm beads; near single‑cell\n\n\nH&E\nYes (same section)\nYes (same section)\nNo\nNo\n\n\ntissue preservation\nFFPE and fresh frozen\nPrimarily FFPE; FF also supported\nFresh frozen\nFresh frozen\n\n\nyear released\n2019\n2023–2024\n2022 (atlas)\n2019\n\n\n\n\n\n\n\n\nAdvantages and disadvantages\nAdvantages:\n\nAnalyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets as you are sequencing the entire transcriptome instead a gene panel.\nCan be run on non-model organisms with more ease.\n\nDisadvantages:\n\nHigh resolution experiments (Visium HD) can be very expensive\nSpots are not guaranteed to be a single-cell (can be multiple cells, or no cells at all)"
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#imaging-based-technologies",
+    "href": "lessons/01_spatial_technologies.html#imaging-based-technologies",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "Imaging-based technologies",
+    "text": "Imaging-based technologies\nThese methods utilize floresence to quantify gene expression on a tissue slide. Specifically utilizing fluoresence in situ hybridization (FISH) to measure expression of a select panel of genes (selected by the researcher) using a probes. Therefore we are able to evaluate the expression for each individual cell after segmentation.\n\nSummary of popular methods\n\n\n\nTable 2: Summary of popular imaging-based methods for spatial transcriptomics.\n\n\n\n\n\n\n\n\n\n\n\n\nseqFISH\nMERFISH\nXenium\n\n\n\n\nvendor\nNA (academic method)\nVizgen\n10x Genomics\n\n\ncapture size\nVariable FOV; tiled imaging fields (typically mm-scale regions stitched across section)\nVariable FOV; tiled imaging fields (mm-scale regions, stitchable to large areas)\nVariable FOV; tiled high‑plex imaging over tissue sections (up to whole‑slide via tiling)\n\n\nresolution\nSubcellular, subdiffraction (seqFISH/seqFISH+)\nSubcellular (single‑molecule FISH)\nSubcellular, targeted in situ (per‑cell calls with subcellular localization)\n\n\nH&E\nNo (standard workflow uses fluorescence imaging only)\nNo (fluorescence imaging only)\n(Yes) — H&E‑like morphology and protein markers supported; H&E compatibility in active development at time of review\n\n\ntissue preservation\nFresh frozen\nFFPE and fresh frozen\nFFPE and fresh frozen\n\n\nyear released\n2014 (first seqFISH paper)\n2015 (first MERFISH paper)\n2022 (commercial launch of Xenium platform)\n\n\n\n\n\n\n\n\nAdvantages and disadvantages\nAdvantages:\n\nCan be used to evaluate the expression of a select panel of genes with high sensitivity and specificity.\nSingle-cell resolution\n\nDisadvantages:\n\nLimited to a select panel of genes.\nSegmentation is not a trivial task and requires careful pre-processing.\nChallenging with non-model organisms as probes are necessary."
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#advantages-and-disadvantages-1",
+    "href": "lessons/01_spatial_technologies.html#advantages-and-disadvantages-1",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "Advantages and disadvantages",
+    "text": "Advantages and disadvantages\nAdvantages:\n\nCan be used to evaluate the expression of a select panel of genes with high sensitivity and specificity.\nSingle-cell resolution\n\nDisadvantages:\n\nLimited to a select panel of genes.\nSegmentation is not a trivial task and requires careful pre-processing.\nChallenging with non-model organisms as probes are necessary."
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#summary-of-comparison",
+    "href": "lessons/01_spatial_technologies.html#summary-of-comparison",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "Summary of comparison",
+    "text": "Summary of comparison\n\n\n\nTable 3: Table: Summary of the advantages and disadvantages of sequencing- and imaging-based spatial transcriptomics technologies.\n\n\n\n\n\n\n\n\n\nSequencing-based\nImaging-based\n\n\n\n\nTranscriptome-wide sequencing\nProbe-based sequencing from a panel of genes\n\n\nSpots/bins resolution depends on bin size (not always single-cell)\nSingle-cell resolution\n\n\nMore accessible to non-model organisms\nCan be challenging to find probes for non-model organisms"
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#references",
+    "href": "lessons/01_spatial_technologies.html#references",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "References",
+    "text": "References\n\nhttps://www.nature.com/articles/s41581-024-00841-1\nhttps://www.sciencedirect.com/science/article/pii/S1044532325000302\nhttps://www.nature.com/articles/s41581-024-00841-1/tables/1\n\n\nNext Lesson &gt;&gt;\nBack to Schedule"
+  },
+  {
+    "objectID": "lessons/01_spatial_technologies.html#high-throughput-sequencing-overview",
+    "href": "lessons/01_spatial_technologies.html#high-throughput-sequencing-overview",
+    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "section": "High-throughput sequencing overview",
+    "text": "High-throughput sequencing overview\nOver the years, transcriptomics technologies have evolved rapids from bulk sequencing, to single-cell sequencing, all the way to the current spatial transcriptomics methods.\n\n\n\n\n\n\nFigure 1: Lego representation of the evolution of sequencing technologies, showing more specificity and structure with each advancement. Image source: Bo Xia Lab\n\n\n\n\nBulk and single-cell sequencing\nBulk RNA-seq is a method for comparing the averages of cellular expression for a population of cells. This method can be a good choice if looking at comparative transcriptomics (e.g. samples of the same tissue from different species), and for quantifying expression signatures in disease studies. It also has potential for the discovery of disease biomarkers if you are not expecting or not concerned about cellular heterogeneity in the sample.\nTo contrast, single-cell sequencing is a method for measuring gene expression on a per-cell basis. This method is ideal for studies of cellular heterogeneity where the differences between celltypes or cell states are the primary focus.\n\n\n\n\n\n\nFigure 2: Comparison of bulk and single-cell RNA sequencing approaches, showcasing loss of cellular resolution in bulk due to averaging. Image source: Trapnell, 2015\n\n\n\nTo give an example, if we look at the image above, we can see that there are two cell types (blue and green) that have different expression patterns for genes A and B. If we were to analyze this data in bulk (left), we would not be able to detect the correct association between the genes. However, if we properly group the cells by cell type (right), we can see the correct correlation between the genes.\n\n\nSpatial transcriptomics\nSpatial transcriptomics extends the concept of single-cell sequencing further by adding the coordinates for each cell or spot on a grid/slide. This allows us to understand both the moleular and spatial context for gene expression. Many of the challenges of scRNA-seq are also present in spatial transcriptomics.\nStudies that focus on the tissue microenvironment benefit from the context of cellular location, as nearby cells are more likely to interact with one another. Another potential application is the ability to annotate key areas of a tissue based upon the histological features of the tissue, which can be particularly useful for studies of cancer and other diseases.\n\n\n\n\n\n\nFigure 3: Example of histology slide from a liver biopsy, annotated by a pathologist. Image source: Holzinger et al., 2019\n\n\n\nMany of the challenges that arise in single-cell experiments are also present in spatial, for example:\n\nLarge volume of data\nLow depth of sequencing per cell\nTechnical variability across cells/samples\nBiological variability across cells/samples\n\nThese technologies can be broadly categorized into two groups: sequencing-based and imaging-based. We will now discuss the different technologies within each of these categories, and their advantages and disadvantages.\n\n\n\n\n\n\nFigure 4: Showcasing the differences between sequencing- and imaging-based spatial transcriptomics technologies (spots vs. cells). Image source: Kazmi et al., 2025"
+  },
+  {
+    "objectID": "lessons/02_spaceranger.html",
+    "href": "lessons/02_spaceranger.html",
+    "title": "SpaceRanger Processing",
+    "section": "",
+    "text": "Approximate time: XX minutes"
+  },
+  {
+    "objectID": "lessons/02_spaceranger.html#learning-objectives",
+    "href": "lessons/02_spaceranger.html#learning-objectives",
+    "title": "SpaceRanger Processing",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nIn this lesson, we will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3"
+  },
+  {
+    "objectID": "lessons/02_spaceranger.html#overview-of-lesson",
+    "href": "lessons/02_spaceranger.html#overview-of-lesson",
+    "title": "SpaceRanger Processing",
+    "section": "Overview of lesson",
+    "text": "Overview of lesson\nWhen doing XYZ…"
+  },
+  {
+    "objectID": "lessons/02_spaceranger.html#topic-1",
+    "href": "lessons/02_spaceranger.html#topic-1",
+    "title": "SpaceRanger Processing",
+    "section": "Topic 1",
+    "text": "Topic 1\n\nSubsection 1A\n\n\nSubsection 1B"
+  },
+  {
+    "objectID": "lessons/02_spaceranger.html#topic-2",
+    "href": "lessons/02_spaceranger.html#topic-2",
+    "title": "SpaceRanger Processing",
+    "section": "Topic 2",
+    "text": "Topic 2\n\nSubsection 2A\n\n\nSubsection 2B"
+  },
+  {
+    "objectID": "lessons/02_spaceranger.html#topic-3",
+    "href": "lessons/02_spaceranger.html#topic-3",
+    "title": "SpaceRanger Processing",
+    "section": "Topic 3",
+    "text": "Topic 3\n\nSubsection 3A\n\n\nSubsection 3B\n\nNext Lesson &gt;&gt;\nBack to Schedule"
+  }
+]
