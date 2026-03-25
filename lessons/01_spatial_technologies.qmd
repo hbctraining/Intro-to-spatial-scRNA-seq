@@ -3,7 +3,7 @@ title: "Comparison of Spatial Transcriptomics Technologies"
 description: |
   Write a description of the lesson here. 
 author:
-  - author_1
+  - Noor Sohail
   - author_2
 date: "YYYY-MM-DD"
 categories: 
@@ -54,9 +54,7 @@ Over the years, transcriptomics technologies have evolved rapids from bulk seque
 
 Lego representation of the evolution of sequencing technologies, showing more specificity and structure with each advancement.<br>
 _Image source: [Bo Xia Lab](https://www.boxialab.org/news)_
-
 :::
-
 
 
 ### Bulk and single-cell sequencing
@@ -69,7 +67,7 @@ To contrast, **single-cell sequencing** is a method for measuring gene expressio
 ![](../img/sc_vs_bulk_cells.png){width=500}
 
 Comparison of bulk and single-cell RNA sequencing approaches, showcasing loss of cellular resolution in bulk due to averaging.<br>
-_Image source: [Trapnell, 2015](https://dx.doi.org/10.1101/gr.190595.115)_
+_Image source: [Trapnell et al., 2015](https://dx.doi.org/10.1101/gr.190595.115)_
 :::
 
 To give an example, if we look at the image above, we can see that there are two cell types (blue and green) that have different expression patterns for genes A and B. If we were to analyze this data in bulk (left), we would not be able to detect the correct association between the genes. However, if we properly group the cells by cell type (right), we can see the correct correlation between the genes.
@@ -77,9 +75,9 @@ To give an example, if we look at the image above, we can see that there are two
 
 ### Spatial transcriptomics
 
-Spatial transcriptomics extends the concept of single-cell sequencing further by adding the coordinates for each cell or spot on a grid/slide. This allows us to understand both the moleular and spatial context for gene expression. Many of the challenges of scRNA-seq are also present in spatial transcriptomics. 
+Spatial transcriptomics extends the concept of single-cell sequencing further by adding the coordinates for each cell or spot on a slide. This allows us to understand both the molecular and spatial context for gene expression. Many of the challenges of scRNA-seq are also present in spatial transcriptomics. 
 
-Studies that focus on the tissue microenvironment benefit from the context of cellular location, as nearby cells are more likely to interact with one another. Another potential application is the ability to annotate key areas of a tissue based upon the histological features of the tissue, which can be particularly useful for studies of cancer and other diseases.
+Studies that focus on the tissue microenvironment benefit from location information, as nearby cells are more likely to interact with one another. Another potential application is the ability to annotate key areas of a tissue based upon the histological features of the tissue, which can be particularly useful for studies of cancer and other diseases.
 
 ::: {#fig-histology .figure}
 ![](../img/histology_example.jpg){width=500}
@@ -96,7 +94,7 @@ Many of the challenges that arise in single-cell experiments are also present in
 - Biological variability across cells/samples
 
 
-These technologies can be broadly categorized into two groups: sequencing-based and imaging-based. We will now discuss the different technologies within each of these categories, and their advantages and disadvantages.
+These technologies can be broadly categorized into two groups: **sequencing-based** and **imaging-based**. We will now discuss the different technologies within each of these categories as well as their advantages and disadvantages.
 
 ::: {#fig-seq_vs_img .figure}
 ![](../img/img_vs_seq_tech.jpg){height=900}
@@ -175,13 +173,18 @@ Table: Summary of popular imaging-based methods for spatial transcriptomics. {#t
 
 ## Summary of comparison
 
-: Table: Summary of the advantages and disadvantages of sequencing- and imaging-based spatial transcriptomics technologies. {#tbl-comparison}
+: Table: Summary of the advantages and disadvantages of sequencing- and imaging-based spatial transcriptomics technologies.<br>_Adapted from:[Single Cell Discoveries](https://www.scdiscoveries.com/blog/sequencing-vs-imaging-in-spatial-transcriptomics/)_ {#tbl-comparison}
 
-| Sequencing-based                                              | Imaging-based                                           |
-|--------------------------------------------------------------|---------------------------------------------------------|
-| Transcriptome-wide sequencing                                | Probe-based sequencing from a panel of genes           |
-| Spots/bins resolution depends on bin size (not always single-cell) | Single-cell resolution                           |
-| More accessible to non-model organisms                       | Can be challenging to find probes for non-model organisms |
+| **Feature**            | Sequencing-based                                    | Imaging-based                         |
+|------------------------|-----------------------------------------------------|---------------------------------------|
+| **What they measure**      | Whole transcriptome                                 | Targeted panels                       |
+| **Spatial resolution**     | Multi-cell (spots/bins) to single cell                         | Single cell          |
+| **Sensitivity**            | Broad detection; may miss low-abundance genes      | High for targeted genes              |
+| **Limitations**        | Mixing of cells in one spot                         | Limited number of probes       |
+| **Throughput (slides)**    | High (parallel processing)                          | Lower (multiple imaging cycles)      |
+| **Throughput (genes)**     | High (dozens of thousands)                          | Limited (hundred to thousand*)       |
+| **Cost**                   | More cost-effective at scale                        | Higher per sample                    |
+| **Best for…**              | Discovery projects                                  | Validation projects                  |
 
 
 ## References
