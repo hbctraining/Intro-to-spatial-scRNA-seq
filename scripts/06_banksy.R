@@ -56,8 +56,8 @@ seurat_banksy <- RunBanksy(
 )
 
 # For convenience, load precomputed object instead:
-qsave(seurat_banksy, "intermediates/06_seurat_banksy_1.RDS")
-# seurat_banksy <- qread("data/intermediates/06_seurat_banksy_1.RDS")
+qsave(seurat_banksy, "intermediates/06_seurat_banksy_1.qs")
+# seurat_banksy <- qread("data/intermediates/06_seurat_banksy_1.qs")
 
 # BANKSY is now the active assay
 seurat_banksy
@@ -108,8 +108,8 @@ DefaultAssay(seurat_banksy) <- "Spatial.008um"
 seurat_banksy[["BANKSY"]] <- NULL
 
 # For convenience, load post-processing object:
-qsave(seurat_banksy, "intermediates/06_seurat_banksy_2.RDS")
-# seurat_banksy <- readRDS("data/seurat_banksy_2.RDS")
+qsave(seurat_banksy, "intermediates/06_seurat_banksy_2.qs")
+# seurat_banksy <- readRDS("data/seurat_banksy_2.qs")
 
 ############################################################
 # Visualize BANKSY clusters on tissue
