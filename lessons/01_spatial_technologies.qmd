@@ -67,7 +67,7 @@ To contrast, **single-cell sequencing** is a method for measuring gene expressio
 ![](../img/sc_vs_bulk_cells.png){width=500}
 
 Comparison of bulk and single-cell RNA sequencing approaches, showcasing loss of cellular resolution in bulk due to averaging.<br>
-_Image source: [Trapnell et al., 2015](https://dx.doi.org/10.1101/gr.190595.115)_
+_Image source: [Trapnell et al. (2015)](https://dx.doi.org/10.1101/gr.190595.115)_
 :::
 
 To give an example, if we look at the image above, we can see that there are two cell types (blue and green) that have different expression patterns for genes A and B. If we were to analyze this data in bulk (left), we would not be able to detect the correct association between the genes. However, if we properly group the cells by cell type (right), we can see the correct correlation between the genes.
@@ -83,7 +83,7 @@ Studies that focus on the tissue microenvironment benefit from location informat
 ![](../img/histology_example.jpg){width=500}
 
 Example of histology slide from a liver biopsy, annotated by a pathologist.<br>
-_Image source: [Holzinger et al., 2019](https://pmc.ncbi.nlm.nih.gov/articles/PMC7017860/)_
+_Image source: [Holzinger et al. (2019)](https://pmc.ncbi.nlm.nih.gov/articles/PMC7017860/)_
 :::
 
 Many of the challenges that arise in single-cell experiments are also present in spatial, for example:
@@ -96,14 +96,18 @@ Many of the challenges that arise in single-cell experiments are also present in
 
 These technologies can be broadly categorized into two groups: **sequencing-based** and **imaging-based**. We will now discuss the different technologies within each of these categories as well as their advantages and disadvantages.
 
-::: {#fig-seq_vs_img .figure}
-![](../img/img_vs_seq_tech.jpg){height=900}
-
-Showcasing the differences between sequencing- and imaging-based spatial transcriptomics technologies (spots vs. cells).<br>
-_Image source: [Kazmi et al., 2025](https://www.sciencedirect.com/science/article/pii/S1044532325000302)_
-::: 
+::: callout-warning
+TODO: want a visual representation of differences between seq and imaging technologies
+:::
 
 ## Sequencing-based technologies
+
+::: {#fig-seq_tech .figure}
+![](../img/visum_vs_visHD.png){width=700}
+
+Comparison of Visium and Visium HD data in FFPE human colorectal cancer,  showcasing the resolution that can be achieved with sequencing-based methods.<br>
+_Image source: [10X Genomics: Your introduction to Visium HD](https://www.10xgenomics.com/blog/your-introduction-to-visium-hd-spatial-biology-in-high-definition)_
+::: 
 
 Sequencing-based methods focus on capturing the full transcriptome of the cells in the dataset. To accomplish this, the tissue is “binned” into different spots which are then sequenced to measure expression levels. In some times, the spot can sometime be comprised of multiple cells (not single-cell level). As the technology has evolved, the bins sizes have become ever smaller, allowing for near single-cell levels.
 
@@ -141,6 +145,13 @@ We will be using Visium HD for the hands-on portion of this workshop.
 - Spots are not guaranteed to be a single-cell (can be multiple cells, or no cells at all)
 
 ## Imaging-based technologies
+
+::: {#fig-img_tech .figure}
+![](../img/vizgen_merfish.png){width=700}
+
+Showcase of MERFish, and imaging-based technolgy, which can achieve single-cell resolution.<br>
+_Image source: [Vizgen: Leading the Global Expansion of Spatial Transcriptomics](https://vizgen.com/vizgen-leading-the-global-expansion-of-spatial-transcriptomics/)_
+:::
 
 These methods utilize floresence to quantify gene expression on a tissue slide. Specifically utilizing fluoresence in situ hybridization (FISH) to measure expression of a select panel of genes (selected by the researcher) using a probes. Therefore we are able to evaluate the expression for each individual cell after segmentation.
 
