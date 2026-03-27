@@ -21,7 +21,6 @@ license: "CC-BY-4.0"
 editor_options: 
   markdown: 
     wrap: 72
-eval: false
 ---
 
 ```{r}
@@ -124,8 +123,20 @@ We can open the R Project up and see that the provided file structure should loo
 library(fs)
 
 # Print the first level in the downloaded directory
-# dir_tree("data", recurse = 1)
+dir_tree("data", recurse = 1)
 ```
+
+::: callout-important
+# Cropped images
+You may notice that we are working with **_cropped** folders for this workshop. This is due to the limitations of how much data can be loaded on a laptop. So here, we have cropped the image so that we have a smaller cross-section of the tissue to work with, ultimately reducing the number of cells for this example dataset.
+
+The code used to create all the files for this workshop can be found [here](TODO: link).
+
+::: callout-warning
+TODO: link for aside lesson on cropping dataset
+:::
+
+:::
 
 If your R Project looks like below, then you are ready to start!
 
@@ -185,7 +196,7 @@ TODO: Image of R project file structure with new script
 :::
 
 
-## Loading Data into a Seurat Object
+## Loading Data into Seurat
 
 There are several different tools that can used for loading and analyzing spatial transcriptomics data. While each has their own nuances, they all follow the same fundamental theory and processes:
 
@@ -243,7 +254,7 @@ This is not an easy question to answer!
 The typical recommendation for a Visium HD analysis is to use the 8µm x 8µm resolution of the dataset. However, it is important to consider the dataset you are working with. For example, neuron cells are know to be a larger celltype in size. Therefore it would be good to consider a large bin size in order to fully represent each cell within a bin.
 :::
 
-### Creating the Seurat Object
+### Creating the Seurat object
 
 Now that we understand the input needed for the `Load10X_Spatial()` function, let's use it to create a Seurat object called `crc`. We will specify that we want to load in the `8µm` and `16µm` bin sizes at the same time. 
 
@@ -263,7 +274,7 @@ We can print out some basic information of our Seurat object to examine its data
 crc
 ```
 
-## Anatomy of a Seurat Object
+## Anatomy of a Seurat object
 
 As we can see from our Seurat callout, there are a lot of different slots inside our object. Here, we will go through each of the major components of a Seurat object and how you would access key pieces of information.
 
@@ -301,7 +312,7 @@ crc
 
 Now we see that the callout says: `Active assay: Spatial.016um `
 
-### Features and Cells
+### `Features` and `Cells`
 
 Our count matrices function as any other matrix does, with rows and columns. 
 
@@ -339,7 +350,7 @@ ncol(crc[["Spatial.016um"]])
 
 ::: callout-tip
 # [**Exercise 2**](03_loading_spatial_data-Answer_key.qmd#exercise-2)
-2. What differences do you see between the `8um` and `16um` bins?
+3. What differences do you see between the `8um` and `16um` bins?
 :::
 
 ### Layers
@@ -386,7 +397,7 @@ LayerData(crc,
 
 By printing the first 5 features and cells in our object (for easier visualization). We can see that we are working with **whole numbers** which reinforces the idea that this is the **raw data**, with no transformations having been applied.
 
-### Spatial Fields
+### Spatial fields
 
 We do not just have expression data associated with our sample, we also have the spatial slide that comes with its own set of values and information.
 
@@ -404,7 +415,7 @@ GetTissueCoordinates(crc) %>% View()
 #| echo: false
 GetTissueCoordinates(crc) %>% 
   head(5) %>%
-  DT::datatable()
+  knitr::kable()
 ```
 
 Or visualize what our slide looks like with `SpatialDimPlot()`:
@@ -431,7 +442,7 @@ crc@meta.data %>% View()
 #| echo: false
 crc@meta.data %>% 
   head(5) %>%
-  DT::datatable()
+  knitr::kable()
 ```
 
 What does each column represent?
@@ -463,7 +474,7 @@ crc@meta.data %>% View()
 #| echo: false
 crc@meta.data %>% 
   head(5) %>%
-  DT::datatable()
+  knitr::kable()
 ```
 
 Additionally, we do not have use the `@meta.data` each time we want to access a single column. We can use the `$` follow by the column name as a shorthand.
@@ -485,7 +496,7 @@ Idents(crc) %>% head()
 
 Where we see that the identities of the cells are the value stored in the `@meta.data` column `orig.ident`.
 
-## Loading Multiple Samples into Seurat
+## Loading multiple samples into Seurat
 
 Before we begin, we are going to remove the `crc` object we have been playing with in order to clear up extra space on our computers. Spatial transcriptomics take up a lot of memory! So we are being careful to remove any variables that might overload the RAM.
 
@@ -495,7 +506,7 @@ rm(crc)
 
 Now that we have a better understanding of how to create a Seurat object from SpaceRanger outpus, let's go through how we can load multiple samples at once. In this case we want to represent both samples `P5CRC` and `P5NAT` in a singular Seurat object.
 
-### Using a `for` Loop 
+### Using a `for` loop 
 
 In practice, you will likely have several samples that you will need to read in data for, and that can get tedious and error-prone if you do it one at a time. So, to make the data import into R more efficient we can use a `for` loop, which will iterate over a series of commands for each of the inputs given and create Seurat objects for each of our samples. 
 
@@ -539,7 +550,7 @@ for (sample in samples) {
   data_dir <- paste0("data/", sample, "_cropped")
   # Create seurat object and set orig ident to be sample
   seurat <- Load10X_Spatial(data.dir = data_dir,
-                            bin.size = c(16),
+                            bin.size = 8,
                             slice = sample)
   seurat$orig.ident <- sample
   
@@ -553,8 +564,8 @@ To confirm that we succesfully loaded both samples in, we can take a look at the
 ```{r}
 #| label: list_seurat_load
 #| echo: false
-# saveRDS(list_seurat, "data/list_seurat.RDS")
-list_seurat <- readRDS("data/list_seurat.RDS")
+# qs::qsave(list_seurat, "intermediate/03_list_seurat.qs")
+list_seurat <- qs::qread("intermediate/03_list_seurat.qs")
 ```
 
 ```{r}
@@ -564,7 +575,7 @@ list_seurat
 
 This is exactly what we had hoped to see! So now we can move on to the next step which is merging the sample together into a singular Seurat object.
 
-### Merge Datasets Together
+### Merge datasets together
 
 We merge samples together because it make it easier to run the QC steps for both sample groups together. It also enables us to easily compare the data quality for all cells at one time
 
@@ -604,12 +615,12 @@ seurat_merged <- JoinLayers(seurat_merged)
 
 ::: callout-tip
 # [**Exercise 3**](03_loading_spatial_data-Answer_key.qmd#exercise-3)
-3. What function can we use to double check that we have a singular `counts` _layer_?
+4. What function can we use to double check that we have a singular `counts` _layer_?
 :::
 
 
 ::: {.callout-note collapse=true}
-# Merging vs. Integration
+# Merging vs. integration
 A common point of confusion is the distinction between **integration** and merging. In the field, integration is considered to be modifying either your counts or latent space in a way to correct for a batch variable. Whereas what we are doing now is **merging** or concatenating multiple samples together. This process of merging does not transform the values in the count matrices.
 :::
 
@@ -644,7 +655,7 @@ seurat_merged@meta.data %>% head()
 #| echo: false
 seurat_merged@meta.data %>% 
   head(5) %>%
-  DT::datatable()
+  knitr::kable()
 ```
 
 ```{r}
@@ -659,7 +670,7 @@ seurat_merged@meta.data %>% tail()
 #| echo: false
 seurat_merged@meta.data %>% 
   tail(5) %>%
-  DT::datatable()
+  knitr::kable()
 ```
 
 Lastly we want to make sure that the `Idents` of our cells is a useful piece of information, for example like `orig.ident`, which contains our sample IDs.
@@ -678,6 +689,14 @@ Now is a great spot to save our `seurat_merged` object as the next step is going
 #| eval: false
 # Save integrated Seurat object
 saveRDS(seurat_merged, "data/seurat_merged.RDS")
+```
+
+```{r}
+#| label: seurat_merged_saveqs
+#| eval: false
+#| echo: false
+# Save integrated Seurat object
+qs::qsave(seurat_merged, "intermediate/03_seurat_merged.qs")
 ```
 
 A good rule of thumb is to save your intermediate objects before doing any filtration or after running a computational step that takes a long time to run.
