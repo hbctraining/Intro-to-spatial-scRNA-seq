@@ -36,9 +36,10 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Establish a hypothesis or biological question to assess using the provided dataset
+- Quantify how bin size affects the count matrix
+- Access important information from a Seurat object
+- Create a merged Seurat object from Space Ranger outputs
 
 ## Overview of lesson
 

@@ -221,7 +221,7 @@
     "href": "lessons/03_loading_spatial_data.html#learning-objectives",
     "title": "Loading Spatial Data",
     "section": "Learning objectives",
-    "text": "Learning objectives\nIn this lesson, we will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3"
+    "text": "Learning objectives\nIn this lesson, we will:\n\nEstablish a hypothesis or biological question to assess using the provided dataset\nQuantify how bin size affects the count matrix\nAccess important information from a Seurat object\nCreate a merged Seurat object from Space Ranger outputs"
   },
   {
     "objectID": "lessons/03_loading_spatial_data.html#overview-of-lesson",
