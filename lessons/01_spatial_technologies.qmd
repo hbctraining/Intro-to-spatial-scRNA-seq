@@ -4,8 +4,7 @@ description: |
   Write a description of the lesson here. 
 author:
   - Noor Sohail
-  - author_2
-date: "YYYY-MM-DD"
+date: "2025-07-22"
 categories: 
   - category_1
   - category_2
@@ -47,7 +46,7 @@ When doing XYZ...
 
 ## High-throughput sequencing overview
 
-Over the years, transcriptomics technologies have evolved rapids from bulk sequencing, to single-cell sequencing, all the way to the current spatial transcriptomics methods.
+Over the years, transcriptomics technologies have evolved rapidly from bulk sequencing, to single-cell sequencing, all the way to the current spatial transcriptomics methods.
 
 ::: {#fig-lego_sc .figure}
 ![](../img/lego_single_cell.png){width=800}
@@ -109,12 +108,12 @@ Comparison of Visium and Visium HD data in FFPE human colorectal cancer,  showca
 _Image source: [10X Genomics: Your introduction to Visium HD](https://www.10xgenomics.com/blog/your-introduction-to-visium-hd-spatial-biology-in-high-definition)_
 ::: 
 
-Sequencing-based methods focus on capturing the full transcriptome of the cells in the dataset. To accomplish this, the tissue is “binned” into different spots which are then sequenced to measure expression levels. In some times, the spot can sometime be comprised of multiple cells (not single-cell level). As the technology has evolved, the bins sizes have become ever smaller, allowing for near single-cell levels.
+Sequencing-based methods focus on capturing the full transcriptome of the cells in the dataset. To accomplish this, the tissue is "binned" into different spots which are then sequenced to measure expression levels. At times, a spot can be comprised of multiple cells (i.e., not single-cell level). As the technology has evolved, the bin sizes have become smaller, allowing for near single-cell resolution.
 
 
 ### Summary of popular methods
 
-In essence, these methods allow you apply a grid to the tissue and quanitify thousands of genes according to each square on the grid. Some popular technologies that belong to this category include:
+In essence, these methods allow you to apply a grid to the tissue and quantify thousands of genes according to each square on the grid. Some popular technologies that belong to this category include:
 
 Table: Summary of popular sequencing-based methods for spatial transcriptomics. {#tbl-seq_methods}
 
@@ -136,8 +135,8 @@ We will be using Visium HD for the hands-on portion of this workshop.
 
 **Advantages:**
 
-- Analyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets as you are sequencing the entire transcriptome instead a gene panel.
-- Can be run on non-model organisms with more ease.
+- Analyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets as you are sequencing the entire transcriptome instead of a gene panel.
+- Can be run on non-model organisms with greater ease.
 
 **Disadvantages:**
 
@@ -149,11 +148,11 @@ We will be using Visium HD for the hands-on portion of this workshop.
 ::: {#fig-img_tech .figure}
 ![](../img/vizgen_merfish.png){width=700}
 
-Showcase of MERFish, and imaging-based technolgy, which can achieve single-cell resolution.<br>
+Showcase of MERFISH, an imaging-based technology, which can achieve single-cell resolution.<br>
 _Image source: [Vizgen: Leading the Global Expansion of Spatial Transcriptomics](https://vizgen.com/vizgen-leading-the-global-expansion-of-spatial-transcriptomics/)_
 :::
 
-These methods utilize floresence to quantify gene expression on a tissue slide. Specifically utilizing fluoresence in situ hybridization (FISH) to measure expression of a select panel of genes (selected by the researcher) using a probes. Therefore we are able to evaluate the expression for each individual cell after segmentation.
+These methods utilize fluorescence to quantify gene expression on a tissue slide, specifically fluorescence in situ hybridization (FISH) to measure expression of a selected panel of genes using probes. Therefore, we are able to evaluate expression for each individual cell after segmentation.
 
 ### Summary of popular methods
 
@@ -179,7 +178,7 @@ Table: Summary of popular imaging-based methods for spatial transcriptomics. {#t
 **Disadvantages:**
 
 - Limited to a select panel of genes.
-- Segmentation is not a trivial task and requires careful pre-processing.
+- Segmentation is not a trivial task and requires careful preprocessing.
 - Challenging with non-model organisms as probes are necessary.
 
 ## Summary of comparison

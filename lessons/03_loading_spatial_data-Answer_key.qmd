@@ -1,0 +1,51 @@
+---
+title: "Loading Spatial Data - Answer Key"
+author:
+  - Noor Sohail
+date: "2025-07-25"
+license: "CC-BY-4.0"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: load_libraries_data
+#| echo: false
+# Load libraries and data
+
+```
+
+# Exercise 1
+
+1. Given the information that we know from the metadata, what might be some questions that we want to answer using our data?
+
+- Identify and characterize tumor cells in `CRC`
+- Construct cell-communication networks, using spatial locations to constrain our results
+- What are unique subtypes/cell states that are found in `CRC` vs. `NAT`
+- Associate cell states with spatial locations 
+- Establish domains and niches of cell populations in quadrants of the slides
+- etc.
+
+
+2. What are some of the limitations of this dataset that we should keep in mind as we analyze it?
+
+We do not have any replicates, so we cannot make any conclusions about the generalizability of our findings with statistical confidence. 
+
+It can be challenging to evaluate differences in cell type composition between the tumor and normal samples as the bin-based method potentially includes a mixture of cells in each bin. Furthermore we are looking at a single section of the tissue, so we may not be capturing the full heterogeneity of the tumor microenvironment.
+
+# Exercise 2
+
+1. A question to evaluate Learning Objective 2
+
+2. A followup question to question #1
+
+3. ...
+
+# Exercise 3
+
+1. A question to evaluate Learning Objective 3
+
+2. A followup question to question #1
+
+3. ...

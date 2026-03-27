@@ -17,7 +17,7 @@ toc: false
 | 10:00 - 10:15 | [Workshop Introduction](../slides/workshop_intro_slides.pdf) |  Instructor_name |
 | 10:45 - 11:45| [Introduction to Spatial Transcriptomics](../slides/single_cell_slides.pdf) | [Dr. Mandovi Chatterjee](https://singlecellcore.hms.harvard.edu/people/mandovi-chatterjee) |
 | 10:45 - 10:50 | Break | |
-| 10:50 - 11:25 | [Load Visium HD Data](../lessons/tmp.qmd) | Instructor_name |
+| 10:50 - 11:25 | [Load Visium HD Data](../lessons/03_loading_spatial_data.qmd) | Instructor_name |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
 
 ### Before the next class:
