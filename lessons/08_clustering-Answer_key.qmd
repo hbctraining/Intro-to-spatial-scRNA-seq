@@ -1,0 +1,44 @@
+---
+title: "Clustering - Answer Key"
+author:
+  - Noor Sohail
+date: "2025-07-22"
+license: "CC-BY-4.0"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: load_libraries_data
+#| echo: false
+# Load libraries and data
+library(Seurat)
+library(tidyverse)
+seurat_processed <- qs::qread("intermediate/08_seurat_processed.qs")
+```
+
+# Exercise 1
+
+1. When we looked at the first few rows of our metadata, it appeared that there were many cells that do not have a cluster value. Count how many `NA`'s are found for our cluster with `table()` function and use the argument (`useNA = "ifany"`). Why do you think there are so many `NA` values?
+
+```{r}
+table(seurat_processed$seurat_cluster.sketched,
+      useNA = "ifany")
+```
+
+# Exercise 2
+
+1. A question to evaluate Learning Objective 2
+
+2. A followup question to question #1
+
+3. ...
+
+# Exercise 3
+
+1. A question to evaluate Learning Objective 3
+
+2. A followup question to question #1
+
+3. ...

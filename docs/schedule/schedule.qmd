@@ -35,6 +35,18 @@ I. Please **study the contents** and **work through all the code** within the fo
         - Learning Objective 2
         - Learning Objective 3
       :::
+      
+   1. [Quality Control](../lessons/05_quality_control.qmd)
+      
+      :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
+      Brief description of the lesson.
+      
+      In this lesson, you will:
+      
+        - Learning Objective 1
+        - Learning Objective 2
+        - Learning Objective 3
+      :::
 
 II. **Submit your work**:
    * Each lesson above contains exercises; please go through each of them.
@@ -50,16 +62,16 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 10:55 | [Quality Control](../lessons/05_quality_control.qmd) | Instructor_name |
+| 10:30 - 10:55 | [Normalization and Sketch Downsampling](../lessons/06_normalization_and_sketch.qmd) | Instructor_name |
 | 10:55 - 11:00 | Break | |
-| 11:00 - 11:55 | [Sketch Downsampling and Dimensionality Reduction](../lessons/tmp.qmd) | Instructor_name |
+| 11:00 - 11:55 | [Dimensionality Reduction](../lessons/07_dim_reduction.qmd) | Instructor_name |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
 
 ### Before the next class:
 
 I. Please **study the contents** and **work through all the code** within the following lessons:
  
-   1. [Clustering and Projection](../lessons/tmp.qmd)
+   1. [Clustering](../lessons/08_clustering.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
       Brief description of the lesson.

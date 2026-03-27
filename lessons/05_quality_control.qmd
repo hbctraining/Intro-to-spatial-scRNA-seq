@@ -121,8 +121,8 @@ ggplot(meta) +
 
 ::: callout-warning
 TODO:
+
 - talk about celltypes and how we see clear structure of certain cells with higher nUMIs
-- Cut-off of 10 for both samples
 :::
 
 We expect to see a bimodal distribution, with one peak representing bins containing lower-quality cells with fewer UMIs and another peak representing bins containing healthy cells with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.
@@ -153,7 +153,7 @@ ggplot(meta) +
                alpha = 0.4,
                color = "black") +
   geom_vline(xintercept = 30, color = "pink") +
-  geom_vline(xintercept = 50, color = "lightblue") +
+  geom_vline(xintercept = 10, color = "lightblue") +
   scale_x_log10() +
   theme_classic()
 ```
@@ -166,7 +166,7 @@ ggplot(meta) +
 #| fig-cap: Number of UMIs density after filtration
 meta_filt <- subset(meta,
   ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 30)) |
-  ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 50)))
+  ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 10)))
 
 ggplot(meta_filt) +
   geom_density(aes(x = nCount_Spatial.008um,
@@ -174,7 +174,7 @@ ggplot(meta_filt) +
                  alpha = 0.4,
                  color = "black") +
   geom_vline(xintercept = 30, color = "pink") +
-  geom_vline(xintercept = 50, color = "lightblue") +
+  geom_vline(xintercept = 10, color = "lightblue") +
   scale_x_log10() +
   theme_classic()
 ```
@@ -217,7 +217,7 @@ ggplot(meta) +
                  alpha = 0.4,
                  color = "black") +
   geom_vline(xintercept = 30, color = "pink") +
-  geom_vline(xintercept = 50, color = "lightblue") +
+  geom_vline(xintercept = 10, color = "lightblue") +
   scale_x_log10() +
   theme_classic()
 ```
@@ -230,7 +230,7 @@ ggplot(meta) +
 #| fig-cap: Number of features density after filtration
 meta_filt <- subset(meta,
   ((orig.ident == "P5CRC") & (nFeature_Spatial.008um > 30)) |
-  ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 50)))
+  ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 10)))
 
 ggplot(meta_filt) +
   geom_density(aes(x = nFeature_Spatial.008um,
@@ -238,7 +238,7 @@ ggplot(meta_filt) +
                  alpha = 0.4,
                  color = "black") +
   geom_vline(xintercept = 30, color = "pink") +
-  geom_vline(xintercept = 50, color = "lightblue") +
+  geom_vline(xintercept = 10, color = "lightblue") +
   scale_x_log10() +
   theme_classic()
 ```
@@ -276,7 +276,7 @@ seurat_merged$log10GenesPerUMI[is.na(seurat_merged$log10GenesPerUMI)] <- 0
 #| fig-cap: Complexity score overlaid over spatial slide
 SpatialFeaturePlot(seurat_merged, 
                    "log10GenesPerUMI",
-                   pt.size.factor = 15,
+                   pt.size.factor = 17,
                    image.alpha = 0,
                    min.cutoff = "q10")
 ```
@@ -339,8 +339,8 @@ seurat_merged$mitoRatio <- PercentageFeatureSet(object = seurat_merged,
                                                 pattern = "^MT-")
 seurat_merged$mitoRatio <- seurat_merged@meta.data$mitoRatio / 100
 
-# Turn NA values into 0 for now
-seurat_merged$mitoRatio[is.na(seurat_merged$mitoRatio)] <- 0
+# Turn NA values into 100 for now
+seurat_merged$mitoRatio[is.na(seurat_merged$mitoRatio)] <- 1.00
 ```
 
 ::: {.panel-tabset}
@@ -424,17 +424,29 @@ We will apply very minimal filtering here. It has been shown that low expression
 # TODO there has to be a cleaner way to do this
 seurat_filtered <- subset(seurat_merged,
   ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 30)) |
-  ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 50)))
+  ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 10)))
 
 seurat_filtered <- subset(seurat_filtered,
   ((orig.ident == "P5CRC") & (nFeature_Spatial.008um > 30)) |
-  ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 50)))
+  ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 10)))
   
 seurat_filtered <- subset(seurat_filtered, mitoRatio < 0.25)
 seurat_filtered <- subset(seurat_filtered, log10GenesPerUMI > 0.80)
 
 seurat_filtered
 ```
+
+After subsetting, you may get the following warning message:
+
+```
+Not validating FOV objectsWarning: Not validating FOV objectsWarning: Not validating FOV objectsWarning: Not validating Seurat objects
+```
+
+::: callout-warning
+TODO: explain this warning message. It is fine that it happens, it does not break anything
+:::
+
+
 
 How many cells did we remove in this filtration process?
 
@@ -505,12 +517,13 @@ saveRDS(seurat_filtered, "data/seurat_filtered.RDS")
 ```{r}
 #| label: save_seurat_filtered_qs
 #| eval: false
+#| echo: false
 # Save Seurat object
 qs::qsave(seurat_filtered, "intermediate/05_seurat_filtered.qs")
 ```
 
 ***
 
-[Next Lesson >>](06_lesson.qmd)
+[Next Lesson >>](06_normalization_and_sketch.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)
