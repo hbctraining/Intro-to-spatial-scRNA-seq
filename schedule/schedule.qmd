@@ -1,53 +1,57 @@
 ---
-title: Introduction to Spatial Single-cell RNA-seq Schedule
+title: "Schedule - Spatial Transcriptomics"
 sidebar: false
 toc: false
-execute: 
-  eval: false
 ---
 
 ## Pre-reading
 
-- [Spatial Technology Overview](../lessons/spatial_technology_overview.qmd)
-- [Pre-reading 2](../lessons/Pre-reading_02.qmd)
-- [Pre-reading 3](../lessons/Pre-reading_03.qmd)
+1. [Spatial Technology Overview](../lessons/01_spatial_technologies.qmd)
+2. [SpaceRanger](../lessons/02_spaceranger.qmd)
+3. [Download Project](TODO: dropbox link to project files here)
 
 ## Day 1
 
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
-| 09:30 - 09:45 | [Workshop introduction](../slides/workshop_intro_slides.pdf) | Will |
-| 09:45 - 10:45| [Introduction to Spatial Single Cell RNA-sequencing](../lessons/01_introduction-to-spatial.qmd) | [Dr. Mandovi Chatterjee](https://singlecellcore.hms.harvard.edu/people/mandovi-chatterjee) |
-| 10:45 - 10:50 | Break |
-| 10:50 - 11:15 | scRNA-seq pre-reading discussion | All |
-| 11:00 - 11:45 | [Loading Spatial Data](../lessons/02_loading-spatial-data.qmd) | Noor |
-| 11:45 - 12:00 | Overview of self-learning materials and homework submission | Will |
+| 10:00 - 10:15 | [Workshop Introduction](../slides/workshop_intro_slides.pdf) |  Instructor_name |
+| 10:45 - 11:45| [Introduction to Spatial Transcriptomics](../slides/single_cell_slides.pdf) | [Dr. Mandovi Chatterjee](https://singlecellcore.hms.harvard.edu/people/mandovi-chatterjee) |
+| 10:45 - 10:50 | Break | |
+| 10:50 - 11:25 | [Load Visium HD Data](../lessons/03_loading_spatial_data.qmd) | Instructor_name |
+| 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
 
 ### Before the next class:
 
 I. Please **study the contents** and **work through all the code** within the following lessons:
  
-   1. [Quality Control](../lessons/03_quality-control.qmd)
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-       <br>Brief description of the lesson<br><br>In this lesson you will:<br>
-             - LO 1<br>
-             - LO 2<br>
-             - LO 3<br><br>
-        </details>
-
-  2. [Theory of PCA](../lessons/04_theory_of_PCA.qmd)
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-         <br>Before we can begin the next steps of the workflow, we need to make sure you have a good understanding of Principal Components Analysis (PCA). This method will be utilized in the scRNA-seq analysis workflow, and this foundation will help you better navigate those steps and interpretation of results.<br><br>
-        </details>
-     
+   1. [Principal Component Analysis (PCA)](../lessons/04_theory_of_PCA.qmd)
+      
+      :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
+      Brief description of the lesson.
+      
+      In this lesson, you will:
+      
+        - Learning Objective 1
+        - Learning Objective 2
+        - Learning Objective 3
+      :::
+      
+   1. [Quality Control](../lessons/05_quality_control.qmd)
+      
+      :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
+      Brief description of the lesson.
+      
+      In this lesson, you will:
+      
+        - Learning Objective 1
+        - Learning Objective 2
+        - Learning Objective 3
+      :::
 
 II. **Submit your work**:
    * Each lesson above contains exercises; please go through each of them.
-   * **Submit your answers** to the exercises using [this Google form]()(**NEED LINK STILL**) on **the day *before* the next class**.
-
-
+   * **Submit your answers** to the exercises using [this Google form]() on **the day *before* the next class**.
+   
 ### Questions?
 * ***If you get stuck due to an error*** while running code in the lesson, [email us](mailto:hbctraining@hsph.harvard.edu) 
 
@@ -57,108 +61,123 @@ II. **Submit your work**:
 
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
-| 09:30 - 10:00 | Self-learning lessons discussion | All |
-| 10:00 - 11:00| [Normalization and Sketch Downsampling](../lessons/05_normalization_and_sketch_downsampling.qmd) | Noor |
-| 11:00 - 11:05 | Break |
-| 11:05 - 12:00| [scRNA-seq Workflow](../lessons/06_scRNAseq_workflow.qmd) | Will |
+| 10:00 - 10:30 | Self-learning lessons discussion | All |
+| 10:30 - 10:55 | [Normalization and Sketch Downsampling](../lessons/06_normalization_and_sketch.qmd) | Instructor_name |
+| 10:55 - 11:00 | Break | |
+| 11:00 - 11:55 | [Dimensionality Reduction](../lessons/07_dim_reduction.qmd) | Instructor_name |
+| 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
 
 ### Before the next class:
+
 I. Please **study the contents** and **work through all the code** within the following lessons:
+ 
+   1. [Clustering](../lessons/08_clustering.qmd)
 
-1. [Integration](../lessons/07_integration.qmd)
+      :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
+      Brief description of the lesson.
+      
+      In this lesson, you will:
+      
+        - Learning Objective 1
+        - Learning Objective 2
+        - Learning Objective 3
+      :::
 
-2. [Spatially Derived Clusters](../lessons/08_spatially_derived_clusters.qmd)
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-       <br>Brief description of the lesson<br><br>In this lesson you will:<br>
-             - LO 1<br>
-             - LO 2<br>
-             - LO 3<br><br>
-        </details>
-        
-3. [Integration](../lessons/09_integration.qmd)
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-       <br>Brief description of the lesson<br><br>In this lesson you will:<br>
-             - LO 1<br>
-             - LO 2<br>
-             - LO 3<br><br>
-        </details>
+   2. [BANKSY Spatial Clustering](../lessons/tmp.qmd)
 
+      :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
+      Brief description of the lesson.
+      
+      In this lesson, you will:
+      
+        - Learning Objective 1
+        - Learning Objective 2
+        - Learning Objective 3
+      :::
 
+   3. [Seurat Cheatsheet](../lessons/tmp.qmd)
+
+      :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
+      Brief description of the lesson.
+      
+      In this lesson, you will:
+      
+        - Learning Objective 1
+        - Learning Objective 2
+        - Learning Objective 3
+      :::
+         
 II. **Submit your work**:
    * Each lesson above contains exercises; please go through each of them.
-   * **Submit your answers** to the exercises using [this Google form]()(**NEED LINK STILL**) on **the day *before* the next class**.
-
+   * **Submit your answers** to the exercises using [this Google form]() on **the day *before* the next class**.
+   
 ### Questions?
-* ***If you get stuck due to an error*** while running code in the lesson, [email us](mailto:hbctraining@hsph.harvard.edu)
-
+* ***If you get stuck due to an error*** while running code in the lesson, [email us](mailto:hbctraining@hsph.harvard.edu) 
 
 ***
-
 
 ## Day 3
 
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
-| 9:30 - 10:15 | Self-learning lessons discussion | All |
-| 10:15 - 11:00 | [Spatially Derived Values](../lessons/10_spatially-derived-values.qmd) | Noor |
-| 11:00 - 11:05 | Break |
-| 11:05 - 12:00 | [Deconvolution](../lessons/11_deconvolution.qmd) | Will |
+| 10:00 - 10:30 | Self-learning lessons discussion | All |
+| 10:30 - 10:55 | [Integration](../lessons/tmp.qmd) | Instructor_name |
+| 10:55 - 11:00 | Break | |
+| 11:00 - 11:55 | [Deconvolution](../lessons/tmp.qmd) | Instructor_name |
+| 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
 
 ### Before the next class:
+
 I. Please **study the contents** and **work through all the code** within the following lessons:
+ 
+   1. [Differential Expression and Pathway Analysis](../lessons/tmp.qmd)
 
-1. [Differential Gene Expression](../lessons/12_dge.qmd)
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-       <br>Brief description of the lesson<br><br>In this lesson you will:<br>
-             - LO 1<br>
-             - LO 2<br>
-             - LO 3<br><br>
-        </details>
+      :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
+      Brief description of the lesson.
+      
+      In this lesson, you will:
+      
+        - Learning Objective 1
+        - Learning Objective 2
+        - Learning Objective 3
+      :::
 
-2. [Seurat Cheatsheet](../lessons/Cheatsheet_seurat.qmd)
-      <details>
-       <summary><i>Click here for a preview of this lesson</i></summary>
-         <br>At this point, we have populated our seurat object with many different pieces of information. Knowing how to access different values will allow you to interact more efficiently with your dataset.
-         <br><br>In this lesson you will:<br>
-           - Explore the different parts of a seurat object.<br>
-           - Use the built-in functions from the Seurat package for visualizations and grabbing data.<br>
-        </details>
+   2. [Spatially Variable Genes](../lessons/tmp.qmd)
+
+      :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
+      Brief description of the lesson.
+      
+      In this lesson, you will:
+      
+        - Learning Objective 1
+        - Learning Objective 2
+        - Learning Objective 3
+      :::
+         
+II. **Submit your work**:
+   * Each lesson above contains exercises; please go through each of them.
+   * **Submit your answers** to the exercises using [this Google form]() on **the day *before* the next class**.
+   
+### Questions?
+* ***If you get stuck due to an error*** while running code in the lesson, [email us](mailto:hbctraining@hsph.harvard.edu) 
 
 ***
+
 
 ## Day 4
 
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
-| 9:30 - 10:15 | Self-learning lessons discussion | All |
-| 10:15 - 11:15 | [Cell-Cell Comunication](../lessons/13_cell-cell-communication.qmd) | Noor |
-| 11:15 - 11:20 | Break |
-| 11:20 - 11:45 | Overview and Final Q & A | All |
-| 11:45- 12:00 | [Wrap up](../slides/Workshop_wrapup.pdf) | Will |
-
+| 10:00 - 10:30 | Self-learning lessons discussion | All |
+| 10:30 - 11:25 | [Cell-Cell Communication](../lessons/tmp.qmd) | Instructor_name |
+| 11:25 - 11:30 | Break | |
+| 11:30 - 11:45 | Discussion, Q & A | Instructor_name |
+| 11:45 - 12:00 | [Wrap Up](../slides/workshop_wrapup_slides.pdf) | Instructor_name |
 
 ***
 
 ## Resources
 
-We have covered the analysis steps in quite a bit of detail for scRNA-seq exploration of cellular heterogeneity using the Seurat package. For more information on topics covered, we encourage you to take a look at the following resources:
-
-### Seurat-focused
-* [Seurat vignettes](https://satijalab.org/seurat/vignettes.html)
-* [Seurat cheatsheet](https://satijalab.org/seurat/essential_commands.html)
-* [Satija Lab: Single Cell Genomics Day](https://satijalab.org/scgd21/)
-
-### Scaling up: analysis on HPC  
-* Using RStudio on O2
-    * [HMSRC wiki page](https://harvardmed.atlassian.net/wiki/spaces/O2/pages/1623425967/RStudio+on+O2)
-    * [HBC RStudio on O2 tutorial](https://hbctraining.github.io/Intro-to-Unix-QMB/lessons/R_studio_on_02.html)
-
-   
-### Highlighted papers
-
-
-### Other online courses:
-
+- [Additional Resource 1](link_to_additonal_resource_1)
+- [Additional Resource 2](link_to_additonal_resource_2)
+- [Additional Resource 3](link_to_additonal_resource_3)

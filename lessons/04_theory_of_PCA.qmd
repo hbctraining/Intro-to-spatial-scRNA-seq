@@ -1,16 +1,37 @@
 ---
 title: "Theory of PCA"
-author: 
+description: |
+  This lesson introduces participants to the theory and mechanics of Principal Components Analysis (PCA). Through a step‑by‑step, hands‑on walkthrough, participants learn how to derive the covariance matrix, obtain eigenvalues and eigenvectors, compute principal component scores and compare their manual PCA results with the output of `prcomp()`. The lesson emphasizes visualization and understanding how PCA operates on high‑dimensional single‑cell RNA‑seq data.
+author:
   - Will Gammerdinger
   - Noor Sohail
-  - Zhu Zhuo
-  - James Billingsley
   - Shannan Ho Sui
-date: "Tuesday, July 22, 2025"
+date: "2025-05-30"
+categories: 
+  - R Programming
+  - Single-cell RNA-seq
+  - Statistics
+  - Data Science 
+keywords:
+  - R
+  - PCA
+  - covariance matrix
+  - eigenvalues
+  - eigenvectors
+  - dimensionality reduction
+license: "CC-BY-4.0"
 editor_options: 
   markdown: 
     wrap: 72
 ---
+
+```{r}
+#| label: load_libraries
+#| echo: false
+# Load libraries
+library(Seurat)
+seurat_merged <- qs::qread("intermediate/03_seurat_merged.qs")
+```
 
 Approximate time: 45 minutes
 
@@ -22,19 +43,19 @@ Approximate time: 45 minutes
 
 # Background
 
-Principal Components Analysis is a dimensionality-reduction method employed to stratify data by their variance. Thus, points that are more closely together on a PCA are more similar to each other, while points that are more dissimilar to each other will be further apart. As a result, you would likely expect similar cell from the same cell type to cluster near each other and apart from distinctly different cell types. In order to demonstrate how Principal Components Analysis works we are going to describe the process roughly works in high-dimensional data, then work through it a two-dimensional example data set.
+Principal Components Analysis is a ***dimensionality-reduction method employed to stratify data by their variance***. In other words, points that are more closely together on a PCA are more similar to each other, while points that are more dissimilar to each other will be further apart. As a result, you would likely expect ***similar cells from the same cell type to cluster near each other and apart from distinctly different cell types***. In order to demonstrate how Principal Components Analysis works we are going to describe how the process works in high-dimensional data, then work through it using a two-dimensional example data set.
 
 Consider a single-cell experiment where you have the expression value for every gene in each cell. Let's hypothetically say that our sample has data from 25,000 genes. We could plot this 25,000-dimensional space where each dimension represents a given gene's expression and each point represents a cell in that 25,000-dimensional space. However, that is rather unintuitive and many of those dimensions are uninteresting, so we would like to reduce the dimensionality to the axes that separate the variance the most. This is what we will be doing with a Principal Components Analysis.
 
 From a high-level perspective, what we will be doing is:
 
 - Finding the vector in that 25,000-dimensional space that has the most variance in it.
-- Looking for another vector that is orthogonal (a 90&deg; angle but in multi-dimensional space) to the first vector that explains the most of the remaining variance. We this process until, in theory, you have have as many vectors as dimensions in your original dataset. However, in practice, people oftentimes stop after a few dozen. 
-- Using these vectors to transform your original data into Principal Components space.
+- Looking for another vector that is orthogonal (a 90&deg; angle but in multi-dimensional space) to the first vector that explains the most of the remaining variance. We continue this process until you have exhausted all source of variantion from your dataset. However, in practice, people oftentimes stop after a few dozen. 
+- Use these vectors to transform your original data into Principal Components space.
 
 # Setting up to calculate Eigenvalues and Eigenvectors
 
-We will be using some functions from `tidyverse` in the lesson, so we will need to load it:
+Let's open a new R script and save it as `PCA-example.R`. Next, we will be using some functions from `tidyverse` in the lesson, so we will need to load it:
 
 ```{r load_tidyverse}
 library(tidyverse)
@@ -75,11 +96,11 @@ ggplot(expression_tibble, aes(x = Gene_A, y = Gene_B, label = cells)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Now if were were to consider our data set that has ***X*** genes and ***Y*** cells, then this plot would have ***X*** dimensions and ***Y*** points.
+As a reminder, if were were to consider our data set, it would have ***`r format(nrow(seurat_merged), scientific=FALSE)`*** genes and ***`r format(ncol(seurat_merged), scientific=FALSE)`*** cells, so this is a simplified example. 
 
 ## Re-centering the dataset
 
-When performing PCA, the first step is to re-center the data so that the center of the data is the origin. In order to do this, we need to do two steps:
+The first step of PCA is to find the central spot among all of our datapoints (cells) and use that as the origin to re-center the data. In order to do this, we need to do two steps:
 
 **1. Find the center of the data**
 
@@ -100,7 +121,7 @@ names(center_of_data) <- c("Gene_A", "Gene_B")
 center_of_data
 ```
 
-The new center of the data will be where ***( `r center_of_data` )*** is currently. We can visualize this center and inspect that this is does in fact appear to be roughly in the middle of the data.
+The new center of the data will be where ***( `r center_of_data` )*** currently is. We can visualize this center and inspect that this is does in fact appear to be roughly in the middle of the data.
 
 ``` {r new_center_plot}
 # View where the center of the data is located
@@ -120,7 +141,7 @@ ggplot(expression_tibble, aes(x = Gene_A, y = Gene_B, label = cells)) +
 
 **2. Translate the points from their raw expression coordinates to coordinates centered around the center of the data**
 
-Next, we need to shift the points so that the center of the data corresponds to the origin. We can do this by subtracting the mean value from each gene from the raw values.
+Next, we need to shift the points so that the center of the data corresponds to the origin. We can do this by subtracting the mean value for each gene from the raw values.
 
 ```{r recentered_data}
 # Shift the data points so that they data is centered on the origin
@@ -134,7 +155,7 @@ recentered_expression_tibble <- expression_tibble %>%
 recentered_expression_tibble
 ```
 
-As with any data analysis, it is always a good idea to visualize your data to ensure that it appears to behaving how you intended. So let's visualize our re-centered data to ensure that the data appears centered around the origin. 
+*As with any data analysis, it is always a good idea to visualize your data to ensure that it appears to behaving how you intended.* So let's visualize our re-centered data to ensure that the data appears centered around the origin. 
 
 ```{r plot_recentered_data}
 # Plot the raw data after it has been shifted to have the center of the data align with the origin
@@ -154,22 +175,25 @@ ggplot(recentered_expression_tibble, aes(x = Gene_A, y = Gene_B, label = cells))
 
 ## Create a covariance matrix
 
-The next step that we will after we have re-centered our data around the origin is to calculate the covariance matrix. As a reminder, the covariance is the joint variability of two random variables. In this case our random variables are the genes. The illustration below we provide examples for positive and negative covariance values along with a covariance that is near zero.
+The next step that we will do after we have re-centered our data around the origin is to calculate a covariance matrix. As a reminder, the covariance is the joint variability of two random variables. In this case our random variables are the genes. The illustration below we provide examples for positive and negative covariance values along with a covariance that is near zero.
 
 <img src="../img/Covariance.png" width="800">
 
 The equation to estimate the sample covariance is:
 
-<img src="https://latex.codecogs.com/svg.image?&space;cov(X,Y)=\frac{1}{n - 1}\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})" width="300">
+$$
+\operatorname{cov}(X,Y)
+= \frac{1}{n - 1}\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})
+$$
 
 Where:
 
  - *X* is Gene A
  - *Y* is Gene B
  - *n* is the number of cells
- - *x~i~* is an expression value for Gene A
+ - *x~i~* is an expression value for Gene A in cell *i*
  - *$\bar{x}$* is the mean expression value for Gene A
- - *y~i~* is an expression value for Gene B
+ - *y~i~* is an expression value for Gene B in cell *i*
 - *$\bar{y}$* is the mean expression value for Gene B
 
 Now we will calculate the covariance for all pairwise comparisons for our re-centered expression data.
@@ -200,52 +224,49 @@ cov(recentered_expression_matrix[, "Gene_A"], recentered_expression_matrix[, "Ge
 This value should match the covariance found in our covariance matrix for the covariance between Gene A and Gene B.
 
 ::: callout-tip
-# [**Exercise 1**](04_theory_of_PCA_Answer-key.qmd#exercise-1)
-Exercise 1
+# [**Exercise 1**](04_theory_of_PCA-Answer_key.qmd#exercise-1)
 
-There are a couple properties of variance and co-variance that we can verify:
+There are a couple properties of variance and covariance that we can verify:
 
 *cov(X,X)* is equal to *var(X)*. We can observe this is mathematically below:
 
-<img src="https://latex.codecogs.com/svg.image?&space;cov(X,X)=\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})(x_{i}-\bar{x})=\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}=var(X)" width="500">
+$$
+\operatorname{cov}(X, X)
+= \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})(x_i - \bar{x})
+= \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^{2}
+= \operatorname{var}(X)
+$$
 
 As a result, you will sometimes see covariance matrices written as:
 
-<img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}var(X)&cov(X,Y)&...&cov(X,Z)\\cov(Y,X)&var(Y)&...&cov(Y,Z)\\...&...&...&...\\cov(Z,X)&cov(Z,Y)&...&var(Z)\\\end{bmatrix}" width="300">
+$$
+\begin{bmatrix}
+\operatorname{var}(X) & \operatorname{cov}(X, Y) & \dots & \operatorname{cov}(X, Z) \\
+\operatorname{cov}(Y, X) & \operatorname{var}(Y) & \dots & \operatorname{cov}(Y, Z) \\
+\dots & \dots & \dots & \dots \\
+\operatorname{cov}(Z, X) & \operatorname{cov}(Z, Y) & \dots & \operatorname{var}(Z)
+\end{bmatrix}
+$$
 
 1. Confirm this property by estimating the variance for Gene A.
 
-```{r covariance_check_1}
-# Estimate the variance for Gene A
-var(recentered_expression_matrix[, "Gene_A"])
-```
 
 2. Now estimate the covariance for Gene A and Gene A
 
-```{r covariance_check_2}
-# Estimate the covariance for Gene A and Gene A
-cov(recentered_expression_matrix[, "Gene_A"], recentered_expression_matrix[, "Gene_A"])
-```
-
 3. Is the value the same? Does it match the value in the covariance matrix for Gene A and Gene A?
 
-```{r covariance_matrix_check}
-# Extract the covariance estimate of Gene A and Gene A from the covariance matrix
-cov_matrix["Gene_A", "Gene_A"]
-```
+4. Another property of covariance is that *cov(X,Y)* is equal to *cov(Y,X)*. We can observe this is mathematically below:
 
-*cov(X,Y)* is equal to *cov(Y,X)*. We can observe this is mathematically below:
+$$
+\operatorname{cov}(X, Y)
+= \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})
+= \frac{1}{n-1} \sum_{i=1}^{n} (y_i - \bar{y})(x_i - \bar{x})
+= \operatorname{cov}(Y, X)
+$$
 
-<img src="https://latex.codecogs.com/svg.image?&space;cov(X,Y)=\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})=\frac{1}{n-1}\sum_{i=1}^{n}(y_{i}-\bar{y})(x_{i}-\bar{x})=cov(Y,X)" width="500">
+Estimate the covariance of Gene B and Gene A.
 
-4. Estimate the covariance of Gene B and Gene A.
-
-```{r covariance_check_3}
-# Estimate the covariance of Gene B and Gene A
-cov(recentered_expression_tibble[, "Gene_B"], recentered_expression_tibble[, "Gene_A"])
-```
-
-4. How does this compare to the covariance that we estimated by hand?
+5. How does this compare to the covariance of Gene A and Gene B that we estimated by hand?
 :::
 
 # Calculating the Principal Components
@@ -270,11 +291,26 @@ eig
 
 If we wanted to do this by hand then we need to set the determinant of the covariance matrix minus $\lambda$ times the identify matrix equal to 0 and solving for $\lambda$.
 
-<img src="https://latex.codecogs.com/svg.image?det(\begin{bmatrix}var(X)&cov(X,Y)\\cov(Y,X)&var(Y)\\\end{bmatrix}-\lambda\begin{bmatrix}1&0\\0&1\\\end{bmatrix})=0" width="500">
+$$
+\det\!\left(
+\begin{bmatrix}
+\operatorname{var}(X) & \operatorname{cov}(X, Y) \\
+\operatorname{cov}(Y, X) & \operatorname{var}(Y)
+\end{bmatrix}
+- \lambda
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+\right) = 0
+$$
 
 In this case it can be simplified to:
 
-<img src="https://latex.codecogs.com/svg.image?(var(X)-\lambda)(var(Y)-\lambda)-(cov(X,Y))(cov(Y,X))=0" width="500">
+$$
+(\operatorname{var}(X) - \lambda)(\operatorname{var}(Y) - \lambda)
+- \operatorname{cov}(X, Y)\,\operatorname{cov}(Y, X) = 0
+$$
 
 We can now replace the variance and covariance values with the values that we have from the covariance matrix and solve for $\lambda$. This results in two lambda values: **$\lambda$~1~ = `r round(eig$values[1], digits = 3)`** and **$\lambda$~2~ = `r round(eig$values[2], digits = 3)`**.
 
@@ -287,9 +323,21 @@ eig$values
 
 **Calculating Eigenvectors**
 
-In order to find the eigenvectors, we need to substitute the variacne and covariance values from the covariance matrix along with one of our *$\lambda$* values, *$\lambda$~1~* to find the associated eigenvector, *v~1~*. This results in *v~1~* being equal to `r eig$vectors[,1]`.
+In order to find the eigenvectors, we need to substitute the variance and covariance values from the covariance matrix along with one of our *$\lambda$* values, *$\lambda$~1~* to find the associated eigenvector, *v~1~*. This results in *v~1~* being equal to `r eig$vectors[,1]`.
 
-<img src="https://latex.codecogs.com/svg.image?(\begin{bmatrix}var(X)&cov(X,Y)\\cov(Y,X)&var(Y)\\\end{bmatrix}-\lambda&space;_{1}\begin{bmatrix}1&0\\0&1\\\end{bmatrix})v_{1}=0" width="500">
+$$
+\left(
+\begin{bmatrix}
+\operatorname{var}(X) & \operatorname{cov}(X, Y) \\
+\operatorname{cov}(Y, X) & \operatorname{var}(Y)
+\end{bmatrix}
+- \lambda_{1}
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+\right) v_{1} = 0
+$$
 
 We can confirm this by plugging our covariance matrix, eigenvalues and eigenvectors back into the above equation and it should return 0, or near 0 (due to rounding errors).
 
@@ -322,9 +370,13 @@ colnames(pc_scores) <- c("PC_1", "PC_2")
 pc_scores
 ```
 
+:::callout-note
+You can see the use of `%*%` here. This is the operator used to carry out matrix multiplication.
+:::
+
 ## Percent Variance Explained
 
-We are likely interested in knowing in knowing the amount of variance explained in our data by each principal component. As we alluded to earlier, we can use the eigenvalues to help us with this. The sum of all of the eigenvalues captures the total variance explained by the principal components analysis.
+We are likely interested in knowing the amount of variance explained in our data by each principal component. As we alluded to earlier, we can use the eigenvalues to help us with this. The sum of all of the eigenvalues captures the total variance explained by the principal components analysis.
 
 Thus, if we want to know the proportion of the variance explained by each principal component, then we would need to divide each eigenvalue by the total variance explained (the sum of the eigenvalues) and if we wanted this as a percentage then we would need to multiply it by 100.
 
@@ -340,7 +392,7 @@ pct_var_explained
 
 ## Plotting our Principal Components
 
-With out principal components in hand, we will create a visualization of the principal components.
+With our principal components in hand, we will create a visualization of the principal components.
 
 ```{r plotting_PCA_hand}
 # Create a tibble to hold the PC scores we found and also make the Cell IDs into a column
@@ -363,14 +415,14 @@ ggplot(pc_scores_tibble, aes(x = PC_1, y = PC_2, label = cells)) +
 ```
 
 ::: callout-tip
-# [**Exercise 2**](04_theory_of_PCA_Answer-key.qmd#exercise-2)
+# [**Exercise 2**](04_theory_of_PCA-Answer_key.qmd#exercise-2)
 
-When looking at the percent explained by each principal component, the first principal component should explain the most and each of the following principal components should explain less than the previous principal component. Let's have a look at our `pct_var_explained` object, are our results congruent with the expectation this expectation?
+When looking at the percent explained by each principal component, the first principal component should explain the most and each of the following principal components should explain less than the previous principal component. Let's have a look at our `pct_var_explained` object, are our results congruent with this expectation?
 :::
 
 # `prcomp()` comparison
 
-At this point we have completed a principal components analysis, but we can also compare it to how R does a principal components analysis and see how our results compare. One way to do a principal components analysis in R is to us the `prcomp()` function in R.
+At this point we have completed a principal components analysis, but we can also compare it to how R does a principal components analysis and see how our results compare. One way to do a principal components analysis in R is to use the `prcomp()` function in R.
 
 In order to run `prcomp()`, we need to start from an expression matrix and move the cell IDs to the rownames:
 
@@ -381,7 +433,7 @@ prcomp_PCA <- expression_tibble %>%
   prcomp()
 ```
 
-Let's inspect the output from `prcomp()` to ensure that we are getting the same output:
+Let's inspect the output from `prcomp()` to ensure that we are getting the same output.
 
 ## Center of the Data
 
@@ -403,9 +455,11 @@ They match which is a great sign that we did this correctly!
 
 ## Eigenvalues
 
-Note that eigenvalues are the variance for a particular principal component and that variance is the square of the standard deviation as shown below. 
+Note that eigenvalues are the variance for a particular principal component and variance is the square of the standard deviation as shown below. 
 
-<img src="https://latex.codecogs.com/svg.image?var(X)=sd(X)^{2}" width="150">
+$$
+\operatorname{var}(X) = \operatorname{sd}(X)^2
+$$
 
 `prcomp()` reports the standard deviation, so we will need to square the items in the `prcomp_PCA$sdev` slot in order to recover our variance, or eigenvalues.
 
@@ -419,7 +473,7 @@ names(prcomp_eigenvalues) <- c("PC_1", "PC_2")
 prcomp_eigenvalues
 ```
 
-We can compare this with our estimation of eiganvalues by hand:
+We can compare this with our estimation of eigenvalues by hand:
 
 ```{r eigenvalue_hand}
 # Print the eigenvalues we found
@@ -453,7 +507,7 @@ Finally, we can check our PC scores to ensure that they are also equivalent. We 
 prcomp_PCA$x
 ```
 
-While our principal components were:
+While our calculated principal components were:
 
 ```{r pc_scores_hand}
 # Print the PC scores we found
@@ -463,26 +517,16 @@ pc_scores
 Once again, the values are the same, but the only difference is the sign, which comes from the arbitrary direction of the eigenvector.
 
 ::: callout-tip
-# [**Exercise 3**](04_theory_of_PCA_Answer-key.qmd#exercise-3)
+# [**Exercise 3**](04_theory_of_PCA-Answer_key.qmd#exercise-3)
 Create a plot of the Principal Components Analysis derived from `prcomp()`. Is it the same as the plot we derived except only rotated 180&deg;?
-
-```{r plotting_PCA_prcomp}
-# Create a tibble to hold the PC scores prcomp() found and also make the Cell IDs into a column
-prcomp_pc_scores_tibble <- prcomp_PCA$x %>% 
-  as.data.frame() %>% 
-  rownames_to_column("cells") %>% 
-  as_tibble()
-
-# Plot the PC scores found by prcomp()
-ggplot(prcomp_pc_scores_tibble, aes(x = PC1, y = PC2, label = cells)) +
-  geom_point( color = "cornflowerblue") +
-  geom_text(hjust = 0, vjust = -1) +
-  theme_bw() +
-  xlim(-50, 50) +
-  ylim(-12, 12) +
-  xlab(paste0("PC 1 (Variance Explained ", round(prcomp_eigenvalues["PC_1"], digits = 2),"%)")) +
-  ylab(paste0("PC 2 (Variance Explained ", round(prcomp_eigenvalues["PC_2"], digits = 2),"%)")) +
-  ggtitle("PCA of Expression Values from Four Cells") +
-  theme(plot.title = element_text(hjust = 0.5))
-```
 :::
+
+# Number of PCs
+
+When carrying out a PCA, it could be interesting the know how many the possible Principal Components axes exist. The answer isn't so simple but the easiest metric to use is that **the number of PCs ≤ minimum(number_of_genes, number_of_cells)**. For a deeper dive in how the number of PCs is determined and factors that influence them, consider [this lesson](Aside_Number_of_PCs.qmd).
+
+***
+
+[Next Lesson >>](05_quality_control.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)
