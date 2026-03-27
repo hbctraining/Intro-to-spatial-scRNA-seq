@@ -34,10 +34,31 @@ website:
     collapse-level: 1     # At what header level to start collapsing
     # contents: auto      # Creates automatic TOC from page headers (no sections)
     contents:
+    
+      - section: "Pre-reading:"
+        contents:
+          - lessons/01_spatial_technologies.qmd
+          - lessons/02_spaceranger.qmd
+
 
       - section: "Day 1:"
         contents:
-          - lessons/01_setting_up.qmd 
+          - lessons/03_loading_spatial_data.qmd
+    
+      - section: "Day 1 Self-learning:"
+        contents:
+          - lessons/04_theory_of_PCA.qmd
+          - lessons/05_quality_control.qmd
+          
+      - section: "Day 2:"
+        contents:
+          - lessons/06_normalization_and_sketch.qmd
+          - lessons/07_dim_reduction.qmd
+
+      - section: "Day 2 Self-learning:"
+        contents:
+          - lessons/08_clustering.qmd
+
 
 format:
   html:
