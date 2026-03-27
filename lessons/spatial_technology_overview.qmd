@@ -11,13 +11,17 @@ Approximate time: XY minutes
 
 # Learning Objectives
 
--   Describe the differences between sequencing and imaging-based technologies
--   Understanding advantages and disadvantages of different technologies
+- Describe the differences between sequencing and imaging-based technologies
+- Understanding advantages and disadvantages of different technologies
+- Utilize the best sequencing method to answer a scientific question
 
 https://www.nature.com/articles/s41581-024-00841-1
 https://www.sciencedirect.com/science/article/pii/S1044532325000302
 
-# Overview of Spatial Technologies
+
+# Evolution of Sequencing Technologies
+
+High throughput sequencing has been around for TODO
 
 Over the years, transcriptomics technologies have evolved rapids from bulk sequencing all the way to the current spatial transcriptomics methods.
 
@@ -25,21 +29,28 @@ Over the years, transcriptomics technologies have evolved rapids from bulk seque
 
 ## Bulk Sequencing
 
-## Single Cell Sequencing
+First, **bulk sequencing** became popularized due to its ability to quantify gene expression within or between conditions. This is accomplished by calculating the average expression of genes in a sample. As a well-established protocol, these methods are good at detecting overall expression changes between conditions. However, as the expression is an average across multiple celltypes (unless FACs sorted), the signal can become confounded if there are celltype specific changes.
+
+## Single-cell Sequencing
+
+Therefore, the advent of **single-cell sequencing** became popularized for its ability to assess cellular heterogeneity and capture rare celltypes. Though these experiments come with their own challenges, including sensitivity to technical noise and the requirement for more demanding bioinformatics analyses. Dropout 
 
 ## Spatial Transcriptomics
+
+Which brings us to current technologies, which are able to distinguish the local neighborhoods of a cell with **spatial transcriptomics**. Cell-cell communication analyses are bolstered with the . Additionally, pathologist annotated slides make it possible to look for differences in disease states in the same tissue sample.
+
+Future innovations, including serial slide sequencing which allows you to stack the spatial results on top of one another to build a 3D image of an organ/sample.
+
+
+
+# Spatial Technology Categorization
 
 Spatial transcriptomics tend to be categorized in two broad categories:
 
 - Sequencing-based technologies
 - Imaging-based technologies
 
-Each of these methods process the tissue slide in different ways that will be explored more in the upcoming sections. The most important thing to note is that the ultimate output will be the same for each of these technologies:
-
-- A TIFF image file which contains pixels that are associated with coordinates
-- Gene counts matrix that maps expression levels to each of the pixels within the TIFF image
-
-This field is ever-changing with new technologies appearing everyday. Here we will summarize the most used technologies as of January 2026.
+This field is ever-changing with new technologies appearing everyday. In the following section we will summarize some of the most popular methods in each category
 
 # Sequencing-based Technologies
 
@@ -87,7 +98,7 @@ As this is a probe-based method, there must be known probes for each gene of int
 Segmentation methods are still up in the air and it can be challenging to define the boundaries of each cell. Some of these methods include 
 
 
-# Overall Comparison of Methods
+# Comparison of Spatial Categories
 
 | Sequencing-based                                              | Imaging-based                                           |
 |--------------------------------------------------------------|---------------------------------------------------------|
@@ -95,3 +106,10 @@ Segmentation methods are still up in the air and it can be challenging to define
 | Spots/bins resolution depends on bin size (not always single-cell) | Single-cell resolution                           |
 | No segmentation                                | Segmentation necessary           |
 | More accessible to non-model organisms                       | Can be challenging to find probes for non-model organisms |
+
+# Choosing the Best Method
+
+Pertinent questions to ask about your samples:
+
+- Fresh frozen or FFPE
+- How large is the cross-section
