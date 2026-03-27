@@ -50,7 +50,7 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 10:55 | [Quality Control](../lessons/tmp.qmd) | Instructor_name |
+| 10:30 - 10:55 | [Quality Control](../lessons/05_quality_control.qmd) | Instructor_name |
 | 10:55 - 11:00 | Break | |
 | 11:00 - 11:55 | [Sketch Downsampling and Dimensionality Reduction](../lessons/tmp.qmd) | Instructor_name |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
