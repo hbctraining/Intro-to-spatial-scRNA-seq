@@ -686,6 +686,7 @@
     "text": "Overview of lesson\nWhen doing XYZ…"
   },
   {
+<<<<<<< HEAD
     "objectID": "lessons/08_clustering.html#grouping-similar-bins-together",
     "href": "lessons/08_clustering.html#grouping-similar-bins-together",
     "title": "Clustering",
@@ -719,5 +720,107 @@
     "title": "Clustering",
     "section": "Save!",
     "text": "Save!\nNow is a great spot to save our seurat_processed object as we have added a lot new information into our Seurat object, such as:\n\nSketch HVGs\nScaled log-normalized counts\nPCA\nk-Nearest neighbors\nClusters\nUMAP\nProjected clusters\n\n\n# Save Seurat object\nsaveRDS(seurat_processed, \"data/seurat_processed.RDS\")\n\n\nNext Lesson &gt;&gt;\nBack to Schedule"
+=======
+    "objectID": "lessons/08_spatially_derived_clusters.html#sub-topic-3-1",
+    "href": "lessons/08_spatially_derived_clusters.html#sub-topic-3-1",
+    "title": "Spatially Derived Clusters",
+    "section": "Sub-topic 3",
+    "text": "Sub-topic 3\n\n\n\n\n\n\nExercise 3\n\n\n\nExercise 1",
+    "crumbs": [
+      "Day 2 Self-learning",
+      "Spatially Derived Clusters"
+    ]
+  },
+  {
+    "objectID": "lessons/spatial_technology_overview.html#categorization",
+    "href": "lessons/spatial_technology_overview.html#categorization",
+    "title": "Spatial Technologies",
+    "section": "Categorization",
+    "text": "Categorization\nSpatial transcriptomics tend to be categorized in two broad categories:\n\nSequencing-based technologies\nImaging-based technologies\n\nEach of these methods process the tissue slide in different ways that will be explored more in the upcoming sections. The most important thing to note is that the ultimate output will be the same for each of these technologies:\n\nA TIFF image file which contains pixels that are associated with coordinates\nGene counts matrix that maps expression levels to each of the pixels within the TIFF image\n\nThis field is ever-changing with new technologies appearing everyday. Here we will summarize the most used technologies as of January 2026."
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html",
+    "href": "lessons/SpaceRanger.html",
+    "title": "SpaceRanger",
+    "section": "",
+    "text": "Approximate time: XY minutes"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#inputs",
+    "href": "lessons/SpaceRanger.html#inputs",
+    "title": "SpaceRanger",
+    "section": "Inputs",
+    "text": "Inputs\nBefore running the count pipeline in SpaceRanger, the following input files must be generated:\n\n\n\n\n\n\n\n\nCategory\nItem / File type\nDescription\n\n\n\n\nReference files\nReference genome (FASTA + GTF)\nReference used for mapping reads (or)\n\n\n\nProbe-set CSV\nProbe definitions for probe-based assays\n\n\nSequencing data\nFASTQ files\nReads from the sequencer for the sample\n\n\nArea\nSlide area (e.g., A1, B1)\nSpecifies which area on the slide to analyze\n\n\nImages\nCytAssist image (TIF)\nMicroscope image used for fiducial alignment and initial registration\n\n\n\nMicroscope image (BTF, optional)\nHigher-quality image of the same tissue used for analysis\n\n\n\nThese are all key input files that are necessary to the run the processing pipeline."
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#running-spaceranger",
+    "href": "lessons/SpaceRanger.html#running-spaceranger",
+    "title": "SpaceRanger",
+    "section": "Running SpaceRanger",
+    "text": "Running SpaceRanger\nNote that Space Ranger requires a Linux system with at least 32 cores, 64GB of RAM, and 1TB of disk space. It is not advisable to run this software on a local laptop or computer as the amount of computation power needed to large. Therefore, making use of cloud computing or a High Performance Compute Cluster would be the ideal environment to run the tool.\nHere is example code for how you could run SpaceRanger:\n\nspaceranger count --id=hd_count \\\n   --transcriptome=/path/to/refdata-gex-GRCh38-2020-A \\\n   --fastqs=/path/to/fastq \\\n   --probe-set=/path/to/Visium_Human_Transcriptome_Probe_Set_v2.0_GRCh38-2020-A.csv \\\n   --slide=H1-YD7CDZK \\\n   --area=A1 \\\n   --cytaimage=/path/to/CAVG10539_2023-11-16_14-56-24_APPS115_H1-YD7CDZK_A1_S11088.tif \\\n   --image=/path/to/APPS115_11088_rescan_01.btf \\\n   --create-bam=false"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#outputs",
+    "href": "lessons/SpaceRanger.html#outputs",
+    "title": "SpaceRanger",
+    "section": "Outputs",
+    "text": "Outputs\nWhen spaceranger count completes successfully, it will generate a variety of outputs (seen below), which will enable the analyst to perform further analysis in R/Python or using the proprietary Loupe browser from 10X Genomics.\n\n\n\n10x Space Ranger Documentation"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#sub-topic-1",
+    "href": "lessons/SpaceRanger.html#sub-topic-1",
+    "title": "SpaceRanger",
+    "section": "Sub-topic 1",
+    "text": "Sub-topic 1"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#sub-topic-2",
+    "href": "lessons/SpaceRanger.html#sub-topic-2",
+    "title": "SpaceRanger",
+    "section": "Sub-topic 2",
+    "text": "Sub-topic 2"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#sub-topic-3",
+    "href": "lessons/SpaceRanger.html#sub-topic-3",
+    "title": "SpaceRanger",
+    "section": "Sub-topic 3",
+    "text": "Sub-topic 3"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#sub-topic-1-1",
+    "href": "lessons/SpaceRanger.html#sub-topic-1-1",
+    "title": "SpaceRanger",
+    "section": "Sub-topic 1",
+    "text": "Sub-topic 1"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#sub-topic-2-1",
+    "href": "lessons/SpaceRanger.html#sub-topic-2-1",
+    "title": "SpaceRanger",
+    "section": "Sub-topic 2",
+    "text": "Sub-topic 2"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#sub-topic-3-1",
+    "href": "lessons/SpaceRanger.html#sub-topic-3-1",
+    "title": "SpaceRanger",
+    "section": "Sub-topic 3",
+    "text": "Sub-topic 3"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#sequencing-alignment",
+    "href": "lessons/SpaceRanger.html#sequencing-alignment",
+    "title": "SpaceRanger",
+    "section": "Sequencing Alignment",
+    "text": "Sequencing Alignment\n\nRead trimming of template switch oligo sequences\nAlignment of FASTQ reads:\n\n\npolyA assays: reference genome using STAR\nProbe-based assays: More complex TODO\n\n\nCorrect barcode sequences that may have been incorrectly sequenced using the edit distance\nProbe filtration\nCount UMIS\nBinning\nSelecting bins under tissue"
+  },
+  {
+    "objectID": "lessons/SpaceRanger.html#imaging-algorithms",
+    "href": "lessons/SpaceRanger.html#imaging-algorithms",
+    "title": "SpaceRanger",
+    "section": "Imaging Algorithms",
+    "text": "Imaging Algorithms\n\nIdentifying tissue regions\nAlign tissue to the printed fiducial spot pattern\n\nTODO define fiducial\n\nTilt correction\nTissue detection\nImage registration\nUMI-based refinement\nCell segmentation\nFluroescence intensity"
+>>>>>>> main
   }
 ]
