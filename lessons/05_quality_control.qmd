@@ -1,9 +1,9 @@
 ---
-title: "Quality Control "
+title: "Quality Control"
 description: |
   Write a description of the lesson here. 
 author:
-  - Noor Sohail
+  - "Noor Sohail"
 date: "2025-07-22"
 categories: 
   - category_1
@@ -46,7 +46,7 @@ In this lesson, we will:
 
 When doing XYZ...
 
-## Quality Metrics
+## Quality metrics
 
 In Visium HD data, the main challenge is in **delineating bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
 
@@ -131,7 +131,7 @@ This is the number of unique transcripts detected per bin. Because the bins are 
 
 ::: {.panel-tabset}
 
-### Spatial overlay
+#### Spatial overlay
 
 ```{r}
 #| label: fig-nCount_spatial
@@ -143,7 +143,7 @@ SpatialFeaturePlot(seurat_merged,
                    max.cutoff = "q90")
 ```
 
-### Before filtration density
+#### Before filtration density
 
 ```{r}
 #| label: fig-nCount_density
@@ -159,7 +159,7 @@ ggplot(meta) +
 ```
 
 
-### After Filtration Density
+#### After filtration density
 
 ```{r}
 #| label: fig-nCount_density_filt
@@ -186,7 +186,7 @@ ggplot(meta_filt) +
 A commonly asked question is if you have to use the same threshold values across all your samples. We recommend that you follow what the data is telling you and do it on a per sample basis. Ultimately the end goal is to retain **high-quality bins**, even if that means using different values for each sample.
 :::
 
-## Genes detected per bin
+### Genes detected per bin
 
 We have similar expectations for gene detection as for UMI detection, although it may be a bit lower than UMIs.
 
@@ -194,7 +194,7 @@ This is the number of unique genes detected per bin. Again, because the bins are
 
 ::: {.panel-tabset}
 
-### Spatial Overlay
+#### Spatial overlay
 
 ```{r}
 #| label: fig-nFeature_spatial
@@ -206,7 +206,7 @@ SpatialFeaturePlot(seurat_merged,
                    max.cutoff = "q90")
 ```
 
-### Before Filtration Density
+#### Before filtration density
 
 ```{r}
 #| label: fig-nFeature_density
@@ -223,7 +223,7 @@ ggplot(meta) +
 ```
 
 
-### After Filtration Density
+#### After filtration density
 
 ```{r}
 #| label: fig-nFeature_density_filt
@@ -245,7 +245,7 @@ ggplot(meta_filt) +
 
 :::
 
-## Complexity (Novelty) Score
+### Complexity (novelty) score
 
 If there are many captured transcripts (high nUMI) and a low number of genes detected in a bin, this likely means that you only captured a low number of genes and simply sequenced transcripts from those lower number of genes over and over again. These low complexity (low novelty) bins could represent a specific cell type (i.e. red blood cells, which lack a typical transcriptome), or could be due to an artifact or contamination. Generally, we expect the complexity score to be above 0.80 for good-quality bins.
 
@@ -269,7 +269,7 @@ seurat_merged$log10GenesPerUMI[is.na(seurat_merged$log10GenesPerUMI)] <- 0
 
 ::: {.panel-tabset}
 
-### Spatial Overlay
+#### Spatial overlay
 
 ```{r}
 #| label: fig-log10GenesPerUMI_spatial
@@ -281,7 +281,7 @@ SpatialFeaturePlot(seurat_merged,
                    min.cutoff = "q10")
 ```
 
-### Before Filtration Density
+#### Before filtration density
 
 ```{r}
 #| label: fig-log10GenesPerUMI_density
@@ -297,7 +297,7 @@ ggplot(meta) +
 ```
 
 
-### After Filtration Density
+#### After filtration density
 
 ```{r}
 #| label: fig-log10GenesPerUMI_density_filt
@@ -314,7 +314,7 @@ ggplot(meta_filt) +
 
 :::
 
-## Mitochondrial Counts Ratio
+### Mitochondrial counts ratio
 
 This metric can identify whether there is a large amount of mitochondrial contamination from dead or dying cells. We define poor-quality samples for mitochondrial counts as bins which surpass the 0.2 mitochondrial ratio threshold, unless of course you are expecting this in your sample. This ratio is computed as:
 
@@ -345,7 +345,7 @@ seurat_merged$mitoRatio[is.na(seurat_merged$mitoRatio)] <- 0
 
 ::: {.panel-tabset}
 
-### Spatial Overlay
+#### Spatial overlay
 
 ```{r}
 #| label: fig-mitoRatio_spatial
@@ -357,7 +357,7 @@ SpatialFeaturePlot(seurat_merged,
                    max.cutoff = "q90")
 ```
 
-### Before Filtration Density
+#### Before filtration density
 
 ```{r}
 #| label: fig-mitoRatio_density
@@ -373,7 +373,7 @@ ggplot(meta) +
 ```
 
 
-### After Filtration Density
+#### After filtration density
 
 ```{r}
 #| label: fig-mitoRatio_density_filt
@@ -390,9 +390,6 @@ ggplot(meta_filt) +
 ```
 
 :::
-
-
-
 
 :::{.callout-tip}
 # [**Exercise 1**](05_quality_control-Answer_key.qmd#exercise-1)
@@ -451,11 +448,11 @@ ncol(seurat_merged) - ncol(seurat_filtered)
 2. How many bins do we have per sample after this filtration step?
 :::
 
-## Visualizing Counts Data
+## Visualizing counts data
 
 We can visualize the number of UMIs and gene counts per bin, both as a distribution and layered on top of the tissue image. 
 
-## Violin Plots
+### Violin plots
 
 Let’s start with a violin plot to look at the distribution of UMI counts and gene counts. The input is our post-filtered dataset.
 
@@ -477,7 +474,7 @@ p_ncount | p_nfeats
 
 We see that both distributions have a similar peak but the nUMI distribution has a much longer tail. This is expected, because while the small physical size of the bins means that most genes will be detected only once or twice, a minority of bins under very transcriptionally active cells may exhibit multiple transcripts of the same gene.
 
-## Spatial Overlay
+### Spatial overlay
 
 Next, we can look at the same metrics and the distribution on the actual image itself. Note that many spots have very few counts, in part due to low cellular density or cell types with low complexity in certain tissue regions.
 
@@ -494,7 +491,7 @@ SpatialFeaturePlot(seurat_filtered,
 ```
 
 
-# Save!
+## Save!
 
 Now is a great spot to save our `seurat_filtered` object as we have finished filtered.
 
