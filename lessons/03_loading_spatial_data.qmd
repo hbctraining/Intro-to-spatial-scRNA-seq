@@ -704,6 +704,6 @@ A good rule of thumb is to save your intermediate objects before doing any filtr
 
 ***
 
-[Next Lesson >>](04_lesson.qmd)
+[Next Lesson >>](04_theory_of_PCA.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)

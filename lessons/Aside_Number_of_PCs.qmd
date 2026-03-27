@@ -61,7 +61,7 @@ library(tidyverse)
 # Creation of the Covariance Matrix
 
 Let's consider the `expression_tibble` that we created in the [Theory of
-PCA](06_theory_of_PCA.qmd#Creating-an-example-data-set) lesson.
+PCA](04_theory_of_PCA.qmd#Creating-an-example-data-set) lesson.
 
 ```{r}
 #| label: print_expression_tibble
@@ -333,3 +333,4 @@ From here, we can see that the re-centered value of `Gene_C` is just 0 for all c
 # Conclusion
 
 The number of PCs, or rank, of a PCA is at most the fewer of the number of cells or the number of genes.
+

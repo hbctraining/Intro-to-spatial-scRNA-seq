@@ -517,10 +517,16 @@ pc_scores
 Once again, the values are the same, but the only difference is the sign, which comes from the arbitrary direction of the eigenvector.
 
 ::: callout-tip
-# [**Exercise 3**](06_theory_of_PCA_Answer-key#exercise-3)
+# [**Exercise 3**](04_theory_of_PCA-Answer_key.qmd#exercise-3)
 Create a plot of the Principal Components Analysis derived from `prcomp()`. Is it the same as the plot we derived except only rotated 180&deg;?
 :::
 
 # Number of PCs
 
 When carrying out a PCA, it could be interesting the know how many the possible Principal Components axes exist. The answer isn't so simple but the easiest metric to use is that **the number of PCs ≤ minimum(number_of_genes, number_of_cells)**. For a deeper dive in how the number of PCs is determined and factors that influence them, consider [this lesson](Aside_Number_of_PCs.qmd).
+
+***
+
+[Next Lesson >>](05_tmp.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)

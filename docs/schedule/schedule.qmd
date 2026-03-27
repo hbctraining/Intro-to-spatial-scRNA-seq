@@ -24,7 +24,7 @@ toc: false
 
 I. Please **study the contents** and **work through all the code** within the following lessons:
  
-   1. [Principal Component Analysis (PCA)](../lessons/tmp.qmd)
+   1. [Principal Component Analysis (PCA)](../lessons/04_theory_of_PCA.qmd)
       
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
       Brief description of the lesson.
