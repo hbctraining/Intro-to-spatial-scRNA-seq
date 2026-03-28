@@ -21,7 +21,6 @@ license: "CC-BY-4.0"
 editor_options: 
   markdown: 
     wrap: 72
-eval: false
 ---
 
 ```{r}
@@ -43,8 +42,8 @@ Approximate time: XX minutes
 In this lesson, we will:
 
 - Discuss why normalizing counts is necessary for accurate comparison between cells
-- Learning Objective 2
-- Learning Objective 3
+- Identify interesting genes with highly variable gene selection
+- Downsample our dataset while retaining the biological complexity
 
 ## Overview of lesson
 
@@ -176,7 +175,7 @@ top_genes
 ```
 
 ::: callout-tip
-# [**Exercise 1**](06_normalization_and_sketch_Answer-key.qmd#exercise-1)
+# [**Exercise 1**](06_normalization_and_sketch-Answer_key.qmd#exercise-1)
 
 1. Using [GeneCards](https://www.genecards.org/), look up one of the top genes and read more about its role and how it could possible relate to CRC.
 2. Visualize one of the top variable genes on the spatial slide with `SpatialFeaturePlot()` to see if expression varies across the image.
