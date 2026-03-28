@@ -1,0 +1,60 @@
+---
+title: "Dimensionality Reduction - Answer Key"
+author:
+  - Noor Sohail
+date: "2025-07-22"
+license: "CC-BY-4.0"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: load_libraries_data
+#| echo: false
+# Load libraries and data
+library(Seurat)
+seurat_processed <- qs::qread("intermediate/07_seurat_processed.qs")
+```
+
+# Exercise 1
+
+1. Do you notice any differences when we calculated HVGs for the entire
+dataset versus the sketch assay?
+
+```{r}
+#| label: top_15_variable_genes_sketch
+# Identify the 15 most highly variable genes
+ranked_variable_genes <- VariableFeatures(seurat_processed, 
+                                          assay="sketch")
+ranked_variable_genes[1:15]
+```
+
+
+Many of the genes are the same in the `sketch` assay compared to the full dataset, but there are several new ones. This tells us that the genes that change the most are different in our downsampled data. 
+
+
+# Exercise 2
+
+2. Plot the `nCount_Spatial.008um` on the UMAP with `FeaturePlot()`. Do you notice any patterns?
+
+```{r}
+FeaturePlot(seurat_processed,
+            features = "nCount_Spatial.008um")
+```
+
+We can see that there is a gradient in nUMIs in the dataset. It is possible that these could be technical artifacts or true biological differences. It is possible that the populations with higher `nCount` are transcriptionally active bins, such as tumor cells. The best way to determine which is true will be annotating populations by cell type as we would have the biological context of expression patterns.
+
+3. Plot the expression of one of the top variable genes on the UMAP also with `FeaturePlot()`. What do you notice?
+
+```{r}
+#| fig-width: 15
+#| fig-height: 15
+FeaturePlot(seurat_processed,
+            features = c("IGHM", "IGLC1", "CHGA",
+                         "SST", "CXCL8", "GCG",
+                         "VIP", "PYY", "MMP12"),
+            ncol = 3)
+```
+
+Many of the top variable genes are expressed in small populations of bins that are close in euclidean distance to one another in UMAP space. 

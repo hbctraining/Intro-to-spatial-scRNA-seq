@@ -21,7 +21,6 @@ license: "CC-BY-4.0"
 editor_options: 
   markdown: 
     wrap: 72
-eval: false
 ---
 
 ```{r}
@@ -111,7 +110,7 @@ following genes to be the most variable:
 #| label: top_15_variable_genes_full
 # Identify the 15 most highly variable genes
 ranked_variable_genes <- VariableFeatures(seurat_sketch, 
-                                          assay="Spatial.008um")
+                                          assay = "Spatial.008um")
 top_genes <- ranked_variable_genes[1:15]
 top_genes
 ```
@@ -125,7 +124,7 @@ our smaller sketch assay of 10,000 bins.
 seurat_processed <- FindVariableFeatures(seurat_sketch, 
                                          selection.method = "vst",
                                          nfeatures = 2000,
-                                         assay="sketch")
+                                         assay = "sketch")
 seurat_processed
 ```
 
@@ -212,7 +211,8 @@ data by:
     be 1
 
 ```{r}
-# Scale the data counts
+#| label: scale_data
+# Scale the log-normalized expression
 seurat_processed <- ScaleData(seurat_processed)
 seurat_processed
 ```
@@ -222,6 +222,7 @@ log-normalized counts now exist. So now we can proceed in calculating
 our Principal Components with `RunPCA()`.
 
 ```{r}
+#| label: run_pca
 # Run PCA
 seurat_processed <- RunPCA(seurat_processed,
                            assay = "sketch",
@@ -233,6 +234,7 @@ score for each component. This includes genes that have both a positive
 and negative weight.
 
 ```{r}
+#| label: pca_callout
 seurat_processed
 ```
 
@@ -255,6 +257,7 @@ Example of visualizing cells using the first two principal components (PC1 vs PC
 ```{r}
 #| label: fig-PCA_plot
 #| fig-cap: PCA plot of PC1 vs PC2 with bins colored by sample.
+# Plot PCA
 DimPlot(seurat_processed,
         group.by = "orig.ident",
         reduction = "pca.sketch")
@@ -267,13 +270,14 @@ Also assess the differences in coordinates based on batch variables.
 ```{r}
 #| label: fig-PCA_plot_batch
 #| fig-cap: PCA plot of PC1 vs PC2 with bins colored and split by sample.
+# Plot PCA, split by sample
 DimPlot(seurat_processed,
         reduction = "pca.sketch",
         group.by = "orig.ident",
         split.by = "orig.ident")
 ```
 
-### Selecting PC Dimensions
+### Selecting PC dimensions
 
 To overcome the extensive technical noise in the expression of any single gene for scRNA-seq data, Seurat assigns cells to clusters based on their PCA scores derived from the expression of the integrated most variable genes. Each PC essentially representing a "metagene" that combines information across a correlated gene set. **Determining how many PCs to include in the clustering step is therefore important to ensure that we are capturing the majority of the variation**, or cell types, present in our dataset. 
 
@@ -304,10 +308,12 @@ Both methods aim to place cells with similar local neighborhoods in high-dimensi
 
 ```{r}
 #| label: run_umap
+# Run UMAP
 seurat_processed <- RunUMAP(seurat_processed, 
                             reduction = "pca.sketch", 
                             reduction.name = "umap.sketch", 
-                            return.model = T, dims = 1:50)
+                            return.model = T, 
+                            dims = 1:50)
 seurat_processed
 ```
 
@@ -316,10 +322,17 @@ These UMAP coordinates are now stored in the `dimensional reductions calculated:
 ```{r}
 #| label: fig-umap_plot
 #| fig-cap: UMAP plot with bins colored by sample.
+# Plot UMAP
 DimPlot(seurat_processed, 
         group.by="orig.ident",
         reduction="umap.sketch")
 ```
+
+::: callout-tip
+# [**Exercise 2**](07_dim_reduction-Answer_key.qmd#exercise-2)
+2. Plot the `nCount_Spatial.008um` on the UMAP with `FeaturePlot()`. Do you notice any patterns?
+3. Plot the expression of one of the top variable genes on the UMAP also with `FeaturePlot()`. What do you notice?
+:::
 
 ```{r}
 #| label: save_seurat_qs
