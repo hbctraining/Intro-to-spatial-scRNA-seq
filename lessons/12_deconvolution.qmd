@@ -250,12 +250,13 @@ The more celltypes you have the longer this will take.
 We need to provide a time estimate for this step
 
 Start = 8:02
-End =   
+End = ~ 9:00  
 
 This took me 
 :::
 
 ```{r}
+#| eval: false
 # Run RCTD
 RCTD <- create.RCTD(spatialRNA = query, 
                     reference = reference, 
@@ -265,8 +266,8 @@ RCTD <- run.RCTD(RCTD, doublet_mode = "doublet") # This step takes a while
 
 ```{r}
 #| echo: false
-qsave(nat, "intermediate/12_nat_rctd.qs")
-nat <- qread("intermediate/12_nat_rctd.qs")
+# qsave(RCTD, "intermediate/12_RCTD_nat.qs")
+RCTD <- qread("intermediate/12_RCTD_nat.qs")
 ```
 
 ## RCTD Results
@@ -289,17 +290,71 @@ df_rctd_results <- RCTD@results$results_df
 df_rctd_results %>% head()
 ```
 
-# RCTD Results in Seurat
-
-We want to add the relevant information into our seurat object using the `AddMetaData()` function.
+We can also visualize the identifications established for each `first_type`:
 
 ```{r}
-crc <- AddMetaData(crc, 
-                   metadata = RCTD@results$results_df)
+ggplot(df_rctd_results,
+       aes(x = first_type, fill = first_type)) +
+  geom_bar() +
+  theme_bw() + ggtitle("RCTD First Type: P5NAT Sample") +
+  NoLegend() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
+## Project RCTD results on all bins
+
+Let us take a look at how many rows (bins) we have these annotations for:
+
 ```{r}
-table(crc$second_type)
+nrow(df_rctd_results)
+```
+
+But didn't our `sketch` assay include 5,000 bins? RCTD runs its own QC and when it cannot identify what the annotation for a specific bin is, then it is removed from the final results.
+
+So we are going to do some data wrangling to ensure that we keep track of all information. Including those ~800 bins without `first_type` labels.
+
+```{r}
+# Create column cell to merge on
+# Also make sure columns are not factors
+df_rctd_results <- df_rctd_results %>%
+  mutate(cell = rownames(df_rctd_results)) %>%
+  mutate(first_type = as.character(first_type),
+         second_type = as.character(second_type),
+         spot_class = as.character(spot_class))
+
+# Update column names to have _sketch
+# This is so that we can create a projected column
+colnames(df_rctd_results) <- paste0(colnames(df_rctd_results), 
+                                    "_sketch")
+df_rctd_results %>% head()
+```
+
+Now let us merge this information into our Seurat object. THis is necessary step so that we can merge i
+
+```{r}
+nat$cell <- rownames(nat@meta.data)
+meta <- nat@meta.data
+meta <- left_join(meta, 
+                  df_rctd_results,
+                  by = c("cell" = "cell_sketch"))
+rownames(meta) <- meta$cell
+nat@meta.data <- meta
+
+# Set value ot unassigned to sketch bins that do not have values
+# This is because ProjectData will throw errors if there is not a value
+# For every sketch bin
+nat@meta.data[sketch_cells, "spot_class_sketch"][
+  is.na(nat@meta.data[sketch_cells, "spot_class_sketch"])] <- "unassigned"
+nat@meta.data[sketch_cells, "first_type_sketch"][
+  is.na(nat@meta.data[sketch_cells, "first_type_sketch"])]   <- "unassigned"
+nat@meta.data[sketch_cells, "second_type_sketch"][
+  is.na(nat@meta.data[sketch_cells, "second_type_sketch"])] <- "unassigned"
+
+```
+
+
+```{r}
+table(nat$first_type_sketch)
 ```
 
 ## Project Back to Full Dataset
