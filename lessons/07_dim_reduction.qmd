@@ -21,6 +21,7 @@ license: "CC-BY-4.0"
 editor_options: 
   markdown: 
     wrap: 72
+eval: false
 ---
 
 ```{r}
@@ -39,9 +40,9 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Follow a standard single-cell RNA-seq workflow on our `sketch` assay
+- Identify highly variable genes in the `sketch` assay and compare to the full dataset
+- Perform dimensionality reduction using PCA and UMAP on the `sketch` assay
 
 ## Overview of lesson
 
@@ -58,7 +59,13 @@ start to end.
 Here we show the overarching steps that are takin in a classical
 single-cell analysis.
 
-<img src="../img/sc_workflow_2022.jpg" width="630"/>
+::: {#fig-sc_workflow .figure}
+![](../img/sc_workflow_2022.jpg){width=630}
+
+Single-cell RNA-seq analysis workflow.<br>
+_Image source: [Intro to scRNA-seq analysis](https://hbctraining.github.io/Intro-to-scRNAseq/)_.
+:::
+
 
 The broader principles of this workflow remain the same when working
 with spatial transcriptomics data. This lesson will cover the following
@@ -66,16 +73,17 @@ steps:
 
 1.  `FindVariableFeatures()`: As before, this generates a list of highly
     variable genes, which may be slightly different for the sketched
-    dataset than for the full dataset
+    dataset than for the full dataset.
 2.  `ScaleData()`: Highly variable genes will be confounded with the
-    most highly expressed genes, so we need to adjust for this
+    most highly expressed genes, so we need to adjust for this before PCA.
 3.  `RunPCA()`: Perform a principal component analysis using our scaled
     data and variable genes. This will emphasize variation in gene
-    expression as well as similarity across bins
-4.  `RunUMAP()`: TODO
+    expression as well as similarity across bins.
+4.  `RunUMAP()`: Calculate UMAP coordinates for each bin, which will be used for
+    visualization and clustering.
 
 With that being said, there are certain elements that are unique to a
-spatial dataset that we will highlight as we go through all of these
+spatial dataset that we will highlight as we go through each of these
 steps.
 
 ## Variation in the dataset
@@ -94,12 +102,13 @@ seurat_sketch <- readRDS("data/seurat_sketch.RDS")
 ```
 
 
-### Identify Highly Variable Features
+### Identify highly variable genes (HVGs)
 
 Recall that when we were working with the entire dataset, we found the
 following genes to be the most variable:
 
 ```{r}
+#| label: top_15_variable_genes_full
 # Identify the 15 most highly variable genes
 ranked_variable_genes <- VariableFeatures(seurat_sketch, 
                                           assay="Spatial.008um")
@@ -108,9 +117,10 @@ top_genes
 ```
 
 We are going to run `FindVariableFeatures()` once more, but this time on
-our smaller dataset of 10,000 bins.
+our smaller sketch assay of 10,000 bins.
 
 ```{r}
+#| label: find_variable_features_sketch
 # Identify the most variable genes
 seurat_processed <- FindVariableFeatures(seurat_sketch, 
                                          selection.method = "vst",
@@ -120,12 +130,13 @@ seurat_processed
 ```
 
 ::: callout-tip
-# [**Exercise 1**](06_clustering_Answer-key.qmd#exercise-1)
+# [**Exercise 1**](07_dim_reduction-Answer_key.qmd#exercise-1)
 
-Do you seen any differences when we calculated HVGs for the entire
+1. Do you notice any differences when we calculated HVGs for the entire
 dataset versus the sketch assay?
 
 ```{r}
+#| label: top_15_variable_genes_sketch
 # Identify the 15 most highly variable genes
 ranked_variable_genes <- VariableFeatures(seurat_processed, 
                                           assay="sketch")
@@ -133,7 +144,7 @@ ranked_variable_genes[1:15]
 ```
 :::
 
-### Visualize Highly Variable Genes
+### Visualize highly variable genes
 
 We can visualize the dispersion of all genes using Seurat's
 `VariableFeaturePlot()`, which shows a gene's average expression across
@@ -145,7 +156,8 @@ For the visualization, we are adding labels using `LabelPoints()` to
 help us better understand which genes are driving the shape of our data.
 
 ```{r}
-#| label: top_15_variable_genes
+#| label: fig-VariableFeaturePlot
+#| fig-cap: Scatterplot of genes variance and average expression, with top 15 variable genes labeled.
 # Identify the 15 most highly variable genes
 ranked_variable_genes <- VariableFeatures(seurat_processed,
                                           assay = "sketch")
@@ -160,11 +172,11 @@ LabelPoints(plot = p, points = top_genes, repel = TRUE)
 Now we are primed to run the next step of the workflow, which is
 Principal Component Analysis.
 
-## Principal Component Analysis (PCA)
+## Principal component analysis (PCA)
 
 PCA is a technique used to emphasize
 variation as well as similarity, and to bring out strong patterns in a
-dataset; it is one of the methods used for *"dimensionality reduction"*.
+dataset; it is one of the methods used for **dimensionality reduction**.
 
 ::: {.callout-note collapse="true"}
 # Video on how PCA is calculated
@@ -177,11 +189,15 @@ more thorough understanding.
 :::
 
 Let's say you are working with a single-cell RNA-seq dataset with
-*12,000 cells* and you have quantified the expression of *20,000 genes*.
+_12,000 cells_ and you have quantified the expression of _20,000 genes_.
 The schematic below demonstrates how you would go from a cell x gene
 matrix to principal component (PC) scores for each individual cell.
 
-<img src="../img/PCA_scrnaseq_1.png" width="900"/>
+::: {#fig-PCA_schematic .figure}
+![](../img/PCA_scrnaseq_1.png){width=900}
+
+Schematic of PCA: from a cell-by-gene count matrix to principal component scores per cell.
+::: 
 
 To perform PCA, we need to first choose the most variable features, then
 **scale the data**. Since highly expressed genes exhibit the highest
@@ -216,13 +232,11 @@ The information printed out show the top genes that influence a cell's
 score for each component. This includes genes that have both a positive
 and negative weight.
 
-If we look at our updated `seurat_processed` object:
-
 ```{r}
 seurat_processed
 ```
 
-We see that we have stored our PCA results:
+If we look at our updated `seurat_processed` object, we can see the PCA results have been stored:
 `dimensional reduction calculated: pca.sketch`
 
 ### Visualize PCA
@@ -232,9 +246,15 @@ After the PC scores have been calculated, you are looking at a matrix of
 expression in all the cells. You can select the PC1 and PC2 columns and
 plot that in a 2D way.
 
-<img src="../img/PCA_scrnaseq_2.png" width="600"/>
+::: {#fig-PCA_scrnaseq_2 .figure}
+![](../img/PCA_scrnaseq_2.png){width=600}
+
+Example of visualizing cells using the first two principal components (PC1 vs PC2).
+:::
 
 ```{r}
+#| label: fig-PCA_plot
+#| fig-cap: PCA plot of PC1 vs PC2 with bins colored by sample.
 DimPlot(seurat_processed,
         group.by = "orig.ident",
         reduction = "pca.sketch")
@@ -245,6 +265,8 @@ Ultimately what we have calculated with PCA are values that can represent how si
 Also assess the differences in coordinates based on batch variables.
 
 ```{r}
+#| label: fig-PCA_plot_batch
+#| fig-cap: PCA plot of PC1 vs PC2 with bins colored and split by sample.
 DimPlot(seurat_processed,
         reduction = "pca.sketch",
         group.by = "orig.ident",
@@ -262,7 +284,8 @@ The **elbow plot** is a helpful way to determine how many PCs to use for cluster
 Let's draw an elbow plot using the top 50 PCs:
 
 ```{r}
-#| label: PC_elbow_plot
+#| label: fig-PC_elbow_plot
+#| fig-cap: Elbow plot representing the standard deviations of the first 50 principal components.
 # Plot the elbow plot
 ElbowPlot(object = seurat_processed,
           reduction = "pca.sketch",
@@ -280,6 +303,7 @@ To visualize the cell clusters, there are a few different dimensionality reducti
 Both methods aim to place cells with similar local neighborhoods in high-dimensional space together in low-dimensional space. These methods will require you to input number of PCA dimentions to use for the visualization, we suggest using the same number of PCs as input to the clustering analysis. Here, we will proceed with the [UMAP method](https://umap-learn.readthedocs.io/en/latest/how_umap_works.html) for visualizing the clusters.
 
 ```{r}
+#| label: run_umap
 seurat_processed <- RunUMAP(seurat_processed, 
                             reduction = "pca.sketch", 
                             reduction.name = "umap.sketch", 
@@ -290,6 +314,8 @@ seurat_processed
 These UMAP coordinates are now stored in the `dimensional reductions calculated: pca.sketch, umap.sketch`. 
 
 ```{r}
+#| label: fig-umap_plot
+#| fig-cap: UMAP plot with bins colored by sample.
 DimPlot(seurat_processed, 
         group.by="orig.ident",
         reduction="umap.sketch")
