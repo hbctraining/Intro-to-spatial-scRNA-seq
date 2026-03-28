@@ -997,5 +997,187 @@
     "title": "Dimensionality Reduction - Answer Key",
     "section": "",
     "text": "Exercise 1\n\nDo you notice any differences when we calculated HVGs for the entire dataset versus the sketch assay?\n\n\n# Identify the 15 most highly variable genes\nranked_variable_genes &lt;- VariableFeatures(seurat_processed, \n                                          assay=\"sketch\")\nranked_variable_genes[1:15]\n\n [1] \"IGHG1\"  \"IGHM\"   \"IGLC1\"  \"CHGA\"   \"SST\"    \"CXCL8\"  \"GCG\"    \"INSL5\" \n [9] \"VIP\"    \"PYY\"    \"HBA2\"   \"IGHA1\"  \"REG3A\"  \"GUCA2B\" \"MMP12\" \n\n\nMany of the genes are the same in the sketch assay compared to the full dataset, but there are several new ones. This tells us that the genes that change the most are different in our downsampled data.\n\n\nExercise 2\n\nPlot the nCount_Spatial.008um on the UMAP with FeaturePlot(). Do you notice any patterns?\n\n\nFeaturePlot(seurat_processed,\n            features = \"nCount_Spatial.008um\")\n\n\n\n\n\n\n\n\nWe can see that there is a gradient in nUMIs in the dataset. It is possible that these could be technical artifacts or true biological differences. It is possible that the populations with higher nCount are transcriptionally active bins, such as tumor cells. The best way to determine which is true will be annotating populations by cell type as we would have the biological context of expression patterns.\n\nPlot the expression of one of the top variable genes on the UMAP also with FeaturePlot(). What do you notice?\n\n\nFeaturePlot(seurat_processed,\n            features = c(\"IGHM\", \"IGLC1\", \"CHGA\",\n                         \"SST\", \"CXCL8\", \"GCG\",\n                         \"VIP\", \"PYY\", \"MMP12\"),\n            ncol = 3)\n\n\n\n\n\n\n\n\nMany of the top variable genes are expressed in small populations of bins that are close in euclidean distance to one another in UMAP space.\n\n\n\n\n\n\nReuseCC-BY-4.0"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html",
+    "href": "lessons/10_seurat_cheatsheet.html",
+    "title": "Seurat Cheatsheet",
+    "section": "",
+    "text": "Approximate time: XX minutes"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#learning-objectives",
+    "href": "lessons/10_seurat_cheatsheet.html#learning-objectives",
+    "title": "Seurat Cheatsheet",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nIn this lesson, we will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#overview-of-lesson",
+    "href": "lessons/10_seurat_cheatsheet.html#overview-of-lesson",
+    "title": "Seurat Cheatsheet",
+    "section": "Overview of lesson",
+    "text": "Overview of lesson\nWhen doing XYZ…"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#seurat-cheatsheet",
+    "href": "lessons/10_seurat_cheatsheet.html#seurat-cheatsheet",
+    "title": "Seurat Cheatsheet",
+    "section": "Seurat Cheatsheet",
+    "text": "Seurat Cheatsheet\nThis cheatsheet is meant to provide examples of the various functions available in Seurat. This includes how to access certain information, handy tips, and visualization functions built into the package. We have pulled together all of this information with examples using the dataset used throughout this workshop so that there are clear visuals on what the output of each function is.\nThese materials were developed by referencing the following pages from the Seurat website:\n\nhttps://satijalab.org/seurat/articles/essential_commands.html\nhttps://satijalab.org/seurat/articles/visualization_vignette.html"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#dataset",
+    "href": "lessons/10_seurat_cheatsheet.html#dataset",
+    "title": "Seurat Cheatsheet",
+    "section": "Dataset",
+    "text": "Dataset\n\nlibrary(Seurat)\nlibrary(tidyverse)\nseurat_banksy &lt;- readRDS(\"data/seurat_banksy.RDS\")"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#cell-barcodes",
+    "href": "lessons/10_seurat_cheatsheet.html#cell-barcodes",
+    "title": "Seurat Cheatsheet",
+    "section": "Cell barcodes",
+    "text": "Cell barcodes\nWithin Seurat, there are multiple ways to access the cell barcode IDs.\nWe can use colnames() to get a vector of cell barcodes in the same order as they appear in the Seurat object.\n\ncolnames(seurat_banksy) %&gt;% head()\n\n[1] \"P5CRC_s_008um_00078_00444-1\" \"P5CRC_s_008um_00128_00278-1\"\n[3] \"P5CRC_s_008um_00052_00559-1\" \"P5CRC_s_008um_00121_00413-1\"\n[5] \"P5CRC_s_008um_00202_00633-1\" \"P5CRC_s_008um_00035_00460-1\"\n\n\nSimilarly we can use the Cells() function:\n\nCells(seurat_banksy) %&gt;% head()\n\n[1] \"P5CRC_s_008um_00078_00444-1\" \"P5CRC_s_008um_00128_00278-1\"\n[3] \"P5CRC_s_008um_00052_00559-1\" \"P5CRC_s_008um_00121_00413-1\"\n[5] \"P5CRC_s_008um_00202_00633-1\" \"P5CRC_s_008um_00035_00460-1\"\n\n\nIt is very important that the values stored in Cells() are the same as the rownames in meta.data. Otherwise Seurat will start throwing errors at you!\n\nall(rownames(seurat_banksy@meta.data) == Cells(seurat_banksy))\n\n[1] TRUE"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#featuresgenes",
+    "href": "lessons/10_seurat_cheatsheet.html#featuresgenes",
+    "title": "Seurat Cheatsheet",
+    "section": "Features/genes",
+    "text": "Features/genes\nNow we want to be able to access the rows, or genes, in our Seurat object. Rather than calling these values “genes”, many tools will call them “features” as different assays (CITE-seq, ATAC-seq) provide alternative information than genes as output.\nThe Features() function returns a vector of all features/genes in our dataset in the same order as it appears in the count matrix.\n\nFeatures(seurat_banksy) %&gt;% head()\n\n[1] \"SAMD11\"  \"NOC2L\"   \"KLHL17\"  \"PLEKHN1\" \"PERM1\"   \"HES4\"   \n\n\nThe rownames() function provides the same output:\n\nrownames(seurat_banksy) %&gt;% head()\n\n[1] \"SAMD11\"  \"NOC2L\"   \"KLHL17\"  \"PLEKHN1\" \"PERM1\"   \"HES4\"   \n\n\n\n\n\n\n\n\n\nExercise 1\n\n\n\n\nWhat are the last 5 cells barcodes and the last 5 genes in the integrated seurat object."
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#number-of-cells-and-features",
+    "href": "lessons/10_seurat_cheatsheet.html#number-of-cells-and-features",
+    "title": "Seurat Cheatsheet",
+    "section": "Number of cells and features",
+    "text": "Number of cells and features\nIf you recall, Seurat stores your count matrix as cells (columns) x genes (rows).\nTherefore, we can access the number of cells by using the ncol() function.\n\nncol(seurat_banksy)\n\n[1] 135798\n\n\nThe number of features is returned with the nrow() function:\n\nnrow(seurat_banksy)\n\n[1] 18085\n\n\nThe dim() function provides both the number of cells and genes for the default assay. Here we see the number of features followed by the number of cells:\n\ndim(seurat_banksy)\n\n[1]  18085 135798"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#rename-idents",
+    "href": "lessons/10_seurat_cheatsheet.html#rename-idents",
+    "title": "Seurat Cheatsheet",
+    "section": "Rename Idents",
+    "text": "Rename Idents\nTo quickly make modifications to identities, you can use the RenameIdents() function where new values are mapped to the identities. This is particularly helpful when annotating your cells from clusters to celltypes as showcased here. Bear in mind that these new identities are not stored in the meta.data automatically. We recommend adding these identities as a new column in the Seurat object to keep track of it for future use.\n\n# Rename all identities\nseurat_banksy &lt;- RenameIdents(object = seurat_banksy, \n                                 \"1\" = \"CD14+ monocytes\",\n                                 \"3\" = \"CD14+ monocytes\",\n                                 \"2\" = \"Activated T cells\")\n\n# These new celltype values are only stored in the idents\n# Good practice is to store these changes in a column\nseurat_banksy$celltype &lt;- Idents(seurat_banksy)\n\n\n\n\n\n\n\n\nExercise 2\n\n\n\n\nWhat are the last 5 identities for the cells in the integrated seurat object?"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#accessing-variable-features",
+    "href": "lessons/10_seurat_cheatsheet.html#accessing-variable-features",
+    "title": "Seurat Cheatsheet",
+    "section": "Accessing variable features",
+    "text": "Accessing variable features\nTo obtain a vector of all highly variable genes that were selected after running FindVariableFeatures(), we can use the VariableFeatures() function.\n\nVariableFeatures(seurat_banksy) %&gt;% head()\n\n[1] \"IGHG1\" \"IGHM\"  \"SST\"   \"IGLC1\" \"INSL5\" \"CHGA\""
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#setting-variable-features",
+    "href": "lessons/10_seurat_cheatsheet.html#setting-variable-features",
+    "title": "Seurat Cheatsheet",
+    "section": "Setting variable features",
+    "text": "Setting variable features\nUsing the same VariableFeatures() function, we can set our own custom set of genes as our highly variable genes.\nAs an example, here we are omitting mitochondrial genes from the original list of variable genes:\n\n# Get list of all variable genes\n# Remove variable genes that start with MT-\nvar_genes &lt;- VariableFeatures(seurat_banksy)\nvar_genes &lt;- var_genes[!startsWith(var_genes, \"MT-\")]\n\n# Now we set our vector of gene names back to VariableFeatures()\nVariableFeatures(seurat_banksy) &lt;- var_genes\n\n\n\n\n\n\n\n\nExercise 3\n\n\n\n\nWhat are the the 5 least variable genes in the integrated seurat object?"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#assays",
+    "href": "lessons/10_seurat_cheatsheet.html#assays",
+    "title": "Seurat Cheatsheet",
+    "section": "Assays",
+    "text": "Assays\nWithin a Seurat object you can have multiple “assays”. Each assay contains its own count matrix that is separate from the other assays in the object. This structure was created with multimodal datasets in mind so we can store, for example, ATAC peaks within the same Seurat object as your RNA counts.\nSCTransform also makes use of these assays to store the SCT normalized matrix in a separate assay called “SCT”.\nTo access the list of assays in your Seurat object, you can call @assays.\n\nseurat_banksy@assays\n\n$Spatial.008um\nAssay (v5) data with 18085 features for 135798 cells\nTop 10 variable features:\n IGHG1, IGHM, SST, IGLC1, INSL5, CHGA, CXCL8, GCG, HBA2, IGLC7 \nLayers:\n counts, data \n\n$sketch\nAssay (v5) data with 18085 features for 10000 cells\nTop 10 variable features:\n IGHG1, IGHM, IGLC1, CHGA, SST, CXCL8, GCG, INSL5, VIP, PYY \nLayers:\n counts, data, scale.data \n\n\nWe can additionally see which of the assays in our dataset is set as the default with the DefaultAssays() function. This default assay is automatically used as by Seurat functions, unless you specify otherise in the parameters of your function.\n\nDefaultAssay(seurat_banksy)\n\n[1] \"Spatial.008um\"\n\n\nHere we can see that the default assay is set to “integrated”. If we instead wanted to use the RNA counts, we can set a new default by once again calling the DefaultAssay() function and storing the name of a different assay.\n\n# Set new default assay\nDefaultAssay(seurat_banksy) &lt;- \"sketch\"\n\n# Print out the new default to see if it changed\nDefaultAssay(seurat_banksy)\n\n[1] \"sketch\"\n\n\nWe can access each assay as if the Seurat object was a named list with double brackets:\n\nseurat_banksy[[\"Spatial.008um\"]]\n\nAssay (v5) data with 18085 features for 135798 cells\nTop 10 variable features:\n IGHG1, IGHM, SST, IGLC1, INSL5, CHGA, CXCL8, GCG, HBA2, IGLC7 \nLayers:\n counts, data \n\n\nAnd similarly run any function on it:\n\ndim(seurat_banksy[[\"sketch\"]])\n\n[1] 18085 10000\n\n\n\n\n\n\n\n\n\nExercise 4\n\n\n\n\nWhat are the dimensions for each assay in the integrated seurat object?"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#layers",
+    "href": "lessons/10_seurat_cheatsheet.html#layers",
+    "title": "Seurat Cheatsheet",
+    "section": "Layers",
+    "text": "Layers\nLayers are the different counts matrices that you can access within each assay (prior to Seurat version 5, this feature was known as “slots”).\nFollowing the standard Seurat workflow, you would have the following matrices:\n\ncounts (raw counts matrix)\ndata (normalized count matrix (generated after SCTransform() or NormalizeData())\nscale.data (output from the ScaleData())\n\nWe can see which layers are accessible with the Layers() function.\n\nLayers(seurat_banksy[[\"sketch\"]])\n\n[1] \"counts\"     \"data\"       \"scale.data\""
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#accessing-full-count-matrix",
+    "href": "lessons/10_seurat_cheatsheet.html#accessing-full-count-matrix",
+    "title": "Seurat Cheatsheet",
+    "section": "Accessing full count matrix",
+    "text": "Accessing full count matrix\nYou can grab the entire counts matrix by making use of the LayerData() function.\n\n# Subsetting to the first 5 genes and cells for easy viewing\nLayerData(seurat_banksy, assay=\"Spatial.008um\", layer=\"counts\")[1:5, 1:5]\n\n5 x 5 sparse Matrix of class \"dgCMatrix\"\n        P5CRC_s_008um_00078_00444-1 P5CRC_s_008um_00128_00278-1\nSAMD11                            .                           .\nNOC2L                             .                           .\nKLHL17                            .                           .\nPLEKHN1                           .                           .\nPERM1                             .                           .\n        P5CRC_s_008um_00052_00559-1 P5CRC_s_008um_00121_00413-1\nSAMD11                            .                           .\nNOC2L                             .                           .\nKLHL17                            .                           .\nPLEKHN1                           .                           .\nPERM1                             .                           .\n        P5CRC_s_008um_00202_00633-1\nSAMD11                            .\nNOC2L                             .\nKLHL17                            .\nPLEKHN1                           .\nPERM1                             .\n\n\n\n\n\n\n\n\n\nExercise 5\n\n\n\n\nShow the code to get the entire SCT normalized (data) count matrix."
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#accessing-specific-features-and-metadata",
+    "href": "lessons/10_seurat_cheatsheet.html#accessing-specific-features-and-metadata",
+    "title": "Seurat Cheatsheet",
+    "section": "Accessing specific features and metadata",
+    "text": "Accessing specific features and metadata\nThe FetchData() function is useful to directly access the counts of a feature for each cell. You can also specify the layer and assay to specify which piece of information you want.\n\n# Normalized counts for the gene PTPRC in the assay SCT\nFetchData(seurat_banksy, vars=c(\"PTPRC\", \"sample\"), \n          assay=\"SCT\", layer=\"data\") %&gt;% head()\n\n                            PTPRC\nP5CRC_s_008um_00205_00489-1     0\nP5CRC_s_008um_00098_00552-1     0\nP5CRC_s_008um_00151_00503-1     0\nP5CRC_s_008um_00107_00427-1     0\nP5CRC_s_008um_00065_00311-1     0\nP5CRC_s_008um_00165_00349-1     0\n\n\nConveniently, you can also get information from multiple assays at the same time. To do so, you prepend the assay name (in lowercase format) for the feature you supply to the FetchData() function.\n\n# Grab the normalized counts in the integrated and RNA assays\nFetchData(seurat_banksy, vars=c(\"sketch_PTPRC\", \"Spatial.008um_PTPRC\"), \n          layer=\"data\") %&gt;% head()\n\n                            sketch_PTPRC\nP5CRC_s_008um_00205_00489-1            0\nP5CRC_s_008um_00098_00552-1            0\nP5CRC_s_008um_00151_00503-1            0\nP5CRC_s_008um_00107_00427-1            0\nP5CRC_s_008um_00065_00311-1            0\nP5CRC_s_008um_00165_00349-1            0\n\n\n\n\n\n\n\n\n\nExercise 6\n\n\n\n\nShow how you would use the FetchData() function to generate a dataframe of UMAP_1, UMAP_2, and sample values for each cell."
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#pca",
+    "href": "lessons/10_seurat_cheatsheet.html#pca",
+    "title": "Seurat Cheatsheet",
+    "section": "PCA",
+    "text": "PCA\nThe scores for each PC is stored within the embeddings slot of the Seurat object. These can be accessed by using the Embeddings() function.\n\n# Alternative method of accessing PCA values\n# seurat_banksy[['pca']]@cell.embeddings\nEmbeddings(seurat_banksy, reduction=\"pca.sketch\")[1:5, 1:5]\n\n                                 PC_1       PC_2        PC_3       PC_4\nP5CRC_s_008um_00205_00489-1 -3.709849  1.8211238  -2.3986868  0.7668802\nP5CRC_s_008um_00098_00552-1 -1.980028 -0.7778499  -3.1677418 -1.3651792\nP5CRC_s_008um_00151_00503-1 -3.792953  3.4913129 -10.0880635 31.1775494\nP5CRC_s_008um_00107_00427-1 -2.155094 -4.0626835  -3.5620699 -3.0045564\nP5CRC_s_008um_00065_00311-1 22.418986  6.0337961   0.7166466  0.6370425\n                                  PC_5\nP5CRC_s_008um_00205_00489-1 -0.7384352\nP5CRC_s_008um_00098_00552-1  0.9685766\nP5CRC_s_008um_00151_00503-1 13.5393602\nP5CRC_s_008um_00107_00427-1  1.0419661\nP5CRC_s_008um_00065_00311-1 -1.4939448\n\n\nThe weight (loadings) for each feature is also stored and can be accessed with Loadings() function.\n\n# pbmc[['pca]]@feature.loadings\nLoadings(seurat_banksy, reduction=\"pca.sketch\")[1:5, 1:5]\n\n              PC_1         PC_2        PC_3         PC_4         PC_5\nIGHG1 -0.008452733  0.020308239  0.02129613 -0.011084173 -0.001551012\nIGHM  -0.033021861  0.028329336  0.02998861 -0.030913278 -0.008691539\nIGLC1 -0.017115714  0.011751574  0.02216127 -0.010183218 -0.023574571\nCHGA   0.002114548 -0.017452775 -0.03843885  0.000981708  0.006565780\nSST   -0.000300560 -0.001918063 -0.01127173  0.002564481  0.002356307\n\n\nWe can also view more information about the top PCs, like the genes that are most strongly correlated with the first few PCs with the ProjectDim() function.\n\nProjectDim(seurat_banksy, reduction = \"pca.sketch\")\n\nPC_ 1 \nPositive:  LCN2, CEACAM6, CEACAM5, GPX2, ID1, DPEP1, NQO1, S100P, MDK, FERMT1 \n       GGH, REG3A, CDC25B, IFITM3, PTP4A3, GMDS, ITGA6, HOXB9, ZNF703, SERPINA1 \nNegative:  IGKC, JCHAIN, A2M, CD74, IGHA1, SPARCL1, IGHM, COL3A1, SRGN, ADAMDEC1 \n       TAGLN, CXCR4, C3, TIMP3, COL6A2, IGFBP5, CCN2, SELENOP, APOE, IL7R \nPC_ 2 \nPositive:  CD74, SRGN, IFITM3, CD44, REG3A, IFITM2, SPARC, A2M, CDC25B, COL3A1 \n       DPEP1, PTP4A3, SPARCL1, LGALS1, TGFBI, C3, CXCR4, IGFBP7, COL1A1, LAPTM5 \nNegative:  MUC12, PIGR, SLC26A3, FABP1, SLC26A2, FXYD3, CKB, TSPAN1, GUCA2A, FCGBP \n       CEACAM7, CA1, CA2, KRT20, ZG16, PLA2G2A, CA4, MUC2, SGK1, TMPRSS2 \nPC_ 3 \nPositive:  SELENOP, C1QA, C1QC, C1QB, CD74, APOE, SLC40A1, SRGN, LYZ, MS4A6A \n       CEACAM7, GUCA2A, SLC26A3, CXCL14, MS4A7, CTSB, FCER1G, TYROBP, IFI30, MPEG1 \nNegative:  CLCA1, LEFTY1, WFDC2, KIAA1324, NXPE1, VIP, MUC5B, SCG2, SCGN, ITLN1 \n       CALB2, PCSK1N, HMGCS2, NXPE4, WNK2, KLK1, RGMB, SPINK4, TFF3, L1CAM \nPC_ 4 \nPositive:  VIP, CALB2, SCG2, SCGN, TUBB2B, CHRNA3, UCHL1, L1CAM, RTN1, NSG2 \n       GAL, HAND2, SYT1, PCSK1N, AKAP12, TMEM59L, STMN2, ETV1, TUBB2A, PRPH \nNegative:  CLCA1, CXCL8, G0S2, LEFTY1, ITLN1, WFDC2, IL1B, MUC2, BCL2A1, IL1R2 \n       MUC5B, PLA2G2A, IL1RN, NXPE1, FCGBP, PLEK, TFF3, AQP9, PIGR, PTGS2 \nPC_ 5 \nPositive:  CXCL8, G0S2, IL1B, BCL2A1, IL1RN, S100A9, AQP9, S100A8, PLEK, PTGS2 \n       OSM, NAMPT, PLAUR, ITGAX, IL1R2, CSF3R, PFKFB3, FCAR, SOD2, ACSL1 \nNegative:  A2M, COL3A1, JCHAIN, PLVAP, IGFBP7, CXCL14, SPARCL1, COL6A2, SPARC, F3 \n       COL1A2, PECAM1, COL4A1, ENG, IGKC, COL6A1, RGS5, COL1A1, VWF, ADAMDEC1 \n\n\nAn object of class Seurat \n36170 features across 135798 samples within 2 assays \nActive assay: sketch (18085 features, 2000 variable features)\n 3 layers present: counts, data, scale.data\n 1 other assay present: Spatial.008um\n 5 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch, pca.banksy\n 2 spatial fields of view present: P5CRC.008um P5NAT.008um"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#umaptsne",
+    "href": "lessons/10_seurat_cheatsheet.html#umaptsne",
+    "title": "Seurat Cheatsheet",
+    "section": "UMAP/tSNE",
+    "text": "UMAP/tSNE\nTo access the coordinates used for UMAP/tSNE plots, we specify the reduction of interest in the Embeddings() function.\n\n# seurat_banksy[['umap']]@cell.embeddings\nEmbeddings(seurat_banksy, reduction=\"umap.sketch\") %&gt;% head()\n\n                            umapsketch_1 umapsketch_2\nP5CRC_s_008um_00205_00489-1   -2.2727049    7.3794805\nP5CRC_s_008um_00098_00552-1   -5.3293479    4.8962003\nP5CRC_s_008um_00151_00503-1    6.3238598   13.8152648\nP5CRC_s_008um_00107_00427-1    0.8981785   -6.4918383\nP5CRC_s_008um_00065_00311-1    8.7368118    0.1362428\nP5CRC_s_008um_00165_00349-1    9.6643406    1.8682761"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#dimplot",
+    "href": "lessons/10_seurat_cheatsheet.html#dimplot",
+    "title": "Seurat Cheatsheet",
+    "section": "DimPlot",
+    "text": "DimPlot\nThe DimPlot() function allows us to visualize metadata that is categorical on different reductions (PCA, UMAP).\nBy default DimPlot() will color cells by the Idents() and use UMAP as the default reduction.\n\nDimPlot(seurat_banksy) + ggtitle(\"Seurat clusters\")\n\n\n\n\n\n\n\n\nWe can specify a different metadata column using the group.by argument\n\nDimPlot(seurat_banksy, group.by = \"orig.ident\")\n\n\n\n\n\n\n\n\nWe can also use the split.by argument to create multiple plots that only show cells that have the same value for the metadata column specified.\n\nDimPlot(seurat_banksy, split.by = \"orig.ident\", group.by=\"orig.ident\")"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#featureplot",
+    "href": "lessons/10_seurat_cheatsheet.html#featureplot",
+    "title": "Seurat Cheatsheet",
+    "section": "FeaturePlot",
+    "text": "FeaturePlot\nThe FeaturePlot() function allows us to visualize both metadata and features that are continuous on different reductions (PCA, UMAP).\n\nFeaturePlot(seurat_banksy, \n            features = c(\"FCGR3A\", \"MS4A7\"))\n\n\n\n\n\n\n\n\nWe can additionally order the values in a way that cells with higher values are shown in front (to avoid other cells drowning out them).\nTo identify cells that show the highest expression of a feature, we can set a min.cutoff based upon quantiles, where cells below the the threshold will show no expression.\n\nFeaturePlot(seurat_banksy, \n            reduction = \"umap.sketch\", \n            features = c(\"FCGR3A\", \"MS4A7\"), \n            order = TRUE,\n            min.cutoff = 'q10')\n\n\n\n\n\n\n\n\nWe can also add labels onto our UMAP to easily identify which groups of cells we are seeing the expression using the LabelClusters() function. The parameters shown here put a white background behind the text to make it easier to see the labels.\n\nIdents(seurat_banksy) &lt;- \"banksy_cluster\"\np &lt;- FeaturePlot(seurat_banksy, \n            reduction = \"umap.sketch\", \n            features = \"FCGR3A\", \n            order = TRUE,\n            min.cutoff = 'q10')\nLabelClusters(p, id = \"ident\",  fontface = \"bold\", size = 3, \n              bg.colour = \"white\", bg.r = .2, force = 0)"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#featurescatter",
+    "href": "lessons/10_seurat_cheatsheet.html#featurescatter",
+    "title": "Seurat Cheatsheet",
+    "section": "FeatureScatter",
+    "text": "FeatureScatter\nFeatureScatter() creates a scatterplot of expression values for two features with each cell being colored by the ident. Bear in mind that you can also specify a continuous metadata column and not just 2 genes/features.\n\nIdents(seurat_banksy) &lt;- \"seurat_cluster.projected\"\nFeatureScatter(seurat_banksy, feature1 = \"MT-ND5\", feature2 = \"mitoRatio\") + \n  ggtitle(\"MitoRatio vs MT-ND5 expression\")"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#cellscatter",
+    "href": "lessons/10_seurat_cheatsheet.html#cellscatter",
+    "title": "Seurat Cheatsheet",
+    "section": "CellScatter",
+    "text": "CellScatter\nTo visualize the differences between two specific cells, you can use the CellScatter() function to get a scatterplot of values for each feature in both cells.\n\ncell1 &lt;- Cells(seurat_banksy)[1] \ncell2 &lt;- Cells(seurat_banksy)[2]\n\n# Here we can see the metadata for the first two cells in the dataset\n# We are comparing \"Activated T cell\" vs \"CD14+ monocytes\" (so they should be very different)\nseurat_banksy@meta.data %&gt;% \n  subset(rownames(seurat_banksy@meta.data) %in% c(cell1, cell2)) %&gt;% \n  select(orig.ident, nCount_Spatial.008um)\n\n                            orig.ident nCount_Spatial.008um\nP5CRC_s_008um_00205_00489-1      P5CRC                  165\nP5CRC_s_008um_00098_00552-1      P5CRC                  199\n\n\n\nCellScatter(seurat_banksy, cell1=cell1, cell2=cell2)"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#vlnplot",
+    "href": "lessons/10_seurat_cheatsheet.html#vlnplot",
+    "title": "Seurat Cheatsheet",
+    "section": "VlnPlot",
+    "text": "VlnPlot\nWe can create a violin plot to compare the distribution of gene expression across different populations using the VlnPlot() function.\nThis is a very customizable function, with many parameters to customize the look of the plots.\n\nVlnPlot(seurat_banksy, c(\"CD14\", \"CD79A\"))\n\n\n\n\n\n\n\n\nIn this example, we are grouping expression by sample and showing 2 plots per column. We are also removing the points (cells) by setting their size to 0.\n\nVlnPlot(seurat_banksy, c(\"CEACAM6\", \"CEACAM5\", \"CD52\", \"CXCL8\"), \n        group.by=\"orig.ident\", ncol=2, pt.size=0)"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#ridgeplot",
+    "href": "lessons/10_seurat_cheatsheet.html#ridgeplot",
+    "title": "Seurat Cheatsheet",
+    "section": "RidgePlot",
+    "text": "RidgePlot\nRidge plots are most commonly used with CITE-seq or hashtagged dataset as they provide an easy way to identify cells that express a protein/antibody.\nFor our scRNA dataset, when we call RidgePlot(), on the y-axis we see the unique identities assigned for each cell. The x-axis shows us the expression level for whichever feature we chose. This is a great visualization to use when justifying annotation decisions.\n\nRidgePlot(seurat_banksy, \"VIM\", assay=\"Spatial.008um\") + NoLegend()"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#dimheatmap",
+    "href": "lessons/10_seurat_cheatsheet.html#dimheatmap",
+    "title": "Seurat Cheatsheet",
+    "section": "DimHeatmap",
+    "text": "DimHeatmap\nTo see the effect of genes on the principal component, we can see the top and bottom features in PC1 using the DimHeatmap() function.\n\nDimHeatmap(seurat_banksy, nfeatures = 10, reduction = \"pca.sketch\")"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#doheatmap",
+    "href": "lessons/10_seurat_cheatsheet.html#doheatmap",
+    "title": "Seurat Cheatsheet",
+    "section": "DoHeatmap",
+    "text": "DoHeatmap\nTo plot the expression values for genes across all cells (grouped by their identity), you can call Seurat’s DoHeatmap() function to identify which populations certain genes are lowly or hihgly expressed.\n\nDoHeatmap(seurat_banksy, features=c(\"CD14\", \"FCGR3A\", \"FCER1A\", \n                                        \"IL3RA\", \"CD79A\", \"CD3D\"))"
+  },
+  {
+    "objectID": "lessons/10_seurat_cheatsheet.html#dotplot",
+    "href": "lessons/10_seurat_cheatsheet.html#dotplot",
+    "title": "Seurat Cheatsheet",
+    "section": "DotPlot",
+    "text": "DotPlot\nSeurat also has a built in visualization tool which allows us to view the average expression of genes groups clusters called DotPlot(). The size of the circle represents the number of cells that express the gene within a group and the hue reprents the average expression of the feature.\nIf you supply a named list with labels annotating genes, those labels will appear at the top of the plot for easier visualization.\n\n# List of known celltype markers\nmarkers &lt;- list()\nmarkers[[\"CD14+ monocytes\"]] &lt;- c(\"CD14\", \"LYZ\")\nmarkers[[\"FCGR3A+ monocyte\"]] &lt;- c(\"FCGR3A\", \"MS4A7\")\nmarkers[[\"Macrophages\"]] &lt;- c(\"MARCO\", \"ITGAM\", \"ADGRE1\")\nmarkers[[\"Conventional dendritic\"]] &lt;- c(\"FCER1A\", \"CST3\")\nmarkers[[\"Plasmacytoid dendritic\"]] &lt;- c(\"IL3RA\", \"GZMB\", \"SERPINF1\", \"ITM2C\")\n\n# Create dotplot based on RNA expression\nDotPlot(seurat_banksy, markers, assay=\"Spatial.008um\")\n\n\n\n\n\n\n\n\n\nNext Lesson &gt;&gt;\nBack to Schedule"
   }
 ]

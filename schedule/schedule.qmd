@@ -83,7 +83,7 @@ I. Please **study the contents** and **work through all the code** within the fo
         - Learning Objective 3
       :::
 
-   2. [BANKSY Spatial Clustering](../lessons/tmp.qmd)
+   2. [BANKSY Spatial Clustering](../lessons/09_banksy_clustering.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
       Brief description of the lesson.
@@ -95,7 +95,7 @@ I. Please **study the contents** and **work through all the code** within the fo
         - Learning Objective 3
       :::
 
-   3. [Seurat Cheatsheet](../lessons/tmp.qmd)
+   3. [Seurat Cheatsheet](../lessons/10_seurat_cheatsheet.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
       Brief description of the lesson.
@@ -121,9 +121,9 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 10:55 | [Integration](../lessons/tmp.qmd) | Instructor_name |
+| 10:30 - 10:55 | [Integration](../lessons/11_integration.qmd) | Instructor_name |
 | 10:55 - 11:00 | Break | |
-| 11:00 - 11:55 | [Deconvolution](../lessons/tmp.qmd) | Instructor_name |
+| 11:00 - 11:55 | [Deconvolution](../lessons/12_deconvolution.qmd) | Instructor_name |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
 
 ### Before the next class:
