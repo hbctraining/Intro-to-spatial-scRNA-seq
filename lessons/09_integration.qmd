@@ -29,7 +29,7 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
-seurat_banksy <- qs::qread("intermediate/09_seurat_banksy_2.qs")
+seurat_processed <- qs::qread("intermediate/08_seurat_processed.qs")
 ```
 
 Approximate time: XX minutes
@@ -77,12 +77,13 @@ _**If cells cluster by sample, condition, batch, dataset, modality, performing i
 ```{r}
 #| eval: false
 # Integration
-# Author: HBC
-# Date: Demeber 2025
+# Visium HD spatial transcriptomics workshop
+# Author: Harvard Chan Bioinformatics Core
+# Created: December 2025
 library(Seurat)
 library(tidyverse)
 
-seurat_banksy <- readRDS("data/seurat_banksy.RDS")
+seurat_processed <- readRDS("data/seurat_processed.RDS")
 ```
 
 ### Exploring our data
@@ -91,12 +92,12 @@ In our case, we have only one batch condition, which is our samples `P5CRC` and 
 
 ```{r}
 #| fig-width: 10
-p1 <- DimPlot(seurat_banksy,
+p1 <- DimPlot(seurat_processed,
               group.by="orig.ident",
               reduction = "full.pca.sketch") +
   NoLegend() + ggtitle("PCA (Projected)")
 
-p2 <- DimPlot(seurat_banksy,
+p2 <- DimPlot(seurat_processed,
               group.by="orig.ident",
               reduction = "full.umap.sketch") +
   ggtitle("UMAP (Projected)")
@@ -118,25 +119,24 @@ There does appear to be a unique popluation of bins belonging to `P5CRC` that ar
 #| label: fig-cell_proportion_barplot
 #| fig-cap: Proportion of bins in each cluster by sample.
 # Barplot of proportion of cells in each cluster by sample
-ggplot(seurat_banksy@meta.data) +
+ggplot(seurat_processed@meta.data) +
     geom_bar(aes(x=seurat_cluster.projected, fill=orig.ident), 
              position=position_fill())  +
     theme_classic()
 ```
 
-Notably, clusters 1 and 12 contain almost only `P5CRC` bins. Instead of jumping staight into integration
+Notably, clusters 2 and 12 contain almost only `P5CRC` bins. Instead of jumping staight into integration
 
 In particular, this tells us that we need to zoom in on clusters 1 and 12 to determine if integration is necessary. 
-
-
 
 If we wanted to highlight the bins that are belongs to clusters 1 and 12 we can use the `highlight` argument in `DimPlot()`
 
 ```{r}
-Idents(seurat_banksy) <- "seurat_cluster.projected"
-p <- DimPlot(seurat_banksy,
-        cells.highlight = WhichCells(seurat_banksy, 
-                                     idents = c("1", "12")))
+Idents(seurat_processed) <- "seurat_cluster.projected"
+p <- DimPlot(seurat_processed,
+        cells.highlight = WhichCells(seurat_processed, 
+                                     idents = c("2", "12"))) +
+  ggtitle("Clusters 2 and 12")
 LabelClusters(p, id = "ident",  fontface = "bold", size = 5, 
               bg.colour = "white", bg.r = .2, force = 0)
 ```
@@ -180,36 +180,39 @@ To see if these genes are associated with the clusters we identified previously,
 ### CEACAM5
 
 ```{r}
-FeaturePlot(seurat_banksy, "CEACAM5",
+FeaturePlot(seurat_processed, 
+            "CEACAM5",
             label = T)
 ```
 
 ```{r}
-VlnPlot(seurat_banksy, "CEACAM5", pt.size = 0) +
+VlnPlot(seurat_processed, 
+        "CEACAM5", 
+        pt.size = 0) +
   NoLegend()
 ```
 
 ### CEACAM6
 
 ```{r}
-FeaturePlot(seurat_banksy, "CEACAM6",
+FeaturePlot(seurat_processed, "CEACAM6",
             label = TRUE)
 ```
 
 ```{r}
-VlnPlot(seurat_banksy, "CEACAM6", pt.size = 0) +
+VlnPlot(seurat_processed, "CEACAM6", pt.size = 0) +
   NoLegend()
 ```
 
 :::
 
-We see that clusters 1 and 1w do indeed have higher expression of this tumor marker gene! We can even look at `CEACAM5` at the same time with a dotplot to gain more confidence with two marker genes as well:
+We see that clusters 2 and 12 do indeed have higher expression of this tumor marker gene! We can even look at `CEACAM5` at the same time with a dotplot to gain more confidence with two marker genes as well:
 
 ```{r}
-DotPlot(seurat_banksy, c("CEACAM5", "CEACAM6"))
+DotPlot(seurat_processed, c("CEACAM5", "CEACAM6"))
 ```
 
-Now we also have the additional knowledge that there are likely some tumor cells among cluster 3.
+Now we also have the additional knowledge that there are likely some tumor cells among clusters 1 and 9.
 
 
 ## Final integration decision
@@ -310,9 +313,10 @@ For a more detailed breakdown of the `Harmony` algorithm, we recommend checking 
 ::: {.callout-note collapse=true}
 # Code to run Harmony
 :::
+:::
 
 ***
 
-[Next Lesson >>](tmp.qmd)
+[Next Lesson >>](10_seurat_cheatsheet.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)
