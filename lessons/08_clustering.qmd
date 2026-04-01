@@ -48,20 +48,33 @@ When doing XYZ...
 
 ## Grouping similar bins together
 
-Seurat uses a graph-based clustering approach using a K-nearest neighbor approach, and then attempts to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’ [[Seurat - Guided Clustering Tutorial](https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html)]. A nice in-depth description of clustering methods is provided in the [SVI Bioinformatics and Cellular Genomics Lab course](https://biocellgen-public.svi.edu.au/mig_2019_scrnaseq-workshop/clustering-and-cell-annotation.html).
+Now, we want to group similar bins (cell states) together based upon their gene expression profiles with clustering. This is a two step process that involves:
+
+1. Constructing a K-nearest neighbor (KNN) graph based on the PCA space.
+2. Group bins together based upon the KNN graph to assign cluster labels to each bin.
+
+This graph-based approach allows us to partition the graph of bins into highly interconnected ‘quasi-cliques’ or ‘communities’ that represent clusters of similar bins. A nice in-depth description of clustering methods is provided in the [SVI Bioinformatics and Cellular Genomics Lab course](https://biocellgen-public.svi.edu.au/mig_2019_scrnaseq-workshop/clustering-and-cell-annotation.html).
 
 
 ## k-nearest neighbors (kNN)
 
-The first step is to **construct a K-nearest neighbor (KNN) graph** based on the euclidean distance in PCA space. 
+The first step is to **construct a K-nearest neighbor (KNN) graph**. As previous mentioned, this is calculated on the PCA space. Recall that we have multiple principle components (PCs) with scores for each one of our bins. We can think of the steps taken like so:
 
-<img src="../img/k-means.png" width="500">
-_Image source: [Analysis of Single cell RNA-seq data](https://biocellgen-public.svi.edu.au/mig_2019_scrnaseq-workshop/clustering-and-cell-annotation.html)_
-  
-- Edges are drawn between cells with similar features expression patterns.
-- Edge weights are refined between any two cells based on shared overlap in their local neighborhoods.
+1. Each bin is a point in PCA (n-dimensional) space.
+2. We calculate the distance (euclidean) between each bin and all other bins in this PCA space.
+3. We then connect bins together (edges) that are close to each other in this PCA space. Bins that are close together in PCA space will have similar gene expression profiles, and thus are likely to be similar.
+4. Then edge weights are calculate for each connection based upon the shared overlap in their local neighborhoods to create a **shared nearest neighbor (SNN) graph**. 
 
-This is done in Seurat by using the `FindNeighbors()` function. We also specify the `reduction` we want to use as well as which components (`dims`) will be used for the calculation. In this case, we will be using the first 50.
+This means that if two bins are close together in PCA space and have similar neighbors, they will have a stronger connection (higher edge weight) than two bins that are close together but do not share similar neighbors.
+
+::: {#fig-k_means .figure}
+![](../img/k_means.png){width=500}
+
+Schematic showing how bins are connected in PCA space, where edges connected between close bins are then used to calculate edge weights based upon the shared overlap in their local neighborhoods.<br>
+_Image source: [Analysis of Single cell RNA-seq data](https://biocellgen-public.svi.edu.au/mig_2019_scrnaseq-workshop/clustering-and-cell-annotation.html)_.
+:::
+
+All of this is done in one step with the Seurat function `FindNeighbors()`. The function takes in the PCA reduction and calculates the KNN graph. We specify the `reduction` (sketch) as well as which components (`dims`) will be used for the calculation. In this case, we will be using the first 50 PCs.
 
 ```{r}
 #| label: FindNeighbors
@@ -72,20 +85,25 @@ seurat_processed <- FindNeighbors(seurat_processed,
                                   dims = 1:50)
 ```    
 
-We should now see both of these graphs in the `@graph` slot of our seurat object.
-
+We should now see two graphs in the `@graphs` slot of `seurat_processed`. The first in the list is the KNN graph (`sketch_nn`) and the second is the shared nearest neighbor (SNN) graph (`sketch_snn`).
 
 ```{r}
+#| label: print_seurat_graphs
 seurat_processed@graphs
 ```
 
+ We use the SNN graph because it considers both the distance beteween two bins and the similarity of their local neighborhoods. This leads to more robust and biologically meaningful connections between bins. In contrast, the KNN graph only considers the distance between two bins, which may not capture the full complexity of the global relationships between many bins at once.
+
+ Now that we have this shared nearest neighbor graph, we can being the clustering step.
+
 ## Clustering
 
-Next, Seurat will **iteratively group cells together with the goal of optimizing the standard modularity function**. 
+The next step in the workflow is to **group bins together based upon the graph to assign cluster labels to each bin**.
 
-We will use the `FindClusters()` function to perform the graph-based clustering. The `resolution` is an important argument that sets the "granularity" of the downstream clustering and will need to be optimized for every individual experiment.  For datasets of 3,000 - 5,000 cells, the `resolution` set between `0.4`-`1.4` generally yields good clustering. Increased resolution values lead to a greater number of clusters, which is often required for larger datasets. 
+The `FindClusters()` function accomplishes this by iteratively grouping bins together with the goal of optimizing the standard modularity function. This function is a measure of the strength of division of a network into clusters, with higher values indicating a stronger clustering structure. The `FindClusters()` function uses the Louvain algorithm to optimize this modularity function and assign cluster labels to each bin by default. We can also use the Leiden algorithm by setting the `algorithm = 4`. The Leiden algorithm is an improvement on the Louvain algorithm that is faster and more accurate in finding clusters in large datasets.
 
-The `FindClusters()` function allows us to enter a series of resolutions and will calculate the "granularity" of the clustering. This is very helpful for testing which resolution works for moving forward without having to run the function for each resolution.
+An important parameter is `resolution` which sets the "granularity" of the downstream clustering and will need to be optimized for every individual experiment. **Larger resolution values lead to a greater number of clusters**, which is often required for larger datasets. For datasets of 3,000 - 5,000 cells, the `resolution` set between `0.4`-`1.4` generally yields good clustering.
+
 
 ::: callout-note
 # Testing different resolution values
@@ -93,16 +111,30 @@ Typically we would recommend using a variety of different resolutions and select
 :::
 
 ```{r}
+#| label: FindClusters
 seurat_processed <- FindClusters(seurat_processed, 
                                  cluster.name = "seurat_cluster.sketched", 
+                                 algorithm = 4,
                                  resolution = 0.65)
 ```
 
 If we take a look at the columns in our `@meta.data`, we see that the column `seurat_cluster.sketched` is a new column that was added.
 
 ```{r}
+#| label: head_meta_data_clusters
+#| eval: false
 seurat_processed@meta.data %>% head() %>% 
   relocate("seurat_cluster.sketched")
+```
+
+```{r}
+#| label: tbl-head_meta_data_clusters_kable
+#| tbl-cap: Updated `@meta.data` with sketch Leiden clusters. 
+#| eval: true
+#| echo: false
+seurat_processed@meta.data %>% head() %>% 
+  relocate("seurat_cluster.sketched") %>%
+  knitr::kable()
 ```
 
 ::: callout-tip
@@ -112,17 +144,20 @@ seurat_processed@meta.data %>% head() %>%
 
 :::
 
-`FindClusters()` tends to automatically change the `Idents()` to the cluster values that were just calculated. If we take a look at our `Idents` we can see if that it has changed from `orig.ident` to `seurat_cluster.sketched`
+The Seurat workflow tends to automatically change the `Idents()` of the Seurat object to the last cluster values that were calculated during `FindClusters()`. If we take a look at our `Idents` we can see if that it has changed from `orig.ident` to `seurat_cluster.sketched`.
 
 ```{r}
+#| label: idents
 Idents(seurat_processed) %>% head()
 ```
 
 ### Visualize clusters on UMAP
 
-Now we can visualize these clusters on the UMAP that we calculated earlier using `DimPlot() and adding clearer labels with `LabelClusters()`.
+We previously [calculated UMAP coordinates](07_dim_reduction.qmd#umap) for our sketch assay and colored the bins by which sample they belonged to. Now, we can visualize the clusters that we just calculated on this UMAP to see how well the clusters are separating.
 
 ```{r}
+#| label: fig-umap_sketch
+#| fig-cap: UMAP scatterplot with bins colored and labeled by sketch Leiden cluster annotation.
 # Plot UMAP
 p <- DimPlot(seurat_processed, 
         reduction = "umap.sketch", label = T) + 
@@ -131,31 +166,45 @@ LabelClusters(p, id = "ident",  fontface = "bold", size = 5,
               bg.colour = "white", bg.r = .2, force = 0)
 ```
 
-## Project Back to Entire Dataset
+Ideally we would see distinct clusters of bins that are well separated from each other. If we see a lot of overlap between clusters, this may indicate that the clustering is not optimal and we may need to adjust our `resolution` parameter or re-consider our previous steps (QC, filtration, highly variable gene selection, etc.) to improve the clustering.
 
-Now that we have our clusters and dimensional reductions from our sketched dataset, we need to extend these to the full dataset.
+## Project back to entire dataset
+
+Recall that we have been calculating all of these steps on our sketched dataset of 10,000 bins. Now, we want to know what the cluster labels are for all of the bins in our full dataset. We can do this with the `ProjectData()` function.
+
+::: callout-warning
+Struggling to find method used to project sketch to full data
+:::
 
 ### Run `ProjectData()`
 
-The `ProjectData` function projects all the bins in the dataset (the `Spatial.008um` assay) onto the `sketch` assay. 
+During this projection step, we provide the sketched information we have just calculated:
+
+- `sketched.assay` = sketch assay name (`sketch`)
+- `sketched.reduction` = reduction (PCA) calculated on the sketch assay (`pca.sketch`)
+- `umap.model` =  UMAP reduction calculated on the sketch assay (`umap.sketch`)
+
+The we specify the `assay` with the full dataset that we want to project onto (in this case, the `Spatial.008um` assay). We also specify the `full.reduction` to name the PCA that will have scores for each bin (`full.pca.sketch`) as well as the number of principal components to use (`dims`).
 
 ```{r}
+#| label: ProjectData
 #| eval: false
 # Increases the size of the default vector
 options(future.globals.maxSize= 2000000000)
 
 seurat_processed <- ProjectData(
   object = seurat_processed,
-  assay = "Spatial.008um",
-  full.reduction = "full.pca.sketch",
   sketched.assay = "sketch",
   sketched.reduction = "pca.sketch",
   umap.model = "umap.sketch",
+  assay = "Spatial.008um",
+  full.reduction = "full.pca.sketch",
   dims = 1:50,
   refdata = list(seurat_cluster.projected = "seurat_cluster.sketched"))
 ```
 
 ```{r}
+#| label: load_clustered_obj
 #| echo: false
 # qs::qsave(seurat_processed, "intermediate/08_seurat_projected.qs")
 seurat_processed <- qs::qread("intermediate/08_seurat_projected.qs")
@@ -170,24 +219,44 @@ Using the sketch PCA and UMAP, the `ProjectData` function returns a Seurat objec
 | Cluster labels             | The `seurat_cluster.projected` metadata column labels all cells with cluster labels from sketched cells |
 
 
-We can now see the additional full-dataset reductions in the object.
+So now when we investigate the `@reductions` slot, we see that we have two new reductions: `full.pca.sketch` and `full.umap.sketch`. 
 
 ```{r}
-seurat_processed
+#| label: seurat_processed_callout
+seurat_processed@reductions
 ```
 
-Note that a score for the projection of each bin will be saved as a column in the metadata. Now the `seurat_cluster.projected` column shows values for every bin.
+We also now have a `seurat_cluster.projected` column with Leiden cluster labels for every bin.
 
 ```{r}
-head(seurat_processed@meta.data)
+#| label: seurat_processed_metadata
+#| eval: false
+seurat_processed@meta.data %>% head()
 ```
 
-### Visualize Projected Clusters
+```{r}
+#| label: tbl-seurat_processed_metadata
+#| tbl-cap: Updated `@meta.data` with projected Leiden clusters. 
+seurat_processed@meta.data %>% head() %>% knitr::kable()
+```
 
-We can now visualize our clusters from the projected assignments. The UMAP plot now contains more points, which is expected because we are now visualizing the full dataset rather than our 10,000 bin sketch. Nonetheless, we can see that the full dataset is still well-represented by the projected dimensional reduction and clustering. 
+::: callout-tip
+# [**Exercise 2**](08_clustering-Answer_key.qmd#exercise-2)
+
+2. How many bins are in each cluster? Use the `table()` function to count the number of bins in each cluster. Do you notice any patterns in the number of bins per cluster?
+:::
+
+
+### Visualize projected clusters
+
+This is a good point to pause and inspect our datset!
+
+We now have UMAP and cluster labels for every bin in our dataset. Earlier, we visualized the _sketch_ UMAP with the cluster labels. and saw separation in groups. Now, we can visualize the _full_ UMAP with the projected cluster labels to ensure that the projection step worked and that the clusters are still well separated in the full dataset.
 
 ```{r}
-# switch to full dataset assay
+#| label: fig-umap_projected_clusters
+#| fig-cap: UMAP scatterplot with bins colored and labeled by projected Leiden cluster annotation.
+# Switch to full dataset assay
 DefaultAssay(seurat_processed) <- "Spatial.008um"
 
 # Change the idents to the projected cluster assignments
@@ -206,19 +275,25 @@ LabelClusters(p, id = "ident",  fontface = "bold", size = 5,
 To ensure that our cluster labels are listed in proper numeric order, we are going to make our `seurat_cluster.projected` a factor and set the levels such that the order is correct.
 
 ```{r}
-# Arrange so clusters get listed in numerical order
+#| label: arrange_cluster_levels
+# Arrange seurat_cluster.projected so that values are in numeric order
 order <- seurat_processed$seurat_cluster.projected %>%
-  unique() %>%
-  as.numeric() %>%
-  sort() %>%
-  as.character()
+  unique() %>% as.numeric() %>%
+  sort() %>% as.character()
+order
+```
+
+```{r}
+#| label: factor_cluster_levels
+# Factorize seurat_cluster.projected with levels in correct numeric order
 seurat_processed$seurat_cluster.projected <- seurat_processed$seurat_cluster.projected %>% 
   factor(levels = order)
 
+# Print head of seurat_cluster.projected to confirm levels are in correct order
 seurat_processed$seurat_cluster.projected %>% head()
 ```
 
-Now we should see the levels in correct numeric order.
+Now we should see the levels in numeric order on our UMAP legend.
 
 ```{r}
 # Change the idents to the projected cluster assignments
@@ -234,9 +309,15 @@ LabelClusters(p, id = "ident",  fontface = "bold", size = 5,
 
 :::
 
-In order to see the clusters superimposed on our image we can use the `SpatialDimPlot()` function. We will also set the color palette and convert the cluster assignments to a factor so they are ordered numerically rather than lexicographically in the figure.
+In a typical single-cell analysis, this would a pause point. However, this is a **spatial transcriptomics** analysis with coordinates associated with each bin. So now we can visualize the clusters superimposed on the tissue image to see how the groups are spatially distributed across the tissue.
+
+This is another litmus test to see if we have generated clusters that are biologically meaningful. For example, if a pathologist were to look at the tissue image, they may be able to identify unique, distinct regions of the tissue. If our clusters are biologically meaningful, we would expect to see that the clusters are spatially separated and correspond to these regions of the tissue (depending on the tissue type and the biological question at hand). 
+
+In order to plot the clusters superimposed on our image we use the `SpatialDimPlot()` function.
 
 ```{r}
+#| label: fig-spatial_projected_clusters
+#| fig-cap: Bins on the tissue slide, colored by projected Leiden cluster annotation.
 #| fig-width: 10
 SpatialDimPlot(seurat_processed,
                pt.size.factor = 16,
@@ -245,7 +326,7 @@ SpatialDimPlot(seurat_processed,
 
 ## Save!
 
-Now is a great spot to save our `seurat_processed` object as we have added a lot new information into our Seurat object, such as:
+Now is a great spot to save our `seurat_processed` object as we have added a lot new information into our Seurat object, including:
 
 - Sketch HVGs
 - Scaled log-normalized counts
@@ -256,12 +337,14 @@ Now is a great spot to save our `seurat_processed` object as we have added a lot
 - Projected clusters
 
 ```{r}
+#| label: save_seurat_processed
 #| eval: false
 # Save Seurat object
 saveRDS(seurat_processed, "data/seurat_processed.RDS")
 ```
 
 ```{r}
+#| label: qsave_seurat_processed
 #| eval: false
 #| echo: false
 qs::qsave(seurat_processed, "intermediate/08_seurat_processed.qs")
@@ -269,6 +352,6 @@ qs::qsave(seurat_processed, "intermediate/08_seurat_processed.qs")
 
 ***
 
-[Next Lesson >>](tmp.qmd)
+[Next Lesson >>](09_banksy_clustering.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)

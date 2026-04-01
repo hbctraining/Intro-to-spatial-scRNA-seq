@@ -7,7 +7,7 @@ toc: false
 ## Pre-reading
 
 1. [Spatial Technology Overview](../lessons/01_spatial_technologies.qmd)
-2. [SpaceRanger](../lessons/02_spaceranger.qmd)
+2. [Space Ranger Summary](../lessons/02_spaceranger.qmd)
 3. [Download Project](TODO: dropbox link to project files here)
 
 ## Day 1
@@ -70,7 +70,7 @@ II. **Submit your work**:
 ### Before the next class:
 
 I. Please **study the contents** and **work through all the code** within the following lessons:
- 
+
    1. [Clustering](../lessons/08_clustering.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
@@ -83,7 +83,7 @@ I. Please **study the contents** and **work through all the code** within the fo
         - Learning Objective 3
       :::
 
-   2. [BANKSY Spatial Clustering](../lessons/09_banksy_clustering.qmd)
+   2. [Integration](../lessons/09_integration.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
       Brief description of the lesson.
@@ -121,7 +121,7 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 10:55 | [Integration](../lessons/11_integration.qmd) | Instructor_name |
+| 10:30 - 10:55 | [BANKSY Spatial Clustering](../lessons/09_banksy_clustering.qmd) | Instructor_name |
 | 10:55 - 11:00 | Break | |
 | 11:00 - 11:55 | [Deconvolution](../lessons/12_deconvolution.qmd) | Instructor_name |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |

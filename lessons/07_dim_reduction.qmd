@@ -312,7 +312,7 @@ Both methods aim to place cells with similar local neighborhoods in high-dimensi
 seurat_processed <- RunUMAP(seurat_processed, 
                             reduction = "pca.sketch", 
                             reduction.name = "umap.sketch", 
-                            return.model = T, 
+                            return.model = TRUE, 
                             dims = 1:50)
 seurat_processed
 ```
