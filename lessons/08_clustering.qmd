@@ -55,7 +55,6 @@ Now, we want to group similar bins (cell states) together based upon their gene 
 
 This graph-based approach allows us to partition the graph of bins into highly interconnected ‘quasi-cliques’ or ‘communities’ that represent clusters of similar bins. A nice in-depth description of clustering methods is provided in the [SVI Bioinformatics and Cellular Genomics Lab course](https://biocellgen-public.svi.edu.au/mig_2019_scrnaseq-workshop/clustering-and-cell-annotation.html).
 
-
 ## k-nearest neighbors (kNN)
 
 The first step is to **construct a K-nearest neighbor (KNN) graph**. As previous mentioned, this is calculated on the PCA space. Recall that we have multiple principle components (PCs) with scores for each one of our bins. We can think of the steps taken like so:
@@ -92,7 +91,7 @@ We should now see two graphs in the `@graphs` slot of `seurat_processed`. The fi
 seurat_processed@graphs
 ```
 
- We use the SNN graph because it considers both the distance beteween two bins and the similarity of their local neighborhoods. This leads to more robust and biologically meaningful connections between bins. In contrast, the KNN graph only considers the distance between two bins, which may not capture the full complexity of the global relationships between many bins at once.
+We use the SNN graph because it considers both the distance beteween two bins and the similarity of their local neighborhoods. This leads to more robust and biologically meaningful connections between bins. In contrast, the KNN graph only considers the distance between two bins, which may not capture the full complexity of the global relationships between many bins at once.
 
  Now that we have this shared nearest neighbor graph, we can being the clustering step.
 
@@ -237,6 +236,7 @@ seurat_processed@meta.data %>% head()
 ```{r}
 #| label: tbl-seurat_processed_metadata
 #| tbl-cap: Updated `@meta.data` with projected Leiden clusters. 
+#| echo: false
 seurat_processed@meta.data %>% head() %>% knitr::kable()
 ```
 
@@ -352,6 +352,6 @@ qs::qsave(seurat_processed, "intermediate/08_seurat_processed.qs")
 
 ***
 
-[Next Lesson >>](09_banksy_clustering.qmd)
+[Next Lesson >>](09_integration.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)
