@@ -259,6 +259,6 @@ DimPlot(seurat_banksy,
 
 ***
 
-[Next Lesson >>](tmp.qmd)
+[Next Lesson >>](12_deconvolution.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)

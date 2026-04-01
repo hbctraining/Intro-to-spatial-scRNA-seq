@@ -121,7 +121,7 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 10:55 | [BANKSY Spatial Clustering](../lessons/09_banksy_clustering.qmd) | Instructor_name |
+| 10:30 - 10:55 | [BANKSY Spatial Clustering](../lessons/11_banksy_clustering.qmd) | Instructor_name |
 | 10:55 - 11:00 | Break | |
 | 11:00 - 11:55 | [Deconvolution](../lessons/12_deconvolution.qmd) | Instructor_name |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
@@ -130,7 +130,7 @@ II. **Submit your work**:
 
 I. Please **study the contents** and **work through all the code** within the following lessons:
  
-   1. [Differential Expression and Pathway Analysis](../lessons/tmp.qmd)
+   1. [Differential Expression and Pathway Analysis](../lessons/13_dge_pathway.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
       Brief description of the lesson.
