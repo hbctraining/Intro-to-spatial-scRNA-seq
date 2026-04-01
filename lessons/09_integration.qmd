@@ -21,7 +21,6 @@ license: "CC-BY-4.0"
 editor_options: 
   markdown: 
     wrap: 72
-eval: false
 ---
 
 ```{r}
@@ -257,7 +256,7 @@ Clusters 2 and 12 are dominated by `P5CRC` bins and have higher expression of tu
 
 So the lack of overlap in samples/batch has a biological answer! We would not want to integrate the dataset across samples because we would be trying to force the tumor cells to cluster together with other cell types. However, that is not the biological reality of our dataset, and therefore not in the best interest of our analysis.
 
-### Integration Algorithms
+## Integration Algorithms
 
 ::: callout-warning
 # Anecdote
@@ -268,7 +267,7 @@ In this spatial transcriptomics workflow, integration would be performed on the 
 
 ::: {.panel-tabset}
 
-## CCA
+### CCA
 
 Integration is a powerful method that **uses shared highly variable genes from each group to identify shared subpopulations across conditions or datasets** [[Stuart and Bulter et al. (2018)](https://www.biorxiv.org/content/early/2018/11/02/460147)]. The goal of integration is to ensure that the cell types of one condition/dataset align with the same celltypes of the other conditions/datasets (e.g. control macrophages align with stimulated macrophages).
 
@@ -315,21 +314,12 @@ Assess the similarity between anchor pairs by the overlap in their local neighbo
 
 Using the anchors and corresponding scores the cell expression values are transformed, allowing for the integration of the conditions/datasets (different samples, conditions, datasets, modalities). For each cell in the dataset we now have an integrated value, but only for the variable features used for this analysis.
 
-::: callout-note
-Transformation of each cell uses a weighted average of the two cells of each anchor across anchors of the datasets. Weights determined by cell similarity score (distance between cell and k nearest anchors) and anchor scores, so cells in the same neighborhood should have similar correction values.
-:::
-
 **If cell types are present in one dataset, but not the other, then the cells will still appear as a separate sample-specific cluster.**
-
-::: callout-note
-# Reciprocal PCA (RPCA)
-If there are a substantial number of cells that do not have a match between groups or there are a large number of cells to integrate, an alternative approach recommended by the Seurat vignette is [reciprocal PCA (RPCA)](https://satijalab.org/seurat/articles/integration_rpca.html).
-:::
 
 In the [Introduction to scRNA-seq workshop](https://hbctraining.github.io/Intro-to-scRNAseq-Quarto/lessons/08_integration_cca_theory.html), there are more detailed instructions on how to run a CCA analysis.
 
 
-## Harmony
+### Harmony
 
 [Harmony](https://www.nature.com/articles/s41592-019-0619-0) was devleoped in 2019, and is an example of **a tool that can work with complex integration tasks**. It is available as an [R package on GitHub](https://github.com/immunogenomics/harmony), and it has functions for standalone and Seurat pipeline analyses. It has been shown to perform incredibly well from recent benchmarking studies [[1]](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9). 
 
