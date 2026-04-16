@@ -29,7 +29,7 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
-seurat_processed <- qs::qread("intermediate/08_seurat_processed.qs")
+seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
 ```
 
 Approximate time: XX minutes
@@ -267,6 +267,28 @@ In this spatial transcriptomics workflow, integration would be performed on the 
 
 ::: {.panel-tabset}
 
+### Harmony
+
+[Harmony](https://www.nature.com/articles/s41592-019-0619-0) was devleoped in 2019, and is an example of **a tool that can work with complex integration tasks**. It is available as an [R package on GitHub](https://github.com/immunogenomics/harmony), and it has functions for standalone and Seurat pipeline analyses. It has been shown to perform incredibly well from recent benchmarking studies [[1]](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9). 
+
+In this section, we illustrate the use of [`Harmony`](https://portals.broadinstitute.org/harmony/articles/quickstart.html) as a possible alternative to the `Seurat` integration workflow. Compared to other algorithms, `Harmony` notably presents the following advantages ([Korsunsky et al. 2019](https://www.nature.com/articles/s41592-019-0619-0), [Tran et al. 2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9)): 
+
+1. Possibility to integrate data across several variables (for example, by experimental batch and by condition)
+2. Significant gain in speed and lower memory requirements for integration of large datasets
+3. Interoperability with the `Seurat` workflow
+
+Instead of using CCA, `Harmony` applies a transformation to the principal component (PCs) values, using all available PCs, e.g. as pre-computed within the `Seurat` workflow. In this space of transformed PCs, `Harmony` uses k-means clustering to delineate clusters, seeking to define clusters with maximum "diversity". The diversity of each cluster reflects whether it contains balanced amounts of cells from each of the batches (donor, condition, tissue, technolgy...) we seek to integrate on, as should be observed in a well-integrated dataset. After defining diverse clusters, `Harmony` determines how much a cell's batch identity impacts on its PC coordinates, and applies a correction to "shift" the cell towards the centroid of the cluster it belongs to. Cells are projected again using these corrected PCs, and the process is repeated iteratively until convergence. 
+
+::: {#fig-harmony-overview .figure}
+![](../img/harmony_overview.jpeg){width=600}
+
+Overview of the Harmony algorithm for batch correction and integration of single-cell datasets.
+_Image Source: [Korsunsky et al., 2019](https://www.nature.com/articles/s41592-019-0619-0)
+:::
+
+For a more detailed breakdown of the `Harmony` algorithm, we recommend checking [this advanced vignette](http://htmlpreview.github.io/?https://github.com/immunogenomics/harmony/blob/master/docs/advanced.html) from the package developers.
+
+
 ### CCA
 
 Integration is a powerful method that **uses shared highly variable genes from each group to identify shared subpopulations across conditions or datasets** [[Stuart and Bulter et al. (2018)](https://www.biorxiv.org/content/early/2018/11/02/460147)]. The goal of integration is to ensure that the cell types of one condition/dataset align with the same celltypes of the other conditions/datasets (e.g. control macrophages align with stimulated macrophages).
@@ -318,27 +340,6 @@ Using the anchors and corresponding scores the cell expression values are transf
 
 In the [Introduction to scRNA-seq workshop](https://hbctraining.github.io/Intro-to-scRNAseq-Quarto/lessons/08_integration_cca_theory.html), there are more detailed instructions on how to run a CCA analysis.
 
-
-### Harmony
-
-[Harmony](https://www.nature.com/articles/s41592-019-0619-0) was devleoped in 2019, and is an example of **a tool that can work with complex integration tasks**. It is available as an [R package on GitHub](https://github.com/immunogenomics/harmony), and it has functions for standalone and Seurat pipeline analyses. It has been shown to perform incredibly well from recent benchmarking studies [[1]](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9). 
-
-In this section, we illustrate the use of [`Harmony`](https://portals.broadinstitute.org/harmony/articles/quickstart.html) as a possible alternative to the `Seurat` integration workflow. Compared to other algorithms, `Harmony` notably presents the following advantages ([Korsunsky et al. 2019](https://www.nature.com/articles/s41592-019-0619-0), [Tran et al. 2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9)): 
-
-1. Possibility to integrate data across several variables (for example, by experimental batch and by condition)
-2. Significant gain in speed and lower memory requirements for integration of large datasets
-3. Interoperability with the `Seurat` workflow
-
-Instead of using CCA, `Harmony` applies a transformation to the principal component (PCs) values, using all available PCs, e.g. as pre-computed within the `Seurat` workflow. In this space of transformed PCs, `Harmony` uses k-means clustering to delineate clusters, seeking to define clusters with maximum "diversity". The diversity of each cluster reflects whether it contains balanced amounts of cells from each of the batches (donor, condition, tissue, technolgy...) we seek to integrate on, as should be observed in a well-integrated dataset. After defining diverse clusters, `Harmony` determines how much a cell's batch identity impacts on its PC coordinates, and applies a correction to "shift" the cell towards the centroid of the cluster it belongs to. Cells are projected again using these corrected PCs, and the process is repeated iteratively until convergence. 
-
-::: {#fig-harmony-overview .figure}
-![](../img/harmony_overview.jpeg){width=600}
-
-Overview of the Harmony algorithm for batch correction and integration of single-cell datasets.
-_Image Source: [Korsunsky et al., 2019](https://www.nature.com/articles/s41592-019-0619-0)
-:::
-
-For a more detailed breakdown of the `Harmony` algorithm, we recommend checking [this advanced vignette](http://htmlpreview.github.io/?https://github.com/immunogenomics/harmony/blob/master/docs/advanced.html) from the package developers.
 
 :::
 
