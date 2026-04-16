@@ -1,0 +1,284 @@
+---
+title: "Anatomy of a Seurat Object"
+description: |
+  Write a description of the lesson here. 
+author:
+  - Noor Sohail
+date: "2026-04-15"
+categories: 
+  - category_1
+  - category_2
+  - category_3
+  - category_4
+keywords:
+  - keyword_1
+  - keyword_2
+  - keyword_3
+  - keyword_4
+  - keyword_5
+  - keyword_6
+license: "CC-BY-4.0"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: load_libraries_data
+#| echo: false
+# Load libraries and data
+
+```
+
+Approximate time: XX minutes
+
+## Learning objectives 
+
+In this lesson, we will:
+
+- Learning Objective 1
+- Learning Objective 2
+- Learning Objective 3
+
+## Overview of lesson
+
+When doing XYZ...
+
+## Load dataset
+
+```{r}
+#| label: crc_Load10X_Spatial
+library(Seurat)
+library(tidyverse)
+crc <- Load10X_Spatial(data.dir = "data/P5CRC_cropped/",
+                       bin.size = c(8, 16),
+                       slice = "P5CRC")
+```
+
+## Anatomy of a Seurat object
+
+As we can see from our Seurat callout, there are a lot of different slots inside our object. Here, we will go through each of the major components of a Seurat object and how you would access key pieces of information.
+
+### Assays
+
+`Assays` are where we can store different counts matrices - we are not forced to keep the same features and variable genes across assays. Each assay will contain it's own `Layers` that can be distinct from other assays in the object. This is useful in several different cases:
+
+- Multi-modal assays, where you can keep the expression matrices for RNA, ATAC, or protein in a single Seurat object
+- Storing counts matrices from a variety of different normalization techniques
+- Batch integration methods will sometimes generate a transformed counts matrix
+
+Here we can print the different assays that exist within our `crc` object:
+
+```{r}
+#| label: crc_assays
+Assays(crc)
+```
+
+We have 2 distinct assays for the different bin sizes, which makes sense because we have different count matrices for our cells based upon the bin size that was selected.
+
+The `DefaultAssay()` function shows us which assay information will be used in other Seurat function calls, unless explicitly specified otherwise.
+
+```{r}
+#| label: crc_DefaultAssay
+DefaultAssay(crc)
+```
+
+We can also change what our default assay is. Let's set it to the `016um` bins:
+
+```{r}
+#| label: crc_DefaultAssay_callout
+DefaultAssay(crc) <- "Spatial.016um"
+crc
+```
+
+Now we see that the callout says: `Active assay: Spatial.016um `
+
+### `Features` and `Cells`
+
+Our count matrices function as any other matrix does, with rows and columns. 
+
+In Seurat, the **rows** correspond to `Features`. In the case of spatial transcriptomics, our features are genes. In other experiments, features could refer to chromatin peaks or proteins. The important thing to keep in mind is what technology you are using. Since this is a Visium HD dataset, we are quantifying RNA expression (genes).
+
+We can see what the first few genes/features in our count matrix are:
+
+```{r}
+#| label: crc_features
+Features(crc) %>% head()
+```
+
+As well as see the number of genes that are found in each of our assays:
+
+```{r}
+#| label: crc_nrow
+nrow(crc[["Spatial.008um"]])
+nrow(crc[["Spatial.016um"]])
+```
+
+The **columns** correspond to `Cells` (or samples as it appears in the callout). We can see what the first few cells in our count matrix are:
+
+```{r}
+#| label: crc_cells
+Cells(crc) %>% head()
+```
+
+As well as see the number of cells that are found in each of our assays:
+
+```{r}
+#| label: crc_ncol
+ncol(crc[["Spatial.008um"]])
+ncol(crc[["Spatial.016um"]])
+```
+
+::: callout-tip
+# [**Exercise 2**](03_loading_spatial_data-Answer_key.qmd#exercise-2)
+3. What differences do you see between the `8um` and `16um` bins?
+:::
+
+### Layers
+
+Layers are our count matrices. 
+
+```{r}
+#| label: crc_layers
+Layers(crc)
+```
+
+By default, Seurat uses the following naming convention for the counts matrices within an `Assay`: 
+
+| Layer       | Description                     |
+|-------------|---------------------------------|
+| counts      | Raw counts                      |
+| data        | Normalized counts               |
+| scale.data  | Scaled‑normalized counts        |
+
+: Description of each `Layer()` count matrix {#tbl-layer_descriptions}
+
+You may notice that our Seurat object only contains `counts` right now. This is because we have not run any normalization steps yet (we will discuss how to do so in future lessons).
+
+Using the `LayerData()` function we can access the entire counts matrix. Furthermore, we can specify the `assay` if we would prefer to not use the `DefaultAssay`.
+
+```{r}
+#| label: crc_LayerData
+#| eval: false
+LayerData(crc, 
+          assay = "Spatial.016um", 
+          layer = "count")[1:5, 1:5]
+```
+
+```{r}
+#| label: tbl-crc_LayerData_kable
+#| tbl-cap: First 5 rows and columns of raw counts matrix
+#| echo: false
+LayerData(crc, 
+          assay = "Spatial.016um", 
+          layer = "count")[1:5, 1:5] %>%
+  as.data.frame() %>%
+  knitr::kable()
+```
+
+By printing the first 5 features and cells in our object (for easier visualization). We can see that we are working with **whole numbers** which reinforces the idea that this is the **raw data**, with no transformations having been applied.
+
+### Spatial fields
+
+We do not just have expression data associated with our sample, we also have the spatial slide that comes with its own set of values and information.
+
+For example we can grab the x,y coordinates of each bin using the `GetTissueCoordinates()` function.
+
+```{r}
+#| label: crc_GetTissueCoordinates
+#| eval: false
+GetTissueCoordinates(crc) %>% View()
+```
+
+```{r}
+#| label: tbl-crc_GetTissueCoordinates_dt
+#| tbl-cap: Coordinates on spatial slide for each cell
+#| echo: false
+GetTissueCoordinates(crc) %>% 
+  head(5) %>%
+  knitr::kable()
+```
+
+Or visualize what our slide looks like with `SpatialDimPlot()`:
+
+```{r}
+#| label: fig-crc_SpatialDimPlot
+#| fig-cap: Spatial visualization of spots with `SpatialDimPlot()`
+SpatialDimPlot(crc)
+```
+
+### Metadata
+
+**Seurat automatically creates some metadata** for each of the cells when the object is created. This information is stored in the `@meta.data` slot within the Seurat object. The rownames are automatically set to be the cell names.
+
+```{r}
+#| label: crc_meta_data_1
+#| eval: false
+crc@meta.data %>% View()
+```
+
+```{r}
+#| label: tbl-crc_meta_data_1_dt
+#| tbl-cap: Seurat default `@meta.data`
+#| echo: false
+crc@meta.data %>% 
+  head(5) %>%
+  knitr::kable()
+```
+
+What does each column represent?
+
+| Column        | Description                                   |
+|---------------|-----------------------------------------------|
+| orig.ident    | Sample identity if known; defaults to “s”     |
+| nCount_RNA    | Number of UMIs per cell                       |
+| nFeature_RNA  | Number of genes detected per cell             |
+
+: Columns automatically populated in `@meta.data` {#tbl-metadata_cols}
+
+While it may seem intimidating at first, the important thing to remember is that this is a dataframe. Therefore can modify and work with this dataframe just like we would any other in R! For example, we can set our `orig.ident` column to be our sample name rather than "s".
+
+```{r}
+#| label: crc_meta_data_orig_ident
+crc@meta.data$orig.ident <- "P5CRC"
+```
+
+```{r}
+#| label: crc_meta_data_2
+#| eval: false
+crc@meta.data %>% View()
+```
+
+```{r}
+#| label: tbl-crc_meta_data_2_dt
+#| tbl-cap: Seurat default `@meta.data` after updating `orig.ident`
+#| echo: false
+crc@meta.data %>% 
+  head(5) %>%
+  knitr::kable()
+```
+
+Additionally, we do not have use the `@meta.data` each time we want to access a single column. We can use the `$` follow by the column name as a shorthand.
+
+```{r}
+#| label: crc_dollar_notation
+crc$nCount_Spatial.008um %>% head()
+```
+
+### Idents
+
+The cell identities are stored as `Idents()`, which contain the default way to label cells. For example, if we wanted to label each cell by which sample they came from we could run:
+
+```{r}
+#| label: crc_idents
+Idents(crc) <- "orig.ident"
+Idents(crc) %>% head()
+```
+
+Where we see that the identities of the cells are the value stored in the `@meta.data` column `orig.ident`.
+
+***
+
+[Back to Lesson >>](03_loading_spatial_data.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)
