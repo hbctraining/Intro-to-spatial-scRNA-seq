@@ -16,7 +16,7 @@ editor_options:
 library(Seurat)
 library(tidyverse)
 
-seurat_filtered <- qs::qread("intermediate/05_seurat_filtered.qs")
+seurat_filtered <- qs2::qs_read("intermediate/05_seurat_filtered.qs")
 seurat_filtered <- UpdateSeuratObject(seurat_filtered)
 seurat_sketch <- NormalizeData(seurat_filtered)
 ```

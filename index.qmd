@@ -75,6 +75,9 @@ Download the most recent versions of R and RStudio for your laptop:
 **Please install them one-by-one as follows:**
 
 ```{r}
+
+
+
 BiocManager::install("package_1")
 BiocManager::install("package_2")
 BiocManager::install("package_3")
@@ -86,11 +89,13 @@ BiocManager::install("package_4")
 **Please install them one-by-one as follows:**
 
 ```{r}
+install.packages("tidyverse")
+install.packages("Seurat")
 install.packages("arrow")
 install.packages("hdf5r")
-install.packages("Seurat")
-install.packages("package_8")
-install.packages("package_9")
+install.packages("qs2")
+install.packages("scales")
+
 install.packages("package_10")
 install.packages("package_11")
 ```

@@ -27,12 +27,11 @@ editor_options:
 #| label: load_libraries_data
 #| echo: false
 # Load libraries and data
-# Load libraries
 library(Seurat)
 library(tidyverse)
 library(scales)
 
-seurat_filtered <- qs::qread("intermediate/05_seurat_filtered.qs")
+seurat_filtered <- qs2::qs_read("intermediate/05_seurat_filtered.qs")
 ```
 
 Approximate time: XX minutes
@@ -295,7 +294,7 @@ saveRDS(seurat_sketch, "data/seurat_sketch.RDS")
 #| eval: false
 #| echo: false
 # Save Seurat object
-qs::qsave(seurat_sketch, "intermediate/06_seurat_sketch.qs")
+qs2::qs_save(seurat_sketch, "intermediate/06_seurat_sketch.qs")
 ```
 
 
