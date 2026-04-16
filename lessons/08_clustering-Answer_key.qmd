@@ -15,7 +15,7 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
-seurat_processed <- qs::qread("intermediate/08_seurat_processed.qs")
+seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
 ```
 
 # Exercise 1

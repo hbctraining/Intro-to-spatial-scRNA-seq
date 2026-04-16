@@ -95,6 +95,8 @@ install.packages("arrow")
 install.packages("hdf5r")
 install.packages("qs2")
 install.packages("scales")
+install.packages('leidenbase')
+
 
 install.packages("package_10")
 install.packages("package_11")

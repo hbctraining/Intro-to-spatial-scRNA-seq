@@ -29,6 +29,8 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
+set.seed(12345)
+
 seurat_processed <- qs2::qs_read("intermediate/07_seurat_processed.qs")
 ```
 
@@ -114,7 +116,8 @@ Typically we would recommend using a variety of different resolutions and select
 seurat_processed <- FindClusters(seurat_processed, 
                                  cluster.name = "seurat_cluster.sketched", 
                                  algorithm = 4,
-                                 resolution = 0.65)
+                                 resolution = 0.65,
+                                 random.seed = 12345)
 ```
 
 If we take a look at the columns in our `@meta.data`, we see that the column `seurat_cluster.sketched` is a new column that was added.
@@ -122,7 +125,8 @@ If we take a look at the columns in our `@meta.data`, we see that the column `se
 ```{r}
 #| label: head_meta_data_clusters
 #| eval: false
-seurat_processed@meta.data %>% head() %>% 
+seurat_processed@meta.data %>% 
+  head() %>% 
   relocate("seurat_cluster.sketched")
 ```
 
@@ -189,8 +193,10 @@ The we specify the `assay` with the full dataset that we want to project onto (i
 #| label: ProjectData
 #| eval: false
 # Increases the size of the default vector
-options(future.globals.maxSize= 2000000000)
+# 8GB
+options(future.globals.maxSize = 8000 * 1024^2)
 
+# Project from sketch assay onto entire dataset
 seurat_processed <- ProjectData(
   object = seurat_processed,
   sketched.assay = "sketch",
@@ -205,8 +211,8 @@ seurat_processed <- ProjectData(
 ```{r}
 #| label: load_clustered_obj
 #| echo: false
-# qs::qsave(seurat_processed, "intermediate/08_seurat_projected.qs")
-seurat_processed <- qs::qread("intermediate/08_seurat_projected.qs")
+# qs2::qs_save(seurat_processed, "intermediate/08_seurat_projected.qs")
+seurat_processed <- qs2::qs_read("intermediate/08_seurat_projected.qs")
 ```
 
 Using the sketch PCA and UMAP, the `ProjectData` function returns a Seurat object that includes:
@@ -347,7 +353,7 @@ saveRDS(seurat_processed, "data/seurat_processed.RDS")
 #| label: qsave_seurat_processed
 #| eval: false
 #| echo: false
-qs::qsave(seurat_processed, "intermediate/08_seurat_processed.qs")
+qs2::qs_save(seurat_processed, "intermediate/08_seurat_processed.qs")
 ```
 
 ***
