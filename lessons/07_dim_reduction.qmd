@@ -29,6 +29,7 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
+set.seed(12345)
 
 seurat_sketch <- qs2::qs_read("intermediate/06_seurat_sketch.qs")
 ```
@@ -96,6 +97,7 @@ steps.
 # Created: December 2025
 library(Seurat)
 library(tidyverse)
+set.seed(12345)
 
 seurat_sketch <- readRDS("data/seurat_sketch.RDS")
 ```
@@ -314,7 +316,8 @@ seurat_processed <- RunUMAP(seurat_processed,
                             reduction = "pca.sketch", 
                             reduction.name = "umap.sketch", 
                             return.model = TRUE, 
-                            dims = 1:50)
+                            dims = 1:50,
+                            seed.use = 12345)
 seurat_processed
 ```
 

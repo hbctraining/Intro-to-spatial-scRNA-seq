@@ -29,7 +29,7 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
-seurat_processed <- qs::qread("intermediate/07_seurat_processed.qs")
+seurat_processed <- qs2::qs_read("intermediate/07_seurat_processed.qs")
 ```
 
 Approximate time: XX minutes
