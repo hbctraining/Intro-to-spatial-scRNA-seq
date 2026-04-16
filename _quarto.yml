@@ -58,6 +58,18 @@ website:
       - section: "Day 2 Self-learning:"
         contents:
           - lessons/08_clustering.qmd
+          - lessons/09_integration.qmd
+          - lessons/10_seurat_cheatsheet.qmd
+          
+      - section: "Day 3:"
+        contents:
+          - lessons/11_banksy_clustering.qmd
+          - lessons/12_deconvolution.qmd
+          
+      - section: "Day 3 Self-learning:"
+        contents:
+          - lessons/13_dge_pathway.qmd
+          
 
 
 format:

@@ -86,12 +86,14 @@ install.packages("remotes")
 install.packages("R.utils")
 install.packages("future")
 install.packages("harmony")
+install.package("devtools")
 
 remotes::install_github("prabhakarlab/Banksy")
 remotes::install_github('satijalab/seurat-wrappers')
 
-install.packages("package_10")
-install.packages("package_11")
+devtools::install_github("dmcable/spacexr", 
+                         build_vignettes = FALSE)
+
 ```
 
 **(3)** Finally, please check that all the packages were installed successfully by **loading them one at a time** using the `library()` function.  
