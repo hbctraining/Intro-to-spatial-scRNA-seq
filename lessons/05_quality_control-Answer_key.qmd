@@ -15,12 +15,12 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
-seurat_merged <- qs::qread("intermediate/03_seurat_merged.qs")
+seurat_merged <- qs2::qs_read("intermediate/03_seurat_merged.qs")
 seurat_merged$mitoRatio <- PercentageFeatureSet(object = seurat_merged, 
                                                 pattern = "^MT-")
 seurat_merged$mitoRatio <- seurat_merged@meta.data$mitoRatio / 100
 
-seurat_filtered <- qs::qread("intermediate/05_seurat_filtered.qs")
+seurat_filtered <- qs2::qs_read("intermediate/05_seurat_filtered.qs")
 ```
 
 # Exercise 1

@@ -29,7 +29,7 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
-seurat_merged <- qs::qread("intermediate/03_seurat_merged.qs")
+seurat_merged <- qs2::qs_read("intermediate/03_seurat_merged.qs")
 ```
 
 Approximate time: XX minutes
@@ -439,13 +439,15 @@ seurat_filtered
 After subsetting, you may get the following warning message:
 
 ```
-Not validating FOV objectsWarning: Not validating FOV objectsWarning: Not validating FOV objectsWarning: Not validating Seurat objects
+Warning: Not validating FOV objects
+Warning: Not validating FOV objects
+Warning: Not validating FOV objects
+Warning: Not validating Seurat objects
 ```
 
 ::: callout-warning
 TODO: explain this warning message. It is fine that it happens, it does not break anything
 :::
-
 
 
 How many cells did we remove in this filtration process?
@@ -519,7 +521,7 @@ saveRDS(seurat_filtered, "data/seurat_filtered.RDS")
 #| eval: false
 #| echo: false
 # Save Seurat object
-qs::qsave(seurat_filtered, "intermediate/05_seurat_filtered.qs")
+qs2::qs_save(seurat_filtered, "intermediate/05_seurat_filtered.qs")
 ```
 
 ***
