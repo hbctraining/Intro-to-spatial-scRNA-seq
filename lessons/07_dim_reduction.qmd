@@ -30,7 +30,7 @@ editor_options:
 library(Seurat)
 library(tidyverse)
 
-seurat_sketch <- qs::qread("intermediate/06_seurat_sketch.qs")
+seurat_sketch <- qs2::qs_read("intermediate/06_seurat_sketch.qs")
 ```
 
 Approximate time: XX minutes
@@ -272,6 +272,7 @@ Also assess the differences in coordinates based on batch variables.
 #| fig-cap: PCA plot of PC1 vs PC2 with bins colored and split by sample.
 # Plot PCA, split by sample
 DimPlot(seurat_processed,
+        pt.size = 2,
         reduction = "pca.sketch",
         group.by = "orig.ident",
         split.by = "orig.ident")
@@ -338,7 +339,7 @@ DimPlot(seurat_processed,
 #| label: save_seurat_qs
 #| echo: false
 #| eval: false
-qs::qsave(seurat_processed, "intermediate/07_seurat_processed.qs")
+qs2::qs_save(seurat_processed, "intermediate/07_seurat_processed.qs")
 ```
 
 ***

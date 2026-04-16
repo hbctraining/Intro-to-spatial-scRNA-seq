@@ -14,7 +14,7 @@ editor_options:
 #| echo: false
 # Load libraries and data
 library(Seurat)
-seurat_processed <- qs::qread("intermediate/07_seurat_processed.qs")
+seurat_processed <- qs2::qs_read("intermediate/07_seurat_processed.qs")
 ```
 
 # Exercise 1
