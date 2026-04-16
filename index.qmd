@@ -70,21 +70,7 @@ Download the most recent versions of R and RStudio for your laptop:
    type **`n`** (no) and press Enter.
 :::
 
-**(1)** Install the X packages listed below from **Bioconductor** using the the `BiocManager::install()` function.
-
-**Please install them one-by-one as follows:**
-
-```{r}
-
-
-
-BiocManager::install("package_1")
-BiocManager::install("package_2")
-BiocManager::install("package_3")
-BiocManager::install("package_4")
-```
-
-**(2)** Install the Y packages listed below from **CRAN** using the `install.packages()` function. 
+**(1)** Install the following packages:
 
 **Please install them one-by-one as follows:**
 
@@ -96,7 +82,13 @@ install.packages("hdf5r")
 install.packages("qs2")
 install.packages("scales")
 install.packages('leidenbase')
+install.packages("remotes")
+install.packages("R.utils")
+install.packages("future")
+install.packages("harmony")
 
+remotes::install_github("prabhakarlab/Banksy")
+remotes::install_github('satijalab/seurat-wrappers')
 
 install.packages("package_10")
 install.packages("package_11")

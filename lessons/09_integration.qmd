@@ -141,12 +141,12 @@ ggplot(seurat_processed@meta.data) +
     theme_classic()
 ```
 
-Notably, we see that that clusters 2 and 12 contain almost exclusively `P5CRC` bins. So let us zoom in on these bins to see if there is a biological explanation for this observation, or if it is a technical artifact that we need to correct for with integration.
+Notably, we see that that clusters 1 and 11 contain almost exclusively `P5CRC` bins. So let us zoom in on these bins to see if there is a biological explanation for this observation, or if it is a technical artifact that we need to correct for with integration.
 
 ::: {.callout-note collapse=true}
 # Zoom in on clusters of interest with `DimPlot()`
 
-First, we will identify which bins belong to clusters 1 and 12 with the `WhichCells()` function. We will supply that output to the `cells.highlight` argument in `DimPlot()` to highlight these bins on the UMAP.
+First, we will identify which bins belong to clusters 1 and 11 with the `WhichCells()` function. We will supply that output to the `cells.highlight` argument in `DimPlot()` to highlight these bins on the UMAP.
 
 ```{r}
 #| label: fig-highlight_clusters
@@ -154,13 +154,13 @@ First, we will identify which bins belong to clusters 1 and 12 with the `WhichCe
 Idents(seurat_processed) <- "seurat_cluster.projected"
 p <- DimPlot(seurat_processed,
              cells.highlight = WhichCells(seurat_processed, 
-                                          idents = c("2", "12"))) +
+                                          idents = c("1", "11"))) +
   ggtitle("Clusters 2 and 12")
 LabelClusters(p, id = "ident",  fontface = "bold", size = 5, 
               bg.colour = "white", bg.r = .2, force = 0)
 ```
 
-Now bins that have the label of cluster 2 or 12 are colored red while the rest are gray in the UMAP.
+Now bins that have the label of cluster 1 or 11 are colored red while the rest are gray in the UMAP.
 :::
 
 ## Possible explanations for batch
@@ -193,7 +193,7 @@ Table: Marker genes for broad cell types in our dataset. {#tbl-marker_genes}
 
 ### Assessing tumor marker genes
 
-Our dataset contains two samples, `P5CRC` and `P5NAT`, which are colorectal cancer (CRC) and normal adjacent tissue (NAT) samples, respectively. Therefore, it makes sense that we may see a population of tumor cells in the `P5CRC` sample that is not present in the  other sample. To confirm that the clusters that are dominated by `P5CRC` bins are indeed tumor cells, we can look at the expression of tumor marker genes in clusters 2 and 12.
+Our dataset contains two samples, `P5CRC` and `P5NAT`, which are colorectal cancer (CRC) and normal adjacent tissue (NAT) samples, respectively. Therefore, it makes sense that we may see a population of tumor cells in the `P5CRC` sample that is not present in the  other sample. To confirm that the clusters that are dominated by `P5CRC` bins are indeed tumor cells, we can look at the expression of tumor marker genes in clusters 1 and 11.
 
 We are going to use `VlnPlot()` and `FeaturePlot()` to visualize which clusters have higher expression of `CEACAM5` and `CEACAM6`, which are known tumor marker genes in colorectal cancer. 
 
@@ -239,7 +239,7 @@ VlnPlot(seurat_processed,
 
 :::
 
-We see that clusters 2 and 12 do indeed have higher expression of the tumor marker genes! 
+We see that clusters 1 and 11 do indeed have higher expression of the tumor marker genes! 
 
 When annotating cell types, using multiple genes is recommended to give you more confidence in your annotations. We can also make use of the `DotPlot()` function to visualize the expression of both `CEACAM5` and `CEACAM6` at the same time across all clusters. Here, the size of a dot represents the percentage of cells in a cluster that express the gene, and the color of the dot represents the average expression of the gene in that cluster.  
 
@@ -248,7 +248,7 @@ DotPlot(seurat_processed,
         features = c("CEACAM5", "CEACAM6"))
 ```
 
-From this, we have the additional knowledge that there are likely some tumor cells among clusters 1 and 9.
+From this, we have the additional knowledge that there are likely some tumor cells among cluster 7.
 
 ## Final integration decision
 
@@ -282,8 +282,8 @@ Instead of using CCA, `Harmony` applies a transformation to the principal compon
 ::: {#fig-harmony-overview .figure}
 ![](../img/harmony_overview.jpeg){width=600}
 
-Overview of the Harmony algorithm for batch correction and integration of single-cell datasets.
-_Image Source: [Korsunsky et al., 2019](https://www.nature.com/articles/s41592-019-0619-0)
+Overview of the Harmony algorithm for batch correction and integration of single-cell datasets.<br>
+_Image Source: [Korsunsky et al., 2019](https://www.nature.com/articles/s41592-019-0619-0)_
 :::
 
 For a more detailed breakdown of the `Harmony` algorithm, we recommend checking [this advanced vignette](http://htmlpreview.github.io/?https://github.com/immunogenomics/harmony/blob/master/docs/advanced.html) from the package developers.

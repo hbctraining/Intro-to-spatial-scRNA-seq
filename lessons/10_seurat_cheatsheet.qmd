@@ -31,7 +31,7 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
-seurat_banksy <- qs::qread("intermediate/09_seurat_banksy_2.qs")
+seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
 ```
 
 Approximate time: XX minutes
@@ -67,7 +67,7 @@ These materials were developed by referencing the following pages from the Seura
 
 library(Seurat)
 library(tidyverse)
-seurat_banksy <- readRDS("data/seurat_banksy.RDS")
+seurat_processed <- readRDS("data/seurat_processed.RDS")
 ```
 
 # Accessing cell barcodes and gene names
@@ -80,7 +80,7 @@ We can use `colnames()` to get a vector of cell barcodes in the same order as th
 
 ```{r}
 #| label: show_colnames
-colnames(seurat_banksy) %>% head()
+colnames(seurat_processed) %>% head()
 ```
 
 
@@ -88,7 +88,7 @@ Similarly we can use the `Cells()` function:
 
 ```{r}
 #| label: show_cells
-Cells(seurat_banksy) %>% head()
+Cells(seurat_processed) %>% head()
 ```
 
 
@@ -96,7 +96,7 @@ It is **very important** that the values stored in `Cells()` are the same as the
 
 ```{r}
 #| label: check_rowname_cells_equal
-all(rownames(seurat_banksy@meta.data) == Cells(seurat_banksy))
+all(rownames(seurat_processed@meta.data) == Cells(seurat_processed))
 ```
 
 
@@ -108,19 +108,19 @@ The `Features()` function returns a vector of all features/genes in our dataset 
 
 ```{r}
 #| label: show_features
-Features(seurat_banksy) %>% head()
+Features(seurat_processed) %>% head()
 ```
 
 The `rownames()` function provides the same output:
 
 ```{r}
 #| label: show_rownames
-rownames(seurat_banksy) %>% head()
+rownames(seurat_processed) %>% head()
 ```
 
 ***
 ::: callout-tip
-# [**Exercise 1**](12_seurat_cheatsheet-Answer_key.qmd#exercise-1)
+# [**Exercise 1**](10_seurat_cheatsheet-Answer_key.qmd#exercise-1)
 
 1. What are the last 5 cells barcodes and the last 5 genes in the integrated seurat object.
 :::
@@ -134,21 +134,21 @@ Therefore, we can access the number of cells by using the `ncol()` function.
 
 ```{r}
 #| label: show_ncol
-ncol(seurat_banksy)
+ncol(seurat_processed)
 ```
 
 The number of features is returned with the `nrow()` function:
 
 ```{r}
 #| label: show_nrow
-nrow(seurat_banksy)
+nrow(seurat_processed)
 ```
 
 The `dim()` function provides both the number of cells and genes for the **default assay**. Here we see the number of features followed by the number of cells:
 
 ```{r}
 #| label: show_dim
-dim(seurat_banksy)
+dim(seurat_processed)
 ```
 
 # Idents
@@ -159,7 +159,7 @@ Common information set as the identity for cells include: clusters (as in our ex
 
 ```{r}
 #| label: show_idents
-Idents(seurat_banksy) %>% head()
+Idents(seurat_processed) %>% head()
 ```
 
 ## Rename Idents
@@ -169,20 +169,20 @@ To quickly make modifications to identities, you can use the `RenameIdents()` fu
 ```{r}
 #| label: rename_idents
 # Rename all identities
-seurat_banksy <- RenameIdents(object = seurat_banksy, 
+seurat_processed <- RenameIdents(object = seurat_processed, 
                                  "1" = "CD14+ monocytes",
                                  "3" = "CD14+ monocytes",
                                  "2" = "Activated T cells")
 
 # These new celltype values are only stored in the idents
 # Good practice is to store these changes in a column
-seurat_banksy$celltype <- Idents(seurat_banksy)
+seurat_processed$celltype <- Idents(seurat_processed)
 ```
 
 ***
 
 ::: callout-tip
-# [**Exercise 2**](12_seurat_cheatsheet-Answer_key.qmd#exercise-2)
+# [**Exercise 2**](10_seurat_cheatsheet-Answer_key.qmd#exercise-2)
 2. What are the last 5 identities for the cells in the integrated seurat object?
 :::
 
@@ -196,7 +196,7 @@ To obtain a vector of all highly variable genes that were selected after running
 
 ```{r}
 #| label: show_var_features
-VariableFeatures(seurat_banksy) %>% head()
+VariableFeatures(seurat_processed) %>% head()
 ```
 
 ## Setting variable features
@@ -209,17 +209,17 @@ As an example, here we are omitting mitochondrial genes from the original list o
 #| label: set_var_features
 # Get list of all variable genes
 # Remove variable genes that start with MT-
-var_genes <- VariableFeatures(seurat_banksy)
+var_genes <- VariableFeatures(seurat_processed)
 var_genes <- var_genes[!startsWith(var_genes, "MT-")]
 
 # Now we set our vector of gene names back to VariableFeatures()
-VariableFeatures(seurat_banksy) <- var_genes
+VariableFeatures(seurat_processed) <- var_genes
 ```
 
 ***
 
 ::: callout-tip
-# [**Exercise 3**](12_seurat_cheatsheet-Answer_key.qmd#exercise-3)
+# [**Exercise 3**](10_seurat_cheatsheet-Answer_key.qmd#exercise-3)
 3. What are the the 5 least variable genes in the integrated seurat object?
 :::
 
@@ -231,20 +231,18 @@ VariableFeatures(seurat_banksy) <- var_genes
 
 Within a Seurat object you can have multiple "assays". Each assay contains its own count matrix that is separate from the other assays in the object. This structure was created with multimodal datasets in mind so we can store, for example, ATAC peaks within the same Seurat object as your RNA counts.
 
-SCTransform also makes use of these assays to store the SCT normalized matrix in a separate assay called "SCT".
-
 To access the list of assays in your Seurat object, you can call `@assays`.
 
 ```{r}
 #| label: show_assays
-seurat_banksy@assays
+seurat_processed@assays
 ```
 
 We can additionally see which of the assays in our dataset is set as the default with the `DefaultAssays()` function. This default assay is automatically used as by Seurat functions, unless you specify otherise in the parameters of your function.
 
 ```{r}
 #| label: show_default_assay
-DefaultAssay(seurat_banksy)
+DefaultAssay(seurat_processed)
 ```
 
 Here we can see that the default assay is set to "integrated". If we instead wanted to use the RNA counts, we can set a new default by once again calling the `DefaultAssay()` function and storing the name of a different assay.
@@ -252,17 +250,17 @@ Here we can see that the default assay is set to "integrated". If we instead wan
 ```{r}
 #| label: set_default_assay
 # Set new default assay
-DefaultAssay(seurat_banksy) <- "sketch"
+DefaultAssay(seurat_processed) <- "sketch"
 
 # Print out the new default to see if it changed
-DefaultAssay(seurat_banksy)
+DefaultAssay(seurat_processed)
 ```
 
 We can access each assay as if the Seurat object was a named list with double brackets:
 
 ```{r}
 #| label: access_assay
-seurat_banksy[["Spatial.008um"]]
+seurat_processed[["Spatial.008um"]]
 ```
 
 
@@ -270,13 +268,13 @@ And similarly run any function on it:
 
 ```{r}
 #| label: access_assay_dim
-dim(seurat_banksy[["sketch"]])
+dim(seurat_processed[["sketch"]])
 ```
 
 ***
 
 ::: callout-tip
-# [**Exercise 4**](12_seurat_cheatsheet-Answer_key.qmd#exercise-4)
+# [**Exercise 4**](10_seurat_cheatsheet-Answer_key.qmd#exercise-4)
 4. What are the dimensions for each assay in the integrated seurat object?
 :::
 
@@ -297,7 +295,7 @@ We can see which layers are accessible with the `Layers()` function.
 
 ```{r}
 #| label: show_layers
-Layers(seurat_banksy[["sketch"]])
+Layers(seurat_processed[["sketch"]])
 ```
 
 ## Accessing full count matrix
@@ -307,14 +305,14 @@ You can grab the entire counts matrix by making use of the `LayerData()` functio
 ```{r}
 #| label: show_counts_mtx
 # Subsetting to the first 5 genes and cells for easy viewing
-LayerData(seurat_banksy, assay="Spatial.008um", layer="counts")[1:5, 1:5]
+LayerData(seurat_processed, assay="Spatial.008um", layer="counts")[1:5, 1:5]
 ```
 
 ***
 
 ::: callout-tip
-# [**Exercise 5**](12_seurat_cheatsheet-Answer_key.qmd#exercise-5)
-5. Show the code to get the entire SCT normalized (data) count matrix.
+# [**Exercise 5**](10_seurat_cheatsheet-Answer_key.qmd#exercise-5)
+5. Show the code to get the entire sketch normalized (data) count matrix.
 :::
 
 ***
@@ -325,9 +323,9 @@ The `FetchData()` function is useful to directly access the counts of a feature 
 
 ```{r}
 #| label: fetchdata
-# Normalized counts for the gene PTPRC in the assay SCT
-FetchData(seurat_banksy, vars=c("PTPRC", "sample"), 
-          assay="SCT", layer="data") %>% head()
+# Normalized counts for the gene PTPRC in the assay sketch
+FetchData(seurat_processed, vars=c("PTPRC", "sample"), 
+          assay="sketch", layer="data") %>% head()
 ```
 
 Conveniently, you can also get information from multiple assays at the same time. To do so, you prepend the assay name (in lowercase format) for the feature you supply to the `FetchData()` function.
@@ -335,14 +333,14 @@ Conveniently, you can also get information from multiple assays at the same time
 ```{r}
 #| label: fetchdata_assays
 # Grab the normalized counts in the integrated and RNA assays
-FetchData(seurat_banksy, vars=c("sketch_PTPRC", "Spatial.008um_PTPRC"), 
+FetchData(seurat_processed, vars=c("sketch_PTPRC", "Spatial.008um_PTPRC"), 
           layer="data") %>% head()
 ```
 
 ***
 
 ::: callout-tip
-# [**Exercise 6**](12_seurat_cheatsheet-Answer_key.qmd#exercise-6)
+# [**Exercise 6**](10_seurat_cheatsheet-Answer_key.qmd#exercise-6)
 6. Show how you would use the `FetchData()` function to generate a dataframe of UMAP_1, UMAP_2, and sample values for each cell.
 :::
 
@@ -357,8 +355,8 @@ The scores for each PC is stored within the embeddings slot of the Seurat object
 ```{r}
 #| label: show_embeddings_pca
 # Alternative method of accessing PCA values
-# seurat_banksy[['pca']]@cell.embeddings
-Embeddings(seurat_banksy, reduction="pca.sketch")[1:5, 1:5]
+# seurat_processed[['pca']]@cell.embeddings
+Embeddings(seurat_processed, reduction="pca.sketch")[1:5, 1:5]
 ```
 
 The weight (loadings) for each feature is also stored and can be accessed with `Loadings()` function.
@@ -366,14 +364,14 @@ The weight (loadings) for each feature is also stored and can be accessed with `
 ```{r}
 #| label: show_loadings
 # pbmc[['pca]]@feature.loadings
-Loadings(seurat_banksy, reduction="pca.sketch")[1:5, 1:5]
+Loadings(seurat_processed, reduction="pca.sketch")[1:5, 1:5]
 ```
 
 We can also view more information about the top PCs, like the genes that are most strongly correlated with the first few PCs with the `ProjectDim()` function.
 
 ```{r}
 #| label: show_projectdim
-ProjectDim(seurat_banksy, reduction = "pca.sketch")
+ProjectDim(seurat_processed, reduction = "pca.sketch")
 ```
 
 ## UMAP/tSNE
@@ -382,8 +380,8 @@ To access the coordinates used for UMAP/tSNE plots, we specify the reduction of 
 
 ```{r}
 #| label: show_embeddings_umap
-# seurat_banksy[['umap']]@cell.embeddings
-Embeddings(seurat_banksy, reduction="umap.sketch") %>% head()
+# seurat_processed[['umap']]@cell.embeddings
+Embeddings(seurat_processed, reduction="umap.sketch") %>% head()
 ```
 
 # Data visualization
@@ -398,21 +396,21 @@ By default `DimPlot()` will color cells by the `Idents()` and use UMAP as the de
 
 ```{r}
 #| label: dimplot_ggtitle
-DimPlot(seurat_banksy) + ggtitle("Seurat clusters")
+DimPlot(seurat_processed) + ggtitle("Seurat clusters")
 ```
 
 We can specify a different metadata column using the `group.by` argument
 
 ```{r}
 #| label: dimplot_groupby
-DimPlot(seurat_banksy, group.by = "orig.ident")
+DimPlot(seurat_processed, group.by = "orig.ident")
 ```
 
 We can also use the `split.by` argument to create multiple plots that only show cells that have the same value for the metadata column specified.
 
 ```{r fig.width=8}
 #| label: dimplot_splitby
-DimPlot(seurat_banksy, split.by = "orig.ident", group.by="orig.ident")
+DimPlot(seurat_processed, split.by = "orig.ident", group.by="orig.ident")
 ```
 
 ## FeaturePlot
@@ -421,7 +419,7 @@ The `FeaturePlot()` function allows us to visualize both metadata and features t
 
 ```{r fig.width=8}
 #| label: featureplot
-FeaturePlot(seurat_banksy, 
+FeaturePlot(seurat_processed, 
             features = c("FCGR3A", "MS4A7"))
 ```
 
@@ -431,7 +429,7 @@ To identify cells that show the highest expression of a feature, we can set a `m
 
 ```{r fig.width=8}
 #| label: featureplot_cutoff
-FeaturePlot(seurat_banksy, 
+FeaturePlot(seurat_processed, 
             reduction = "umap.sketch", 
             features = c("FCGR3A", "MS4A7"), 
             order = TRUE,
@@ -442,8 +440,8 @@ We can also add labels onto our UMAP to easily identify which groups of cells we
 
 ```{r}
 #| label: featureplot_labelcluster
-Idents(seurat_banksy) <- "banksy_cluster"
-p <- FeaturePlot(seurat_banksy, 
+Idents(seurat_processed) <- "seurat_cluster.projected"
+p <- FeaturePlot(seurat_processed, 
             reduction = "umap.sketch", 
             features = "FCGR3A", 
             order = TRUE,
@@ -458,8 +456,8 @@ LabelClusters(p, id = "ident",  fontface = "bold", size = 3,
 
 ```{r}
 #| label: featurescatter
-Idents(seurat_banksy) <- "seurat_cluster.projected"
-FeatureScatter(seurat_banksy, feature1 = "MT-ND5", feature2 = "mitoRatio") + 
+Idents(seurat_processed) <- "seurat_cluster.projected"
+FeatureScatter(seurat_processed, feature1 = "MT-ND5", feature2 = "mitoRatio") + 
   ggtitle("MitoRatio vs MT-ND5 expression")
 ```
 
@@ -470,19 +468,19 @@ To visualize the differences between two specific cells, you can use the `CellSc
 
 ```{r}
 #| label: cellscatter_select_cells
-cell1 <- Cells(seurat_banksy)[1] 
-cell2 <- Cells(seurat_banksy)[2]
+cell1 <- Cells(seurat_processed)[1] 
+cell2 <- Cells(seurat_processed)[2]
 
 # Here we can see the metadata for the first two cells in the dataset
 # We are comparing "Activated T cell" vs "CD14+ monocytes" (so they should be very different)
-seurat_banksy@meta.data %>% 
-  subset(rownames(seurat_banksy@meta.data) %in% c(cell1, cell2)) %>% 
+seurat_processed@meta.data %>% 
+  subset(rownames(seurat_processed@meta.data) %in% c(cell1, cell2)) %>% 
   select(orig.ident, nCount_Spatial.008um)
 ```
 
 ```{r}
 #| label: cellscatter
-CellScatter(seurat_banksy, cell1=cell1, cell2=cell2)
+CellScatter(seurat_processed, cell1=cell1, cell2=cell2)
 ```
 
 ## VlnPlot
@@ -493,7 +491,7 @@ This is a very customizable function, with many parameters to customize the look
 
 ```{r fig.width=9}
 #| label: vlnplot
-VlnPlot(seurat_banksy, c("CD14", "CD79A"))
+VlnPlot(seurat_processed, c("CD14", "CD79A"))
 ```
 
 
@@ -501,7 +499,7 @@ In this example, we are grouping expression by sample and showing 2 plots per co
 
 ```{r}
 #| label: vlnplot_customization
-VlnPlot(seurat_banksy, c("CEACAM6", "CEACAM5", "CD52", "CXCL8"), 
+VlnPlot(seurat_processed, c("CEACAM6", "CEACAM5", "CD52", "CXCL8"), 
         group.by="orig.ident", ncol=2, pt.size=0)
 ```
 
@@ -513,7 +511,7 @@ For our scRNA dataset, when we call `RidgePlot()`, on the y-axis we see the uniq
 
 ```{r}
 #| label: ridgeplot
-RidgePlot(seurat_banksy, "VIM", assay="Spatial.008um") + NoLegend()
+RidgePlot(seurat_processed, "VIM", assay="Spatial.008um") + NoLegend()
 ```
 
 ## DimHeatmap
@@ -522,7 +520,7 @@ To see the effect of genes on the principal component, we can see the top and bo
 
 ```{r}
 #| label: dimheatmap
-DimHeatmap(seurat_banksy, nfeatures = 10, reduction = "pca.sketch")
+DimHeatmap(seurat_processed, nfeatures = 10, reduction = "pca.sketch")
 ```
 
 ## DoHeatmap
@@ -531,7 +529,7 @@ To plot the expression values for genes across all cells (grouped by their ident
 
 ```{r fig.width=8}
 #| label: doheatmap
-DoHeatmap(seurat_banksy, features=c("CD14", "FCGR3A", "FCER1A", 
+DoHeatmap(seurat_processed, features=c("CD14", "FCGR3A", "FCER1A", 
                                         "IL3RA", "CD79A", "CD3D"))
 ```
 
@@ -552,7 +550,7 @@ markers[["Conventional dendritic"]] <- c("FCER1A", "CST3")
 markers[["Plasmacytoid dendritic"]] <- c("IL3RA", "GZMB", "SERPINF1", "ITM2C")
 
 # Create dotplot based on RNA expression
-DotPlot(seurat_banksy, markers, assay="Spatial.008um")
+DotPlot(seurat_processed, markers, assay="Spatial.008um")
 ```
 ***
 

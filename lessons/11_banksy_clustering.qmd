@@ -28,13 +28,22 @@ editor_options:
 #| echo: false
 # Load libraries and data
 library(Seurat)
-# remotes::install_github("prabhakarlab/Banksy")
 library(Banksy)
 library(SeuratWrappers)
 library(tidyverse)
+library(harmony)
+set.seed(12345)
 
-seurat_processed <- qs::qread("intermediate/08_seurat_processed.qs")
+# Set parallelization (multithreading)
+# Speed up calculations
+plan("multicore", workers = parallel::detectCores() - 1)
 
+# Increases the size of the default vector
+# 8GB
+options(future.globals.maxSize = 8000 * 1024^2)
+
+# Load dataset
+seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
 ```
 
 Approximate time: XX minutes
@@ -67,11 +76,22 @@ These new matrices are then concatenated to the counts matrix before running the
 ```{r}
 #| eval: false
 library(Seurat)
-# remotes::install_github("prabhakarlab/Banksy")
 library(Banksy)
 library(SeuratWrappers)
 library(tidyverse)
+library(future)
+library(harmony)
+set.seed(12345)
 
+# Set parallelization (multithreading)
+# Speed up calculations
+plan("multicore", workers = parallel::detectCores() - 1)
+
+# Increases the size of the default vector
+# 8GB
+options(future.globals.maxSize = 8000 * 1024^2)
+
+# Load dataset
 seurat_processed <- readRDS("data/seurat_processed.RDS")
 ```
 
@@ -118,9 +138,15 @@ seurat_processed@meta.data %>% head()
 
 But wait! Our rownames are missing! It is vital that the rownames of our Seurat object align with what is stored in `Cell()`. So we are going to add the rownames back into our metadata.
 
-Afterwards, we can then calculate the new BANKSY matrix. This step can take a while to compute (TODO time estimate)
+Afterwards, we can then calculate the new BANKSY matrix. This step can take a while to compute 
+
+::: callout-note
+TODO time estimate
+~1 minute for me
+:::
 
 ```{r}
+#| eval: false
 # Add cell barcodes back to rownames
 rownames(seurat_processed@meta.data) <- seurat_processed$cell
 
@@ -130,16 +156,19 @@ seurat_banksy <- RunBanksy(seurat_processed, lambda = 0.8, verbose = T,
                            dimx = 'x', dimy = 'y', 
                            group = "orig.ident", split.scale = T)
 ```
+
 ::: callout-warning
 Totally possible that participants run out RAM at this step. We should provide them the intermediate object at this point.
 
 `seurat_banksy` is 10.4 GB on my system right now...
+
+Basically if participants don't have enough RAM, they will need to follow along and then load the banksy object at the end of the lesson for next part
 :::
 
 ```{r}
 #| echo: false
-# qs::qsave(seurat_banksy, "intermediate/09_seurat_banksy_1.qs")
-seurat_banksy <- qs::qread("intermediate/09_seurat_banksy_1.qs")
+#qs2::qs_save(seurat_banksy, "intermediate/09_seurat_banksy_1.qs")
+seurat_banksy <- qs2::qs_read("intermediate/09_seurat_banksy_1.qs")
 ```
 
 With a new `Active assay: BANKSY`
@@ -168,18 +197,9 @@ Features(seurat_banksy) %>% tail()
 
 With these weights, we can now run through a simplified clustering workflow - using many of the same functions we used in the previous lesson on the scRNA workflow. The only distinction here is that these values are going to be calculated on our new BANKSY count matrix.
 
-:::{.callout-tip}
-# [**Exercise 1**](09_banksy_clustering-Answer_key.qmd#exercise-1)
-1. What steps/functions did we use to calculate clusters previously?
-:::
-
-We are once again going to use a `resolution = 0.65` so that we can make comparisons of our spatially-weighted clusters (BANKSY) versus transcript based clusters ().
-
 ```{r}
 #| eval: false
-# Increases the size of the default vector
-options(future.globals.maxSize = 200000000000)
-
+#| echo: false
 # PCA
 seurat_banksy <- RunPCA(seurat_banksy, 
                         assay = "BANKSY", 
@@ -187,15 +207,131 @@ seurat_banksy <- RunPCA(seurat_banksy,
                         features = rownames(seurat_banksy), 
                         npcs = 30)
 
+# Harmony batch correction
+seurat_banksy <- RunHarmony(seurat_banksy,
+                            group.by.vars = "orig.ident",
+                            reduction = "pca.banksy",
+                            reduction.save = "harmony.banksy",
+                            assay.use = "BANKSY")
+
+
 # Find k-Nearest Neighbors
 seurat_banksy <- FindNeighbors(seurat_banksy, 
                                reduction = "pca.banksy", 
                                dims = 1:30)
 
-# Louvain clustering
+# Leiden clustering
 seurat_banksy <- FindClusters(seurat_banksy, 
+                              algorithm = 4,
                               cluster.name = "banksy_cluster",
-                              resolution = 0.65)
+                              resolution = 0.65,
+                              random.seed = 12345)
+
+# Change default asasy from BANKSY
+DefaultAssay(seurat_banksy) <- "Spatial.008um"
+
+# Delete BANKSY assay by setting it to NULL
+seurat_banksy[["BANKSY"]] <- NULL
+```
+
+```{r}
+#| echo: false
+# qs2::qs_save(seurat_banksy, "intermediate/09_seurat_banksy_2.qs")
+seurat_banksy <- qs2::qs_read("intermediate/09_seurat_banksy_2.qs")
+```
+
+:::{.callout-tip}
+# [**Exercise 1**](09_banksy_clustering-Answer_key.qmd#exercise-1)
+1. What steps/functions did we use to calculate clusters previously?
+:::
+
+### Dimensionality reduction
+
+With this new matrix, we are once again going to calculate our PCA space, this time storing it as `pca.banksy` to keep it straight from the previous PCA coordinates that were calculated.
+
+```{r}
+#| eval: false
+# PCA
+seurat_banksy <- RunPCA(seurat_banksy, 
+                        assay = "BANKSY", 
+                        reduction.name = "pca.banksy", 
+                        features = rownames(seurat_banksy), 
+                        npcs = 30)
+```
+
+We can take a look at the distribution of the samples and the gene `IGKC` (B cell marker gene) to see if this newly calculated PCA space requires integration.
+
+```{r}
+#| fig-width: 10
+# BANKSY PCA colored by sample
+p_orig <- DimPlot(seurat_banksy,
+                  group.by = "orig.ident",
+                  reduction = "pca.banksy") 
+
+# BANKSY PCA colored by IGKC expression
+p_igkc <- FeaturePlot(seurat_banksy,
+                        feature = "IGKC",
+                        reduction = "pca.banksy")
+
+p_orig + p_igkc
+```
+
+We can see that there appears to be 2 unique populations of B cells in our PCA space, where the `orig.ident` or sample is driving the differences in 
+
+### Integration
+
+We are going to use the `Harmony` algorithm in order to batch correct our dataset. This is going to create a new reduction we will call `harmony.banksy`.
+
+This may take several iterations and may take a few minutes to run.
+
+::: callout-warning
+TODO how long does this step take
+~ 1 minute for me
+:::
+
+```{r}
+#| eval: false
+# Harmony batch correction
+seurat_banksy <- RunHarmony(seurat_banksy,
+                            group.by.vars = "orig.ident",
+                            reduction = "pca.banksy",
+                            reduction.save = "harmony.banksy",
+                            assay.use = "BANKSY")
+```
+
+We can once again visualize what this new, corrected dimensionality reduction looks like:
+
+```{r}
+# Harmony BANKSY PCA colored by sample
+p_orig <- DimPlot(seurat_banksy,
+                  group.by = "orig.ident",
+                  reduction = "harmony.banksy") 
+
+# Harmony BANKSY PCA colored by IGKC expression
+p_igkc <- FeaturePlot(seurat_banksy,
+                        feature = "IGKC",
+                        reduction = "harmony.banksy")
+
+p_orig + p_igkc
+```
+
+### Clustering
+
+We are once again going to use a `resolution = 0.65` so that we can make comparisons of our spatially-weighted clusters (BANKSY) versus transcript based clusters ().
+
+```{r}
+#| eval: false
+# Find k-Nearest Neighbors
+seurat_banksy <- FindNeighbors(seurat_banksy, 
+                               reduction = "pca.banksy", 
+                               dims = 1:30)
+
+# Leiden clustering
+seurat_banksy <- FindClusters(seurat_banksy, 
+                              algorithm = 4,
+                              cluster.name = "banksy_cluster",
+                              resolution = 0.65,
+                              random.seed = 12345)
 ```
 
 At this point, we no longer need access to the BANKSY assay as all the relevant information has now been stored as:
@@ -212,12 +348,6 @@ DefaultAssay(seurat_banksy) <- "Spatial.008um"
 
 # Delete BANKSY assay by setting it to NULL
 seurat_banksy[["BANKSY"]] <- NULL
-```
-
-```{r}
-#| echo: false
-# qs::qsave(seurat_banksy, "intermediate/09_seurat_banksy_2.qs")
-seurat_banksy <- qs::qread("intermediate/09_seurat_banksy_2.qs")
 ```
 
 
@@ -248,7 +378,8 @@ SpatialDimPlot(seurat_banksy,
 #| fig-width: 14
 DimPlot(seurat_banksy, 
         group.by = c("banksy_cluster",
-                     "seurat_cluster.projected"))
+                     "seurat_cluster.projected"),
+        reduction = "full.umap.sketch")
 ```
 
 
@@ -256,6 +387,13 @@ DimPlot(seurat_banksy,
 # [**Exercise 3**](09_banksy_clustering-Answer_key.qmd#exercise-3)
 2. What does the UMAP look like when use the BANKSY derived PCA to calculate coordinates?
 :::
+
+## Save!
+
+```{r}
+#| eval: false
+saveRDS("data/seurat_banksy.RDS")
+```
 
 ***
 
