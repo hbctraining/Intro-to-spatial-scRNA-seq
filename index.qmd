@@ -93,7 +93,6 @@ remotes::install_github('satijalab/seurat-wrappers')
 
 devtools::install_github("dmcable/spacexr", 
                          build_vignettes = FALSE)
-
 ```
 
 **(3)** Finally, please check that all the packages were installed successfully by **loading them one at a time** using the `library()` function.  
