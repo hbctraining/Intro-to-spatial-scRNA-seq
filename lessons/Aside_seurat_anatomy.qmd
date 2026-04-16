@@ -204,7 +204,7 @@ Or visualize what our slide looks like with `SpatialDimPlot()`:
 ```{r}
 #| label: fig-crc_SpatialDimPlot
 #| fig-cap: Spatial visualization of spots with `SpatialDimPlot()`
-SpatialDimPlot(crc)
+SpatialDimPlot(crc, pt.size.factor = 15)
 ```
 
 ### Metadata

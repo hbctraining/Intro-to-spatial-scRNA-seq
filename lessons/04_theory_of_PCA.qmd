@@ -30,7 +30,7 @@ editor_options:
 #| echo: false
 # Load libraries
 library(Seurat)
-seurat_merged <- qs::qread("intermediate/03_seurat_merged.qs")
+seurat_merged <- qs2::qs_read("intermediate/03_seurat_merged.qs")
 ```
 
 Approximate time: 45 minutes
