@@ -5108,8 +5108,8 @@ margin-right: 0;
 </table>
 <section id="description" class="level3">
 <h3 class="anchored" data-anchor-id="description">Description</h3>
-<p>This repository has teaching materials for a hands-on <strong>Introduction to Spatial Transcriptomics</strong> workshop. This workshop begins with experimental design considerations and an overview of current spatial transcriptomics technologies. From there, participants will load in Visium HD colorectal cancer samples as a practical example of a spatial analysis workflow. The first half of the workflow will be learning how to load data, assess quality, and filter out low-quality bins using Seurat in R. Once the data has been cleaned, a standard single-cell workflow will be used: highly variable gene selection, PCA, UMAP, k-nearest neighbors, and clustering. Then, we will apply a deconvolution algorithm to annotate the celltypes in the dataset.</p>
-<p>Building upon this foundation, participants will then conduct analyses that incorporate the physical locations of bins on the tissue. This includes spatial clustering, where groups are assigned based upon both gene expression and proximity to neighboring bins in the tissue. Moran’s I will be utilized to identify spatially variable genes, where expression of genes change across different regions of the tissue. The workshop will conclude with a cell-cell communication analysis to assess ligand-receptor interactions between cells that are in close proximity with one another.</p>
+<p>This repository has teaching materials for a hands-on <strong>Introduction to Spatial Transcriptomics</strong> workshop. This workshop begins with experimental design considerations and an overview of current spatial transcriptomics technologies. From there, participants will load in <strong>Visium HD</strong> colorectal cancer samples as a practical example of a spatial analysis workflow. The first half of the workflow will be learning how to load data, assess quality, and filter out low-quality bins using Seurat in R. Once the data has been cleaned, a standard single-cell workflow will be used: highly variable gene selection, PCA, UMAP, k-nearest neighbors, and clustering. Then, we will apply a deconvolution algorithm to annotate the celltypes in the dataset.</p>
+<p>Building upon this foundation, participants will then conduct <strong>analyses that incorporate the physical locations of bins on the tissue</strong>. This includes spatial clustering, where groups are assigned based upon both gene expression and proximity to neighboring bins in the tissue. Moran’s I will be utilized to identify spatially variable genes, where expression of genes change across different regions of the tissue. The workshop will conclude with a cell-cell communication analysis to assess ligand-receptor interactions between cells that are in close proximity with one another.</p>
 <p>Working knowledge of R is required or completion of the <a href="https://hbctraining.github.io/Intro-to-R-flipped/">Introduction to R workshop</a>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -5130,14 +5130,14 @@ Length of workshop
 <h3 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h3>
 <ul>
 <li>Experimental design best practices of current spatial transcriptomics technologies</li>
-<li>Data loading and quality control of Visium HD samples, including filtering and preprocessing steps</li>
-<li>Standard single-cell workflows adapted for spatial data, including highly variable gene selection, PCA, UMAP, and clustering</li>
-<li>Deconvolution for cell type annotation of spots for sequencing-based technologies with <code>RCTD</code></li>
+<li>Data loading and quality control of Visium HD samples</li>
+<li>Standard single-cell workflows adapted for spatial data, including highly variable gene selection, PCA, UMAP, kNN, and clustering</li>
+<li>Cell type annotation with deconvolution using <code>RCTD</code> for sequencing-based technologies</li>
 <li>Spatial-specific analyses that utilize the physical location of bins/cells on the tissue, including:
 <ul>
 <li>Spatial clustering with <code>BANKSY</code></li>
 <li>Spatially variable gene detection with Moran’s I</li>
-<li>Cell-cell communication withh <code>CellChat</code></li>
+<li>Cell-cell communication with <code>CellChat</code></li>
 </ul></li>
 </ul>
 </section>
@@ -5747,9 +5747,9 @@ Citation
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Description</span></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>This repository has teaching materials for a hands-on **Introduction to Spatial Transcriptomics** workshop. This workshop begins with experimental design considerations and an overview of current spatial transcriptomics technologies. From there, participants will load in Visium HD colorectal cancer samples as a practical example of a spatial analysis workflow. The first half of the workflow will be learning how to load data, assess quality, and filter out low-quality bins using Seurat in R. Once the data has been cleaned, a standard single-cell workflow will be used: highly variable gene selection, PCA, UMAP, k-nearest neighbors, and clustering. Then, we will apply a deconvolution algorithm to annotate the celltypes in the dataset.</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>This repository has teaching materials for a hands-on **Introduction to Spatial Transcriptomics** workshop. This workshop begins with experimental design considerations and an overview of current spatial transcriptomics technologies. From there, participants will load in **Visium HD** colorectal cancer samples as a practical example of a spatial analysis workflow. The first half of the workflow will be learning how to load data, assess quality, and filter out low-quality bins using Seurat in R. Once the data has been cleaned, a standard single-cell workflow will be used: highly variable gene selection, PCA, UMAP, k-nearest neighbors, and clustering. Then, we will apply a deconvolution algorithm to annotate the celltypes in the dataset.</span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>Building upon this foundation, participants will then conduct analyses that incorporate the physical locations of bins on the tissue. This includes spatial clustering, where groups are assigned based upon both gene expression and proximity to neighboring bins in the tissue. Moran&#39;s I will be utilized to identify spatially variable genes, where expression of genes change across different regions of the tissue. The workshop will conclude with a cell-cell communication analysis to assess ligand-receptor interactions between cells that are in close proximity with one another.</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>Building upon this foundation, participants will then conduct **analyses that incorporate the physical locations of bins on the tissue**. This includes spatial clustering, where groups are assigned based upon both gene expression and proximity to neighboring bins in the tissue. Moran&#39;s I will be utilized to identify spatially variable genes, where expression of genes change across different regions of the tissue. The workshop will conclude with a cell-cell communication analysis to assess ligand-receptor interactions between cells that are in close proximity with one another.</span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>Working knowledge of R is required or completion of the <span class="co">[</span><span class="ot">Introduction to R workshop</span><span class="co">](https://hbctraining.github.io/Intro-to-R-flipped/)</span>. </span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
@@ -5763,13 +5763,13 @@ Citation
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="fu">### Learning Objectives</span></span>
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Experimental design best practices of current spatial transcriptomics technologies</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Data loading and quality control of Visium HD samples, including filtering and preprocessing steps</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Standard single-cell workflows adapted for spatial data, including highly variable gene selection, PCA, UMAP, and clustering</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Deconvolution for cell type annotation of spots for sequencing-based technologies with <span class="in">`RCTD`</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Data loading and quality control of Visium HD samples</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Standard single-cell workflows adapted for spatial data, including highly variable gene selection, PCA, UMAP, kNN, and clustering</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cell type annotation with deconvolution using <span class="in">`RCTD`</span> for sequencing-based technologies</span>
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Spatial-specific analyses that utilize the physical location of bins/cells on the tissue, including:</span>
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Spatial clustering with <span class="in">`BANKSY`</span></span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Spatially variable gene detection with Moran&#39;s I</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Cell-cell communication withh <span class="in">`CellChat`</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Cell-cell communication with <span class="in">`CellChat`</span></span>
 <span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="fu">### Lessons</span></span>
