@@ -137,6 +137,7 @@ We already have the `group` parameter with `orig.ident` (representing our two sa
 The easiest way to grab the coordinates is the `GetTissueCoordinates()` function:
 
 ```{r}
+#| label: get_tissue_coordinates
 # Store the cell barcode as a column
 # Sometimes when you merge dataframes, you lose rownames
 seurat_processed$cell <- rownames(seurat_processed@meta.data)
@@ -475,6 +476,19 @@ seurat_banksy <- readRDS("data/intermediate_seurat/seurat_banksy.rds")
 ```
 
 :::
+
+Now is also a great point to assess how well the integration step worked when looking at each of our clusters:
+
+```{r}
+#| label: fig-cell_proportion_barplot
+#| fig-cap: Proportion of bins in each cluster by sample for BANKSY clusters.
+# Barplot of proportion of cells in each cluster by sample
+ggplot(seurat_banksy@meta.data) +
+    geom_bar(aes(x = banksy_cluster, 
+                 fill = orig.ident), 
+             position = position_fill())  +
+    theme_classic()
+```
 
 ## Comparing clustering results
 
