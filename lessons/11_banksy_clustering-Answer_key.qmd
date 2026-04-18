@@ -1,0 +1,74 @@
+---
+title: "Spatially Derived Clusters - Answer Key"
+author:
+  - Noor Sohail
+date: "2026-04-18"
+license: "CC-BY-4.0"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: load_libraries_data
+#| echo: false
+# Load libraries and data
+library(Seurat)
+
+# Set parallelization (multithreading) to speed up calculations
+plan("multicore", workers = parallel::detectCores() - 1)
+
+# Load dataset
+seurat_banksy <- qs2::qs_read("intermediate/09_seurat_banksy_2.qs")
+```
+
+# Exercise 1
+
+1. What steps/functions did we use to calculate clusters previously?
+
+::: {#fig-sc_workflow .figure}
+![](../img/sc_workflow_2022.jpg){width=630}
+
+Single-cell RNA-seq analysis workflow.<br>
+_Image source: [Intro to scRNA-seq analysis](https://hbctraining.github.io/Intro-to-scRNAseq/)_.
+:::
+
+
+- Principle component analysis: `RunPCA()`
+- Evaluate necessity of integration
+- Find k-nearest neighbors: `FindNeighbors()`
+- Cluster cells: `FindClusters()`
+
+
+# Exercise 2
+
+2. What does the UMAP look like when use the BANKSY derived harmony latent space to calculate UMAP coordinates?
+
+First we calculate UMAP on the BANKSY harmony latent space.
+
+```{r}
+#| label: RunUMAP_banksy
+# Run UMAP on BANKSY harmony latent space
+seurat_banksy <- RunUMAP(seurat_banksy,
+                         reduction = "harmony.banksy",
+                         reduction.name = "umap.harmony.banksy", 
+                         return.model = TRUE, 
+                         dims = 1:30,
+                         seed.use = 12345)
+seurat_banksy
+```
+
+Then we can visualize what each of the resultant clusters appear like on the BANKSY derived UMAP space:
+
+```{r}
+#| label: fig-umap_banksy
+#| fig-cap: UMAP of both BANKSY derived clusters and gene expression derived clusters.
+#| fig-width: 14
+DimPlot(seurat_banksy, 
+        group.by = c("banksy_cluster",
+                     "seurat_cluster.projected"),
+        reduction = "umap.harmony.banksy",
+        label = TRUE)
+```
+
+The BANKSY clusters align much better with the BANKSY derived UMAP coordinates. This is due to the fact that they have the same underlying structure.

@@ -144,8 +144,6 @@ So first, let us load in the reference seurat object that was downloaded with th
 
 ```{r}
 seurat_ref <- readRDS("data/crc_flex_ref_downsample.RDS")
-# seurat_ref <- subset(seurat_ref,
-#                      Level1 != "Tumor")
 seurat_ref
 ```
 
@@ -153,10 +151,11 @@ Let us start by taking a look at the UMAP of our reference dataset.
 
 ```{r}
 # UMAP of reference dataset
-DimPlot(seurat_ref, 
-              group.by = "Level1", 
-              label = TRUE) +
+Idents(seurat_ref) <- "Level1"
+p <- DimPlot(seurat_ref) +
   ggtitle("CRC Reference")
+LabelClusters(p, id = "ident",  fontface = "bold", size = 3, 
+              bg.colour = "white", bg.r = .2, force = 0)
 ```
 
 ## Running RCTD
@@ -218,7 +217,7 @@ crc <- FindVariableFeatures(object = crc,
 # Calculate leverage score
 crc <- SketchData(
   object = crc,
-  ncells = 5000,
+  ncells = 10000,
   method = "LeverageScore",
   sketched.assay = "sketch_crc",
   var.name = "leverage.score_crc")
@@ -258,7 +257,7 @@ The more celltypes you have the longer this will take.
 ::: callout-warning
 We need to provide a time estimate for this step
 
-This took me ~3 minutes
+This took me ~5 minutes
 :::
 
 ```{r}
@@ -368,7 +367,7 @@ for (col in cols) {
 table(crc$first_type_sketch)
 ```
 
-## Project Back to Full Dataset
+## Project back to full dataset
 
 ```{r}
 #| eval: false
@@ -387,11 +386,11 @@ crc <- ProjectData(
 
 ```{r}
 #| echo: false
-# qs2::qs_save(crc, "intermediate/12_crc_RCTD_seurat.qs")
+#qs2::qs_save(crc, "intermediate/12_crc_RCTD_seurat.qs")
 crc <- qs2::qs_read("intermediate/12_crc_RCTD_seurat.qs")
 ```
 
-## Visualize New Annotation
+## Visualize new annotation
 
 ```{r}
 SpatialDimPlot(crc,
@@ -402,16 +401,39 @@ SpatialDimPlot(crc,
 
 
 ```{r}
+ggplot(crc@meta.data,
+       aes(x = first_type, fill = first_type)) +
+  geom_bar() +
+  theme_bw() + ggtitle("RCTD First Type: P5CRC Sample") +
+  NoLegend() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r}
+#| fig-width: 12
 df <- FetchData(crc,
                 c("x", "y", "first_type"))
 
 ggplot(df,
        aes(x = x, y = y,
            color = first_type)) +
-  geom_point() +
+  geom_point(size = 0.05) +
   theme_bw() +
-  facet_wrap(~first_type)
+  facet_wrap(~first_type) +
+  NoLegend()
 ```
+
+
+```{r}
+# UMAP of reference dataset
+Idents(crc) <- "first_type"
+p <- DimPlot(crc,
+             reduction = "full.umap.sketch") +
+  ggtitle("P5CRC RCTD First Type")
+LabelClusters(p, id = "ident",  fontface = "bold", size = 3, 
+              bg.colour = "white", bg.r = .2, force = 0)
+```
+
 
 ***
 
