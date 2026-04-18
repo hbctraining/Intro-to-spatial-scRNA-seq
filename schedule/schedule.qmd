@@ -142,7 +142,7 @@ I. Please **study the contents** and **work through all the code** within the fo
         - Learning Objective 3
       :::
 
-   2. [Spatially Variable Genes](../lessons/tmp.qmd)
+   2. [Spatially Variable Genes](../lessons/14_svgs.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
       Brief description of the lesson.
