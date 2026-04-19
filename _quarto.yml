@@ -68,7 +68,7 @@ website:
       - section: "Day 3 Self-learning:"
         contents:
           - lessons/13_dge_pathway.qmd
-          - lessons/14/svgs.qmd
+          - lessons/14_svgs.qmd
           
       - section: "Day 4:"
         contents:

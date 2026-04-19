@@ -16,67 +16,67 @@
   {
     "objectID": "lessons/15_cellchat.html",
     "href": "lessons/15_cellchat.html",
-    "title": "Tmp",
+    "title": "CellChat",
     "section": "",
     "text": "Approximate time: XX minutes",
     "crumbs": [
       "Day 4:",
-      "Tmp"
+      "CellChat"
     ]
   },
   {
     "objectID": "lessons/15_cellchat.html#learning-objectives",
     "href": "lessons/15_cellchat.html#learning-objectives",
-    "title": "Tmp",
+    "title": "CellChat",
     "section": "Learning objectives",
     "text": "Learning objectives\nIn this lesson, we will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3",
     "crumbs": [
       "Day 4:",
-      "Tmp"
+      "CellChat"
     ]
   },
   {
     "objectID": "lessons/15_cellchat.html#overview-of-lesson",
     "href": "lessons/15_cellchat.html#overview-of-lesson",
-    "title": "Tmp",
+    "title": "CellChat",
     "section": "Overview of lesson",
     "text": "Overview of lesson\nWhen doing XYZ…",
     "crumbs": [
       "Day 4:",
-      "Tmp"
+      "CellChat"
     ]
   },
   {
     "objectID": "lessons/15_cellchat.html#topic-1",
     "href": "lessons/15_cellchat.html#topic-1",
-    "title": "Tmp",
+    "title": "CellChat",
     "section": "Topic 1",
     "text": "Topic 1\n\nSubsection 1A\n\n\nSubsection 1B\n\n\n\n\n\n\nExercise 1\n\n\n\n\nA question to evaluate Learning Objective 1\nA followup question to question #1\n…",
     "crumbs": [
       "Day 4:",
-      "Tmp"
+      "CellChat"
     ]
   },
   {
     "objectID": "lessons/15_cellchat.html#topic-2",
     "href": "lessons/15_cellchat.html#topic-2",
-    "title": "Tmp",
+    "title": "CellChat",
     "section": "Topic 2",
     "text": "Topic 2\n\nSubsection 2A\n\n\nSubsection 2B\n\n\n\n\n\n\nExercise 2\n\n\n\n\nA question to evaluate Learning Objective 2\nA followup question to question #1\n…",
     "crumbs": [
       "Day 4:",
-      "Tmp"
+      "CellChat"
     ]
   },
   {
     "objectID": "lessons/15_cellchat.html#topic-3",
     "href": "lessons/15_cellchat.html#topic-3",
-    "title": "Tmp",
+    "title": "CellChat",
     "section": "Topic 3",
     "text": "Topic 3\n\nSubsection 3A\n\n\nSubsection 3B\n\n\n\n\n\n\nExercise 3\n\n\n\n\nA question to evaluate Learning Objective 3\nA followup question to question #1\n…\n\n\n\n\nNext Lesson &gt;&gt;\nBack to Schedule",
     "crumbs": [
       "Day 4:",
-      "Tmp"
+      "CellChat"
     ]
   },
   {
@@ -1238,49 +1238,77 @@
     "href": "lessons/14_svgs.html",
     "title": "Spatially Variable Genes",
     "section": "",
-    "text": "Approximate time: XX minutes"
+    "text": "Approximate time: XX minutes",
+    "crumbs": [
+      "Day 3 Self-learning:",
+      "Spatially Variable Genes"
+    ]
   },
   {
     "objectID": "lessons/14_svgs.html#learning-objectives",
     "href": "lessons/14_svgs.html#learning-objectives",
     "title": "Spatially Variable Genes",
     "section": "Learning objectives",
-    "text": "Learning objectives\nIn this lesson, we will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3"
+    "text": "Learning objectives\nIn this lesson, we will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3",
+    "crumbs": [
+      "Day 3 Self-learning:",
+      "Spatially Variable Genes"
+    ]
   },
   {
     "objectID": "lessons/14_svgs.html#overview-of-lesson",
     "href": "lessons/14_svgs.html#overview-of-lesson",
     "title": "Spatially Variable Genes",
     "section": "Overview of lesson",
-    "text": "Overview of lesson\nWhen doing XYZ…"
+    "text": "Overview of lesson\nWhen doing XYZ…",
+    "crumbs": [
+      "Day 3 Self-learning:",
+      "Spatially Variable Genes"
+    ]
   },
   {
     "objectID": "lessons/14_svgs.html#spatially-variable-genes-svgs",
     "href": "lessons/14_svgs.html#spatially-variable-genes-svgs",
     "title": "Spatially Variable Genes",
     "section": "Spatially variable genes (SVGs)",
-    "text": "Spatially variable genes (SVGs)\n\n\n\n\n\n\nFigure 1: Schematic of how spatially variable genes present themselves in spatial data. Image source: Yan et al. (2025)\n\n\n\nSpatially variable genes (SVGs) are similar in concept to highly variable genes (HVGs). These were identifies by evaluating the variability of gene expression across the entire dataset. However, now we have the additional layer of the spatial location of each bin. Therefore we are able to identify genes that have different levels of expression depending on which area of the tissue they are found on.\nThese methods can be used to identify genes that have strong strong spatial associations for downstream analyses - similar to how we used HVGs to calculate PCA. These SVGs can also be used to evaluate spatial niches within cell-types to assist in find subtypes with the tissue.\nUltimately, these genes provide another peek in the spatial context of the tissue."
+    "text": "Spatially variable genes (SVGs)\n\n\n\n\n\n\nFigure 1: Schematic of how spatially variable genes present themselves in spatial data. Image source: Yan et al. (2025)\n\n\n\nSpatially variable genes (SVGs) are similar in concept to highly variable genes (HVGs). These were identifies by evaluating the variability of gene expression across the entire dataset. However, now we have the additional layer of the spatial location of each bin. Therefore we are able to identify genes that have different levels of expression depending on which area of the tissue they are found on.\nThese methods can be used to identify genes that have strong strong spatial associations for downstream analyses - similar to how we used HVGs to calculate PCA. These SVGs can also be used to evaluate spatial niches within cell-types to assist in find subtypes with the tissue.\nUltimately, these genes provide another peek in the spatial context of the tissue.",
+    "crumbs": [
+      "Day 3 Self-learning:",
+      "Spatially Variable Genes"
+    ]
   },
   {
     "objectID": "lessons/14_svgs.html#morans-i",
     "href": "lessons/14_svgs.html#morans-i",
     "title": "Spatially Variable Genes",
     "section": "Moran’s I",
-    "text": "Moran’s I\nMost of the SVG algorithms are built upon the concept of Moran’s I which is defined as “a measure of spatial autocorrelation”.\n\n\n\n\n\n\nMath behind Moran’s I\n\n\n\n\n\n\\[\nI =\n\\frac{N}{S_0}\n\\frac{\n\\sum_{i=1}^N \\sum_{j=1}^N w_{ij}\\,(x_i - \\bar{x})(x_j - \\bar{x})\n}{\n\\sum_{i=1}^N (x_i - \\bar{x})^2\n}\n\\]\nwhere\n\n\\(N\\) is the number of spatial units, indexed by \\(i\\) and \\(j\\);\n\\(x\\) is the variable of interest;\n\\(\\bar{x}\\) is the mean of \\(x\\);\n\\(w_{ij}\\) are the elements of the spatial-weights matrix, with \\(w_{ii} = 0\\);\n\\(S_0\\) is the sum of all spatial weights, \\(S_0 = \\sum_{i=1}^N \\sum_{j=1}^N w_{ij}\\).\n\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nExplanation of Moran’s I"
+    "text": "Moran’s I\nMost of the SVG algorithms are built upon the concept of Moran’s I which is defined as “a measure of spatial autocorrelation”.\n\n\n\n\n\n\nMath behind Moran’s I\n\n\n\n\n\n\\[\nI =\n\\frac{N}{S_0}\n\\frac{\n\\sum_{i=1}^N \\sum_{j=1}^N w_{ij}\\,(x_i - \\bar{x})(x_j - \\bar{x})\n}{\n\\sum_{i=1}^N (x_i - \\bar{x})^2\n}\n\\]\nwhere\n\n\\(N\\) is the number of spatial units, indexed by \\(i\\) and \\(j\\);\n\\(x\\) is the variable of interest;\n\\(\\bar{x}\\) is the mean of \\(x\\);\n\\(w_{ij}\\) are the elements of the spatial-weights matrix, with \\(w_{ii} = 0\\);\n\\(S_0\\) is the sum of all spatial weights, \\(S_0 = \\sum_{i=1}^N \\sum_{j=1}^N w_{ij}\\).\n\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nExplanation of Moran’s I",
+    "crumbs": [
+      "Day 3 Self-learning:",
+      "Spatially Variable Genes"
+    ]
   },
   {
     "objectID": "lessons/14_svgs.html#running-morans-i",
     "href": "lessons/14_svgs.html#running-morans-i",
     "title": "Spatially Variable Genes",
     "section": "Running Moran’s I",
-    "text": "Running Moran’s I\nMoran’s I will work best if we focus on one sample at a time, as the spatial coordinates will be consistent within a single slide. Furthermore, because this step can take a long time to run, we are going to further subset the data to a singular celltype. In this way, we are attempting to evaluate genes that are specific to spatially defined subtype of a celltype.\nIn this case, let us zoom in on the tumor cells in the CRC dataset:\n\ncrc_sub &lt;- subset(seurat_rctd,\n              subset = (orig.ident == \"P5CRC\") &\n                       (seurat_cluster.projected == 1))\ncrc_sub\n\nAn object of class Seurat \n36170 features across 12057 samples within 2 assays \nActive assay: Spatial.008um (18085 features, 2000 variable features)\n 2 layers present: counts, data\n 1 other assay present: sketch\n 6 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch, pca.banksy, harmony.banksy\n 1 spatial field of view present: P5CRC.008um\n\n\nFor the best results we are going to make use of the scale.data assay (this was originally calculated right before the PCA step). However, we deleted this layer in the interest of storing memory, so we re-calculate it now:\n\ncrc_sub &lt;- ScaleData(crc_sub)\ncrc_sub\n\nAn object of class Seurat \n36170 features across 12057 samples within 2 assays \nActive assay: Spatial.008um (18085 features, 2000 variable features)\n 3 layers present: counts, data, scale.data\n 1 other assay present: sketch\n 6 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch, pca.banksy, harmony.banksy\n 1 spatial field of view present: P5CRC.008um\n\n\nNow we can actually calculate Moran’s I with FindSpatiallyVariableFeatures() and set the selection.method = \"moransi\".\nWe are additionally going to specify that we want to evaluate Moran’s I on the top 100 highly variable genes to reduce the number of calculations that take place (so we can reasonably run this on a laptop).\n\ncrc_sub &lt;- FindSpatiallyVariableFeatures(crc_sub,\n                                      selection.method = \"moransi\",\n                                      verbose = TRUE,\n                                      features = VariableFeatures(crc_sub)[1:100],\n                                      image = \"P5CRC_sub.008um\")\n\n\n# qs2::qs_save(crc_sub, \"intermediate/14_crc_svg.qs\")\ncrc_sub &lt;- qs2::qs_read(\"intermediate/14_crc_svg.qs\")\n\nWe can now access the features that have the top\n\n# Get top 10 spatially variable features\ntop10_svg &lt;- SpatiallyVariableFeatures(crc_sub, \n                                       method = \"moransi\")\ntop10_svg &lt;- top10_svg[1:10]\ntop10_svg\n\n [1] \"REG3A\"   \"OLFM4\"   \"PI3\"     \"LCN2\"    \"MUC17\"   \"SULT1C4\" \"CEACAM6\"\n [8] \"SLC26A3\" \"IGHG1\"   \"PPBP\"   \n\n\nAnd visualize the expression on the spatial slide:\n\n# Spatial plot of top spatially variable features\nSpatialFeaturePlot(crc_sub,\n                   features = top10_svg[1:4],\n                   pt.size.factor = 15,\n                   image.alpha = 0.1, \n                   ncol = 4)\n\n\n\n\n\n\n\nFigure 2: Top spatially variable gene expression for tumor cells, plotted on top of the tissue.\n\n\n\n\n\nRecall in the BANKSY lesson we noted that the BANKSY algorithm identified different, spatially constrained subtypes in this cancerous region? Now we can clearly see which of those genes were defining the phenotype of these tumerous subtypes."
+    "text": "Running Moran’s I\nMoran’s I will work best if we focus on one sample at a time, as the spatial coordinates will be consistent within a single slide. Furthermore, because this step can take a long time to run, we are going to further subset the data to a singular celltype. In this way, we are attempting to evaluate genes that are specific to spatially defined subtype of a celltype.\nIn this case, let us zoom in on the tumor cells in the CRC dataset:\n\ncrc_sub &lt;- subset(seurat_rctd,\n              subset = (orig.ident == \"P5CRC\") &\n                       (seurat_cluster.projected == 1))\ncrc_sub\n\nAn object of class Seurat \n36170 features across 12057 samples within 2 assays \nActive assay: Spatial.008um (18085 features, 2000 variable features)\n 2 layers present: counts, data\n 1 other assay present: sketch\n 6 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch, pca.banksy, harmony.banksy\n 1 spatial field of view present: P5CRC.008um\n\n\nFor the best results we are going to make use of the scale.data assay (this was originally calculated right before the PCA step). However, we deleted this layer in the interest of storing memory, so we re-calculate it now:\n\ncrc_sub &lt;- ScaleData(crc_sub)\ncrc_sub\n\nAn object of class Seurat \n36170 features across 12057 samples within 2 assays \nActive assay: Spatial.008um (18085 features, 2000 variable features)\n 3 layers present: counts, data, scale.data\n 1 other assay present: sketch\n 6 dimensional reductions calculated: pca.sketch, umap.sketch, full.pca.sketch, full.umap.sketch, pca.banksy, harmony.banksy\n 1 spatial field of view present: P5CRC.008um\n\n\nNow we can actually calculate Moran’s I with FindSpatiallyVariableFeatures() and set the selection.method = \"moransi\".\nWe are additionally going to specify that we want to evaluate Moran’s I on the top 100 highly variable genes to reduce the number of calculations that take place (so we can reasonably run this on a laptop).\n\ncrc_sub &lt;- FindSpatiallyVariableFeatures(crc_sub,\n                                      selection.method = \"moransi\",\n                                      verbose = TRUE,\n                                      features = VariableFeatures(crc_sub)[1:100],\n                                      image = \"P5CRC_sub.008um\")\n\n\n# qs2::qs_save(crc_sub, \"intermediate/14_crc_svg.qs\")\ncrc_sub &lt;- qs2::qs_read(\"intermediate/14_crc_svg.qs\")\n\nWe can now access the features that have the top\n\n# Get top 10 spatially variable features\ntop10_svg &lt;- SpatiallyVariableFeatures(crc_sub, \n                                       method = \"moransi\")\ntop10_svg &lt;- top10_svg[1:10]\ntop10_svg\n\n [1] \"REG3A\"   \"OLFM4\"   \"PI3\"     \"LCN2\"    \"MUC17\"   \"SULT1C4\" \"CEACAM6\"\n [8] \"SLC26A3\" \"IGHG1\"   \"PPBP\"   \n\n\nAnd visualize the expression on the spatial slide:\n\n# Spatial plot of top spatially variable features\nSpatialFeaturePlot(crc_sub,\n                   features = top10_svg[1:4],\n                   pt.size.factor = 15,\n                   image.alpha = 0.1, \n                   ncol = 4)\n\n\n\n\n\n\n\nFigure 2: Top spatially variable gene expression for tumor cells, plotted on top of the tissue.\n\n\n\n\n\nRecall in the BANKSY lesson we noted that the BANKSY algorithm identified different, spatially constrained subtypes in this cancerous region? Now we can clearly see which of those genes were defining the phenotype of these tumerous subtypes.",
+    "crumbs": [
+      "Day 3 Self-learning:",
+      "Spatially Variable Genes"
+    ]
   },
   {
     "objectID": "lessons/14_svgs.html#other-svg-methods",
     "href": "lessons/14_svgs.html#other-svg-methods",
     "title": "Spatially Variable Genes",
     "section": "Other SVG methods",
-    "text": "Other SVG methods\nSome popular methods include, but are not limited to:\n\nMoran’s I\nSpatialDE\nMERINGUE\nBinSpect\n\nSeveral of these algorithms are written in Python.\n\nNext Lesson &gt;&gt;\nBack to Schedule"
+    "text": "Other SVG methods\nSome popular methods include, but are not limited to:\n\nMoran’s I\nSpatialDE\nMERINGUE\nBinSpect\n\nSeveral of these algorithms are written in Python.\n\nNext Lesson &gt;&gt;\nBack to Schedule",
+    "crumbs": [
+      "Day 3 Self-learning:",
+      "Spatially Variable Genes"
+    ]
   },
   {
     "objectID": "lessons/Aside_seurat_anatomy.html",
