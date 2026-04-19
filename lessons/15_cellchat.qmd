@@ -3,9 +3,8 @@ title: "CellChat"
 description: |
   Write a description of the lesson here. 
 author:
-  - author_1
-  - author_2
-date: "YYYY-MM-DD"
+  - Noor Sohail
+date: "2026-04-19"
 categories: 
   - category_1
   - category_2
@@ -28,7 +27,19 @@ editor_options:
 #| label: load_libraries_data
 #| echo: false
 # Load libraries and data
+library(Seurat)
+library(tidyverse)
+library(CellChat)
 
+set.seed(12345)
+
+# Set parallelization (multithreading) to speed up calculations
+plan("multicore", workers = parallel::detectCores() - 1)
+
+# Increases the size of the default vector (8GB)
+options(future.globals.maxSize = 8000 * 1024^2)
+
+seurat_rctd <- qs2::qs_read("intermediate/12_seurat_RCTD.qs")
 ```
 
 Approximate time: XX minutes
@@ -45,47 +56,317 @@ In this lesson, we will:
 
 When doing XYZ...
 
-## Topic 1
+## Cell-cell communication
 
-### Subsection 1A
 
-### Subsection 1B
+## P5CRC
 
-:::{.callout-tip}
-# [**Exercise 1**](tmp-Answer_key.qmd#exercise-1)
-1. A question to evaluate Learning Objective 1
-2. A followup question to question #1
-3. ...
-:::
+We will run CellChat on one sample at a time.
 
-## Topic 2
+This is the recommended way, where you would run the full workflow on each sample and then compare and contrast.
 
-### Subsection 2A
+```{r}
+crc <- subset(seurat_rctd,
+              subset = (orig.ident == "P5CRC") &
+                       (first_type != "unassigned"))
+crc
+```
 
-### Subsection 2B
+To create a CellChat object, we need the following information:
 
-:::{.callout-tip}
-# [**Exercise 2**](tmp-Answer_key.qmd#exercise-2)
-1. A question to evaluate Learning Objective 2
-2. A followup question to question #1
-3. ...
-:::
+- Normalized counts matrix
+- Spatial coordinates for each bin
+- Spatial factors (stored in json file)
 
-## Topic 3
+```{r}
+# Get normalized counts matrices
+counts_norm_crc <- GetAssayData(crc,
+                                assay = "Spatial.008um",
+                                layer = "data")
+counts_norm_crc[1:5, 1:5]
+```
 
-### Subsection 3A
 
-### Subsection 3B
+```{r}
+# Get spatial coordinates
+coords_crc <- FetchData(crc, vars = c("x", "y"))
+coords_crc %>% head()
+```
 
-:::{.callout-tip}
-# [**Exercise 3**](tmp-Answer_key.qmd#exercise-3)
-1. A question to evaluate Learning Objective 3
-2. A followup question to question #1
-3. ...
-:::
+Now we need to grab the `spatial.factors` which is defined as:
+
+>  data frame containing two distance factors 'ratio' and 'tol', which is dependent on spatial transcriptomics technologies (and specific datasets).
+
+```{r}
+# Scale factors
+sf_json <- jsonlite::fromJSON("data/P5CRC_cropped/binned_outputs/square_008um/spatial/scalefactors_json.json")
+spatial_factors_crc <- data.frame(
+  # pixels-to-µm conversion factor
+  ratio = sf_json$bin_size_um / sf_json$spot_diameter_fullres,
+  # neighbour tolerance radius in µm
+  tol   = sf_json$bin_size_um / 2)
+spatial_factors_crc
+```
+
+
+```{r}
+# Create cellchat object
+cellchat_crc <- createCellChat(
+  object          = counts_norm_crc,
+  meta            = crc@meta.data,
+  group.by        = "first_type",
+  datatype        = "spatial",
+  coordinates     = coords_crc,
+  spatial.factors = spatial_factors_crc)
+```
+We are working with human samples so we can make use of the human database. So we assign this to our cellchat object.
+
+```{r}
+# Load CellChat databases
+cellchat_db <- CellChatDB.human
+ppi <- PPI.human
+
+# Assign DB to cellchat object
+cellchat_crc@DB <- cellchat_db
+```
+
+```{r}
+# Subset to signaling genes only – reduces memory and speeds up computation.
+cellchat_crc <- subsetData(cellchat_crc)
+
+# Identify genes that are over-expressed relative to other cell types
+cellchat_crc <- identifyOverExpressedGenes(cellchat_crc)
+cellchat_crc <- identifyOverExpressedInteractions(cellchat_crc)
+```
+
+```{r}
+#| eval: false
+# (Optional) Smooth expression over the protein-protein interaction network to
+# reduce dropout noise. If you run this, set raw.use = FALSE below.
+cellchat_crc <- smoothData(cellchat_crc, adj = PPI.human)
+# cellchat <- projectData(cellchat, PPI.human) # older version
+```
+
+Here we actually run the ligand-receptor analysis:
+
+```{r}
+#| eval: false
+# distance.use = TRUE  : spatial distances constrain which cell pairs can talk
+# interaction.range    : max diffusion distance in µm (literature: ~250 µm)
+# scale.distance       : scaling factor; tune if you get warnings about distances
+# contact.dependent    : TRUE adds juxtacrine / cell-contact signalling
+# contact.range        : max distance (µm) for contact-dependent signals;
+#                        ~8-10 µm = cell diameter for single-cell res data,
+#                        ~100 µm  = centre-to-centre distance for 10x Visium
+
+cellchat_crc <- computeCommunProb(
+  cellchat_crc,
+  distance.use       = TRUE,
+  interaction.range = 200,
+  scale.distance     = 0.2,
+  contact.dependent  = TRUE,
+  contact.range      = 10,
+  raw.use            = FALSE
+)
+```
+```{r}
+#| echo: false
+# qs2::qs_save(cellchat_crc, "intermediate/15_cellchat_crc_computeCommunProb.qs")
+cellchat_crc <- qs2::qs_read("intermediate/15_cellchat_crc_computeCommunProb.qs")
+```
+
+Now we do a final step of filtration and calculate probability of interactions occuring based upon the number and weights of the interactions:
+
+```{r}
+# removes cell-type pairs with too few cells
+# and drops pathways that end up with no valid interactions
+cellchat_crc <- filterCommunication(cellchat_crc, min.cells = 5)
+
+# Summarise L-R pair probabilities into signalling pathway probabilities
+cellchat_crc <- computeCommunProbPathway(cellchat_crc)
+# Count interactions and sum weights into a flat network matrix
+cellchat_crc <- aggregateNet(cellchat_crc)
+# Compute how much each cell type sends vs receives across all pathways
+cellchat_crc <- netAnalysis_computeCentrality(cellchat_crc, slot.name = "netP")
+```
+
+```{r}
+#| echo: false
+#qs2::qs_save(cellchat_crc, "intermediate/15_cellchat_crc.qs")
+cellchat_crc <- qs2::qs_read("intermediate/15_cellchat_crc.qs")
+```
+
+We can see the structure of how data is stored within the CellChat object:
+
+```{r}
+# str(cellchat_crc)
+```
+
+### Visualizations
+
+Now we can begin visualizing how the bins in `P5CRC` are interacting with one another:
+
+Count + strength of interactions:
+
+```{r}
+par(mfrow = c(1, 2), xpd = TRUE)
+netVisual_circle(cellchat_crc@net$count,
+                 weight.scale   = TRUE,
+                 label.edge     = FALSE,
+                 edge.width.max = 12,
+                 title.name     = "Number of interactions")
+netVisual_circle(cellchat_crc@net$weight,
+                 weight.scale   = TRUE,
+                 label.edge     = FALSE,
+                 edge.width.max = 12,
+                 title.name     = "Interaction strength")
+```
+
+
+
+Heatmap of number of interactions and strength:
+
+```{r}
+gg_h_count  <- netVisual_heatmap(cellchat_crc, measure = "count",
+                                  color.heatmap = "Blues",
+                                  title.name    = "Number of interactions")
+gg_h_weight <- netVisual_heatmap(cellchat_crc, measure = "weight",
+                                  color.heatmap = "Reds",
+                                  title.name    = "Interaction strength")
+gg_h_count + gg_h_weight
+```
+
+Signaling scatterplot
+
+```{r}
+netAnalysis_signalingRole_scatter(cellchat_crc)
+```
+
+Incoming and outgoing heatmap for signaling strength:
+
+```{r}
+#| fig-width: 10
+#| fig-height: 15
+ht_out <- netAnalysis_signalingRole_heatmap(cellchat_crc, pattern = "outgoing",
+                                             width         = 10,
+                                             height        = 20,
+                                             color.heatmap = "YlOrRd",
+                                             title         = "Outgoing signaling strength")
+ht_in  <- netAnalysis_signalingRole_heatmap(cellchat_crc, pattern = "incoming",
+                                             width         = 10,
+                                             height        = 20,
+                                             color.heatmap = "GnBu",
+                                             title         = "Incoming signaling strength")
+ht_out + ht_in
+```
+
+
+Ranked barchart of interactions
+
+```{r}
+#| fig-height: 8
+rankNet(cellchat_crc, 
+        measure = "weight",
+        mode = "single", 
+        stacked = TRUE, 
+        do.stat = TRUE)
+```
+
+Bubble plot ligand-receptor interactions
+
+```{r}
+#| fig-width: 15
+#| fig-height: 8
+n_ct <- seurat_rctd@meta.data %>%
+  pull(first_type) %>%
+  unique() %>% length()
+
+# Many pathways are significant so we are going to zoom in on top 5
+top_pathways <- cellchat_crc@netP$pathways[1:5]
+
+netVisual_bubble(cellchat_crc,
+                 signaling      = top_pathways,
+                 sort.by.source.priority = TRUE,
+                 sources.use    = 1:n_ct,
+                 targets.use    = 1:n_ct,
+                 remove.isolate = TRUE,
+                 color.heatmap = "viridis",
+                 angle.x        = 90)
+```
+
+We can also identify which ligand-receptor pairs are most significant
+
+```{r}
+df_lr <- subsetCommunication(cellchat_crc) %>%
+  arrange(desc(prob))
+df_lr %>% head(10)
+```
+
+As an example, we are going to look an interaction occuring between two different population (not circular):
+
+```{r}
+idx <- 7
+ligand <- df_lr[idx, "ligand"]
+receptor <- df_lr[idx, "receptor"]
+
+ligand <- "COL3A1"
+receptor <- "ADGRG1"
+
+SpatialFeaturePlot(crc, 
+                   c(ligand, receptor),
+                   pt.size.factor = 15,
+                   image.alpha = 0.2)
+```
+
+From the results, we know that this is a ligand-recptor interaction that is significant in interactions from Fibroblasts to Tumor cells. Therefore, we would expect to see higher expression of `COL3A1` in Fibroblases and `ADGRG1` in Tumor cells.
+
+```{r}
+#| fig-height: 6
+VlnPlot(crc, 
+        c(ligand, receptor), 
+        group.by = "first_type",
+        pt.size = 0,
+        ncol = 1)
+```
+
+And even plot the interactions on the spatial slide
+
+
+```{r}
+# netVisual_aggregate on the whole pathway to shows arrows of interacttions
+netVisual_aggregate(cellchat_crc,
+                    signaling         = "CEACAM",
+                    layout            = "spatial",
+                    point.size        = 0.05,
+                    alpha.image       = 0.1,
+                    alpha             = 0.6,
+                    vertex.size.max   = 3,
+                    edge.width.max    = 5,
+                    vertex.label.cex = 3)
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+# netVisual_aggregate on the whole pathway to show chrods
+netVisual_aggregate(cellchat_crc,
+                    signaling  = "CEACAM",
+                    layout     = "chord",
+                    title.name = "CEACAM signaling — CRC")
+```
+
+## Session information
+
+Now we would want to save the output of sessionInfo():
+
+```{r}
+#| eval: false
+# Create and save a text file with sessionInfo
+sink("sessionInfo_spatial_transcriptomics.txt")
+sessionInfo()
+sink()
+```
 
 ***
-
-[Next Lesson >>](tmp.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)

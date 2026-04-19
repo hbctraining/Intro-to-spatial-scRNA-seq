@@ -105,12 +105,16 @@ BiocManager::install("EnhancedVolcano")
 BiocManager::install("clusterProfiler")
 BiocManager::install("org.Hs.eg.db")
 BiocManager::install("msigdbr")
+BiocManager::install("ComplexHeatmap")
+BiocManager::install("BiocNeighbors")
 
 # GitHub packages
 remotes::install_github("prabhakarlab/Banksy")
 remotes::install_github("satijalab/seurat-wrappers")
 devtools::install_github("dmcable/spacexr", 
                          build_vignettes = FALSE)
+devtools::install_github("jinworks/CellChat")
+devtools::install_github('immunogenomics/presto')
 ```
 
 **(2)** Finally, please check that all the packages were installed successfully by **loading them one at a time** using the `library()` function.  
@@ -142,6 +146,7 @@ library(msigdbr)
 library(Banksy)
 library(SeuratWrappers)
 library(spacexr)
+library(CellChat)
 ```
 
 **(3)** Once all packages have been loaded, run sessionInfo().  

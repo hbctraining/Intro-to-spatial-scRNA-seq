@@ -34,12 +34,10 @@ library(tidyverse)
 library(harmony)
 set.seed(12345)
 
-# Set parallelization (multithreading)
-# Speed up calculations
+# Set parallelization (multithreading) to speed up calculations
 plan("multicore", workers = parallel::detectCores() - 1)
 
-# Increases the size of the default vector
-# 8GB
+# Increases the size of the default vector (8GB)
 options(future.globals.maxSize = 8000 * 1024^2)
 
 # Load dataset
