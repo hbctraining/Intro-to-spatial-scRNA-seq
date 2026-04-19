@@ -22,7 +22,6 @@ license: "CC-BY-4.0"
 editor_options: 
   markdown: 
     wrap: 72
-eval: false
 ---
 
 ```{r}
@@ -31,8 +30,8 @@ eval: false
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
-library(qs)
-# seurat_banksy <- qs::qread("intermediate/09_seurat_banksy_2.qs")
+
+seurat_rctd <- qs2::qs_read("intermediate/12_seurat_RCTD.qs")
 ```
 
 Approximate time: XX minutes
@@ -51,40 +50,33 @@ When doing XYZ...
 
 ## Differential gene expression (DGE)
 
-In our current UMAP, we have merged samples across the different conditions and used integration to align cells of the same celltype across samples. Now, what if we were interested in a particular celltype and **understanding how gene expression changes across the different conditions?**
+What if we were interested in a particular celltype and **understanding how gene expression changes across the different conditions?**
 
 From the publication, we know that the macrophage population is of interest.
 
 ```{r}
+#| label: load 
+#| eval: false
 # DGE and pathway analysis
 # Visium HD spatial transcriptomics workshop
 # Author: Harvard Chan Bioinformatics Core
 # Created: December 2025
+
+# Load libraries
 library(Seurat)
 library(tidyverse)
 library(qs)
 
-# seurat_rctd <- qs::qread("intermediate/09_seurat_banksy_2.qs")
-# seurat_rctd$cell <- rownames(seurat_rctd@meta.data)
-# 
-# full_meta <- qs::qread("../scripts/intermediates/07_seurat_rctd_unassigned.qs")
-# full_meta <- full_meta@meta.data
-# full_meta <- full_meta[c("cell",
-#                          "spot_class",
-#                          "first_type",
-#                          "second_type")]
-# 
-# meta <- left_join(seurat_rctd@meta.data,
-#           full_meta, by = "cell")
-# rownames(meta) <- meta$cell
-# seurat_rctd@meta.data <- meta
-# 
-# qs::qsave(seurat_rctd, "intermediate/13_rctd_tmp.qs")
-seurat_rctd <- qs::qread("intermediate/13_rctd_tmp.qs")
+# Load dataset
+seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
+```
 
+In particular, maybe we were interested in what changes are occuring between the Myeloid populations.
+
+```{r}
 # Subset to macrophages
 seurat_macro <- subset(seurat_rctd,
-                       first_type == "Macrophage")
+                       first_type == "Myeloid")
 Idents(seurat_macro) <- "orig.ident"
 ```
 
