@@ -59,7 +59,7 @@ When doing XYZ...
 
 
 ::: {#fig-svg_schematic .fig}
-![](../img/svg_schematic.png){width=100}
+![](../img/svg_schematic.png){width=300}
 
 Schematic of how spatially variable genes present themselves in spatial data.<br>
 _Image source: [Yan et al. (2025)](https://www.nature.com/articles/s41467-025-56080-w)_
@@ -143,6 +143,7 @@ crc_sub <- FindSpatiallyVariableFeatures(crc_sub,
 
 ```{r}
 #| label: instructor_svg
+#| echo: false
 # qs2::qs_save(crc_sub, "intermediate/14_crc_svg.qs")
 crc_sub <- qs2::qs_read("intermediate/14_crc_svg.qs")
 ```
@@ -163,14 +164,14 @@ And visualize the expression on the spatial slide:
 ```{r}
 #| label: fig-top_svgs
 #| fig-cap: Top spatially variable gene expression for tumor cells, plotted on top of the tissue.
-#| fig-width: 12
-#| fig-height: 7
+#| fig-width: 6
+#| fig-height: 6
 # Spatial plot of top spatially variable features
 SpatialFeaturePlot(crc_sub,
                    features = top10_svg[1:4],
                    pt.size.factor = 15,
                    image.alpha = 0.1, 
-                   ncol = 4)
+                   ncol = 2)
 ```
 
 Recall in the [BANKSY lesson](11_banksy_clustering.qmd) we noted that the BANKSY algorithm identified different, spatially constrained subtypes in this cancerous region? Now we can clearly see which of those genes were defining the phenotype of these tumerous subtypes.
@@ -179,12 +180,11 @@ Recall in the [BANKSY lesson](11_banksy_clustering.qmd) we noted that the BANKSY
 
 Some popular methods include, but are not limited to:
 
-- Moran's I
 - [SpatialDE](https://www.nature.com/articles/nmeth.4636)
 - [MERINGUE](https://genome.cshlp.org/content/31/10/1843.long)
 - [BinSpect](https://link.springer.com/article/10.1186/s13059-021-02286-2)
 
-Several of these algorithms are written in Python.
+Some of these algorithms are written in Python.
 
 ***
 
