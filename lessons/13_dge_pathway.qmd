@@ -495,6 +495,6 @@ In this plot, the lines in plot represent the genes in the gene set `GOBP_RESPON
 
 ***
 
-[Next Lesson >>](14_spatially_variable_genes.qmd)
+[Next Lesson >>](14_svgs.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)

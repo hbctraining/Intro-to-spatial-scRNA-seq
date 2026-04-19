@@ -59,7 +59,7 @@ When doing XYZ...
 
 
 ::: {#fig-svg_schematic .fig}
-![](../img/svg_schematic.png){height=100}
+![](../img/svg_schematic.png){width=100}
 
 Schematic of how spatially variable genes present themselves in spatial data.<br>
 _Image source: [Yan et al. (2025)](https://www.nature.com/articles/s41467-025-56080-w)_
@@ -100,6 +100,9 @@ where
 
 :::
 
+::: callout-warning
+Explanation of Moran's I
+:::
 
 
 ## Running Moran's I
@@ -185,6 +188,6 @@ Several of these algorithms are written in Python.
 
 ***
 
-[Next Lesson >>](tmp.qmd)
+[Next Lesson >>](15_cellchat.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)

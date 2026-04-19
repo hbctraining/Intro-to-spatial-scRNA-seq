@@ -179,3 +179,9 @@ ggplot(prcomp_pc_scores_tibble, aes(x = PC1, y = PC2, label = cells)) +
 ```
 
 Yes, it is the same plot just rotated 180&deg;.
+
+***
+
+[Back to Lesson >>](04_theory_of_PCA.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)

@@ -58,3 +58,9 @@ FeaturePlot(seurat_processed,
 ```
 
 Many of the top variable genes are expressed in small populations of bins that are close in euclidean distance to one another in UMAP space. 
+
+***
+
+[Back to Lesson >>](07_dim_reduction.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)

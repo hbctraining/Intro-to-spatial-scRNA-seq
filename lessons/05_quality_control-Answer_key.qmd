@@ -80,3 +80,9 @@ ggplot(seurat_filtered@meta.data) +
             stat='count', vjust=-1) +
   theme_classic()
 ```
+
+***
+
+[Back to Lesson >>](05_quality_control.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)

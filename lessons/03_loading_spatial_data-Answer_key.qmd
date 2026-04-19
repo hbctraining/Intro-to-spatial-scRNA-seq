@@ -51,3 +51,9 @@ This is why the bin value matters, it determines how many "cells" are ultimately
 #| eval: false
 Layers(seurat_merged)
 ```
+
+***
+
+[Back to Lesson >>](03_loading_spatial_data.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)

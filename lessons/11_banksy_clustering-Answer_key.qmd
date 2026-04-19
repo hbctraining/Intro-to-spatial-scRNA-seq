@@ -72,3 +72,9 @@ DimPlot(seurat_banksy,
 ```
 
 The BANKSY clusters align much better with the BANKSY derived UMAP coordinates. This is due to the fact that they have the same underlying structure.
+
+***
+
+[Back to Lesson >>](11_banksy_clustering.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)

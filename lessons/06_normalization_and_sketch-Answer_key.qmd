@@ -60,3 +60,9 @@ SpatialFeaturePlot(seurat_sketch,
 ```
 
 Similarly, we can see that gene IGHM, which is a B-cell marker genes, is expressed selectively throughout the dataset.
+
+***
+
+[Back to Lesson >>](06_normalization_and_sketch.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)
