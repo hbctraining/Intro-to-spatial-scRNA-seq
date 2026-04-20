@@ -1,0 +1,164 @@
+---
+sidebar: false
+toc: false
+execute: 
+  eval: false
+---
+
+
+# Spatial Transcriptomics
+
+| Audience | Computational skills required| Duration |
+:----------|:----------|:----------|
+| Biologists | [Introduction to R](https://hbctraining.github.io/Intro-to-R-flipped/) | 4-session online workshop (~7.5 hours of trainer-led time)|
+
+### Description
+
+This repository has teaching materials for a hands-on **Introduction to Spatial Transcriptomics** workshop. This workshop begins with experimental design considerations and an overview of current spatial transcriptomics technologies. From there, participants will load in **Visium HD** colorectal cancer samples as a practical example of a spatial analysis workflow. The first half of the workflow will be learning how to load data, assess quality, and filter out low-quality bins using Seurat in R. Once the data has been cleaned, a standard single-cell workflow will be used: highly variable gene selection, PCA, UMAP, k-nearest neighbors, and clustering. Then, we will apply a deconvolution algorithm to annotate the celltypes in the dataset.
+
+Building upon this foundation, participants will then conduct **analyses that incorporate the physical locations of bins on the tissue**. This includes spatial clustering, where groups are assigned based upon both gene expression and proximity to neighboring bins in the tissue. Moran's I will be utilized to identify spatially variable genes, where expression of genes change across different regions of the tissue. The workshop will conclude with a cell-cell communication analysis to assess ligand-receptor interactions between cells that are in close proximity with one another.
+
+Working knowledge of R is required or completion of the [Introduction to R workshop](https://hbctraining.github.io/Intro-to-R-flipped/). 
+
+> Please note that the schedule linked below assumes that learners will spend between 3-4 hours on reading through, > and completing exercises from selected lessons between classes. The online component of the workshop focuses on more exercises and > discussion/Q & A.
+> 
+> These materials were developed for a trainer-led workshop, but are also amenable to self-guided learning.
+
+
+### Learning Objectives
+
+- Experimental design best practices of current spatial transcriptomics technologies
+- Data loading and quality control of Visium HD samples
+- Standard single-cell workflows adapted for spatial data, including highly variable gene selection, PCA, UMAP, kNN, and clustering
+- Cell type annotation with deconvolution using `RCTD` for sequencing-based technologies
+- Spatial-specific analyses that utilize the physical location of bins/cells on the tissue, including:
+   - Spatial clustering with `BANKSY`
+   - Spatially variable gene detection with Moran's I
+   - Cell-cell communication with `CellChat`
+
+
+### Lessons
+
+- [Workshop schedule (trainer-led learning)](schedule/schedule.qmd)
+- [Self-learning](schedule/links-to-lessons.qmd)
+
+### Installation Requirements
+
+#### Applications
+Download the most recent versions of R and RStudio for your laptop:
+
+ - [R](http://lib.stat.cmu.edu/R/CRAN/) **(version 4.0.0 or above)**
+ - [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
+
+#### Packages for R
+
+
+##### Instructions for installing R packages
+
+>1. **Install the packages in the order listed below.**
+>
+>2. **All the package names listed below are case sensitive.**
+>
+>3. **Mac with Apple Silicon (M1/M2/etc.):**  
+>   Download and install the gfortran tool *before* installing your packages:  
+>   <https://mac.r-project.org/tools/gfortran-12.2-universal.pkg>
+>
+>4. **Updating old packages:**  
+>   If R asks in the console:  
+>   `Update all/some/none? [a/s/n]:`  
+>   type **`a`** and press Enter to update any old packages.  
+>   _Note: Updating can take a while, so allow extra time before starting._
+>
+>5. **“Binary version available but the source version is later” message:**  
+>   If you see:  
+>   `Do you want to install from sources the package which needs compilation? y/n`  
+>   type **`n`** (no) and press Enter.
+
+
+**(1)** Install the following packages:
+
+**Please install them one-by-one as follows:**
+
+```{r}
+# Package managers (install first)
+install.packages("remotes")
+install.packages("devtools")
+install.packages("BiocManager")
+
+# CRAN packages
+install.packages("tidyverse")
+install.packages("scales")
+install.packages("future")
+install.packages("R.utils")
+install.packages("arrow")
+install.packages("hdf5r")
+install.packages("qs2")
+install.packages('Rfast2')
+install.packages("leidenbase")
+install.packages("harmony")
+install.packages("Seurat")
+
+# Bioconductor packages
+BiocManager::install("EnhancedVolcano")
+BiocManager::install("clusterProfiler")
+BiocManager::install("org.Hs.eg.db")
+BiocManager::install("msigdbr")
+BiocManager::install("ComplexHeatmap")
+BiocManager::install("BiocNeighbors")
+
+# GitHub packages
+remotes::install_github("prabhakarlab/Banksy")
+remotes::install_github("satijalab/seurat-wrappers")
+devtools::install_github("dmcable/spacexr", 
+                         build_vignettes = FALSE)
+devtools::install_github("jinworks/CellChat")
+devtools::install_github('immunogenomics/presto')
+```
+
+**(2)** Finally, please check that all the packages were installed successfully by **loading them one at a time** using the `library()` function.  
+
+```{r}
+# Package managers
+library(remotes)
+library(devtools)
+
+# CRAN
+library(tidyverse)
+library(scales)
+library(future)
+library(R.utils)
+library(arrow)
+library(hdf5r)
+library(qs2)
+library(leidenbase)
+library(harmony)
+library(Seurat)
+
+# Bioconductor
+library(EnhancedVolcano)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(msigdbr)
+
+# GitHub
+library(Banksy)
+library(SeuratWrappers)
+library(spacexr)
+library(CellChat)
+```
+
+**(3)** Once all packages have been loaded, run sessionInfo().  
+
+```{r}
+sessionInfo()
+```
+
+---
+
+### Citation
+
+To cite material from this course in your publications, please use:
+
+> **Create Zenodo citation**
+
+A lot of time and effort went into the preparation of these materials. Citations help us understand the needs of the community, gain recognition for our work, and attract further funding to support our teaching activities. Thank you for citing this material if it helped you in your data analysis.
