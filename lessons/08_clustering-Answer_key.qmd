@@ -23,25 +23,65 @@ seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
 1. When we looked at the first few rows of our metadata, it appeared that there were many cells that do not have a cluster value. Count how many `NA`'s are found for our cluster with `table()` function and use the argument (`useNA = "ifany"`). Why do you think there are so many `NA` values?
 
 ```{r}
+#| label: table_clusters
 table(seurat_processed$seurat_cluster.sketched,
       useNA = "ifany")
 ```
 
 # Exercise 2
 
-1. A question to evaluate Learning Objective 2
+2. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with celltypes.
 
-2. A followup question to question #1
+```{r}
+#| label: marker_list
+marker_list <- list(
+  "B cells" = c("IGKC", "IGHM", "CD79A", "MS4A1", "MZB1"),
+  "Endothelial cells" = c("PECAM1", "VWF", "PLVAP", "ENG", "KLF2"),
+  "Fibroblasts" = c("COL1A1", "COL3A1", "DCN", "LUM", "COL6A2"),
+  "Intestinal epithelial cells" = c("CLCA1", "FCGBP", "MUC2", "PIGR", "ZG16"),
+  "Myeloid cells" = c("C1QC", "SELENOP", "SPP1", "LYZ", "CD68"),
+  "Neural cells" = c("NRXN1", "L1CAM", "NCAM1", "VIP", "CALB2"),
+  "Smooth muscle cells" = c("TAGLN", "ACTA2", "MYH11", "MYL9", "CNN1"),
+  "T cells" = c("TRAC", "CD3E", "TRBC2", "IL7R", "CD52"),
+  "Tumor cells" = c("CEACAM6", "CEACAM5", "EPCAM", "KRT8", "LCN2")
+)
+```
 
-3. ...
+```{r}
+#| label: dotplot
+#| fig-width: 15
+DotPlot(seurat_processed,
+        marker_list,
+        group.by = "seurat_cluster.projected",
+        cluster.idents = TRUE) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
 
-# Exercise 3
+3. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.
 
-1. A question to evaluate Learning Objective 3
+Based upon the dotplot, the good thing is that while it may not be the clearest signal, we are able to identify major populations of cells in the clusters. At this point, you can see there is some uncertainty in this **very rough assignment** and that is okay!
 
-2. A followup question to question #1
 
-3. ...
+| Cluster | Cell type                         |
+|---------|-----------------------------------|
+| 1       | Tumor                             |
+| 2       | B cells                           |
+| 3       | Intestinal epithelial cells       |
+| 4       | ?                                 |
+| 5       | Tumor cells /Intestinal epithelial cells  |
+| 6       | B cells / T cells                          |
+| 7       | Tumor cells / Intestinal epithelial cells       |
+| 8       | Endothelial cells                 |
+| 9       | Myeloid cells / Fibroblasts                    |
+| 10      | Smooth muscle cells               |
+| 11      | Tumor                                 |
+| 12      | Neural cells                      |
+| 13      | Neural cells                      |
+| 14      | ?                       |
+
+In a standard analysis, we could test out different resolution scores to better tease apart clusters of different celltypes from one another. However, in future lessons we are going to (1) run an alternative, spatially-constrained clustering method and (2) automatically annotate our dataset.
+
+This is a good exercise to run to ensure that we are able to identify key celltypes in our dataset.
 
 
 ***

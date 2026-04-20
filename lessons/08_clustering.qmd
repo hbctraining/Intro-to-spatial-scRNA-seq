@@ -273,7 +273,7 @@ LabelClusters(p, id = "ident",  fontface = "bold", size = 5,
               bg.colour = "white", bg.r = .2, force = 0)
 ```
 
-::: callout-note
+::: {.callout-note collapse="true"}
 # My cluster labels are all out of order!
 To ensure that our cluster labels are listed in proper numeric order, we are going to make our `seurat_cluster.projected` a factor and set the levels such that the order is correct.
 
@@ -326,6 +326,64 @@ SpatialDimPlot(seurat_processed,
                pt.size.factor = 16,
                image.alpha = 0)
 ```
+
+## Assessing cluster quality
+
+In the ideal scenario, we expect that the clusters should correspond with the celltypes in our dataset at this point. When we began the analysis, we identified the celltypes that we expect to see in the dataset. 
+
+Here, we have taken that information one step further by finding several well characterized marker genes for each celltype:
+
+Table: Marker genes for broad cell types in our dataset. {#tbl-marker_genes}
+
+| Cell type                   | Marker genes                                             |
+|-----------------------------|------------------------------------------------------------|
+| B cells                     | IGKC, IGHM, CD79A, MS4A1, MZB1                             |
+| Endothelial cells           | PECAM1, VWF, PLVAP, ENG, KLF2                              |
+| Fibroblasts                 | COL1A1, COL3A1, DCN, LUM, COL6A2                           |
+| Intestinal epithelial cells | CLCA1, FCGBP, MUC2, PIGR, ZG16                             |
+| Myeloid cells               | C1QC, SELENOP, SPP1, LYZ, CD68                             |
+| Neural cells                | NRXN1, L1CAM, NCAM1, VIP, CALB2                            |
+| Smooth muscle cells         | TAGLN, ACTA2, MYH11, MYL9, CNN1                            |
+| T cells                     | TRAC, CD3E, TRBC2, IL7R, CD52                              |
+| Tumor cells                 | CEACAM6, CEACAM5, EPCAM, KRT8, LCN2                        |
+
+So now, for example, we can see how the marker genes for Endothelial cells appear in our `seurat_cluster.projected`:
+
+```{r}
+#| label: fig-vln_endothelial_marker
+#| fig-cap: Violin plot of `PECAM1` and `VWF` for each cluster to potentially identify populations of Endothelial cells.
+VlnPlot(seurat_processed,
+        features = c("PECAM1", "VWF"),
+        pt.size = 0.1,
+        ncol = 1) +
+  NoLegend()
+```
+
+We can clearly see that there is an uptick of expression of both genes in cluster 8 - which is an indication that cluster 8 is likely comprised of Endothelial cells. Because we know these celltype markers, we are able to more concretely tell how well the clustering and QC of our dataset is going. This is why we strongly encourage everyone to being a single-cell study with a general concept of broad celltypes and marker genes to save time down the line.
+
+::: callout-tip
+# [**Exercise 2**](08_clustering-Answer_key.qmd#exercise-2)
+
+2. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with celltypes.
+
+```{r}
+#| label: marker_list
+marker_list <- list(
+  "B cells" = c("IGKC", "IGHM", "CD79A", "MS4A1", "MZB1"),
+  "Endothelial cells" = c("PECAM1", "VWF", "PLVAP", "ENG", "KLF2"),
+  "Fibroblasts" = c("COL1A1", "COL3A1", "DCN", "LUM", "COL6A2"),
+  "Intestinal epithelial cells" = c("CLCA1", "FCGBP", "MUC2", "PIGR", "ZG16"),
+  "Myeloid cells" = c("C1QC", "SELENOP", "SPP1", "LYZ", "CD68"),
+  "Neural cells" = c("NRXN1", "L1CAM", "NCAM1", "VIP", "CALB2"),
+  "Smooth muscle cells" = c("TAGLN", "ACTA2", "MYH11", "MYL9", "CNN1"),
+  "T cells" = c("TRAC", "CD3E", "TRBC2", "IL7R", "CD52"),
+  "Tumor cells" = c("CEACAM6", "CEACAM5", "EPCAM", "KRT8", "LCN2")
+)
+```
+
+3. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.
+
+:::
 
 ## Save!
 

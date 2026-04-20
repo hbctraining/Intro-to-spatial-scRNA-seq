@@ -170,17 +170,17 @@ Add marker genes for neural cells and smooth muscle cells
 
 Table: Marker genes for broad cell types in our dataset. {#tbl-marker_genes}
 
-| Cell type                    | Genes                          |
-|-----------------------------|---------------------------------|
-| B cells                     | IGKC                           |
-| Endothelial cells           | PECAM1                         |
-| Fibroblasts                 | COL1A1                         |
-| Intestinal epithelial cells | CLCA1, FCGBP, MUC2, PIGR       |
-| Myeloid cells               | C1QC, SPP1, SELENOP            |
-| Neural cells                | TODO                           |
-| Smooth muscle cells         | TODO                           |
-| T cells                     | TRAC, CD3E                     |
-| Tumor cells                 | CEACAM6, CEACAM5               |
+| Cell type                   | Marker genes                                             |
+|-----------------------------|------------------------------------------------------------|
+| B cells                     | IGKC, IGHM, CD79A, MS4A1, MZB1                             |
+| Endothelial cells           | PECAM1, VWF, PLVAP, ENG, KLF2                              |
+| Fibroblasts                 | COL1A1, COL3A1, DCN, LUM, COL6A2                           |
+| Intestinal epithelial cells | CLCA1, FCGBP, MUC2, PIGR, ZG16                             |
+| Myeloid cells               | C1QC, SELENOP, SPP1, LYZ, CD68                             |
+| Neural cells                | NRXN1, L1CAM, NCAM1, VIP, CALB2                            |
+| Smooth muscle cells         | TAGLN, ACTA2, MYH11, MYL9, CNN1                            |
+| T cells                     | TRAC, CD3E, TRBC2, IL7R, CD52                              |
+| Tumor cells                 | CEACAM6, CEACAM5, EPCAM, KRT8, LCN2                        |
 
 
 :::{.callout-tip}
