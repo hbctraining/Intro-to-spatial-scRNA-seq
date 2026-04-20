@@ -35,7 +35,7 @@ options(future.globals.maxSize = 8000 * 1024^2)
 plan("multicore", workers = parallel::detectCores() - 1)
 
 # Load dataset
-seurat_rctd <- qs_read("intermediate/09_seurat_banksy_2.qs")
+seurat_rctd <- qs_read("intermediate/12_seurat_RCTD.qs")
 ```
 
 Approximate time: XX minutes
@@ -122,7 +122,7 @@ In this case, let us zoom in on the tumor cells in the CRC dataset:
 #| label: subset_crc_tumor
 crc_sub <- subset(seurat_rctd,
               subset = (orig.ident == "P5CRC") &
-                       (seurat_cluster.projected == 1))
+                       (first_type == "Tumor"))
 crc_sub
 ```
 
@@ -145,7 +145,7 @@ crc_sub <- FindSpatiallyVariableFeatures(crc_sub,
                                       selection.method = "moransi",
                                       verbose = TRUE,
                                       features = VariableFeatures(crc_sub)[1:100],
-                                      image = "P5CRC_sub.008um")
+                                      image = "P5CRC.008um")
 ```
 
 ```{r}
@@ -181,7 +181,7 @@ SpatialFeaturePlot(crc_sub,
                    ncol = 2)
 ```
 
-Recall in the [BANKSY lesson](11_banksy_clustering.qmd) we noted that the BANKSY algorithm identified different, spatially constrained subtypes in this cancerous region? Now we can clearly see which of those genes were defining the phenotype of these tumerous subtypes.
+Recall in the [BANKSY lesson](11_banksy_clustering.qmd) we noted that the BANKSY algorithm identified different, spatially constrained subtypes in this cancerous region. Now we can clearly see which of those genes were defining the phenotype of these tumor subtypes.
 
 ## Other SVG methods
 
