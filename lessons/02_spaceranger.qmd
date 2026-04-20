@@ -40,7 +40,7 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-When doing XYZ...
+There is a key step that occurs between the sequencing experiment and the start of an analysis in R for spatial transcriptomics. We must pre-process the raw data (FASTQ and TIFF) files to generates outputs which we can then use to perform downstream analyses. In this lesson highlight the broad steps of what the Space Ranger algorithm does to take us from sequnces to a count matrix with associated spatial coordinates.
 
 ## Space Ranger overview
 

@@ -106,7 +106,7 @@
     "href": "lessons/02_spaceranger.html#overview-of-lesson",
     "title": "Space Ranger Processing",
     "section": "Overview of lesson",
-    "text": "Overview of lesson\nWhen doing XYZ…",
+    "text": "Overview of lesson\nThere is a key step that occurs between the sequencing experiment and the start of an analysis in R for spatial transcriptomics. We must pre-process the raw data (FASTQ and TIFF) files to generates outputs which we can then use to perform downstream analyses. In this lesson highlight the broad steps of what the Space Ranger algorithm does to take us from sequnces to a count matrix with associated spatial coordinates.",
     "crumbs": [
       "Pre-reading:",
       "Space Ranger Processing"
