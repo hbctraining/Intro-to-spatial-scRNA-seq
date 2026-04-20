@@ -296,41 +296,41 @@ At this point, we still do not have our spatially constrained clusters. But now 
 #| label: instructor_run_all_steps
 #| eval: false
 #| echo: false
-# PCA
-seurat_banksy <- RunPCA(seurat_banksy, 
-                        assay = "BANKSY", 
-                        reduction.name = "pca.banksy", 
-                        features = rownames(seurat_banksy), 
-                        npcs = 30)
-
-# Harmony batch correction
-seurat_banksy <- RunHarmony(seurat_banksy,
-                            group.by.vars = "orig.ident",
-                            reduction = "pca.banksy",
-                            reduction.save = "harmony.banksy",
-                            assay.use = "BANKSY")
-
-
-# Find k-Nearest Neighbors
-seurat_banksy <- FindNeighbors(seurat_banksy, 
-                               reduction = "harmony.banksy", 
-                               dims = 1:30)
-
-# Leiden clustering
-seurat_banksy <- FindClusters(seurat_banksy, 
-                              algorithm = 4,
-                              cluster.name = "banksy_cluster",
-                              resolution = 0.65,
-                              random.seed = 12345)
-
-# Change default asasy from BANKSY
-DefaultAssay(seurat_banksy) <- "Spatial.008um"
-
-# Delete BANKSY assay by setting it to NULL
-seurat_banksy[["BANKSY"]] <- NULL
-
-# Save processed BANKSY seurat object
-qs2::qs_save(seurat_banksy, "intermediate/09_seurat_banksy_2.qs")
+# # PCA
+# seurat_banksy <- RunPCA(seurat_banksy, 
+#                         assay = "BANKSY", 
+#                         reduction.name = "pca.banksy", 
+#                         features = rownames(seurat_banksy), 
+#                         npcs = 30)
+# 
+# # Harmony batch correction
+# seurat_banksy <- RunHarmony(seurat_banksy,
+#                             group.by.vars = "orig.ident",
+#                             reduction = "pca.banksy",
+#                             reduction.save = "harmony.banksy",
+#                             assay.use = "BANKSY")
+# 
+# 
+# # Find k-Nearest Neighbors
+# seurat_banksy <- FindNeighbors(seurat_banksy, 
+#                                reduction = "harmony.banksy", 
+#                                dims = 1:30)
+# 
+# # Leiden clustering
+# seurat_banksy <- FindClusters(seurat_banksy, 
+#                               algorithm = 4,
+#                               cluster.name = "banksy_cluster",
+#                               resolution = 0.65,
+#                               random.seed = 12345)
+# 
+# # Change default asasy from BANKSY
+# DefaultAssay(seurat_banksy) <- "Spatial.008um"
+# 
+# # Delete BANKSY assay by setting it to NULL
+# seurat_banksy[["BANKSY"]] <- NULL
+# 
+# # Save processed BANKSY seurat object
+# qs2::qs_save(seurat_banksy, "intermediate/09_seurat_banksy_2.qs")
 ```
 
 ```{r}
@@ -567,6 +567,64 @@ An important note about this UMAP is that we are still using the `UMAP_1` and `U
 # [**Exercise 2**](11_banksy_clustering-Answer_key.qmd#exercise-2)
 2. What does the UMAP look like when use the BANKSY derived harmony latent space to calculate UMAP coordinates?
 :::
+
+## Assess clustering
+
+Just like we saw in the [clustering lesson](08_clustering.qmd), we can once again answer the question of how well these BANKSY cluster align with the expected celltypes.
+
+Table: Marker genes for broad cell types in our dataset. {#tbl-marker_genes}
+
+| Cell type                   | Marker genes                                             |
+|-----------------------------|------------------------------------------------------------|
+| B cells                     | IGKC, IGHM, CD79A, MS4A1, MZB1                             |
+| Endothelial cells           | PECAM1, VWF, PLVAP, ENG, KLF2                              |
+| Fibroblasts                 | COL1A1, COL3A1, DCN, LUM, COL6A2                           |
+| Intestinal epithelial cells | CLCA1, FCGBP, MUC2, PIGR, ZG16                             |
+| Myeloid cells               | C1QC, SELENOP, SPP1, LYZ, CD68                             |
+| Neural cells                | NRXN1, L1CAM, NCAM1, VIP, CALB2                            |
+| Smooth muscle cells         | TAGLN, ACTA2, MYH11, MYL9, CNN1                            |
+| T cells                     | TRAC, CD3E, TRBC2, IL7R, CD52                              |
+| Tumor cells                 | CEACAM6, CEACAM5, EPCAM, KRT8, LCN2                        |
+
+So now, for example, we can see how the marker genes for Smooth Muscle cells appear in our `seurat_banksy` clusters:
+
+```{r}
+#| label: fig-vln_endothelial_marker
+#| fig-cap: Violin plot of `ACTA2` and `MYH11` for each BANKSY cluster to potentially identify populations of Smooth Muscle cells.
+VlnPlot(seurat_banksy,
+        features = c("ACTA2", "MYH11"),
+        pt.size = 0,
+        ncol = 1) +
+  NoLegend()
+```
+
+We can clearly see that there is an uptick of expression of both genes in cluster 9 - which is an indication that cluster 9 is likely comprised of Smooth Muscle cells.
+
+::: callout-tip
+# [**Exercise 3**](08_clustering-Answer_key.qmd#exercise-3)
+
+3. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with celltypes.
+
+```{r}
+#| label: marker_list
+marker_list <- list(
+  "B cells" = c("IGKC", "IGHM", "CD79A", "MS4A1", "MZB1"),
+  "Endothelial cells" = c("PECAM1", "VWF", "PLVAP", "ENG", "KLF2"),
+  "Fibroblasts" = c("COL1A1", "COL3A1", "DCN", "LUM", "COL6A2"),
+  "Intestinal epithelial cells" = c("CLCA1", "FCGBP", "MUC2", "PIGR", "ZG16"),
+  "Myeloid cells" = c("C1QC", "SELENOP", "SPP1", "LYZ", "CD68"),
+  "Neural cells" = c("NRXN1", "L1CAM", "NCAM1", "VIP", "CALB2"),
+  "Smooth muscle cells" = c("TAGLN", "ACTA2", "MYH11", "MYL9", "CNN1"),
+  "T cells" = c("TRAC", "CD3E", "TRBC2", "IL7R", "CD52"),
+  "Tumor cells" = c("CEACAM6", "CEACAM5", "EPCAM", "KRT8", "LCN2")
+)
+```
+
+4. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.
+
+:::
+
+
 
 ## Save!
 

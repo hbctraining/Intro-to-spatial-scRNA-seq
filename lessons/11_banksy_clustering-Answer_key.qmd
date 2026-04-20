@@ -14,7 +14,7 @@ editor_options:
 #| echo: false
 # Load libraries and data
 library(Seurat)
-
+library(tidyverse)
 # Set parallelization (multithreading) to speed up calculations
 plan("multicore", workers = parallel::detectCores() - 1)
 
@@ -72,6 +72,68 @@ DimPlot(seurat_banksy,
 ```
 
 The BANKSY clusters align much better with the BANKSY derived UMAP coordinates. This is due to the fact that they have the same underlying structure.
+
+# Exercise 3
+
+3. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with celltypes.
+
+```{r}
+#| label: marker_list
+marker_list <- list(
+  "B cells" = c("IGKC", "IGHM", "CD79A", "MS4A1", "MZB1"),
+  "Endothelial cells" = c("PECAM1", "VWF", "PLVAP", "ENG", "KLF2"),
+  "Fibroblasts" = c("COL1A1", "COL3A1", "DCN", "LUM", "COL6A2"),
+  "Intestinal epithelial cells" = c("CLCA1", "FCGBP", "MUC2", "PIGR", "ZG16"),
+  "Myeloid cells" = c("C1QC", "SELENOP", "SPP1", "LYZ", "CD68"),
+  "Neural cells" = c("NRXN1", "L1CAM", "NCAM1", "VIP", "CALB2"),
+  "Smooth muscle cells" = c("TAGLN", "ACTA2", "MYH11", "MYL9", "CNN1"),
+  "T cells" = c("TRAC", "CD3E", "TRBC2", "IL7R", "CD52"),
+  "Tumor cells" = c("CEACAM6", "CEACAM5", "EPCAM", "KRT8", "LCN2")
+)
+```
+
+```{r}
+#| label: dotplot
+#| fig-width: 15
+#| fig-height: 8
+DotPlot(seurat_banksy,
+        marker_list,
+        group.by = "banksy_cluster",
+        cluster.idents = TRUE) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+3. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.
+
+Based upon the dotplot, the good thing is that while it may not be the clearest signal, we are able to identify major populations of cells in the clusters.
+
+::: callout-warning
+Most of these annotations are wrong, need to fix
+:::
+
+| Cluster | Cell type                    |
+|---------|------------------------------|
+| 1       | B cells                      |
+| 2       | Tumor cells                  |
+| 3       | Tumor cells                  |
+| 4       | Intestinal epithelial cells  |
+| 5       | Endothelial cells            |
+| 6       | B cells                      |
+| 7       | B cells / T cells            |
+| 8       | Smooth muscle cells          |
+| 9       | Smooth muscle cells                |
+| 10      | T cells                      |
+| 11      | Intestinal epithelial cells  |
+| 12      | Fibroblasts                  |
+| 13      | Fibroblasts                  |
+| 14      | Tumor cells                  |
+| 15      | Tumor cells                  |
+| 16      | Intestinal epithelial cells  |
+| 17      | Myeloid cells (?)            |
+| 18      | Neural cells                 |
+| 19      | Neural cells                 |
+| 20      | ?                            |
+
 
 ***
 
