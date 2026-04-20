@@ -164,10 +164,6 @@ Now bins that have the label of cluster 1 or 11 are colored red while the rest a
 
 Recall that when we first loaded the dataset, we identified the broad cell types that we expected to see in our dataset. Here, we summarize this information once again to help us identify if there is a biological explanation for the presence of these clusters that are dominated by `P5CRC` bins.
 
-::: callout-warning
-Add marker genes for neural cells and smooth muscle cells
-:::
-
 Table: Marker genes for broad cell types in our dataset. {#tbl-marker_genes}
 
 | Cell type                   | Marker genes                                             |
@@ -199,39 +195,37 @@ We are going to use `VlnPlot()` and `FeaturePlot()` to visualize which clusters 
 ### CEACAM5
 
 ```{r}
-#| label: fig-ceacam5_featureplot
-#| fig-cap: CEACAM5 expression plotted on the UMAP.
-FeaturePlot(seurat_processed, 
-            features = "CEACAM5",
-            label = TRUE)
-```
+#| label: fig-ceacam5
+#| fig-cap: CEACAM5 expression shown as violin plot per cluster as well as on the UMAP embedding.
+#| fig-width: 10
+p_feature <- FeaturePlot(seurat_processed, 
+                         features = "CEACAM5",
+                         label = TRUE)
 
-```{r}
-#| label: fig-ceacam5_vlnplot
-#| fig-cap: CEACAM5 expression plotted as a violin plot for each cluster.
-VlnPlot(seurat_processed, 
-        features = "CEACAM5", 
-        pt.size = 0) +
+p_vln <- VlnPlot(seurat_processed, 
+                 features = "CEACAM5", 
+                 pt.size = 0) +
   NoLegend()
+
+p_feature | p_vln
 ```
 
 ### CEACAM6
 
 ```{r}
-#| label: fig-ceacam6_featureplot
-#| fig-cap: CEACAM6 expression plotted on the UMAP.
-FeaturePlot(seurat_processed, 
-            features = "CEACAM6",
-            label = TRUE)
-```
+#| label: fig-ceacam6
+#| fig-cap: CEACAM6 expression shown as violin plot per cluster as well as on the UMAP embedding.
+#| fig-width: 10
+p_feature <- FeaturePlot(seurat_processed, 
+                         features = "CEACAM6",
+                         label = TRUE)
 
-```{r}
-#| label: fig-ceacam6_vlnplot
-#| fig-cap: CEACAM6 expression plotted as a violin plot for each cluster.
-VlnPlot(seurat_processed, 
-        features = "CEACAM6", 
-        pt.size = 0) +
+p_vln <- VlnPlot(seurat_processed, 
+                 features = "CEACAM6", 
+                 pt.size = 0) +
   NoLegend()
+
+p_feature | p_vln
 ```
 
 :::

@@ -1,0 +1,60 @@
+---
+title: "Integration - Answer Key"
+author:
+  - Noor Sohail
+date: "2026-04-19"
+license: "CC-BY-4.0"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: load_libraries_data
+#| echo: false
+# Load libraries and data
+library(Seurat)
+library(tidyverse)
+seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
+
+```
+
+# Exercise 1
+
+1. Do you see a clear split based on sample in the UMAP and PCA? What could this indicate about the presence of batch effects in our data?
+
+```{r}
+#| label: fig-pca_umap_by_sample
+#| fig-cap: PCA and UMAP colored by sample.
+#| fig-width: 10
+#| echo: false
+p1 <- DimPlot(seurat_processed,
+              group.by="orig.ident",
+              reduction = "full.pca.sketch") +
+  NoLegend() + ggtitle("PCA (Projected)")
+
+p2 <- DimPlot(seurat_processed,
+              group.by = "orig.ident",
+              reduction = "full.umap.sketch") +
+  ggtitle("UMAP (Projected)")
+
+p1 | p2
+```
+
+When we look at the UMAP and PCA plot without any other pieces of information it does seem like there is a batch effect. In the PCA space, we can see in the top left-hand corner of PC space that the bins predominantly belong to `P5CRC`. Similarly in the UMAP space, there is a cluster of bins on the right-hand side that belong solely to `P5CRC` and another at the top of the UMAP.
+
+Based solely on this visualization and no additional information, it may seem like integration may be necessary - though the other bins in the dataset do appear to overlay quite well across both datasets.
+
+# Exercise 2
+
+2. Is there a biological reason we see clusters that are dominated by `P5CRC` bins? What cell type do you think these clusters may represent?
+
+When we look at the celltypes we anticipate being in our dataset, there is one population that stands outs - `Tumor cells`.
+
+The `P5NAT` sample is "normal adjacent tissue" which indicates that we should not see any tumor cells in this sample. Conversely, we are anticipating cancerous cells in the `P5CRC` dataset. So before we make a final decision on integration, we should first see if the previously identified populations could possible be tumor cells.
+
+***
+
+[Back to Lesson >>](09_integration.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)
