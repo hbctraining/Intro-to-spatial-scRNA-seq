@@ -1,11 +1,3 @@
----
-sidebar: false
-toc: false
-execute: 
-  eval: false
----
-
-
 # Spatial Transcriptomics
 
 | Audience | Computational skills required| Duration |
@@ -20,7 +12,7 @@ Building upon this foundation, participants will then conduct **analyses that in
 
 Working knowledge of R is required or completion of the [Introduction to R workshop](https://hbctraining.github.io/Intro-to-R-flipped/). 
 
-> Please note that the schedule linked below assumes that learners will spend between 3-4 hours on reading through, > and completing exercises from selected lessons between classes. The online component of the workshop focuses on more exercises and > discussion/Q & A.
+> Please note that the schedule linked below assumes that learners will spend between 3-4 hours on reading through, and completing exercises from selected lessons between classes. The online component of the workshop focuses on more exercises and discussion/Q & A.
 > 
 > These materials were developed for a trainer-led workshop, but are also amenable to self-guided learning.
 
@@ -53,7 +45,7 @@ Download the most recent versions of R and RStudio for your laptop:
 #### Packages for R
 
 
-##### Instructions for installing R packages
+**Instructions for installing R packages**
 
 >1. **Install the packages in the order listed below.**
 >
