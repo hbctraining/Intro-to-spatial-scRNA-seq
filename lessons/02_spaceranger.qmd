@@ -1,22 +1,20 @@
 ---
 title: "Space Ranger Processing"
 description: |
-  Write a description of the lesson here. 
+  Gain a practical overview of the 10x Genomics Space Ranger pipeline, from raw FASTQ and TIF files to spatial gene expression matrices and QC reports. You will learn how to interpret key Space Ranger outputs and prepare Visium data for downstream analysis in R and Seurat.
 author:
   - Noor Sohail
 date: "2026-03-25"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - spatial transcriptomics
+  - Space Ranger
+  - Visium HD
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Preprocessing
+  - Segmentation
+  - QC reports
+  - Counts matrix
+  - 10X Genomics
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

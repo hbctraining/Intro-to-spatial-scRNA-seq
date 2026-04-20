@@ -1,22 +1,18 @@
 ---
 title: "Loading Spatial Data"
 description: |
-  Write a description of the lesson here. 
+  Learn how to load Visium HD spatial transcriptomics data into R and build Seurat objects. This lesson prepares your spatial dataset for quality control, visualization, and downstream analysis.
 author:
   - Noor Sohail
 date: "2025-07-25"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Visium HD
+  - Colorectal Cancer
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Spatial transcriptomics
+  - Seurat
+  - Tissue slide
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

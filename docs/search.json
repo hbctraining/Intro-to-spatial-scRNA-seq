@@ -375,100 +375,100 @@
   {
     "objectID": "lessons/01_spatial_technologies.html",
     "href": "lessons/01_spatial_technologies.html",
-    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "title": "Spatial Transcriptomics Technologies",
     "section": "",
     "text": "Approximate time: XX minutes",
     "crumbs": [
       "Pre-reading:",
-      "Comparison of Spatial Transcriptomics Technologies"
+      "Spatial Transcriptomics Technologies"
     ]
   },
   {
     "objectID": "lessons/01_spatial_technologies.html#learning-objectives",
     "href": "lessons/01_spatial_technologies.html#learning-objectives",
-    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "title": "Spatial Transcriptomics Technologies",
     "section": "Learning objectives",
     "text": "Learning objectives\nIn this lesson, we will:\n\nFollow the evolution of high-throughput sequencing\nDescribe the differences in sequencing- and imaging-based technologies\nDefine the advantages and disadvantages of different spatial transcriptomics technologies",
     "crumbs": [
       "Pre-reading:",
-      "Comparison of Spatial Transcriptomics Technologies"
+      "Spatial Transcriptomics Technologies"
     ]
   },
   {
     "objectID": "lessons/01_spatial_technologies.html#overview-of-lesson",
     "href": "lessons/01_spatial_technologies.html#overview-of-lesson",
-    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "title": "Spatial Transcriptomics Technologies",
     "section": "Overview of lesson",
     "text": "Overview of lesson\nWhen doing XYZ…",
     "crumbs": [
       "Pre-reading:",
-      "Comparison of Spatial Transcriptomics Technologies"
+      "Spatial Transcriptomics Technologies"
     ]
   },
   {
     "objectID": "lessons/01_spatial_technologies.html#high-throughput-sequencing-overview",
     "href": "lessons/01_spatial_technologies.html#high-throughput-sequencing-overview",
-    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "title": "Spatial Transcriptomics Technologies",
     "section": "High-throughput sequencing overview",
     "text": "High-throughput sequencing overview\nOver the years, transcriptomics technologies have evolved rapidly from bulk sequencing, to single-cell sequencing, all the way to the current spatial transcriptomics methods.\n\n\n\n\n\n\nFigure 1: Lego representation of the evolution of sequencing technologies, showing more specificity and structure with each advancement. Image source: Bo Xia Lab\n\n\n\n\nBulk and single-cell sequencing\nBulk RNA-seq is a method for comparing the averages of cellular expression for a population of cells. This method can be a good choice if looking at comparative transcriptomics (e.g. samples of the same tissue from different species), and for quantifying expression signatures in disease studies. It also has potential for the discovery of disease biomarkers if you are not expecting or not concerned about cellular heterogeneity in the sample.\nTo contrast, single-cell sequencing is a method for measuring gene expression on a per-cell basis. This method is ideal for studies of cellular heterogeneity where the differences between celltypes or cell states are the primary focus.\n\n\n\n\n\n\nFigure 2: Comparison of bulk and single-cell RNA sequencing approaches, showcasing loss of cellular resolution in bulk due to averaging. Image source: Trapnell et al. (2015)\n\n\n\nTo give an example, if we look at the image above, we can see that there are two cell types (blue and green) that have different expression patterns for genes A and B. If we were to analyze this data in bulk (left), we would not be able to detect the correct association between the genes. However, if we properly group the cells by cell type (right), we can see the correct correlation between the genes.\n\n\nSpatial transcriptomics\nSpatial transcriptomics extends the concept of single-cell sequencing further by adding the coordinates for each cell or spot on a slide. This allows us to understand both the molecular and spatial context for gene expression. Many of the challenges of scRNA-seq are also present in spatial transcriptomics.\nStudies that focus on the tissue microenvironment benefit from location information, as nearby cells are more likely to interact with one another. Another potential application is the ability to annotate key areas of a tissue based upon the histological features of the tissue, which can be particularly useful for studies of cancer and other diseases.\n\n\n\n\n\n\nFigure 3: Example of histology slide from a liver biopsy, annotated by a pathologist. Image source: Holzinger et al. (2019)\n\n\n\nMany of the challenges that arise in single-cell experiments are also present in spatial, for example:\n\nLarge volume of data\nLow depth of sequencing per cell\nTechnical variability across cells/samples\nBiological variability across cells/samples\n\nThese technologies can be broadly categorized into two groups: sequencing-based and imaging-based. We will now discuss the different technologies within each of these categories as well as their advantages and disadvantages.\n\n\n\n\n\n\nWarning\n\n\n\nTODO: want a visual representation of differences between seq and imaging technologies",
     "crumbs": [
       "Pre-reading:",
-      "Comparison of Spatial Transcriptomics Technologies"
+      "Spatial Transcriptomics Technologies"
     ]
   },
   {
     "objectID": "lessons/01_spatial_technologies.html#sequencing-based-technologies",
     "href": "lessons/01_spatial_technologies.html#sequencing-based-technologies",
-    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "title": "Spatial Transcriptomics Technologies",
     "section": "Sequencing-based technologies",
     "text": "Sequencing-based technologies\n\n\n\n\n\n\nFigure 4: Comparison of Visium and Visium HD data in FFPE human colorectal cancer, showcasing the resolution that can be achieved with sequencing-based methods. Image source: 10X Genomics: Your introduction to Visium HD\n\n\n\nSequencing-based methods focus on capturing the full transcriptome of the cells in the dataset. To accomplish this, the tissue is “binned” into different spots which are then sequenced to measure expression levels. At times, a spot can be comprised of multiple cells (i.e., not single-cell level). As the technology has evolved, the bin sizes have become smaller, allowing for near single-cell resolution.\n\nSummary of popular methods\nIn essence, these methods allow you to apply a grid to the tissue and quantify thousands of genes according to each square on the grid. Some popular technologies that belong to this category include:\n\n\n\nTable 1: Summary of popular sequencing-based methods for spatial transcriptomics.\n\n\n\n\n\n\n\n\n\n\n\n\n\nVisium\nVisium HD\nStereo-seq\nSlide-seq\n\n\n\n\nvendor\n10x Genomics\n10x Genomics\nBGI Group\nCurio Biosciences*\n\n\ncapture size\n~6.5 × 6.5 mm capture area (×4 per slide)\n~11 × 11 mm–scale capture area (single array)\nUp to ~1 × 1 cm chip (cm²‑scale field of view)\n~1 cm diameter puck (~80 mm²)\n\n\nresolution\n55 µm spot diameter; multicellular\n~2 µm “pixel” size; near single‑cell\n220 nm DNA nanoball spacing; subcellular\n10 µm beads; near single‑cell\n\n\nH&E\nYes (same section)\nYes (same section)\nNo\nNo\n\n\ntissue preservation\nFFPE and fresh frozen\nPrimarily FFPE; FF also supported\nFresh frozen\nFresh frozen\n\n\nyear released\n2019\n2023–2024\n2022 (atlas)\n2019\n\n\n\n\n\n\n\n\n\n\n\n\nVisium HD\n\n\n\nWe will be using Visium HD for the hands-on portion of this workshop.\n\n\n\n\nAdvantages and disadvantages\nAdvantages:\n\nAnalyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets as you are sequencing the entire transcriptome instead of a gene panel.\nCan be run on non-model organisms with greater ease.\n\nDisadvantages:\n\nHigh resolution experiments (Visium HD) can be very expensive\nSpots are not guaranteed to be a single-cell (can be multiple cells, or no cells at all)",
     "crumbs": [
       "Pre-reading:",
-      "Comparison of Spatial Transcriptomics Technologies"
+      "Spatial Transcriptomics Technologies"
     ]
   },
   {
     "objectID": "lessons/01_spatial_technologies.html#imaging-based-technologies",
     "href": "lessons/01_spatial_technologies.html#imaging-based-technologies",
-    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "title": "Spatial Transcriptomics Technologies",
     "section": "Imaging-based technologies",
     "text": "Imaging-based technologies\n\n\n\n\n\n\nFigure 5: Showcase of MERFISH, an imaging-based technology, which can achieve single-cell resolution. Image source: Vizgen: Leading the Global Expansion of Spatial Transcriptomics\n\n\n\nThese methods utilize fluorescence to quantify gene expression on a tissue slide, specifically fluorescence in situ hybridization (FISH) to measure expression of a selected panel of genes using probes. Therefore, we are able to evaluate expression for each individual cell after segmentation.\n\nSummary of popular methods\n\n\n\nTable 2: Summary of popular imaging-based methods for spatial transcriptomics.\n\n\n\n\n\n\n\n\n\n\n\n\nseqFISH\nMERFISH\nXenium\n\n\n\n\nvendor\nNA (academic method)\nVizgen\n10x Genomics\n\n\ncapture size\nVariable FOV; tiled imaging fields (typically mm-scale regions stitched across section)\nVariable FOV; tiled imaging fields (mm-scale regions, stitchable to large areas)\nVariable FOV; tiled high‑plex imaging over tissue sections (up to whole‑slide via tiling)\n\n\nresolution\nSubcellular, subdiffraction (seqFISH/seqFISH+)\nSubcellular (single‑molecule FISH)\nSubcellular, targeted in situ (per‑cell calls with subcellular localization)\n\n\nH&E\nNo (standard workflow uses fluorescence imaging only)\nNo (fluorescence imaging only)\n(Yes) — H&E‑like morphology and protein markers supported; H&E compatibility in active development at time of review\n\n\ntissue preservation\nFresh frozen\nFFPE and fresh frozen\nFFPE and fresh frozen\n\n\nyear released\n2014 (first seqFISH paper)\n2015 (first MERFISH paper)\n2022 (commercial launch of Xenium platform)\n\n\n\n\n\n\n\n\nAdvantages and disadvantages\nAdvantages:\n\nCan be used to evaluate the expression of a select panel of genes with high sensitivity and specificity.\nSingle-cell resolution\n\nDisadvantages:\n\nLimited to a select panel of genes.\nSegmentation is not a trivial task and requires careful preprocessing.\nChallenging with non-model organisms as probes are necessary.",
     "crumbs": [
       "Pre-reading:",
-      "Comparison of Spatial Transcriptomics Technologies"
+      "Spatial Transcriptomics Technologies"
     ]
   },
   {
     "objectID": "lessons/01_spatial_technologies.html#summary-of-comparison",
     "href": "lessons/01_spatial_technologies.html#summary-of-comparison",
-    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "title": "Spatial Transcriptomics Technologies",
     "section": "Summary of comparison",
     "text": "Summary of comparison\n\n\n\nTable 3: Table: Summary of the advantages and disadvantages of sequencing- and imaging-based spatial transcriptomics technologies.Adapted from:Single Cell Discoveries\n\n\n\n\n\n\n\n\n\n\nFeature\nSequencing-based\nImaging-based\n\n\n\n\nWhat they measure\nWhole transcriptome\nTargeted panels\n\n\nSpatial resolution\nMulti-cell (spots/bins) to single cell\nSingle cell\n\n\nSensitivity\nBroad detection; may miss low-abundance genes\nHigh for targeted genes\n\n\nLimitations\nMixing of cells in one spot\nLimited number of probes\n\n\nThroughput (slides)\nHigh (parallel processing)\nLower (multiple imaging cycles)\n\n\nThroughput (genes)\nHigh (dozens of thousands)\nLimited (hundred to thousand*)\n\n\nCost\nMore cost-effective at scale\nHigher per sample\n\n\nBest for…\nDiscovery projects\nValidation projects",
     "crumbs": [
       "Pre-reading:",
-      "Comparison of Spatial Transcriptomics Technologies"
+      "Spatial Transcriptomics Technologies"
     ]
   },
   {
     "objectID": "lessons/01_spatial_technologies.html#experimental-design-considerations",
     "href": "lessons/01_spatial_technologies.html#experimental-design-considerations",
-    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "title": "Spatial Transcriptomics Technologies",
     "section": "Experimental design considerations",
     "text": "Experimental design considerations\nWhen designing a spatial transcriptomics experiment, there are several factors to consider:\n\n\n\n\n\n\nWarning\n\n\n\nTODO: Talk with single-cell core about good design",
     "crumbs": [
       "Pre-reading:",
-      "Comparison of Spatial Transcriptomics Technologies"
+      "Spatial Transcriptomics Technologies"
     ]
   },
   {
     "objectID": "lessons/01_spatial_technologies.html#references",
     "href": "lessons/01_spatial_technologies.html#references",
-    "title": "Comparison of Spatial Transcriptomics Technologies",
+    "title": "Spatial Transcriptomics Technologies",
     "section": "References",
     "text": "References\n\nhttps://www.nature.com/articles/s41581-024-00841-1\nhttps://www.sciencedirect.com/science/article/pii/S1044532325000302\nhttps://www.nature.com/articles/s41581-024-00841-1/tables/1\n\n\nNext Lesson &gt;&gt;\nBack to Schedule",
     "crumbs": [
       "Pre-reading:",
-      "Comparison of Spatial Transcriptomics Technologies"
+      "Spatial Transcriptomics Technologies"
     ]
   },
   {
@@ -897,7 +897,7 @@
     "href": "lessons/03_loading_spatial_data.html#set-up",
     "title": "Loading Spatial Data",
     "section": "Set up",
-    "text": "Set up\nWe have assembled an R Project for you to download that includes the data along with a basic file structure for good data management. Whenever you start a new project, is is a good habit to set up a similar directory structure to clearly organize your data, scripts, and results. This will make it easier to keep track of your files and to share your work with others.\n\n\n\n\n\n\nDownload the data\n\n\n\nIf you haven’t done this already, the project can be accessed using this link. You will have to left-click the link and select Save Link As.. or Download Linked File As.., then select a place on your computer where you would like to place this R Project.\n\n\n\nOpening R Studio\nWe can open the R Project up and see that the provided file structure should look like:\n\n\ndata\n├── P5CRC_cropped\n│   └── binned_outputs\n├── P5NAT_cropped\n│   └── binned_outputs\n├── crc_flex_ref_downsample.RDS\n└── intermediate_seurat\n    └── seurat_banksy.rds\n\n\n\n\n\n\n\n\nCropped images\n\n\n\nYou may notice that we are working with cropped folders for this workshop. This is due to the limitations of how much data can be loaded on a laptop. So here, we have cropped the image so that we have a smaller cross-section of the tissue to work with, ultimately reducing the number of cells for this example dataset.\nThe code used to create all the files for this workshop can be found here.\n\n\n\n\n\n\nWarning\n\n\n\nTODO: link for aside lesson on cropping dataset\n\n\n\n\nIf your R Project looks like below, then you are ready to start!\n\n\n\n\n\n\nWarning\n\n\n\nTODO: Image of R project file structure\n\n\n\n\nProject organization\nWhen you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as data management is often an afterthought when it should be a key part of the workflow from the very beginning. The HMS Data Management Working Group, discusses in-depth some things to consider beyond the data creation and analysis.\nOne important aspect of data management is organization. For each experiment you work on and analyze data for, it is considered best practice to get organized by creating a planned storage space. We will do that for our spatial transcriptomics analysis.\nLook inside your project space and you will find that a directory structure has been setup for you:\n\n\n\n\n\n\nWarning\n\n\n\nTODO: is this the right directory structure? Do we need to add anything else?\n\n\n\nspatial_transcriptomics/\n├── data\n├── figures\n├── results\n├── scripts\n└── spatial_transcriptomics.Rproj\n\n\n\n\n\n\n\nNote for Windows OS users\n\n\n\nWhen you open the project folder after unzipping, please check if you have a data folder with a sub folder also called data. If this is the case, please move all the files from the subfolder into the parent data folder.\n\n\n\n\nNew script\nNext, open a new Rscript file, and start with some comments to indicate what this file is going to contain. Ideally we will have one script per major step in our analysis. For this first script, we will be loading our data and performing quality control - as indicated in the header.\nLoading your libraries at the top of the script also allows you to easily keep track of which libraries you are using and to load them all at once in the beginning.\n\n# Creating Seurat object from Space Ranger output\n# Visium HD spatial transcriptomics workshop\n# Author: Harvard Chan Bioinformatics Core\n# Created: December 2025\n\nlibrary(tidyverse)\nlibrary(Seurat)\n\nSave the Rscript as quality_control.R into the scripts folder. Your working directory should look something like this:\n\n\n\n\n\n\nWarning\n\n\n\nTODO: Image of R project file structure with new script",
+    "text": "Set up\nWe have assembled an R Project for you to download that includes the data along with a basic file structure for good data management. Whenever you start a new project, is is a good habit to set up a similar directory structure to clearly organize your data, scripts, and results. This will make it easier to keep track of your files and to share your work with others.\n\n\n\n\n\n\nDownload the data\n\n\n\nIf you haven’t done this already, the project can be accessed using this link. You will have to left-click the link and select Save Link As.. or Download Linked File As.., then select a place on your computer where you would like to place this R Project.\n\n\n\nOpening R Studio\nWe can open the R Project up and see that the provided file structure should look like:\n\n\ndata\n├── P5CRC_cropped\n│   └── binned_outputs\n├── P5NAT_cropped\n│   └── binned_outputs\n├── crc_flex_ref_downsample.RDS\n└── intermediate_seurat\n    ├── seurat_RCTD.rds\n    └── seurat_banksy.rds\n\n\n\n\n\n\n\n\nCropped images\n\n\n\nYou may notice that we are working with cropped folders for this workshop. This is due to the limitations of how much data can be loaded on a laptop. So here, we have cropped the image so that we have a smaller cross-section of the tissue to work with, ultimately reducing the number of cells for this example dataset.\nThe code used to create all the files for this workshop can be found here.\n\n\n\n\n\n\nWarning\n\n\n\nTODO: link for aside lesson on cropping dataset\n\n\n\n\nIf your R Project looks like below, then you are ready to start!\n\n\n\n\n\n\nWarning\n\n\n\nTODO: Image of R project file structure\n\n\n\n\nProject organization\nWhen you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as data management is often an afterthought when it should be a key part of the workflow from the very beginning. The HMS Data Management Working Group, discusses in-depth some things to consider beyond the data creation and analysis.\nOne important aspect of data management is organization. For each experiment you work on and analyze data for, it is considered best practice to get organized by creating a planned storage space. We will do that for our spatial transcriptomics analysis.\nLook inside your project space and you will find that a directory structure has been setup for you:\n\n\n\n\n\n\nWarning\n\n\n\nTODO: is this the right directory structure? Do we need to add anything else?\n\n\n\nspatial_transcriptomics/\n├── data\n├── figures\n├── results\n├── scripts\n└── spatial_transcriptomics.Rproj\n\n\n\n\n\n\n\nNote for Windows OS users\n\n\n\nWhen you open the project folder after unzipping, please check if you have a data folder with a sub folder also called data. If this is the case, please move all the files from the subfolder into the parent data folder.\n\n\n\n\nNew script\nNext, open a new Rscript file, and start with some comments to indicate what this file is going to contain. Ideally we will have one script per major step in our analysis. For this first script, we will be loading our data and performing quality control - as indicated in the header.\nLoading your libraries at the top of the script also allows you to easily keep track of which libraries you are using and to load them all at once in the beginning.\n\n# Creating Seurat object from Space Ranger output\n# Visium HD spatial transcriptomics workshop\n# Author: Harvard Chan Bioinformatics Core\n# Created: December 2025\n\nlibrary(tidyverse)\nlibrary(Seurat)\n\nSave the Rscript as quality_control.R into the scripts folder. Your working directory should look something like this:\n\n\n\n\n\n\nWarning\n\n\n\nTODO: Image of R project file structure with new script",
     "crumbs": [
       "Day 1:",
       "Loading Spatial Data"

@@ -8,8 +8,8 @@
 
 <meta name="author" content="Noor Sohail">
 <meta name="dcterms.date" content="2026-03-25">
-<meta name="keywords" content="keyword_1, keyword_2, keyword_3, keyword_4, keyword_5, keyword_6">
-<meta name="description" content="Write a description of the lesson here.">
+<meta name="keywords" content="Preprocessing, Segmentation, QC reports, Counts matrix, 10X Genomics">
+<meta name="description" content="Gain a practical overview of the 10x Genomics Space Ranger pipeline, from raw FASTQ and TIF files to spatial gene expression matrices and QC reports. You will learn how to interpret key Space Ranger outputs and prepare Visium data for downstream analysis in R and Seurat.">
 
 <title>Space Ranger Processing – Spatial Transcriptomics</title>
 <style>
@@ -3932,7 +3932,7 @@ var data = {
 
 
 }
-,"blob":{"1":"2","10":"G-68JBPLLNLG|GT-M399CZS","11":true,"14":"64f1","15":"0","16":"ChEI8NeMzwYQqe3ptbbgjazyARIdAPwP2SJZqoJ0qMPkpNLZjOdNC/+Mo0uCMW8OgM4aAs1s","17":"","19":"dataLayer","20":"","21":"www.googletagmanager.com","22":"eyIwIjoiVVMiLCIxIjoiVVMtTUEiLCIyIjpmYWxzZSwiMyI6IiIsIjQiOiIiLCI1Ijp0cnVlLCI2IjpmYWxzZSwiNyI6ImFkX3N0b3JhZ2V8YW5hbHl0aWNzX3N0b3JhZ2V8YWRfdXNlcl9kYXRhfGFkX3BlcnNvbmFsaXphdGlvbiJ9","23":"google.tagmanager.debugui2.queue","24":"tagassistant.google.com","27":0.005,"3":"www.googletagmanager.com","30":"US","31":"US-MA","32":true,"34":"G-68JBPLLNLG","35":"G","36":"https://adservice.google.com/pagead/regclk","37":"__TAGGY_INSTALLED","38":"cct.google","39":"googTaggyReferrer","40":"https://cct.google/taggy/agent.js","41":"google.tagmanager.ta.prodqueue","42":0.01,"43":"{\"keys\":[{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BIlKt1txMOmCibln7nFEvp7XOd3u3/S4MT3fi78qH3IRHhqSJr4VIgxYTFqb35j+J1rXCCF9OexNyYIe20XLPYk=\",\"version\":0},\"id\":\"de3d1819-00ae-4911-a414-5ce517b664c0\"},{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BCdX7ekhvyhCFVYO7kSVplkMe9vSzYxOMsmBGV3Dz1strOtoirq8tPrGbuChQDpThkhv+C2uT/FARnN+NdYLyrc=\",\"version\":0},\"id\":\"da11b3aa-d3a2-4591-886e-fbddd4140105\"},{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BA4Up9kNIV3q4stAcjGo0pBw+ynPPtxv3YRWwPPbWP0QscmiQY0ugVPz5N65uD/eug2I2jdjXVCxyZu1XKG2aLY=\",\"version\":0},\"id\":\"cae132a4-613b-43a0-a51f-707ed3444e99\"},{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BCaTRZfNCYVeL7qL36vLqYgQKlvfFMnqvqXXIOfJO87qNxIS2PXxguoiywcu9ZVIKC4Do9FLGFv/06ZtTMDS8AM=\",\"version\":0},\"id\":\"aed72445-f57e-4b22-bc3a-e0f58f38b872\"},{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BGOl/KKnNa/bFfs6ryk+vfRQ/fNDBOwtBlh5FHHwRxl7VVxt6YMJhnX4fo5XneQyGelpW6m+t/JGx+v2eWj2JGU=\",\"version\":0},\"id\":\"071be789-2fed-4fcd-96b3-5d15fe0986eb\"}]}","44":"0","45":true,"46":{"1":"1000","10":"63b0","11":"63a0","14":"1000","16":"US-CO~US-CT~US-MT~US-NE~US-NH~US-TX~US-MN~US-NJ~US-MD~US-OR~US-DE","17":"US-CO~US-CT~US-MT~US-NE~US-NH~US-TX~US-MN~US-NJ~US-MD~US-OR~US-DE","2":"9","20":"5000","21":"5000","22":"4.2.0","23":"0.0.0","25":"1","26":"4000","27":"100","3":"5","4":"ad_storage|analytics_storage|ad_user_data|ad_personalization","44":"15000","48":"30000","5":"ad_storage|analytics_storage|ad_user_data","6":"1","61":"1000","62":"A6ONHRY7/bvBro+IMZd/a6LNjn7SSv999SkN/hFAE9L6vMr34dNgfdSVdYmv4U+NHZg1sxd38RtciRpRUtIRPgQAAACCeyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiU2hhcmVkV29ya2VyRXh0ZW5kZWRMaWZldGltZSIsImV4cGlyeSI6MTc3NjcyOTYwMCwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ==","63":"1000","66":"100","7":"10"},"48":true,"5":"G-68JBPLLNLG","55":["G-68JBPLLNLG"],"56":[{"1":403,"3":0.5,"4":115938465,"5":115938466,"6":0,"7":2},{"1":404,"3":0.5,"4":115938468,"5":115938469,"6":0,"7":1},{"1":521,"2":true},{"1":490,"2":true},{"1":491,"3":0.001,"4":118012007,"5":118012008,"6":118012009,"7":1},{"1":480,"2":true},{"1":530,"2":true},{"1":526,"2":true},{"1":537,"3":0.001,"4":118623305,"5":118623304,"6":0,"7":1},{"1":418,"2":true},{"1":462,"2":true},{"1":525,"2":true},{"1":408,"3":0.5,"4":117266400,"5":117266401,"6":117266402,"7":1},{"1":497,"2":true},{"1":531,"3":0.01,"4":118463801,"5":118463800,"6":0,"7":2},{"1":439,"2":true},{"1":450,"3":0.01,"4":117227714,"5":117227715,"6":117227716,"7":3},{"1":458,"2":true},{"1":444,"3":0.1,"4":117384405,"5":117384406,"6":117884344,"7":1},{"1":498,"3":0.2,"4":115616985,"5":115616986,"6":0,"7":1},{"1":518,"2":true},{"1":465,"3":0.1,"4":117512542,"5":117512543,"6":0,"7":3},{"1":529,"3":0.001,"4":118579595,"5":118579593,"6":118579594,"7":1},{"1":515,"3":0.05,"4":118128922,"5":118128923,"6":0,"7":1},{"1":412,"2":true},{"1":441,"2":true},{"1":534,"2":true},{"1":446,"3":0.01,"4":118463262,"5":118463261,"6":0,"7":1},{"1":524,"2":true}],"59":["G-68JBPLLNLG"],"6":"123131330"}
+,"blob":{"1":"2","10":"G-68JBPLLNLG|GT-M399CZS","11":true,"14":"64f1","15":"0","16":"ChEI8PqRzwYQtJmumrqNipzVARIdAIlqlb60mMPMwDpqBrwyyRqNWkgK5dEXftNL2+waAiPC","17":"","19":"dataLayer","20":"","21":"www.googletagmanager.com","22":"eyIwIjoiVVMiLCIxIjoiVVMtTUEiLCIyIjpmYWxzZSwiMyI6IiIsIjQiOiIiLCI1Ijp0cnVlLCI2IjpmYWxzZSwiNyI6ImFkX3N0b3JhZ2V8YW5hbHl0aWNzX3N0b3JhZ2V8YWRfdXNlcl9kYXRhfGFkX3BlcnNvbmFsaXphdGlvbiJ9","23":"google.tagmanager.debugui2.queue","24":"tagassistant.google.com","27":0.005,"3":"www.googletagmanager.com","30":"US","31":"US-MA","32":true,"34":"G-68JBPLLNLG","35":"G","36":"https://adservice.google.com/pagead/regclk","37":"__TAGGY_INSTALLED","38":"cct.google","39":"googTaggyReferrer","40":"https://cct.google/taggy/agent.js","41":"google.tagmanager.ta.prodqueue","42":0.01,"43":"{\"keys\":[{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BIlKt1txMOmCibln7nFEvp7XOd3u3/S4MT3fi78qH3IRHhqSJr4VIgxYTFqb35j+J1rXCCF9OexNyYIe20XLPYk=\",\"version\":0},\"id\":\"de3d1819-00ae-4911-a414-5ce517b664c0\"},{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BCdX7ekhvyhCFVYO7kSVplkMe9vSzYxOMsmBGV3Dz1strOtoirq8tPrGbuChQDpThkhv+C2uT/FARnN+NdYLyrc=\",\"version\":0},\"id\":\"da11b3aa-d3a2-4591-886e-fbddd4140105\"},{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BA4Up9kNIV3q4stAcjGo0pBw+ynPPtxv3YRWwPPbWP0QscmiQY0ugVPz5N65uD/eug2I2jdjXVCxyZu1XKG2aLY=\",\"version\":0},\"id\":\"cae132a4-613b-43a0-a51f-707ed3444e99\"},{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BCaTRZfNCYVeL7qL36vLqYgQKlvfFMnqvqXXIOfJO87qNxIS2PXxguoiywcu9ZVIKC4Do9FLGFv/06ZtTMDS8AM=\",\"version\":0},\"id\":\"aed72445-f57e-4b22-bc3a-e0f58f38b872\"},{\"hpkePublicKey\":{\"params\":{\"aead\":\"AES_128_GCM\",\"kdf\":\"HKDF_SHA256\",\"kem\":\"DHKEM_P256_HKDF_SHA256\"},\"publicKey\":\"BGOl/KKnNa/bFfs6ryk+vfRQ/fNDBOwtBlh5FHHwRxl7VVxt6YMJhnX4fo5XneQyGelpW6m+t/JGx+v2eWj2JGU=\",\"version\":0},\"id\":\"071be789-2fed-4fcd-96b3-5d15fe0986eb\"}]}","44":"0","45":true,"46":{"1":"1000","10":"63b0","11":"63a0","14":"1000","16":"US-CO~US-CT~US-MT~US-NE~US-NH~US-TX~US-MN~US-NJ~US-MD~US-OR~US-DE","17":"US-CO~US-CT~US-MT~US-NE~US-NH~US-TX~US-MN~US-NJ~US-MD~US-OR~US-DE","2":"9","20":"5000","21":"5000","22":"4.2.0","23":"0.0.0","25":"1","26":"4000","27":"100","3":"5","4":"ad_storage|analytics_storage|ad_user_data|ad_personalization","44":"15000","48":"30000","5":"ad_storage|analytics_storage|ad_user_data","6":"1","61":"1000","62":"A6ONHRY7/bvBro+IMZd/a6LNjn7SSv999SkN/hFAE9L6vMr34dNgfdSVdYmv4U+NHZg1sxd38RtciRpRUtIRPgQAAACCeyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiU2hhcmVkV29ya2VyRXh0ZW5kZWRMaWZldGltZSIsImV4cGlyeSI6MTc3NjcyOTYwMCwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ==","63":"1000","66":"100","7":"10"},"48":true,"5":"G-68JBPLLNLG","55":["G-68JBPLLNLG"],"56":[{"1":403,"3":0.5,"4":115938465,"5":115938466,"6":0,"7":2},{"1":404,"3":0.5,"4":115938468,"5":115938469,"6":0,"7":1},{"1":521,"2":true},{"1":490,"2":true},{"1":491,"3":0.001,"4":118012007,"5":118012008,"6":118012009,"7":1},{"1":480,"2":true},{"1":530,"2":true},{"1":526,"2":true},{"1":537,"3":0.001,"4":118623305,"5":118623304,"6":0,"7":1},{"1":418,"2":true},{"1":462,"2":true},{"1":525,"2":true},{"1":408,"3":0.5,"4":117266400,"5":117266401,"6":117266402,"7":1},{"1":497,"2":true},{"1":531,"3":0.01,"4":118463801,"5":118463800,"6":0,"7":2},{"1":439,"2":true},{"1":450,"3":0.01,"4":117227714,"5":117227715,"6":117227716,"7":3},{"1":458,"2":true},{"1":444,"3":0.1,"4":117384405,"5":117384406,"6":117884344,"7":1},{"1":498,"3":0.2,"4":115616985,"5":115616986,"6":0,"7":1},{"1":518,"2":true},{"1":465,"3":0.1,"4":117512542,"5":117512543,"6":0,"7":3},{"1":529,"3":0.001,"4":118579595,"5":118579593,"6":118579594,"7":1},{"1":515,"3":0.05,"4":118128922,"5":118128923,"6":0,"7":1},{"1":412,"2":true},{"1":441,"2":true},{"1":534,"2":true},{"1":446,"3":0.01,"4":118463262,"5":118463261,"6":0,"7":1},{"1":524,"2":true}],"59":["G-68JBPLLNLG"],"6":"123131330"}
 ,"permissions":{
 "__c":{}
 ,
@@ -5134,7 +5134,7 @@ margin-right: 0;
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../lessons/01_spatial_technologies.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Comparison of Spatial Transcriptomics Technologies</span></a>
+ <span class="menu-text">Spatial Transcriptomics Technologies</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -5332,16 +5332,15 @@ margin-right: 0;
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Space Ranger Processing</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
   <div class="quarto-categories">
-    <div class="quarto-category">category_1</div>
-    <div class="quarto-category">category_2</div>
-    <div class="quarto-category">category_3</div>
-    <div class="quarto-category">category_4</div>
+    <div class="quarto-category">spatial transcriptomics</div>
+    <div class="quarto-category">Space Ranger</div>
+    <div class="quarto-category">Visium HD</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    <p>Write a description of the lesson here.</p>
+    <p>Gain a practical overview of the 10x Genomics Space Ranger pipeline, from raw FASTQ and TIF files to spatial gene expression matrices and QC reports. You will learn how to interpret key Space Ranger outputs and prepare Visium data for downstream analysis in R and Seurat.</p>
   </div>
 </div>
 
@@ -5369,7 +5368,7 @@ margin-right: 0;
 <div>
   <div class="keywords">
     <div class="block-title">Keywords</div>
-    <p>keyword_1, keyword_2, keyword_3, keyword_4, keyword_5, keyword_6</p>
+    <p>Preprocessing, Segmentation, QC reports, Counts matrix, 10X Genomics</p>
   </div>
 </div>
 
@@ -6186,280 +6185,278 @@ Segmentation in imaging-based spatial transcriptomics
 <div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Space Ranger Processing&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> |</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">  Write a description of the lesson here. </span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">  Gain a practical overview of the 10x Genomics Space Ranger pipeline, from raw FASTQ and TIF files to spatial gene expression matrices and QC reports. You will learn how to interpret key Space Ranger outputs and prepare Visium data for downstream analysis in R and Seurat.</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - Noor Sohail</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2026-03-25&quot;</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> </span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">  - category_1</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">  - category_2</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">  - category_3</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">  - category_4</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="an">keywords:</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_1</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_2</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_3</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_4</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_5</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_6</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="an">license:</span><span class="co"> &quot;CC-BY-4.0&quot;</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load_libraries_data</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries and data</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">  - spatial transcriptomics</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">  - Space Ranger</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">  - Visium HD</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="an">keywords:</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">  - Preprocessing</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">  - Segmentation</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">  - QC reports</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">  - Counts matrix</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">  - 10X Genomics</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="an">license:</span><span class="co"> &quot;CC-BY-4.0&quot;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load_libraries_data</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries and data</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>Approximate time: XX minutes</span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>Approximate time: XX minutes</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives </span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives </span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>In this lesson, we will:</span>
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>In this lesson, we will:</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Understand the inputs and outputs of the Space Ranger pipeline</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Outline the steps of the Space Ranger algorithm</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Discuss segmentation in the context of spatial transcriptomics data</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Understand the inputs and outputs of the Space Ranger pipeline</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Outline the steps of the Space Ranger algorithm</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Discuss segmentation in the context of spatial transcriptomics data</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview of lesson</span></span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview of lesson</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>When doing XYZ...</span>
 <span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>When doing XYZ...</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Space Ranger overview</span></span>
 <span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="fu">## Space Ranger overview</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Space Ranger</span><span class="co">](https://www.10xgenomics.com/support/software/space-ranger/latest)</span> is a free software created by 10X Genomics to process Visium datasets. The output generated from Space Ranger can be used for downstream analysis in R/Python or using the proprietary <span class="co">[</span><span class="ot">Loupe browser</span><span class="co">](https://www.10xgenomics.com/support/software/loupe-browser/latest)</span> from 10X Genomics.</span>
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Space Ranger</span><span class="co">](https://www.10xgenomics.com/support/software/space-ranger/latest)</span> is a free software created by 10X Genomics to process Visium datasets. The output generated from Space Ranger can be used for downstream analysis in R/Python or using the proprietary <span class="co">[</span><span class="ot">Loupe browser</span><span class="co">](https://www.10xgenomics.com/support/software/loupe-browser/latest)</span> from 10X Genomics.</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="fu"># Other processing software</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>Space Ranger is not the only software that can be used to process spatial transcriptomics data. For example, there are also open-source tools such as <span class="co">[</span><span class="ot">ST Pipeline</span><span class="co">](https://github.com/jfnavarro/st_pipeline)</span> and <span class="co">[</span><span class="ot">SAW</span><span class="co">](https://github.com/STOmics/SAW)</span>.</span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>As we will be working with Visium HD data for this workshop, we will be using Space Ranger outputs. That being said, the overarching steps and considerations for processing spatial transcriptomics data are similar across different platforms and software. So, even if you are not working with Visium HD data, the concepts covered in this lesson will still be relevant to you.</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="fu"># Other processing software</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>Space Ranger is not the only software that can be used to process spatial transcriptomics data. For example, there are also open-source tools such as <span class="co">[</span><span class="ot">ST Pipeline</span><span class="co">](https://github.com/jfnavarro/st_pipeline)</span> and <span class="co">[</span><span class="ot">SAW</span><span class="co">](https://github.com/STOmics/SAW)</span>.</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>As we will be working with Visium HD data for this workshop, we will be using Space Ranger outputs. That being said, the overarching steps and considerations for processing spatial transcriptomics data are similar across different platforms and software. So, even if you are not working with Visium HD data, the concepts covered in this lesson will still be relevant to you.</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>The starting point of this workshop is the files generated by Space Ranger, so here we will briefly go over the inputs, outputs, and algorithms used by Space Ranger. This will help you understand how the raw data is transformed into a count matrix and coordinates that can be used for downstream analysis.</span>
 <span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>The starting point of this workshop is the files generated by Space Ranger, so here we will briefly go over the inputs, outputs, and algorithms used by Space Ranger. This will help you understand how the raw data is transformed into a count matrix and coordinates that can be used for downstream analysis.</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="fu">### Input</span></span>
 <span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="fu">### Input</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>To process Visium HD data, you use the <span class="in">`spaceranger count`</span> command to align the reads in the FASTQ files against a reference genome and provides their spatial location using the oligonucleotide barcode. The three primary inputs to the <span class="in">`count`</span> command are:</span>
 <span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>To process Visium HD data, you use the <span class="in">`spaceranger count`</span> command to align the reads in the FASTQ files against a reference genome and provides their spatial location using the oligonucleotide barcode. The three primary inputs to the <span class="in">`count`</span> command are:</span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>FASTQ files containing the raw sequencing reads</span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>A reference transcriptome (e.g. <span class="co">[</span><span class="ot">human or mouse reference</span><span class="co">](https://www.10xgenomics.com/support/software/space-ranger/downloads#reference-downloads)</span> provided by 10X Genomics, or a <span class="co">[</span><span class="ot">custom reference</span><span class="co">](https://www.10xgenomics.com/support/software/space-ranger/latest/advanced/custom-references)</span> that you create yourself)</span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Image (typically a <span class="in">`.TIFF`</span> file) of the tissue section on the Visium slide</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>FASTQ files containing the raw sequencing reads</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>A reference transcriptome (e.g. <span class="co">[</span><span class="ot">human or mouse reference</span><span class="co">](https://www.10xgenomics.com/support/software/space-ranger/downloads#reference-downloads)</span> provided by 10X Genomics, or a <span class="co">[</span><span class="ot">custom reference</span><span class="co">](https://www.10xgenomics.com/support/software/space-ranger/latest/advanced/custom-references)</span> that you create yourself)</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Image (typically a <span class="in">`.TIFF`</span> file) of the tissue section on the Visium slide</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>With these files, you would then run the <span class="in">`spaceranger count`</span> command. Note that Space Ranger requires a Linux system with at least **32 cores, 64GB of RAM, and 1TB** of disk space. Do not try to run this on your laptop!!!</span>
 <span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>With these files, you would then run the <span class="in">`spaceranger count`</span> command. Note that Space Ranger requires a Linux system with at least **32 cores, 64GB of RAM, and 1TB** of disk space. Do not try to run this on your laptop!!!</span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="fu"># Running `spaceranger count`</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="fu"># Running `spaceranger count`</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>Here we are showing an example script of how you would run <span class="in">`spaceranger count`</span>. We also describe what each of the parameters are set, to help you understand how to run this command on your own data.</span>
 <span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>Here we are showing an example script of how you would run <span class="in">`spaceranger count`</span>. We also describe what each of the parameters are set, to help you understand how to run this command on your own data.</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{bash}</span></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: space_ranger_script</span></span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="co"># Example script to run spaceranger count</span></span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="co"># DO NOT RUN</span></span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /home/jdoe/runs</span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="ex">spaceranger</span> count <span class="at">--id</span><span class="op">=</span>sample345 <span class="dt">\ </span>#Output directory</span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--transcriptome=/home/jdoe/refdata/GRCh38-2020-A</span> <span class="dt">\ </span>#Path to Reference</span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--fastqs=/home/jdoe/runs/HAWT7ADXX/outs/fastq_path</span> <span class="dt">\ </span>#Path to FASTQs</span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--sample=mysample</span> <span class="dt">\ </span>#Sample name from FASTQ filename</span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--image=/home/jdoe/runs/images/sample345.tiff</span> <span class="dt">\ </span>#Path to brightfield image</span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--slide=V19J01-123</span> <span class="dt">\ </span>#Slide ID</span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--area=A1</span> <span class="dt">\ </span>#Capture area</span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--localcores=8</span> <span class="dt">\ </span>#Allowed cores in localmode</span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--localmem=64</span>  <span class="co">#Allowed memory (GB) in localmode</span></span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="in">```{bash}</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: space_ranger_script</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Example script to run spaceranger count</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="co"># DO NOT RUN</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /home/jdoe/runs</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="ex">spaceranger</span> count <span class="at">--id</span><span class="op">=</span>sample345 <span class="dt">\ </span>#Output directory</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--transcriptome=/home/jdoe/refdata/GRCh38-2020-A</span> <span class="dt">\ </span>#Path to Reference</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--fastqs=/home/jdoe/runs/HAWT7ADXX/outs/fastq_path</span> <span class="dt">\ </span>#Path to FASTQs</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--sample=mysample</span> <span class="dt">\ </span>#Sample name from FASTQ filename</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--image=/home/jdoe/runs/images/sample345.tiff</span> <span class="dt">\ </span>#Path to brightfield image</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--slide=V19J01-123</span> <span class="dt">\ </span>#Slide ID</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--area=A1</span> <span class="dt">\ </span>#Capture area</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--localcores=8</span> <span class="dt">\ </span>#Allowed cores in localmode</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">--localmem=64</span>  <span class="co">#Allowed memory (GB) in localmode</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>Here we get a better idea of what the inputs to <span class="in">`spaceranger count`</span> are:</span>
 <span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>Here we get a better idea of what the inputs to <span class="in">`spaceranger count`</span> are:</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>Table: <span class="in">`spaceranger count`</span> input parameters. {#tbl-spaceranger_inputs}</span>
 <span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>Table: <span class="in">`spaceranger count`</span> input parameters. {#tbl-spaceranger_inputs}</span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Argument       <span class="pp">|</span> Filetype(s)                                                                 <span class="pp">|</span> Description                                                                                                                                                                                                                                  <span class="pp">|</span> Example Command                                                                                                                                                                  <span class="pp">|</span></span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------------|-----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|</span></span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`cytaimage`</span>       <span class="pp">|</span> TIFF                                                                       <span class="pp">|</span> Corresponding CytAssist image.                                                                                                                                                                                                              <span class="pp">|</span> <span class="in">`/path/to/CAVG10539_2023-11-16_14-56-24_APPS115_H1-YD7CDZK_A1_S11088.tif`</span>                                                                                                                <span class="pp">|</span></span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`image`</span>           <span class="pp">|</span> TIFF, QPTIFF, BTF, JPEG                                                    <span class="pp">|</span> Brightfield microscope image.                                                                                                                                                                                                               <span class="pp">|</span> <span class="in">`/path/to/APPS115_11088_rescan_01.btf`</span>                                                                                                                                                    <span class="pp">|</span></span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`slide`</span>           <span class="pp">|</span> Text ID                                                                    <span class="pp">|</span> Slide identifier. Used with <span class="in">`area`</span> (and optionally <span class="in">`slidefile`</span>) to specify slide parameters when Space Ranger has or does not have internet access.                                                                                    <span class="pp">|</span> <span class="in">`H1-YD7CDZK`</span>                                                                                                                                                                              <span class="pp">|</span></span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`area`</span>            <span class="pp">|</span> Text ID                                                                    <span class="pp">|</span> Capture area identifier on the slide. Used with <span class="in">`slide`</span> to specify slide parameters.                                                                                                                                                      <span class="pp">|</span> <span class="in">`A1`</span>                                                                                                                                                                                      <span class="pp">|</span></span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`transcriptome`</span>   <span class="pp">|</span> Reference transcriptome directory                                          <span class="pp">|</span> Path to reference transcriptome. Human and mouse references can be downloaded, or a custom reference can be used.                                                                                                                          <span class="pp">|</span> <span class="in">`/path/to/refdata-gex-GRCh38-2020-A`</span>                                                                                                                                                      <span class="pp">|</span></span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`probe-set`</span>       <span class="pp">|</span> CSV                                                                       <span class="pp">|</span> Probe set CSV file. Found in the <span class="in">`probe_sets`</span> directory of the Space Ranger package or downloadable from 10x Genomics. For Visium HD 3&#39; data, this parameter should **not** be specified.                                                  <span class="pp">|</span> <span class="in">`/path/to/Visium_Human_Transcriptome_Probe_Set_v2.0_GRCh38-2020-A.csv`</span>                                                                                                                   <span class="pp">|</span></span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fastqs`</span>          <span class="pp">|</span> Directory containing FASTQ files                                              <span class="pp">|</span> Path to directory containing FASTQ files. The FASTQ files should be named according to the 10X Genomics format, which includes the sample name specified in the <span class="in">`sample`</span> parameter.                                                   <span class="pp">|</span> <span class="in">`/path/to/fastq_path`</span>                                                                                                                                                                       <span class="pp">|</span></span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sample`</span>          <span class="pp">|</span> Text ID                                                                    <span class="pp">|</span> Sample name. Should match the sample name in the FASTQ filenames. Used to identify which FASTQ files to use for the analysis.                                                                                                                        <span class="pp">|</span> <span class="in">`mysample`</span>                                                                                                                                                                              <span class="pp">|</span></span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`id`</span>              <span class="pp">|</span> Text ID                                                                    <span class="pp">|</span> Output directory name. The output files will be generated in a directory with this name.                                                                                                                                                                                                 <span class="pp">|</span> <span class="in">`sample345`</span>                                                                                                                                                                              <span class="pp">|</span></span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`localcores`</span>      <span class="pp">|</span> Integer                                                                     <span class="pp">|</span> Number of cores to use when running in local mode.                                                                                                                                                                                        <span class="pp">|</span> <span class="in">`8`</span>                                                                                                                                                                                        <span class="pp">|</span></span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`localmem`</span>       <span class="pp">|</span> Integer (GB)                                                                <span class="pp">|</span> Amount of memory (in GB) to use when running in local mode.                                                                                                                                                                                        <span class="pp">|</span> <span class="in">`64`</span>                                                                                                                                                                                        <span class="pp">|</span> </span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Argument       <span class="pp">|</span> Filetype(s)                                                                 <span class="pp">|</span> Description                                                                                                                                                                                                                                  <span class="pp">|</span> Example Command                                                                                                                                                                  <span class="pp">|</span></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------------|-----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|</span></span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`cytaimage`</span>       <span class="pp">|</span> TIFF                                                                       <span class="pp">|</span> Corresponding CytAssist image.                                                                                                                                                                                                              <span class="pp">|</span> <span class="in">`/path/to/CAVG10539_2023-11-16_14-56-24_APPS115_H1-YD7CDZK_A1_S11088.tif`</span>                                                                                                                <span class="pp">|</span></span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`image`</span>           <span class="pp">|</span> TIFF, QPTIFF, BTF, JPEG                                                    <span class="pp">|</span> Brightfield microscope image.                                                                                                                                                                                                               <span class="pp">|</span> <span class="in">`/path/to/APPS115_11088_rescan_01.btf`</span>                                                                                                                                                    <span class="pp">|</span></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`slide`</span>           <span class="pp">|</span> Text ID                                                                    <span class="pp">|</span> Slide identifier. Used with <span class="in">`area`</span> (and optionally <span class="in">`slidefile`</span>) to specify slide parameters when Space Ranger has or does not have internet access.                                                                                    <span class="pp">|</span> <span class="in">`H1-YD7CDZK`</span>                                                                                                                                                                              <span class="pp">|</span></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`area`</span>            <span class="pp">|</span> Text ID                                                                    <span class="pp">|</span> Capture area identifier on the slide. Used with <span class="in">`slide`</span> to specify slide parameters.                                                                                                                                                      <span class="pp">|</span> <span class="in">`A1`</span>                                                                                                                                                                                      <span class="pp">|</span></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`transcriptome`</span>   <span class="pp">|</span> Reference transcriptome directory                                          <span class="pp">|</span> Path to reference transcriptome. Human and mouse references can be downloaded, or a custom reference can be used.                                                                                                                          <span class="pp">|</span> <span class="in">`/path/to/refdata-gex-GRCh38-2020-A`</span>                                                                                                                                                      <span class="pp">|</span></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`probe-set`</span>       <span class="pp">|</span> CSV                                                                       <span class="pp">|</span> Probe set CSV file. Found in the <span class="in">`probe_sets`</span> directory of the Space Ranger package or downloadable from 10x Genomics. For Visium HD 3&#39; data, this parameter should **not** be specified.                                                  <span class="pp">|</span> <span class="in">`/path/to/Visium_Human_Transcriptome_Probe_Set_v2.0_GRCh38-2020-A.csv`</span>                                                                                                                   <span class="pp">|</span></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fastqs`</span>          <span class="pp">|</span> Directory containing FASTQ files                                              <span class="pp">|</span> Path to directory containing FASTQ files. The FASTQ files should be named according to the 10X Genomics format, which includes the sample name specified in the <span class="in">`sample`</span> parameter.                                                   <span class="pp">|</span> <span class="in">`/path/to/fastq_path`</span>                                                                                                                                                                       <span class="pp">|</span></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sample`</span>          <span class="pp">|</span> Text ID                                                                    <span class="pp">|</span> Sample name. Should match the sample name in the FASTQ filenames. Used to identify which FASTQ files to use for the analysis.                                                                                                                        <span class="pp">|</span> <span class="in">`mysample`</span>                                                                                                                                                                              <span class="pp">|</span></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`id`</span>              <span class="pp">|</span> Text ID                                                                    <span class="pp">|</span> Output directory name. The output files will be generated in a directory with this name.                                                                                                                                                                                                 <span class="pp">|</span> <span class="in">`sample345`</span>                                                                                                                                                                              <span class="pp">|</span></span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`localcores`</span>      <span class="pp">|</span> Integer                                                                     <span class="pp">|</span> Number of cores to use when running in local mode.                                                                                                                                                                                        <span class="pp">|</span> <span class="in">`8`</span>                                                                                                                                                                                        <span class="pp">|</span></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`localmem`</span>       <span class="pp">|</span> Integer (GB)                                                                <span class="pp">|</span> Amount of memory (in GB) to use when running in local mode.                                                                                                                                                                                        <span class="pp">|</span> <span class="in">`64`</span>                                                                                                                                                                                        <span class="pp">|</span> </span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>Once this command is run, it will take a few hours to generate the output files, which we will discuss in the next section.</span>
 <span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>Once this command is run, it will take a few hours to generate the output files, which we will discuss in the next section.</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a><span class="fu">### Output</span></span>
 <span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a><span class="fu">### Output</span></span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>When <span class="in">`spaceranger count`</span> completes successfully, it will generate a variety of outputs (seen below), which will enable the analyst to perform further analysis in R/Python or using the proprietary Loupe browser from 10X Genomics. </span>
 <span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>When <span class="in">`spaceranger count`</span> completes successfully, it will generate a variety of outputs (seen below), which will enable the analyst to perform further analysis in R/Python or using the proprietary Loupe browser from 10X Genomics. </span>
-<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>::: {#fig-spaceranger_output .figure}</span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/spaceranger_output.svg)</span>{width=400}</span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>Example of the different outputs generated by <span class="in">`spaceranger count`</span>.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>_Image source: [10X Genomics: Space Ranger Documentation](https://www.10xgenomics.com/support/software/space-ranger/2.1/tutorials/count-cytassist-tma)_</span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>::: </span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>::: {#fig-spaceranger_output .figure}</span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/spaceranger_output.svg)</span>{width=400}</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>Example of the different outputs generated by <span class="in">`spaceranger count`</span>.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>_Image source: [10X Genomics: Space Ranger Documentation](https://www.10xgenomics.com/support/software/space-ranger/2.1/tutorials/count-cytassist-tma)_</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>::: </span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>A good starting point is to take a look at the QC of the sample in the web summary, which we have provided in <span class="in">`reports/`</span> folder that you downloaded.</span>
 <span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>A good starting point is to take a look at the QC of the sample in the web summary, which we have provided in <span class="in">`reports/`</span> folder that you downloaded.</span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>In the Visium HD assay, Space Ranger aggregates transcript counts into square spatial bins of different sizes, typically:</span>
 <span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>In the Visium HD assay, Space Ranger aggregates transcript counts into square spatial bins of different sizes, typically:</span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>2µm x 2µm</span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>8µm x 8µm</span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>16µm x 16µm</span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>::: {#fig-visium_hd_bins .figure}</span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/visium_hd_slide_graphic.png)</span>{width=600}</span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>Depiction of the grid-like structure of a Visium HD slide, which can then be binned into various squares of different sizes.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>_Image source: [10x Visium HD Spatial Gene Expression Manual](https://cdn.10xgenomics.com/image/upload/v1756507345/support-documents/CG000685_VisiumHD_GeneExpression_UserGuide_RevD.pdf)_</span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>::: </span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>2µm x 2µm</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>8µm x 8µm</span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>16µm x 16µm</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>::: {#fig-visium_hd_bins .figure}</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/visium_hd_slide_graphic.png)</span>{width=600}</span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>Depiction of the grid-like structure of a Visium HD slide, which can then be binned into various squares of different sizes.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>_Image source: [10x Visium HD Spatial Gene Expression Manual](https://cdn.10xgenomics.com/image/upload/v1756507345/support-documents/CG000685_VisiumHD_GeneExpression_UserGuide_RevD.pdf)_</span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>::: </span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>Having access to 2μm bins, along with matched high-resolution tissue morphology, provides a great opportunity to reconstruct single cells from the data. However, because the 2µm x 2µm bins (and even the 8µm x 8µm bins) are very small, there is a potential for very **little biological signal to be captured per bin**. Additionally, the sheer number of bins at these higher resolutions can substantially increase computational demands in terms of memory usage and processing time.</span>
 <span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>Having access to 2μm bins, along with matched high-resolution tissue morphology, provides a great opportunity to reconstruct single cells from the data. However, because the 2µm x 2µm bins (and even the 8µm x 8µm bins) are very small, there is a potential for very **little biological signal to be captured per bin**. Additionally, the sheer number of bins at these higher resolutions can substantially increase computational demands in terms of memory usage and processing time.</span>
-<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a><span class="fu">## Space Ranger algorithm</span></span>
 <span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## Space Ranger algorithm</span></span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>The Space Ranger algorithm is split into two main parts: <span class="co">[</span><span class="ot">read</span><span class="co">]</span>(https://www.10xgenomics.com/support/software/space-ranger/latest/algorithms-overview/gene-expression</span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>) and <span class="co">[</span><span class="ot">image</span><span class="co">](https://www.10xgenomics.com/support/software/space-ranger/latest/algorithms-overview/image-processing)</span> processing. Think of this as dealing with each of the two main data types generated in a Visium experiment: the sequencing data and the image data. At the end, everything is pulled together to generate the final output files that we can use for downstream analysis.</span>
-<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>::: {#fig-spaceranger_algorithm .figure}</span>
-<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/spaceranger_pipeline.png)</span>{width=600}</span>
-<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>Schematic of the Space Ranger algorithm, including both read and image processing steps.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
-<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>_Image source: [10X Genomics: Visium HD Analysis with `spaceranger count`](https://www.10xgenomics.com/support/software/space-ranger/3.0/analysis/count-visium-hd)_</span>
-<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>::: </span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>The Space Ranger algorithm is split into two main parts: <span class="co">[</span><span class="ot">read</span><span class="co">]</span>(https://www.10xgenomics.com/support/software/space-ranger/latest/algorithms-overview/gene-expression</span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>) and <span class="co">[</span><span class="ot">image</span><span class="co">](https://www.10xgenomics.com/support/software/space-ranger/latest/algorithms-overview/image-processing)</span> processing. Think of this as dealing with each of the two main data types generated in a Visium experiment: the sequencing data and the image data. At the end, everything is pulled together to generate the final output files that we can use for downstream analysis.</span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>::: {#fig-spaceranger_algorithm .figure}</span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/spaceranger_pipeline.png)</span>{width=600}</span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>Schematic of the Space Ranger algorithm, including both read and image processing steps.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>_Image source: [10X Genomics: Visium HD Analysis with `spaceranger count`](https://www.10xgenomics.com/support/software/space-ranger/3.0/analysis/count-visium-hd)_</span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>::: </span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a><span class="fu">### Read processing</span></span>
 <span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a><span class="fu">### Read processing</span></span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>Quantifying the gene expression in a sample can be broken down into the following steps:</span>
 <span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>Quantifying the gene expression in a sample can be broken down into the following steps:</span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>**1. Read trimming**</span>
 <span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>**1. Read trimming**</span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>Remove the template switch oligo sequence from the 5&#39; end as well as the polyA tail from the 3&#39; end of the reads. This is to reduce mismatches during the alignment step to improve sensitivity and reduce computational time. The information about the trimmed bases is retained in the BAM file.</span>
 <span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>Remove the template switch oligo sequence from the 5&#39; end as well as the polyA tail from the 3&#39; end of the reads. This is to reduce mismatches during the alignment step to improve sensitivity and reduce computational time. The information about the trimmed bases is retained in the BAM file.</span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>**2. Alignment and barcode correction**</span>
 <span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>**2. Alignment and barcode correction**</span>
-<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>::: {#fig-alignment .figure}</span>
-<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/alignment.jpg)</span>{width=600}</span>
-<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>Reads are classified based on whether they are exonic (light blue) or intronic (red) and whether they are sense or antisense (purple).<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
-<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a>_Image source: [10X Genomics: Cell Ranger&#39;s Gene Expression Algorithm](https://www.10xgenomics.com/support/software/cell-ranger/latest/algorithms-overview/cr-gex-algorithm)_</span>
-<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>::: {#fig-alignment .figure}</span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/alignment.jpg)</span>{width=600}</span>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a>Reads are classified based on whether they are exonic (light blue) or intronic (red) and whether they are sense or antisense (purple).<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a>_Image source: [10X Genomics: Cell Ranger&#39;s Gene Expression Algorithm](https://www.10xgenomics.com/support/software/cell-ranger/latest/algorithms-overview/cr-gex-algorithm)_</span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a>Sequenced reads are aligned against the reference probe set or transcriptome using STAR. Any read that does not map confidently to a single gene with a MAPQ score of 255 is flagged as low quality.</span>
 <span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a>Sequenced reads are aligned against the reference probe set or transcriptome using STAR. Any read that does not map confidently to a single gene with a MAPQ score of 255 is flagged as low quality.</span>
+<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a>Space Ranger uses a Hamming Distance to correct for sequencing errors in the barcode sequence. This is possible because every barcode is a known sequence that is at least 3 edits away from any other barcode. This allows the algorithm to retain more reads that would have been discarded due to sequencing errors.</span>
 <span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>Space Ranger uses a Hamming Distance to correct for sequencing errors in the barcode sequence. This is possible because every barcode is a known sequence that is at least 3 edits away from any other barcode. This allows the algorithm to retain more reads that would have been discarded due to sequencing errors.</span>
+<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>This is the step where the BAM file is generated, where the gene, original barcode, and corrected barcode information is stored for each read.</span>
 <span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>This is the step where the BAM file is generated, where the gene, original barcode, and corrected barcode information is stored for each read.</span>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>**3. Count UMIs**</span>
 <span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>**3. Count UMIs**</span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>Similar to the barcode correction, Space Ranger also uses a Hamming Distance to correct for sequencing errors in the UMI sequence. Then, reads that have the same corrected barcode, gene, and UMI are collapsed into a single count to generate the count matrix. This is the step where we can begin tabulating the expression values for each barcode to generate a count matrix.</span>
 <span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>Similar to the barcode correction, Space Ranger also uses a Hamming Distance to correct for sequencing errors in the UMI sequence. Then, reads that have the same corrected barcode, gene, and UMI are collapsed into a single count to generate the count matrix. This is the step where we can begin tabulating the expression values for each barcode to generate a count matrix.</span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>We can consider the following scenarios for &quot;collapsing on UMIs&quot;:</span>
 <span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a>We can consider the following scenarios for &quot;collapsing on UMIs&quot;:</span>
-<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reads with **different UMIs** mapping to the same transcript were derived from **different molecules** and are biological duplicates - each read should be counted.</span>
-<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reads with the **same UMI** originated from the **same molecule** and are technical duplicates - the UMIs should be collapsed to be counted as a single read.</span>
-<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>In image below, the reads for ACTB should be collapsed and counted as a single read, while the reads for ARL1 should each be counted.</span>
-<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
-<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a>TODO: Need a new schematic that says bins instead of cells</span>
-<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a>::: {#fig-umi_collapsing .figure}</span>
-<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/umis.png)</span>{width=400}</span>
-<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a>Example of how UMIs are collapsed to generate the count matrix.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
-<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a>_Image source: [Macosko et al. (2015)](https://doi.org/10.1016/j.cell.2015.05.002)_</span>
-<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reads with **different UMIs** mapping to the same transcript were derived from **different molecules** and are biological duplicates - each read should be counted.</span>
+<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reads with the **same UMI** originated from the **same molecule** and are technical duplicates - the UMIs should be collapsed to be counted as a single read.</span>
+<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>In image below, the reads for ACTB should be collapsed and counted as a single read, while the reads for ARL1 should each be counted.</span>
+<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a>TODO: Need a new schematic that says bins instead of cells</span>
+<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a>::: {#fig-umi_collapsing .figure}</span>
+<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/umis.png)</span>{width=400}</span>
+<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a>Example of how UMIs are collapsed to generate the count matrix.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a>_Image source: [Macosko et al. (2015)](https://doi.org/10.1016/j.cell.2015.05.002)_</span>
+<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>**4. Binning**</span>
 <span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a>**4. Binning**</span>
+<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a>Each barcode is then binned together with other barcodes that fall within the same spatial spot. By default, Visium HD datasets are binned into 2µm x 2µm, 8µm x 8µm, and 16µm x 16µm bins. The bin sizes will affect the amount of biological signal captured per bin. For example, an 8 µm bin provides a 16-fold increase compared to a 2µm square. </span>
 <span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a>Each barcode is then binned together with other barcodes that fall within the same spatial spot. By default, Visium HD datasets are binned into 2µm x 2µm, 8µm x 8µm, and 16µm x 16µm bins. The bin sizes will affect the amount of biological signal captured per bin. For example, an 8 µm bin provides a 16-fold increase compared to a 2µm square. </span>
+<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a>An important consideration at this step is the concept of Modifiable Areal Unit Problem (MAUP), which is a source of bias that can occur when spatial data is aggregated (e.g. bins).</span>
 <span id="cb2-209"><a href="#cb2-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a>An important consideration at this step is the concept of Modifiable Areal Unit Problem (MAUP), which is a source of bias that can occur when spatial data is aggregated (e.g. bins).</span>
+<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a>**5. Bins under the tissue**</span>
 <span id="cb2-211"><a href="#cb2-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-212"><a href="#cb2-212" aria-hidden="true" tabindex="-1"></a>**5. Bins under the tissue**</span>
+<span id="cb2-212"><a href="#cb2-212" aria-hidden="true" tabindex="-1"></a>Not every square on the slide will have tissue on it. In this step, bins that are &quot;under the tissue&quot; are identified and then the count matrix is generated to only include those bins.</span>
 <span id="cb2-213"><a href="#cb2-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-214"><a href="#cb2-214" aria-hidden="true" tabindex="-1"></a>Not every square on the slide will have tissue on it. In this step, bins that are &quot;under the tissue&quot; are identified and then the count matrix is generated to only include those bins.</span>
-<span id="cb2-215"><a href="#cb2-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-216"><a href="#cb2-216" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
-<span id="cb2-217"><a href="#cb2-217" aria-hidden="true" tabindex="-1"></a>TODO: Need a new schematic that says bins instead of cells</span>
-<span id="cb2-218"><a href="#cb2-218" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-219"><a href="#cb2-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-220"><a href="#cb2-220" aria-hidden="true" tabindex="-1"></a>::: {#fig-sc_mtx .figure}</span>
-<span id="cb2-221"><a href="#cb2-221" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/count_matrix2.png)</span>{width=300}</span>
-<span id="cb2-222"><a href="#cb2-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-223"><a href="#cb2-223" aria-hidden="true" tabindex="-1"></a>Example of the count matrix generated by Space Ranger, where the rows are the genes and the columns are the barcodes (or bins).<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
-<span id="cb2-224"><a href="#cb2-224" aria-hidden="true" tabindex="-1"></a>_Image source: [Lafzi, et al. (2018)](https://doi.org/10.1038/s41596-018-0073-y)_</span>
-<span id="cb2-225"><a href="#cb2-225" aria-hidden="true" tabindex="-1"></a>::: </span>
+<span id="cb2-214"><a href="#cb2-214" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb2-215"><a href="#cb2-215" aria-hidden="true" tabindex="-1"></a>TODO: Need a new schematic that says bins instead of cells</span>
+<span id="cb2-216"><a href="#cb2-216" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-217"><a href="#cb2-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-218"><a href="#cb2-218" aria-hidden="true" tabindex="-1"></a>::: {#fig-sc_mtx .figure}</span>
+<span id="cb2-219"><a href="#cb2-219" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/count_matrix2.png)</span>{width=300}</span>
+<span id="cb2-220"><a href="#cb2-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-221"><a href="#cb2-221" aria-hidden="true" tabindex="-1"></a>Example of the count matrix generated by Space Ranger, where the rows are the genes and the columns are the barcodes (or bins).<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb2-222"><a href="#cb2-222" aria-hidden="true" tabindex="-1"></a>_Image source: [Lafzi, et al. (2018)](https://doi.org/10.1038/s41596-018-0073-y)_</span>
+<span id="cb2-223"><a href="#cb2-223" aria-hidden="true" tabindex="-1"></a>::: </span>
+<span id="cb2-224"><a href="#cb2-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-225"><a href="#cb2-225" aria-hidden="true" tabindex="-1"></a>Beyond this point, there is also &quot;secondary analyses&quot; steps that are generated by default. However, we are going to load our dataset into R to perform our own QC and analyses. This is in part because the default Space Ranger analyses are generic and not specific to the tissue or biological question you are asking.</span>
 <span id="cb2-226"><a href="#cb2-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-227"><a href="#cb2-227" aria-hidden="true" tabindex="-1"></a>Beyond this point, there is also &quot;secondary analyses&quot; steps that are generated by default. However, we are going to load our dataset into R to perform our own QC and analyses. This is in part because the default Space Ranger analyses are generic and not specific to the tissue or biological question you are asking.</span>
-<span id="cb2-228"><a href="#cb2-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-227"><a href="#cb2-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-228"><a href="#cb2-228" aria-hidden="true" tabindex="-1"></a><span class="fu">### Image processing</span></span>
 <span id="cb2-229"><a href="#cb2-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a><span class="fu">### Image processing</span></span>
+<span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a>The image processing steps of the Space Ranger algorithm are as follows:</span>
 <span id="cb2-231"><a href="#cb2-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-232"><a href="#cb2-232" aria-hidden="true" tabindex="-1"></a>The image processing steps of the Space Ranger algorithm are as follows:</span>
+<span id="cb2-232"><a href="#cb2-232" aria-hidden="true" tabindex="-1"></a>**1. Fiducial alignment**</span>
 <span id="cb2-233"><a href="#cb2-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-234"><a href="#cb2-234" aria-hidden="true" tabindex="-1"></a>**1. Fiducial alignment**</span>
-<span id="cb2-235"><a href="#cb2-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-236"><a href="#cb2-236" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
-<span id="cb2-237"><a href="#cb2-237" aria-hidden="true" tabindex="-1"></a>TODO: https://www.10xgenomics.com/support/software/space-ranger/latest/algorithms-overview/image-processing</span>
-<span id="cb2-238"><a href="#cb2-238" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-234"><a href="#cb2-234" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb2-235"><a href="#cb2-235" aria-hidden="true" tabindex="-1"></a>TODO: https://www.10xgenomics.com/support/software/space-ranger/latest/algorithms-overview/image-processing</span>
+<span id="cb2-236"><a href="#cb2-236" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-237"><a href="#cb2-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-238"><a href="#cb2-238" aria-hidden="true" tabindex="-1"></a>**2. Tilt correction and tissue detection**</span>
 <span id="cb2-239"><a href="#cb2-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-240"><a href="#cb2-240" aria-hidden="true" tabindex="-1"></a>**2. Tilt correction and tissue detection**</span>
+<span id="cb2-240"><a href="#cb2-240" aria-hidden="true" tabindex="-1"></a>If the CytAssist camera is tilted, there is a built-in step to correct for this tilt. This is to ensure that the coordinates map accurately to the transcriptional data. Then, estimates are calculated on if tissue exists at each spot. This is then used to classify if a pixel is considered tissue or background.</span>
 <span id="cb2-241"><a href="#cb2-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-242"><a href="#cb2-242" aria-hidden="true" tabindex="-1"></a>If the CytAssist camera is tilted, there is a built-in step to correct for this tilt. This is to ensure that the coordinates map accurately to the transcriptional data. Then, estimates are calculated on if tissue exists at each spot. This is then used to classify if a pixel is considered tissue or background.</span>
+<span id="cb2-242"><a href="#cb2-242" aria-hidden="true" tabindex="-1"></a>**3. Image registration and UMI refinement**</span>
 <span id="cb2-243"><a href="#cb2-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-244"><a href="#cb2-244" aria-hidden="true" tabindex="-1"></a>**3. Image registration and UMI refinement**</span>
+<span id="cb2-244"><a href="#cb2-244" aria-hidden="true" tabindex="-1"></a>As the CytAssist machine generates multiple images of the same tissue, it is crucial that there is consistency between each of the coordinates. A feature matching algorithm was created to match similar features across the different images to ensure consistency.</span>
 <span id="cb2-245"><a href="#cb2-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-246"><a href="#cb2-246" aria-hidden="true" tabindex="-1"></a>As the CytAssist machine generates multiple images of the same tissue, it is crucial that there is consistency between each of the coordinates. A feature matching algorithm was created to match similar features across the different images to ensure consistency.</span>
+<span id="cb2-246"><a href="#cb2-246" aria-hidden="true" tabindex="-1"></a>Similarly, the H&amp;E stain is contrasted against the UMI counts as a quality control step to ensure that slides are oriented correctly in the 2µm resolution.</span>
 <span id="cb2-247"><a href="#cb2-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-248"><a href="#cb2-248" aria-hidden="true" tabindex="-1"></a>Similarly, the H&amp;E stain is contrasted against the UMI counts as a quality control step to ensure that slides are oriented correctly in the 2µm resolution.</span>
+<span id="cb2-248"><a href="#cb2-248" aria-hidden="true" tabindex="-1"></a>**4. Segmentation**</span>
 <span id="cb2-249"><a href="#cb2-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-250"><a href="#cb2-250" aria-hidden="true" tabindex="-1"></a>**4. Segmentation**</span>
+<span id="cb2-250"><a href="#cb2-250" aria-hidden="true" tabindex="-1"></a>Space Ranger uses a customized version of the StarDist algorithm to perform segmentation on the H&amp;E image to identify the boundaries of each cell. This method is a deep learning model that is able to identify boundaries of star-convex shapes (similar to nuclei). The result is a series of polygons that overlap the tissue that are meant to correspond with cell boundaries. </span>
 <span id="cb2-251"><a href="#cb2-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-252"><a href="#cb2-252" aria-hidden="true" tabindex="-1"></a>Space Ranger uses a customized version of the StarDist algorithm to perform segmentation on the H&amp;E image to identify the boundaries of each cell. This method is a deep learning model that is able to identify boundaries of star-convex shapes (similar to nuclei). The result is a series of polygons that overlap the tissue that are meant to correspond with cell boundaries. </span>
-<span id="cb2-253"><a href="#cb2-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-254"><a href="#cb2-254" aria-hidden="true" tabindex="-1"></a>::: {#fig-segmentation .figure}</span>
-<span id="cb2-255"><a href="#cb2-255" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/multimodal_seg_stains.jpg)</span>{width=600}</span>
-<span id="cb2-256"><a href="#cb2-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-257"><a href="#cb2-257" aria-hidden="true" tabindex="-1"></a>Mock example of how stains are used to identify cell boundaries with segmentation algorithms.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
-<span id="cb2-258"><a href="#cb2-258" aria-hidden="true" tabindex="-1"></a>_Image source: [10X Genomics: Nucleus and Cell Segmentation Algorithms](https://www.10xgenomics.com/support/software/xenium-onboard-analysis/3.4/algorithms-overview/segmentation)_ </span>
-<span id="cb2-259"><a href="#cb2-259" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-260"><a href="#cb2-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-261"><a href="#cb2-261" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb2-262"><a href="#cb2-262" aria-hidden="true" tabindex="-1"></a><span class="fu"># Segmentation in imaging-based spatial transcriptomics</span></span>
+<span id="cb2-252"><a href="#cb2-252" aria-hidden="true" tabindex="-1"></a>::: {#fig-segmentation .figure}</span>
+<span id="cb2-253"><a href="#cb2-253" aria-hidden="true" tabindex="-1"></a><span class="al">![](../img/multimodal_seg_stains.jpg)</span>{width=600}</span>
+<span id="cb2-254"><a href="#cb2-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-255"><a href="#cb2-255" aria-hidden="true" tabindex="-1"></a>Mock example of how stains are used to identify cell boundaries with segmentation algorithms.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb2-256"><a href="#cb2-256" aria-hidden="true" tabindex="-1"></a>_Image source: [10X Genomics: Nucleus and Cell Segmentation Algorithms](https://www.10xgenomics.com/support/software/xenium-onboard-analysis/3.4/algorithms-overview/segmentation)_ </span>
+<span id="cb2-257"><a href="#cb2-257" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-258"><a href="#cb2-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-259"><a href="#cb2-259" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb2-260"><a href="#cb2-260" aria-hidden="true" tabindex="-1"></a><span class="fu"># Segmentation in imaging-based spatial transcriptomics</span></span>
+<span id="cb2-261"><a href="#cb2-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-262"><a href="#cb2-262" aria-hidden="true" tabindex="-1"></a>Segmentation is not a key step when working with sequencing-based spatial transcriptomics data, such as Visium HD. This is because the data is already binned into small squares, so there is no need to segment individual cells.</span>
 <span id="cb2-263"><a href="#cb2-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-264"><a href="#cb2-264" aria-hidden="true" tabindex="-1"></a>Segmentation is not a key step when working with sequencing-based spatial transcriptomics data, such as Visium HD. This is because the data is already binned into small squares, so there is no need to segment individual cells.</span>
+<span id="cb2-264"><a href="#cb2-264" aria-hidden="true" tabindex="-1"></a>However, **segmentation is a critical step when working with imaging-based spatial transcriptomics** data, such as MERFISH or Xenium. This is because we need to identify the boundaries of each cell to assigned transcript counts to that cell. These boundaries are typically identified with stains for the nuclei and cell walls in conjunction with expression data. </span>
 <span id="cb2-265"><a href="#cb2-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-266"><a href="#cb2-266" aria-hidden="true" tabindex="-1"></a>However, **segmentation is a critical step when working with imaging-based spatial transcriptomics** data, such as MERFISH or Xenium. This is because we need to identify the boundaries of each cell to assigned transcript counts to that cell. These boundaries are typically identified with stains for the nuclei and cell walls in conjunction with expression data. </span>
-<span id="cb2-267"><a href="#cb2-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-268"><a href="#cb2-268" aria-hidden="true" tabindex="-1"></a>Segmentatin is a challenging problem, especially when cells have irregular shapes (e.g., neuron cells).</span>
-<span id="cb2-269"><a href="#cb2-269" aria-hidden="true" tabindex="-1"></a>Some methods for segmentation that have been published include, but are not limited to:</span>
-<span id="cb2-270"><a href="#cb2-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-271"><a href="#cb2-271" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Cellpose</span><span class="co">](https://www.cellpose.org/)</span></span>
-<span id="cb2-272"><a href="#cb2-272" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Baysor</span><span class="co">](https://github.com/kharchenkolab/Baysor)</span></span>
+<span id="cb2-266"><a href="#cb2-266" aria-hidden="true" tabindex="-1"></a>Segmentatin is a challenging problem, especially when cells have irregular shapes (e.g., neuron cells).</span>
+<span id="cb2-267"><a href="#cb2-267" aria-hidden="true" tabindex="-1"></a>Some methods for segmentation that have been published include, but are not limited to:</span>
+<span id="cb2-268"><a href="#cb2-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-269"><a href="#cb2-269" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Cellpose</span><span class="co">](https://www.cellpose.org/)</span></span>
+<span id="cb2-270"><a href="#cb2-270" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Baysor</span><span class="co">](https://github.com/kharchenkolab/Baysor)</span></span>
+<span id="cb2-271"><a href="#cb2-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-272"><a href="#cb2-272" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-273"><a href="#cb2-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-274"><a href="#cb2-274" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-275"><a href="#cb2-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-274"><a href="#cb2-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-275"><a href="#cb2-275" aria-hidden="true" tabindex="-1"></a>***</span>
 <span id="cb2-276"><a href="#cb2-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-277"><a href="#cb2-277" aria-hidden="true" tabindex="-1"></a>***</span>
+<span id="cb2-277"><a href="#cb2-277" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Next Lesson &gt;&gt;</span><span class="co">](03_loading_spatial_data.qmd)</span></span>
 <span id="cb2-278"><a href="#cb2-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-279"><a href="#cb2-279" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Next Lesson &gt;&gt;</span><span class="co">](03_loading_spatial_data.qmd)</span></span>
-<span id="cb2-280"><a href="#cb2-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-281"><a href="#cb2-281" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Schedule</span><span class="co">](../schedule/schedule.qmd)</span></span>
+<span id="cb2-279"><a href="#cb2-279" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Schedule</span><span class="co">](../schedule/schedule.qmd)</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

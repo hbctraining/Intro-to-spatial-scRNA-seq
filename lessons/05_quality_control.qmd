@@ -1,22 +1,18 @@
 ---
 title: "Quality Control"
 description: |
-  Write a description of the lesson here. 
+  Focus on quality control strategies for Visium HD, using thresholds on genes, UMIs, and mitochondrial content to filter low-quality spots. This lesson helps you detect technical artifacts and sample issues before downstream analyses.
 author:
   - "Noor Sohail"
 date: "2025-07-22"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - spatial transcriptomics
+  - QC
+  - Filtration
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Quality control
+  - Mitochondrial ratio
+  - UMI counts
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

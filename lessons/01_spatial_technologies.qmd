@@ -1,22 +1,19 @@
 ---
-title: "Comparison of Spatial Transcriptomics Technologies"
+title: "Spatial Transcriptomics Technologies"
 description: |
-  Write a description of the lesson here. 
+    Explore the current landscape of spatial transcriptomics technologies. Focusing on contrasting sequencing-based and imaging-based platforms to show how they differ in resolution, throughput, and sensitivity. By the end, you will be informed on which technology is best suited for your biological question.
 author:
   - Noor Sohail
 date: "2025-07-22"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - spatial transcriptomics
+  - experimental design
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Imaging-based
+  - Sequencing-based
+  - Visium
+  - MERFISH
+  - seqFISH
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 
