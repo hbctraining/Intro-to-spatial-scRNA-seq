@@ -1781,7 +1781,7 @@
     "href": "lessons/12_deconvolution.html#p5crc-and-p5nat-results",
     "title": "Deconvolution",
     "section": "P5CRC and P5NAT results",
-    "text": "P5CRC and P5NAT results\nWe have run RCTD on each sample (without the sketch workflow) for you to load and use for the remainder of the workshop:\n\nseurat_rctd &lt;- readRDS(\"data/intermediate_seurat/seurat_RCTD.rds\")\n\n\n\n\n\n\n\nExercise 1\n\n\n\n\nWhat are the updated counts for each sample?\nCreate a dotplot using the known marker genes for each celltype to see if the first_type labels align with known celltype genes.\n\n\n\n\nNext Lesson &gt;&gt;\nBack to Schedule",
+    "text": "P5CRC and P5NAT results\nWe have run RCTD on each sample (without the sketch workflow) for you to load and use for the remainder of the workshop:\n\nseurat_rctd &lt;- readRDS(\"data/intermediate_seurat/seurat_RCTD.rds\")\n\n\n\n\n\n\n\nExercise 1\n\n\n\n\nWhat is the sample-specific proportion for each first_type?\nCreate a dotplot using the known marker genes for each celltype to see if the first_type labels align with known celltype genes.\n\n\nmarker_list &lt;- list(\n  \"B cells\" = c(\"IGKC\", \"IGHM\", \"CD79A\", \"MS4A1\", \"MZB1\"),\n  \"Endothelial cells\" = c(\"PECAM1\", \"VWF\", \"PLVAP\", \"ENG\", \"KLF2\"),\n  \"Fibroblasts\" = c(\"COL1A1\", \"COL3A1\", \"DCN\", \"LUM\", \"COL6A2\"),\n  \"Intestinal epithelial cells\" = c(\"CLCA1\", \"FCGBP\", \"MUC2\", \"PIGR\", \"ZG16\"),\n  \"Myeloid cells\" = c(\"C1QC\", \"SELENOP\", \"SPP1\", \"LYZ\", \"CD68\"),\n  \"Neural cells\" = c(\"NRXN1\", \"L1CAM\", \"NCAM1\", \"VIP\", \"CALB2\"),\n  \"Smooth muscle cells\" = c(\"TAGLN\", \"ACTA2\", \"MYH11\", \"MYL9\", \"CNN1\"),\n  \"T cells\" = c(\"TRAC\", \"CD3E\", \"TRBC2\", \"IL7R\", \"CD52\"),\n  \"Tumor cells\" = c(\"CEACAM6\", \"CEACAM5\", \"EPCAM\", \"KRT8\", \"LCN2\")\n)\n\n\n\n\nNext Lesson &gt;&gt;\nBack to Schedule",
     "crumbs": [
       "Day 3:",
       "Deconvolution"
@@ -1848,5 +1848,12 @@
       "Day 3:",
       "Spatially Derived Clusters"
     ]
+  },
+  {
+    "objectID": "lessons/12_deconvolution-Answer_key.html",
+    "href": "lessons/12_deconvolution-Answer_key.html",
+    "title": "Deconvolution - Answer Key",
+    "section": "",
+    "text": "Exercise 1\n\nWhat is the sample-specific proportion for each first_type?\n\n\n# Barplot of proportion of cells in each first_type by sample\nggplot(seurat_rctd@meta.data) +\n    geom_bar(aes(x = first_type, \n                 fill = orig.ident), \n             position = position_fill())  +\n  theme_classic() +\n  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))\n\n\n\n\n\n\n\n\n\nCreate a dotplot using the known marker genes for each celltype to see if the first_type labels align with known celltype genes.\n\n\nmarker_list &lt;- list(\n  \"B cells\" = c(\"IGKC\", \"IGHM\", \"CD79A\", \"MS4A1\", \"MZB1\"),\n  \"Endothelial cells\" = c(\"PECAM1\", \"VWF\", \"PLVAP\", \"ENG\", \"KLF2\"),\n  \"Fibroblasts\" = c(\"COL1A1\", \"COL3A1\", \"DCN\", \"LUM\", \"COL6A2\"),\n  \"Intestinal epithelial cells\" = c(\"CLCA1\", \"FCGBP\", \"MUC2\", \"PIGR\", \"ZG16\"),\n  \"Myeloid cells\" = c(\"C1QC\", \"SELENOP\", \"SPP1\", \"LYZ\", \"CD68\"),\n  \"Neural cells\" = c(\"NRXN1\", \"L1CAM\", \"NCAM1\", \"VIP\", \"CALB2\"),\n  \"Smooth muscle cells\" = c(\"TAGLN\", \"ACTA2\", \"MYH11\", \"MYL9\", \"CNN1\"),\n  \"T cells\" = c(\"TRAC\", \"CD3E\", \"TRBC2\", \"IL7R\", \"CD52\"),\n  \"Tumor cells\" = c(\"CEACAM6\", \"CEACAM5\", \"EPCAM\", \"KRT8\", \"LCN2\")\n)\n\n\nDotPlot(seurat_rctd,\n        marker_list,\n        group.by = \"first_type\",\n        cluster.idents = TRUE) +\n  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))\n\n\n\n\n\n\n\n\nWe see that the different celltype markers do correspond quite highly with each of the first_type RCTD results. This gives us more confidence in the results.\n\nBack to Lesson &gt;&gt;\nBack to Schedule\n\n\n\n\n\n\nReuseCC-BY-4.0"
   }
 ]

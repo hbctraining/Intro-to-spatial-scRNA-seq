@@ -584,9 +584,26 @@ seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
 ```
 
 :::{.callout-tip}
-# [**Exercise 1**](tmp-Answer_key.qmd#exercise-1)
-1. What are the updated counts for each sample?
+# [**Exercise 1**](12_deconvolution-Answer_key.qmd#exercise-1)
+
+1. What is the sample-specific proportion for each `first_type`?
 2. Create a dotplot using the known marker genes for each celltype to see if the `first_type` labels align with known celltype genes.
+
+```{r}
+#| label: marker_list
+marker_list <- list(
+  "B cells" = c("IGKC", "IGHM", "CD79A", "MS4A1", "MZB1"),
+  "Endothelial cells" = c("PECAM1", "VWF", "PLVAP", "ENG", "KLF2"),
+  "Fibroblasts" = c("COL1A1", "COL3A1", "DCN", "LUM", "COL6A2"),
+  "Intestinal epithelial cells" = c("CLCA1", "FCGBP", "MUC2", "PIGR", "ZG16"),
+  "Myeloid cells" = c("C1QC", "SELENOP", "SPP1", "LYZ", "CD68"),
+  "Neural cells" = c("NRXN1", "L1CAM", "NCAM1", "VIP", "CALB2"),
+  "Smooth muscle cells" = c("TAGLN", "ACTA2", "MYH11", "MYL9", "CNN1"),
+  "T cells" = c("TRAC", "CD3E", "TRBC2", "IL7R", "CD52"),
+  "Tumor cells" = c("CEACAM6", "CEACAM5", "EPCAM", "KRT8", "LCN2")
+)
+```
+
 :::
 
 ***
