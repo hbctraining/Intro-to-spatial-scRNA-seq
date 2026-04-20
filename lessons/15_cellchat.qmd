@@ -1,22 +1,20 @@
 ---
 title: "CellChat"
 description: |
-  Write a description of the lesson here. 
+  Analyze cell–cell communication in spatial transcriptomics using CellChat infer signaling networks. You will build interaction graphs between cell types and relate spatial proximity to signaling strength.
 author:
   - Noor Sohail
 date: "2026-04-19"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Cell-cell communication
+  - CellChat
+  - Ligand-receptor analysis
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Ligands
+  - Receptors
+  - Interaction graph
+  - Signaling strength
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

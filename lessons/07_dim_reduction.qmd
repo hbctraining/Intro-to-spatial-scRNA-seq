@@ -1,22 +1,17 @@
 ---
 title: "Dimensionality Reduction"
 description: |
-  Write a description of the lesson here. 
+  Apply dimensionality reduction techniques like PCA and UMAP to obtain informative low-dimensional embeddings. This lesson shows how to compute and interpret these embeddings for downstream analysis.
 author:
   - Noor Sohail
 date: "2025-07-22"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - UMAP
+  - PCA
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Dimensionality
+  - Latent space
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

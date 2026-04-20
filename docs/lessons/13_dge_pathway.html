@@ -6,11 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="author_1">
-<meta name="author" content="author_2">
+<meta name="author" content="Noor Sohail">
+<meta name="author" content="Meeta Mistry">
 <meta name="dcterms.date" content="2026-03-25">
-<meta name="keywords" content="keyword_1, keyword_2, keyword_3, keyword_4, keyword_5, keyword_6">
-<meta name="description" content="Write a description of the lesson here.">
+<meta name="keywords" content="Wilcoxon test, FindMarkers, Functional analysis, Overrepresentation analysis, GSEA">
+<meta name="description" content="Perform differential expression analysis between celltypes of matched cancer and normal. Feed the significant genes into pathway and gene set enrichment analyses to observe trends.">
 
 <title>Differential Gene Expression – Spatial Transcriptomics</title>
 <style>
@@ -5135,7 +5135,7 @@ margin-right: 0;
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../lessons/01_spatial_technologies.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Comparison of Spatial Transcriptomics Technologies</span></a>
+ <span class="menu-text">Spatial Transcriptomics Technologies</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -5342,16 +5342,15 @@ margin-right: 0;
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Differential Gene Expression</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
   <div class="quarto-categories">
-    <div class="quarto-category">category_1</div>
-    <div class="quarto-category">category_2</div>
-    <div class="quarto-category">category_3</div>
-    <div class="quarto-category">category_4</div>
+    <div class="quarto-category">Spatial transcriptomics</div>
+    <div class="quarto-category">Differential gene expression</div>
+    <div class="quarto-category">Pathway analysis</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    <p>Write a description of the lesson here.</p>
+    <p>Perform differential expression analysis between celltypes of matched cancer and normal. Feed the significant genes into pathway and gene set enrichment analyses to observe trends.</p>
   </div>
 </div>
 
@@ -5361,8 +5360,8 @@ margin-right: 0;
     <div>
     <div class="quarto-title-meta-heading">Authors</div>
     <div class="quarto-title-meta-contents">
-             <p>author_1 </p>
-             <p>author_2 </p>
+             <p>Noor Sohail </p>
+             <p>Meeta Mistry </p>
           </div>
   </div>
     
@@ -5380,7 +5379,7 @@ margin-right: 0;
 <div>
   <div class="keywords">
     <div class="block-title">Keywords</div>
-    <p>keyword_1, keyword_2, keyword_3, keyword_4, keyword_5, keyword_6</p>
+    <p>Wilcoxon test, FindMarkers, Functional analysis, Overrepresentation analysis, GSEA</p>
   </div>
 </div>
 
@@ -6703,495 +6702,493 @@ Note
 <div class="sourceCode" id="cb29" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Differential Gene Expression&quot;</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> |</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">  Write a description of the lesson here. </span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">  Perform differential expression analysis between celltypes of matched cancer and normal. Feed the significant genes into pathway and gene set enrichment analyses to observe trends.</span></span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - author_1</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - author_2</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - Noor Sohail</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - Meeta Mistry</span></span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2026-03-25&quot;</span></span>
 <span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> </span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">  - category_1</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co">  - category_2</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co">  - category_3</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co">  - category_4</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="an">keywords:</span></span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_1</span></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_2</span></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_3</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_4</span></span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_5</span></span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="co">  - keyword_6</span></span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="an">license:</span><span class="co"> &quot;CC-BY-4.0&quot;</span></span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load_libraries_data</span></span>
-<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries and data</span></span>
-<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
-<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>seurat_rctd <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/12_seurat_RCTD.qs&quot;</span>)</span>
-<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">  - Spatial transcriptomics</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co">  - Differential gene expression</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co">  - Pathway analysis</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="an">keywords:</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="co">  - Wilcoxon test</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="co">  - FindMarkers</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="co">  - Functional analysis</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co">  - Overrepresentation analysis</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="co">  - GSEA</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="an">license:</span><span class="co"> &quot;CC-BY-4.0&quot;</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load_libraries_data</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries and data</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>seurat_rctd <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/12_seurat_RCTD.qs&quot;</span>)</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>Approximate time: XX minutes</span>
 <span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>Approximate time: XX minutes</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives </span></span>
 <span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives </span></span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>In this lesson, we will:</span>
 <span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>In this lesson, we will:</span>
-<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Learning Objective 1</span>
-<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Learning Objective 2</span>
-<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Learning Objective 3</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Learning Objective 1</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Learning Objective 2</span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Learning Objective 3</span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview of lesson</span></span>
 <span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview of lesson</span></span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>When doing XYZ...</span>
 <span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>When doing XYZ...</span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## Differential gene expression (DGE)</span></span>
 <span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## Differential gene expression (DGE)</span></span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>What if we were interested in a particular celltype and **understanding how gene expression changes across the different conditions?**</span>
 <span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>What if we were interested in a particular celltype and **understanding how gene expression changes across the different conditions?**</span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>From the publication, we know that the macrophage population is of interest.</span>
 <span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>From the publication, we know that the macrophage population is of interest.</span>
-<span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load </span></span>
-<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a><span class="co"># DGE and pathway analysis</span></span>
-<span id="cb29-65"><a href="#cb29-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Visium HD spatial transcriptomics workshop</span></span>
-<span id="cb29-66"><a href="#cb29-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Author: Harvard Chan Bioinformatics Core</span></span>
-<span id="cb29-67"><a href="#cb29-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Created: December 2025</span></span>
-<span id="cb29-68"><a href="#cb29-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-69"><a href="#cb29-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
-<span id="cb29-70"><a href="#cb29-70" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
-<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb29-72"><a href="#cb29-72" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(qs)</span>
-<span id="cb29-73"><a href="#cb29-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-74"><a href="#cb29-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Load dataset</span></span>
-<span id="cb29-75"><a href="#cb29-75" aria-hidden="true" tabindex="-1"></a>seurat_rctd <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/intermediate_seurat/seurat_RCTD.rds&quot;</span>)</span>
-<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load </span></span>
+<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a><span class="co"># DGE and pathway analysis</span></span>
+<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Visium HD spatial transcriptomics workshop</span></span>
+<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Author: Harvard Chan Bioinformatics Core</span></span>
+<span id="cb29-65"><a href="#cb29-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Created: December 2025</span></span>
+<span id="cb29-66"><a href="#cb29-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-67"><a href="#cb29-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
+<span id="cb29-68"><a href="#cb29-68" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb29-69"><a href="#cb29-69" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb29-70"><a href="#cb29-70" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(qs)</span>
+<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-72"><a href="#cb29-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Load dataset</span></span>
+<span id="cb29-73"><a href="#cb29-73" aria-hidden="true" tabindex="-1"></a>seurat_rctd <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/intermediate_seurat/seurat_RCTD.rds&quot;</span>)</span>
+<span id="cb29-74"><a href="#cb29-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-75"><a href="#cb29-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a>In particular, maybe we were interested in what changes are occuring between the Myeloid populations.</span>
 <span id="cb29-77"><a href="#cb29-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-78"><a href="#cb29-78" aria-hidden="true" tabindex="-1"></a>In particular, maybe we were interested in what changes are occuring between the Myeloid populations.</span>
-<span id="cb29-79"><a href="#cb29-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-82"><a href="#cb29-82" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-83"><a href="#cb29-83" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to macrophages</span></span>
-<span id="cb29-84"><a href="#cb29-84" aria-hidden="true" tabindex="-1"></a>seurat_macro <span class="ot">&lt;-</span> <span class="fu">subset</span>(seurat_rctd,</span>
-<span id="cb29-85"><a href="#cb29-85" aria-hidden="true" tabindex="-1"></a>                       first_type <span class="sc">==</span> <span class="st">&quot;Myeloid&quot;</span>)</span>
-<span id="cb29-86"><a href="#cb29-86" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(seurat_macro) <span class="ot">&lt;-</span> <span class="st">&quot;orig.ident&quot;</span></span>
-<span id="cb29-87"><a href="#cb29-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-80"><a href="#cb29-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-81"><a href="#cb29-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to macrophages</span></span>
+<span id="cb29-82"><a href="#cb29-82" aria-hidden="true" tabindex="-1"></a>seurat_macro <span class="ot">&lt;-</span> <span class="fu">subset</span>(seurat_rctd,</span>
+<span id="cb29-83"><a href="#cb29-83" aria-hidden="true" tabindex="-1"></a>                       first_type <span class="sc">==</span> <span class="st">&quot;Myeloid&quot;</span>)</span>
+<span id="cb29-84"><a href="#cb29-84" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(seurat_macro) <span class="ot">&lt;-</span> <span class="st">&quot;orig.ident&quot;</span></span>
+<span id="cb29-85"><a href="#cb29-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-86"><a href="#cb29-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-87"><a href="#cb29-87" aria-hidden="true" tabindex="-1"></a><span class="fu">### `FindMarkers()`</span></span>
 <span id="cb29-88"><a href="#cb29-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-89"><a href="#cb29-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### `FindMarkers()`</span></span>
+<span id="cb29-89"><a href="#cb29-89" aria-hidden="true" tabindex="-1"></a>The <span class="in">`FindMarkers()`</span> function in the Seurat package is used to perform differential expression analysis between groups of cells. We provide arguments to specify <span class="in">`ident.1`</span> and <span class="in">`ident.2`</span> the two groups of cells we are interested in comparing. This function is commonly used at the <span class="co">[</span><span class="ot">celltype annotation step</span><span class="co">](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/09_merged_SC_marker_identification.html)</span>, but can also be used to calculate differentially expressed genes between experimental conditions.</span>
 <span id="cb29-90"><a href="#cb29-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-91"><a href="#cb29-91" aria-hidden="true" tabindex="-1"></a>The <span class="in">`FindMarkers()`</span> function in the Seurat package is used to perform differential expression analysis between groups of cells. We provide arguments to specify <span class="in">`ident.1`</span> and <span class="in">`ident.2`</span> the two groups of cells we are interested in comparing. This function is commonly used at the <span class="co">[</span><span class="ot">celltype annotation step</span><span class="co">](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/09_merged_SC_marker_identification.html)</span>, but can also be used to calculate differentially expressed genes between experimental conditions.</span>
-<span id="cb29-92"><a href="#cb29-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-93"><a href="#cb29-93" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb29-94"><a href="#cb29-94" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/marker_ident_function3.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;350&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb29-95"><a href="#cb29-95" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb29-96"><a href="#cb29-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-91"><a href="#cb29-91" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb29-92"><a href="#cb29-92" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/marker_ident_function3.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;350&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb29-93"><a href="#cb29-93" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-94"><a href="#cb29-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-95"><a href="#cb29-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-96"><a href="#cb29-96" aria-hidden="true" tabindex="-1"></a>We can use this same function to compare two groups of cells which represent different conditions by modifying the <span class="in">`ident`</span> values provided. The <span class="in">`FindMarkers()`</span> function has **several important arguments** we can modify when running it. To view what these parameters are, we can access the help page on this function:</span>
 <span id="cb29-97"><a href="#cb29-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-98"><a href="#cb29-98" aria-hidden="true" tabindex="-1"></a>We can use this same function to compare two groups of cells which represent different conditions by modifying the <span class="in">`ident`</span> values provided. The <span class="in">`FindMarkers()`</span> function has **several important arguments** we can modify when running it. To view what these parameters are, we can access the help page on this function:</span>
-<span id="cb29-99"><a href="#cb29-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-102"><a href="#cb29-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-103"><a href="#cb29-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: FindMarkers_help</span></span>
-<span id="cb29-104"><a href="#cb29-104" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb29-105"><a href="#cb29-105" aria-hidden="true" tabindex="-1"></a>?FindMarkers</span>
-<span id="cb29-106"><a href="#cb29-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-100"><a href="#cb29-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-101"><a href="#cb29-101" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: FindMarkers_help</span></span>
+<span id="cb29-102"><a href="#cb29-102" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb29-103"><a href="#cb29-103" aria-hidden="true" tabindex="-1"></a>?FindMarkers</span>
+<span id="cb29-104"><a href="#cb29-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-105"><a href="#cb29-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-106"><a href="#cb29-106" aria-hidden="true" tabindex="-1"></a>Below we have described in more detail what each of these arguments mean :</span>
 <span id="cb29-107"><a href="#cb29-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-108"><a href="#cb29-108" aria-hidden="true" tabindex="-1"></a>Below we have described in more detail what each of these arguments mean :</span>
-<span id="cb29-109"><a href="#cb29-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-110"><a href="#cb29-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Parameter         <span class="pp">|</span> Description                                                                                                                                                                                  <span class="pp">|</span> Default <span class="pp">|</span></span>
-<span id="cb29-111"><a href="#cb29-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|</span></span>
-<span id="cb29-112"><a href="#cb29-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`logfc.threshold`</span> <span class="pp">|</span> The minimum log2 fold change for average expression of a gene in the group relative to the average expression in all other groups combined.                                                 <span class="pp">|</span> 0.25    <span class="pp">|</span></span>
-<span id="cb29-113"><a href="#cb29-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`min.diff.pct`</span>    <span class="pp">|</span> The minimum percent difference between the percent of cells expressing the gene in the group and the percent of cells expressing the gene in all other groups combined.                    <span class="pp">|</span> —       <span class="pp">|</span></span>
-<span id="cb29-114"><a href="#cb29-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`min.pct`</span>         <span class="pp">|</span> Only test genes that are detected in a minimum fraction of cells in either of the two populations; speeds up the function by skipping very infrequently expressed genes.                    <span class="pp">|</span> 0.1     <span class="pp">|</span></span>
-<span id="cb29-115"><a href="#cb29-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ident.1`</span>         <span class="pp">|</span> The group of interest; this function evaluates one group at a time, and <span class="in">`ident.1`</span> must correspond to a value set in <span class="in">`Idents()`</span>.                                                              <span class="pp">|</span> —       <span class="pp">|</span></span>
-<span id="cb29-116"><a href="#cb29-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ident.2`</span>         <span class="pp">|</span> The comparison group; specifies the group against which <span class="in">`ident.1`</span> is compared.                                                                                                              <span class="pp">|</span> —       <span class="pp">|</span></span>
-<span id="cb29-117"><a href="#cb29-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-118"><a href="#cb29-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate DGEs</span></span>
-<span id="cb29-123"><a href="#cb29-123" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">FindMarkers</span>(seurat_macro,</span>
-<span id="cb29-124"><a href="#cb29-124" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ident.1 =</span> <span class="st">&quot;P5CRC&quot;</span>,</span>
-<span id="cb29-125"><a href="#cb29-125" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ident.2 =</span> <span class="st">&quot;P5NAT&quot;</span>)</span>
-<span id="cb29-126"><a href="#cb29-126" aria-hidden="true" tabindex="-1"></a>dge<span class="sc">$</span>gene <span class="ot">&lt;-</span> <span class="fu">rownames</span>(dge)</span>
-<span id="cb29-127"><a href="#cb29-127" aria-hidden="true" tabindex="-1"></a>dge <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb29-128"><a href="#cb29-128" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-108"><a href="#cb29-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Parameter         <span class="pp">|</span> Description                                                                                                                                                                                  <span class="pp">|</span> Default <span class="pp">|</span></span>
+<span id="cb29-109"><a href="#cb29-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|</span></span>
+<span id="cb29-110"><a href="#cb29-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`logfc.threshold`</span> <span class="pp">|</span> The minimum log2 fold change for average expression of a gene in the group relative to the average expression in all other groups combined.                                                 <span class="pp">|</span> 0.25    <span class="pp">|</span></span>
+<span id="cb29-111"><a href="#cb29-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`min.diff.pct`</span>    <span class="pp">|</span> The minimum percent difference between the percent of cells expressing the gene in the group and the percent of cells expressing the gene in all other groups combined.                    <span class="pp">|</span> —       <span class="pp">|</span></span>
+<span id="cb29-112"><a href="#cb29-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`min.pct`</span>         <span class="pp">|</span> Only test genes that are detected in a minimum fraction of cells in either of the two populations; speeds up the function by skipping very infrequently expressed genes.                    <span class="pp">|</span> 0.1     <span class="pp">|</span></span>
+<span id="cb29-113"><a href="#cb29-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ident.1`</span>         <span class="pp">|</span> The group of interest; this function evaluates one group at a time, and <span class="in">`ident.1`</span> must correspond to a value set in <span class="in">`Idents()`</span>.                                                              <span class="pp">|</span> —       <span class="pp">|</span></span>
+<span id="cb29-114"><a href="#cb29-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ident.2`</span>         <span class="pp">|</span> The comparison group; specifies the group against which <span class="in">`ident.1`</span> is compared.                                                                                                              <span class="pp">|</span> —       <span class="pp">|</span></span>
+<span id="cb29-115"><a href="#cb29-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-116"><a href="#cb29-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-119"><a href="#cb29-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-120"><a href="#cb29-120" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate DGEs</span></span>
+<span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">FindMarkers</span>(seurat_macro,</span>
+<span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ident.1 =</span> <span class="st">&quot;P5CRC&quot;</span>,</span>
+<span id="cb29-123"><a href="#cb29-123" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ident.2 =</span> <span class="st">&quot;P5NAT&quot;</span>)</span>
+<span id="cb29-124"><a href="#cb29-124" aria-hidden="true" tabindex="-1"></a>dge<span class="sc">$</span>gene <span class="ot">&lt;-</span> <span class="fu">rownames</span>(dge)</span>
+<span id="cb29-125"><a href="#cb29-125" aria-hidden="true" tabindex="-1"></a>dge <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb29-126"><a href="#cb29-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-127"><a href="#cb29-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-128"><a href="#cb29-128" aria-hidden="true" tabindex="-1"></a>**The output from the `FindMarkers()` function** is a matrix containing a ranked list of differentially expressed genes listed by gene ID and associated statistics. We describe some of these columns below:</span>
 <span id="cb29-129"><a href="#cb29-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-130"><a href="#cb29-130" aria-hidden="true" tabindex="-1"></a>**The output from the `FindMarkers()` function** is a matrix containing a ranked list of differentially expressed genes listed by gene ID and associated statistics. We describe some of these columns below:</span>
-<span id="cb29-131"><a href="#cb29-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-132"><a href="#cb29-132" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**gene:** The gene symbol</span>
-<span id="cb29-133"><a href="#cb29-133" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**p_val:** The p-value not adjusted for multiple test corrections</span>
-<span id="cb29-134"><a href="#cb29-134" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**avg_logFC:** The average log-fold change between sample groups. Positive values indicate that the gene is more highly expressed <span class="in">`ident.1`</span>.  </span>
-<span id="cb29-135"><a href="#cb29-135" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**pct.1:** The percentage of cells where the gene is detected in <span class="in">`ident.1`</span> (cold7)    </span>
-<span id="cb29-136"><a href="#cb29-136" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**pct.2:** The percentage of cells where the gene is detected on average in <span class="in">`ident.2`</span> (TN)</span>
-<span id="cb29-137"><a href="#cb29-137" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**p_val_adj:** The adjusted p-value, based on Bonferroni correction using all genes in the dataset, used to determine significance</span>
-<span id="cb29-138"><a href="#cb29-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-139"><a href="#cb29-139" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb29-140"><a href="#cb29-140" aria-hidden="true" tabindex="-1"></a>These tests treat each cell as an independent replicate and ignore inherent correlations between cells originating from the same sample. This results in highly **inflated p-values** for each gene. Studies have been shown to find a large number of false positive associations with these results.</span>
-<span id="cb29-141"><a href="#cb29-141" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb29-142"><a href="#cb29-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-130"><a href="#cb29-130" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**gene:** The gene symbol</span>
+<span id="cb29-131"><a href="#cb29-131" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**p_val:** The p-value not adjusted for multiple test corrections</span>
+<span id="cb29-132"><a href="#cb29-132" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**avg_logFC:** The average log-fold change between sample groups. Positive values indicate that the gene is more highly expressed <span class="in">`ident.1`</span>.  </span>
+<span id="cb29-133"><a href="#cb29-133" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**pct.1:** The percentage of cells where the gene is detected in <span class="in">`ident.1`</span> (cold7)    </span>
+<span id="cb29-134"><a href="#cb29-134" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**pct.2:** The percentage of cells where the gene is detected on average in <span class="in">`ident.2`</span> (TN)</span>
+<span id="cb29-135"><a href="#cb29-135" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**p_val_adj:** The adjusted p-value, based on Bonferroni correction using all genes in the dataset, used to determine significance</span>
+<span id="cb29-136"><a href="#cb29-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-137"><a href="#cb29-137" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb29-138"><a href="#cb29-138" aria-hidden="true" tabindex="-1"></a>These tests treat each cell as an independent replicate and ignore inherent correlations between cells originating from the same sample. This results in highly **inflated p-values** for each gene. Studies have been shown to find a large number of false positive associations with these results.</span>
+<span id="cb29-139"><a href="#cb29-139" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-140"><a href="#cb29-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-141"><a href="#cb29-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-142"><a href="#cb29-142" aria-hidden="true" tabindex="-1"></a><span class="fu">### Volcano plot</span></span>
 <span id="cb29-143"><a href="#cb29-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-144"><a href="#cb29-144" aria-hidden="true" tabindex="-1"></a><span class="fu">### Volcano plot</span></span>
-<span id="cb29-145"><a href="#cb29-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-148"><a href="#cb29-148" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-149"><a href="#cb29-149" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 10</span></span>
-<span id="cb29-150"><a href="#cb29-150" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EnhancedVolcano)</span>
-<span id="cb29-151"><a href="#cb29-151" aria-hidden="true" tabindex="-1"></a><span class="co"># Volcano plot</span></span>
-<span id="cb29-152"><a href="#cb29-152" aria-hidden="true" tabindex="-1"></a><span class="fu">EnhancedVolcano</span>(dge,</span>
-<span id="cb29-153"><a href="#cb29-153" aria-hidden="true" tabindex="-1"></a>                        <span class="at">lab=</span>dge<span class="sc">$</span>gene,</span>
-<span id="cb29-154"><a href="#cb29-154" aria-hidden="true" tabindex="-1"></a>                        <span class="at">x=</span><span class="st">&quot;avg_log2FC&quot;</span>,</span>
-<span id="cb29-155"><a href="#cb29-155" aria-hidden="true" tabindex="-1"></a>                        <span class="at">y=</span><span class="st">&quot;p_val_adj&quot;</span>,</span>
-<span id="cb29-156"><a href="#cb29-156" aria-hidden="true" tabindex="-1"></a>                        <span class="at">title=</span><span class="st">&quot;FindMarkers Macrophage bins&quot;</span>,</span>
-<span id="cb29-157"><a href="#cb29-157" aria-hidden="true" tabindex="-1"></a>                        <span class="at">subtitle=</span><span class="st">&quot;CRC vs NAT&quot;</span>)</span>
+<span id="cb29-146"><a href="#cb29-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-147"><a href="#cb29-147" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 10</span></span>
+<span id="cb29-148"><a href="#cb29-148" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EnhancedVolcano)</span>
+<span id="cb29-149"><a href="#cb29-149" aria-hidden="true" tabindex="-1"></a><span class="co"># Volcano plot</span></span>
+<span id="cb29-150"><a href="#cb29-150" aria-hidden="true" tabindex="-1"></a><span class="fu">EnhancedVolcano</span>(dge,</span>
+<span id="cb29-151"><a href="#cb29-151" aria-hidden="true" tabindex="-1"></a>                        <span class="at">lab=</span>dge<span class="sc">$</span>gene,</span>
+<span id="cb29-152"><a href="#cb29-152" aria-hidden="true" tabindex="-1"></a>                        <span class="at">x=</span><span class="st">&quot;avg_log2FC&quot;</span>,</span>
+<span id="cb29-153"><a href="#cb29-153" aria-hidden="true" tabindex="-1"></a>                        <span class="at">y=</span><span class="st">&quot;p_val_adj&quot;</span>,</span>
+<span id="cb29-154"><a href="#cb29-154" aria-hidden="true" tabindex="-1"></a>                        <span class="at">title=</span><span class="st">&quot;FindMarkers Macrophage bins&quot;</span>,</span>
+<span id="cb29-155"><a href="#cb29-155" aria-hidden="true" tabindex="-1"></a>                        <span class="at">subtitle=</span><span class="st">&quot;CRC vs NAT&quot;</span>)</span>
+<span id="cb29-156"><a href="#cb29-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-157"><a href="#cb29-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-158"><a href="#cb29-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-159"><a href="#cb29-159" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-159"><a href="#cb29-159" aria-hidden="true" tabindex="-1"></a><span class="fu">### Top genes</span></span>
 <span id="cb29-160"><a href="#cb29-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-161"><a href="#cb29-161" aria-hidden="true" tabindex="-1"></a><span class="fu">### Top genes</span></span>
-<span id="cb29-162"><a href="#cb29-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-165"><a href="#cb29-165" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-166"><a href="#cb29-166" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter significant genes</span></span>
-<span id="cb29-167"><a href="#cb29-167" aria-hidden="true" tabindex="-1"></a>dge_sig <span class="ot">&lt;-</span> dge <span class="sc">%&gt;%</span> <span class="fu">subset</span>(p_val_adj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
-<span id="cb29-168"><a href="#cb29-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-169"><a href="#cb29-169" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the gene names and get the first 6 values</span></span>
-<span id="cb29-170"><a href="#cb29-170" aria-hidden="true" tabindex="-1"></a><span class="co"># Ignore ribosomal genes</span></span>
-<span id="cb29-171"><a href="#cb29-171" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> dge_sig <span class="sc">%&gt;%</span></span>
-<span id="cb29-172"><a href="#cb29-172" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(gene, <span class="st">&quot;Rpl|Rps&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-173"><a href="#cb29-173" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">6</span>)</span>
-<span id="cb29-174"><a href="#cb29-174" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> genes<span class="sc">$</span>gene</span>
-<span id="cb29-175"><a href="#cb29-175" aria-hidden="true" tabindex="-1"></a>genes</span>
-<span id="cb29-176"><a href="#cb29-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-177"><a href="#cb29-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-180"><a href="#cb29-180" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-181"><a href="#cb29-181" aria-hidden="true" tabindex="-1"></a><span class="fu">VlnPlot</span>(seurat_macro, genes,</span>
-<span id="cb29-182"><a href="#cb29-182" aria-hidden="true" tabindex="-1"></a>        <span class="at">group.by =</span> <span class="st">&quot;orig.ident&quot;</span>)</span>
-<span id="cb29-183"><a href="#cb29-183" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-184"><a href="#cb29-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-187"><a href="#cb29-187" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-188"><a href="#cb29-188" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb29-189"><a href="#cb29-189" aria-hidden="true" tabindex="-1"></a><span class="fu">FeaturePlot</span>(seurat_macro, genes, <span class="at">reduction =</span> <span class="st">&quot;full.umap.sketch&quot;</span>)</span>
-<span id="cb29-190"><a href="#cb29-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-191"><a href="#cb29-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-194"><a href="#cb29-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-195"><a href="#cb29-195" aria-hidden="true" tabindex="-1"></a><span class="fu">SpatialFeaturePlot</span>(seurat_macro, genes[<span class="dv">1</span>], </span>
-<span id="cb29-196"><a href="#cb29-196" aria-hidden="true" tabindex="-1"></a>                   <span class="at">image.alpha =</span> <span class="fl">0.1</span>, </span>
-<span id="cb29-197"><a href="#cb29-197" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pt.size.factor =</span> <span class="dv">15</span>)</span>
-<span id="cb29-198"><a href="#cb29-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-199"><a href="#cb29-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-200"><a href="#cb29-200" aria-hidden="true" tabindex="-1"></a>:::{.callout-tip}</span>
-<span id="cb29-201"><a href="#cb29-201" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 1**](tmp-Answer_key.qmd#exercise-1)</span></span>
-<span id="cb29-202"><a href="#cb29-202" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>A question to evaluate Learning Objective 1</span>
-<span id="cb29-203"><a href="#cb29-203" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>A followup question to question #1</span>
-<span id="cb29-204"><a href="#cb29-204" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>...</span>
-<span id="cb29-205"><a href="#cb29-205" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb29-206"><a href="#cb29-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-163"><a href="#cb29-163" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-164"><a href="#cb29-164" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter significant genes</span></span>
+<span id="cb29-165"><a href="#cb29-165" aria-hidden="true" tabindex="-1"></a>dge_sig <span class="ot">&lt;-</span> dge <span class="sc">%&gt;%</span> <span class="fu">subset</span>(p_val_adj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
+<span id="cb29-166"><a href="#cb29-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-167"><a href="#cb29-167" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the gene names and get the first 6 values</span></span>
+<span id="cb29-168"><a href="#cb29-168" aria-hidden="true" tabindex="-1"></a><span class="co"># Ignore ribosomal genes</span></span>
+<span id="cb29-169"><a href="#cb29-169" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> dge_sig <span class="sc">%&gt;%</span></span>
+<span id="cb29-170"><a href="#cb29-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(gene, <span class="st">&quot;Rpl|Rps&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-171"><a href="#cb29-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">6</span>)</span>
+<span id="cb29-172"><a href="#cb29-172" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> genes<span class="sc">$</span>gene</span>
+<span id="cb29-173"><a href="#cb29-173" aria-hidden="true" tabindex="-1"></a>genes</span>
+<span id="cb29-174"><a href="#cb29-174" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-175"><a href="#cb29-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-178"><a href="#cb29-178" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-179"><a href="#cb29-179" aria-hidden="true" tabindex="-1"></a><span class="fu">VlnPlot</span>(seurat_macro, genes,</span>
+<span id="cb29-180"><a href="#cb29-180" aria-hidden="true" tabindex="-1"></a>        <span class="at">group.by =</span> <span class="st">&quot;orig.ident&quot;</span>)</span>
+<span id="cb29-181"><a href="#cb29-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-182"><a href="#cb29-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-185"><a href="#cb29-185" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-186"><a href="#cb29-186" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb29-187"><a href="#cb29-187" aria-hidden="true" tabindex="-1"></a><span class="fu">FeaturePlot</span>(seurat_macro, genes, <span class="at">reduction =</span> <span class="st">&quot;full.umap.sketch&quot;</span>)</span>
+<span id="cb29-188"><a href="#cb29-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-189"><a href="#cb29-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-192"><a href="#cb29-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-193"><a href="#cb29-193" aria-hidden="true" tabindex="-1"></a><span class="fu">SpatialFeaturePlot</span>(seurat_macro, genes[<span class="dv">1</span>], </span>
+<span id="cb29-194"><a href="#cb29-194" aria-hidden="true" tabindex="-1"></a>                   <span class="at">image.alpha =</span> <span class="fl">0.1</span>, </span>
+<span id="cb29-195"><a href="#cb29-195" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pt.size.factor =</span> <span class="dv">15</span>)</span>
+<span id="cb29-196"><a href="#cb29-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-197"><a href="#cb29-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-198"><a href="#cb29-198" aria-hidden="true" tabindex="-1"></a>:::{.callout-tip}</span>
+<span id="cb29-199"><a href="#cb29-199" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 1**](tmp-Answer_key.qmd#exercise-1)</span></span>
+<span id="cb29-200"><a href="#cb29-200" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>A question to evaluate Learning Objective 1</span>
+<span id="cb29-201"><a href="#cb29-201" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>A followup question to question #1</span>
+<span id="cb29-202"><a href="#cb29-202" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>...</span>
+<span id="cb29-203"><a href="#cb29-203" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-204"><a href="#cb29-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-205"><a href="#cb29-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-206"><a href="#cb29-206" aria-hidden="true" tabindex="-1"></a><span class="fu">## Functional Analysis</span></span>
 <span id="cb29-207"><a href="#cb29-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-208"><a href="#cb29-208" aria-hidden="true" tabindex="-1"></a><span class="fu">## Functional Analysis</span></span>
+<span id="cb29-208"><a href="#cb29-208" aria-hidden="true" tabindex="-1"></a>When it comes to functional analysis there are **various analyses** that can be done:</span>
 <span id="cb29-209"><a href="#cb29-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-210"><a href="#cb29-210" aria-hidden="true" tabindex="-1"></a>When it comes to functional analysis there are **various analyses** that can be done:</span>
-<span id="cb29-211"><a href="#cb29-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-212"><a href="#cb29-212" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Determine whether there is enrichment of known biological functions, interactions, or pathways</span>
-<span id="cb29-213"><a href="#cb29-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Identify genes&#39; involvement in novel pathways or networks by grouping genes together based on similar trends</span>
-<span id="cb29-214"><a href="#cb29-214" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use global changes in gene expression by visualizing all genes being significantly up- or down-regulated in the context of external interaction data</span>
+<span id="cb29-210"><a href="#cb29-210" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Determine whether there is enrichment of known biological functions, interactions, or pathways</span>
+<span id="cb29-211"><a href="#cb29-211" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Identify genes&#39; involvement in novel pathways or networks by grouping genes together based on similar trends</span>
+<span id="cb29-212"><a href="#cb29-212" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use global changes in gene expression by visualizing all genes being significantly up- or down-regulated in the context of external interaction data</span>
+<span id="cb29-213"><a href="#cb29-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-214"><a href="#cb29-214" aria-hidden="true" tabindex="-1"></a>Generally, for any differential expression analysis, it is useful to interpret the resulting gene lists using freely available web- and R-based tools.  While tools for functional analysis span a wide variety of techniques, they can loosely be categorized into three main types: over-representation analysis, functional class scoring, and pathway topology [<span class="co">[</span><span class="ot">1</span><span class="co">](https://github.com/hbctraining/In-depth-NGS-Data-Analysis-Course/raw/master/resources/pathway_tools.pdf)</span>]. </span>
 <span id="cb29-215"><a href="#cb29-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-216"><a href="#cb29-216" aria-hidden="true" tabindex="-1"></a>Generally, for any differential expression analysis, it is useful to interpret the resulting gene lists using freely available web- and R-based tools.  While tools for functional analysis span a wide variety of techniques, they can loosely be categorized into three main types: over-representation analysis, functional class scoring, and pathway topology [<span class="co">[</span><span class="ot">1</span><span class="co">](https://github.com/hbctraining/In-depth-NGS-Data-Analysis-Course/raw/master/resources/pathway_tools.pdf)</span>]. </span>
-<span id="cb29-217"><a href="#cb29-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-218"><a href="#cb29-218" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb29-219"><a href="#cb29-219" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/pathway_analysis.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;600&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb29-220"><a href="#cb29-220" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-216"><a href="#cb29-216" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb29-217"><a href="#cb29-217" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/pathway_analysis.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;600&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb29-218"><a href="#cb29-218" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-219"><a href="#cb29-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-220"><a href="#cb29-220" aria-hidden="true" tabindex="-1"></a>Image credit: <span class="co">[</span><span class="ot">Khatri et al, PloS Computational Biology</span><span class="co">](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002375)</span></span>
 <span id="cb29-221"><a href="#cb29-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-222"><a href="#cb29-222" aria-hidden="true" tabindex="-1"></a>Image credit: <span class="co">[</span><span class="ot">Khatri et al, PloS Computational Biology</span><span class="co">](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002375)</span></span>
+<span id="cb29-222"><a href="#cb29-222" aria-hidden="true" tabindex="-1"></a>In this lesson, we will walk you through both an over-representation analysis and gene set enrichment analysis (GSEA) using an R Bioconductor package called <span class="co">[</span><span class="ot">`clusterProfiler`</span><span class="co">](https://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html)</span>.</span>
 <span id="cb29-223"><a href="#cb29-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-224"><a href="#cb29-224" aria-hidden="true" tabindex="-1"></a>In this lesson, we will walk you through both an over-representation analysis and gene set enrichment analysis (GSEA) using an R Bioconductor package called <span class="co">[</span><span class="ot">`clusterProfiler`</span><span class="co">](https://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html)</span>.</span>
-<span id="cb29-225"><a href="#cb29-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-224"><a href="#cb29-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-225"><a href="#cb29-225" aria-hidden="true" tabindex="-1"></a><span class="fu">## Over-representation analysis</span></span>
 <span id="cb29-226"><a href="#cb29-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-227"><a href="#cb29-227" aria-hidden="true" tabindex="-1"></a><span class="fu">## Over-representation analysis</span></span>
+<span id="cb29-227"><a href="#cb29-227" aria-hidden="true" tabindex="-1"></a>Over-representation analysis (ORA) is used to determine which _a priori_ defined gene sets are more present (over-represented) in a subset of “interesting” genes than what would be expected by chance <span class="co">[</span><span class="ot">(Huang et al, 2009)</span><span class="co">](https://pmc.ncbi.nlm.nih.gov/articles/PMC2615629/)</span>. Most genes in the genome have some pre-existing annotation associated with it, which has been compiled through a combination of manual curation and computational algorithms. There are a number of existing databases which define genes using a controlled vocabulary and then categorize genes into groups (gene sets) based on shared function, involvement in a pathway or presence in a specific cellular location, etc. A very commonly used gene annotataion resource is the <span class="co">[</span><span class="ot">Gene Ontology (GO) database</span><span class="co">](https://geneontology.org/)</span>, and is what we will use in our workflow.</span>
 <span id="cb29-228"><a href="#cb29-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-229"><a href="#cb29-229" aria-hidden="true" tabindex="-1"></a>Over-representation analysis (ORA) is used to determine which _a priori_ defined gene sets are more present (over-represented) in a subset of “interesting” genes than what would be expected by chance <span class="co">[</span><span class="ot">(Huang et al, 2009)</span><span class="co">](https://pmc.ncbi.nlm.nih.gov/articles/PMC2615629/)</span>. Most genes in the genome have some pre-existing annotation associated with it, which has been compiled through a combination of manual curation and computational algorithms. There are a number of existing databases which define genes using a controlled vocabulary and then categorize genes into groups (gene sets) based on shared function, involvement in a pathway or presence in a specific cellular location, etc. A very commonly used gene annotataion resource is the <span class="co">[</span><span class="ot">Gene Ontology (GO) database</span><span class="co">](https://geneontology.org/)</span>, and is what we will use in our workflow.</span>
+<span id="cb29-229"><a href="#cb29-229" aria-hidden="true" tabindex="-1"></a>We then use those categorizations to assess whether or not the enrichment observed amongst our DE gene results when compared to the larger universe of genes is significant. </span>
 <span id="cb29-230"><a href="#cb29-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-231"><a href="#cb29-231" aria-hidden="true" tabindex="-1"></a>We then use those categorizations to assess whether or not the enrichment observed amongst our DE gene results when compared to the larger universe of genes is significant. </span>
-<span id="cb29-232"><a href="#cb29-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-233"><a href="#cb29-233" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb29-234"><a href="#cb29-234" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/go_proportions.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;500&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb29-235"><a href="#cb29-235" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb29-236"><a href="#cb29-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-231"><a href="#cb29-231" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb29-232"><a href="#cb29-232" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/go_proportions.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;500&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb29-233"><a href="#cb29-233" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-234"><a href="#cb29-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-235"><a href="#cb29-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-236"><a href="#cb29-236" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hypergeometric test</span></span>
 <span id="cb29-237"><a href="#cb29-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-238"><a href="#cb29-238" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hypergeometric test</span></span>
+<span id="cb29-238"><a href="#cb29-238" aria-hidden="true" tabindex="-1"></a>The statistical test that will determine whether something is actually over-represented is the *Hypergeometric test*.</span>
 <span id="cb29-239"><a href="#cb29-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-240"><a href="#cb29-240" aria-hidden="true" tabindex="-1"></a>The statistical test that will determine whether something is actually over-represented is the *Hypergeometric test*.</span>
+<span id="cb29-240"><a href="#cb29-240" aria-hidden="true" tabindex="-1"></a>Hypergeometric distribution is a probability distribution that describes the probability of some number of genes (k) being associated with &quot;Functional category 1&quot;, for all genes in our gene list (n=1000), compared to the number of genes (K) associated with &quot;Functional category 1&quot; from a population of all of the genes in entire genome (N=13,000) [<span class="co">[</span><span class="ot">2</span><span class="co">](https://en.wikipedia.org/wiki/Hypergeometric_distribution)</span>].</span>
 <span id="cb29-241"><a href="#cb29-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-242"><a href="#cb29-242" aria-hidden="true" tabindex="-1"></a>Hypergeometric distribution is a probability distribution that describes the probability of some number of genes (k) being associated with &quot;Functional category 1&quot;, for all genes in our gene list (n=1000), compared to the number of genes (K) associated with &quot;Functional category 1&quot; from a population of all of the genes in entire genome (N=13,000) [<span class="co">[</span><span class="ot">2</span><span class="co">](https://en.wikipedia.org/wiki/Hypergeometric_distribution)</span>].</span>
+<span id="cb29-242"><a href="#cb29-242" aria-hidden="true" tabindex="-1"></a>The calculation of probability of k successes follows the formula:</span>
 <span id="cb29-243"><a href="#cb29-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-244"><a href="#cb29-244" aria-hidden="true" tabindex="-1"></a>The calculation of probability of k successes follows the formula:</span>
-<span id="cb29-245"><a href="#cb29-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-246"><a href="#cb29-246" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span>  </span>
-<span id="cb29-247"><a href="#cb29-247" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;https://latex.codecogs.com/svg.image?</span><span class="dv">&amp;space;</span><span class="st">p=1-\sum_{i=0}^{k-1}\frac{\binom{N}{k}\binom{N-K}{n-k}}{\binom{N}{n}}&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb29-248"><a href="#cb29-248" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-244"><a href="#cb29-244" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span>  </span>
+<span id="cb29-245"><a href="#cb29-245" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;https://latex.codecogs.com/svg.image?</span><span class="dv">&amp;space;</span><span class="st">p=1-\sum_{i=0}^{k-1}\frac{\binom{N}{k}\binom{N-K}{n-k}}{\binom{N}{n}}&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb29-246"><a href="#cb29-246" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-247"><a href="#cb29-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-248"><a href="#cb29-248" aria-hidden="true" tabindex="-1"></a>This test will result in a p-value that will be adjusted to consider  multiple testing correction for each category tested.</span>
 <span id="cb29-249"><a href="#cb29-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-250"><a href="#cb29-250" aria-hidden="true" tabindex="-1"></a>This test will result in a p-value that will be adjusted to consider  multiple testing correction for each category tested.</span>
+<span id="cb29-250"><a href="#cb29-250" aria-hidden="true" tabindex="-1"></a><span class="fu">### Running ORA with clusterProfiler</span></span>
 <span id="cb29-251"><a href="#cb29-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-252"><a href="#cb29-252" aria-hidden="true" tabindex="-1"></a><span class="fu">### Running ORA with clusterProfiler</span></span>
+<span id="cb29-252"><a href="#cb29-252" aria-hidden="true" tabindex="-1"></a>Now that we know more about what ORA is doing, let&#39;s take our significant genes and see if there are any GO terms over-represented that align with what we expect to be happening in macrophage cells with a change of temperature.</span>
 <span id="cb29-253"><a href="#cb29-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-254"><a href="#cb29-254" aria-hidden="true" tabindex="-1"></a>Now that we know more about what ORA is doing, let&#39;s take our significant genes and see if there are any GO terms over-represented that align with what we expect to be happening in macrophage cells with a change of temperature.</span>
+<span id="cb29-254"><a href="#cb29-254" aria-hidden="true" tabindex="-1"></a>We will take **the results from the FindMarkers DE** and run different **functional analysis** methods to obtain some biological insight.</span>
 <span id="cb29-255"><a href="#cb29-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-256"><a href="#cb29-256" aria-hidden="true" tabindex="-1"></a>We will take **the results from the FindMarkers DE** and run different **functional analysis** methods to obtain some biological insight.</span>
+<span id="cb29-256"><a href="#cb29-256" aria-hidden="true" tabindex="-1"></a>The first thing we&#39;ll do is load the required libraries:</span>
 <span id="cb29-257"><a href="#cb29-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-258"><a href="#cb29-258" aria-hidden="true" tabindex="-1"></a>The first thing we&#39;ll do is load the required libraries:</span>
-<span id="cb29-259"><a href="#cb29-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-262"><a href="#cb29-262" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-263"><a href="#cb29-263" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load_libraries</span></span>
-<span id="cb29-264"><a href="#cb29-264" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
-<span id="cb29-265"><a href="#cb29-265" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb29-266"><a href="#cb29-266" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clusterProfiler)</span>
-<span id="cb29-267"><a href="#cb29-267" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(org.Hs.eg.db)</span>
-<span id="cb29-268"><a href="#cb29-268" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(msigdbr)</span>
-<span id="cb29-269"><a href="#cb29-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-260"><a href="#cb29-260" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-261"><a href="#cb29-261" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load_libraries</span></span>
+<span id="cb29-262"><a href="#cb29-262" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
+<span id="cb29-263"><a href="#cb29-263" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb29-264"><a href="#cb29-264" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clusterProfiler)</span>
+<span id="cb29-265"><a href="#cb29-265" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(org.Hs.eg.db)</span>
+<span id="cb29-266"><a href="#cb29-266" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(msigdbr)</span>
+<span id="cb29-267"><a href="#cb29-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-268"><a href="#cb29-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-269"><a href="#cb29-269" aria-hidden="true" tabindex="-1"></a>Next, we will filter genes to remove any genes that have NA values in the padj column. These are genes that were not tested and so we do not want to consider them in our background set of genes. Once filtered, we create vectors containing our gene symbols for the background and query set of genes. We will query the up- and down-regulated gene sets separately, but note that you can also use the entire significant list as a query input.</span>
 <span id="cb29-270"><a href="#cb29-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-271"><a href="#cb29-271" aria-hidden="true" tabindex="-1"></a>Next, we will filter genes to remove any genes that have NA values in the padj column. These are genes that were not tested and so we do not want to consider them in our background set of genes. Once filtered, we create vectors containing our gene symbols for the background and query set of genes. We will query the up- and down-regulated gene sets separately, but note that you can also use the entire significant list as a query input.</span>
-<span id="cb29-272"><a href="#cb29-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-275"><a href="#cb29-275" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-276"><a href="#cb29-276" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: subset_upregulated_genes</span></span>
-<span id="cb29-277"><a href="#cb29-277" aria-hidden="true" tabindex="-1"></a><span class="co"># Create background dataset for hypergeometric testing using all tested </span></span>
-<span id="cb29-278"><a href="#cb29-278" aria-hidden="true" tabindex="-1"></a><span class="co"># genes for significance in the results</span></span>
-<span id="cb29-279"><a href="#cb29-279" aria-hidden="true" tabindex="-1"></a>all_genes <span class="ot">&lt;-</span> <span class="fu">as.character</span>(dge<span class="sc">$</span>gene)</span>
-<span id="cb29-280"><a href="#cb29-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-281"><a href="#cb29-281" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract significant results for up-regulated</span></span>
-<span id="cb29-282"><a href="#cb29-282" aria-hidden="true" tabindex="-1"></a>sigUp <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(dge_sig, </span>
-<span id="cb29-283"><a href="#cb29-283" aria-hidden="true" tabindex="-1"></a>                       p_val_adj <span class="sc">&lt;</span> <span class="fl">0.05</span>, </span>
-<span id="cb29-284"><a href="#cb29-284" aria-hidden="true" tabindex="-1"></a>                       avg_log2FC <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb29-285"><a href="#cb29-285" aria-hidden="true" tabindex="-1"></a>sigUp_genes <span class="ot">&lt;-</span> <span class="fu">as.character</span>(sigUp<span class="sc">$</span>gene)</span>
-<span id="cb29-286"><a href="#cb29-286" aria-hidden="true" tabindex="-1"></a>sigUp_genes <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb29-287"><a href="#cb29-287" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-273"><a href="#cb29-273" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-274"><a href="#cb29-274" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: subset_upregulated_genes</span></span>
+<span id="cb29-275"><a href="#cb29-275" aria-hidden="true" tabindex="-1"></a><span class="co"># Create background dataset for hypergeometric testing using all tested </span></span>
+<span id="cb29-276"><a href="#cb29-276" aria-hidden="true" tabindex="-1"></a><span class="co"># genes for significance in the results</span></span>
+<span id="cb29-277"><a href="#cb29-277" aria-hidden="true" tabindex="-1"></a>all_genes <span class="ot">&lt;-</span> <span class="fu">as.character</span>(dge<span class="sc">$</span>gene)</span>
+<span id="cb29-278"><a href="#cb29-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-279"><a href="#cb29-279" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract significant results for up-regulated</span></span>
+<span id="cb29-280"><a href="#cb29-280" aria-hidden="true" tabindex="-1"></a>sigUp <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(dge_sig, </span>
+<span id="cb29-281"><a href="#cb29-281" aria-hidden="true" tabindex="-1"></a>                       p_val_adj <span class="sc">&lt;</span> <span class="fl">0.05</span>, </span>
+<span id="cb29-282"><a href="#cb29-282" aria-hidden="true" tabindex="-1"></a>                       avg_log2FC <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb29-283"><a href="#cb29-283" aria-hidden="true" tabindex="-1"></a>sigUp_genes <span class="ot">&lt;-</span> <span class="fu">as.character</span>(sigUp<span class="sc">$</span>gene)</span>
+<span id="cb29-284"><a href="#cb29-284" aria-hidden="true" tabindex="-1"></a>sigUp_genes <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb29-285"><a href="#cb29-285" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-286"><a href="#cb29-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-287"><a href="#cb29-287" aria-hidden="true" tabindex="-1"></a>Finally, we can perform the GO enrichment analysis and save the results:</span>
 <span id="cb29-288"><a href="#cb29-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-289"><a href="#cb29-289" aria-hidden="true" tabindex="-1"></a>Finally, we can perform the GO enrichment analysis and save the results:</span>
-<span id="cb29-290"><a href="#cb29-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-293"><a href="#cb29-293" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-294"><a href="#cb29-294" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: GO_upregulated</span></span>
-<span id="cb29-295"><a href="#cb29-295" aria-hidden="true" tabindex="-1"></a><span class="co"># Run GO enrichment analysis </span></span>
-<span id="cb29-296"><a href="#cb29-296" aria-hidden="true" tabindex="-1"></a>egoUp <span class="ot">&lt;-</span> <span class="fu">enrichGO</span>(<span class="at">gene =</span> sigUp_genes, </span>
-<span id="cb29-297"><a href="#cb29-297" aria-hidden="true" tabindex="-1"></a>                  <span class="at">universe =</span> all_genes,</span>
-<span id="cb29-298"><a href="#cb29-298" aria-hidden="true" tabindex="-1"></a>                  <span class="at">keyType =</span> <span class="st">&quot;SYMBOL&quot;</span>,</span>
-<span id="cb29-299"><a href="#cb29-299" aria-hidden="true" tabindex="-1"></a>                  <span class="at">OrgDb =</span> org.Hs.eg.db, </span>
-<span id="cb29-300"><a href="#cb29-300" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ont =</span> <span class="st">&quot;BP&quot;</span>, </span>
-<span id="cb29-301"><a href="#cb29-301" aria-hidden="true" tabindex="-1"></a>                  <span class="at">pAdjustMethod =</span> <span class="st">&quot;BH&quot;</span>, </span>
-<span id="cb29-302"><a href="#cb29-302" aria-hidden="true" tabindex="-1"></a>                  <span class="at">qvalueCutoff =</span> <span class="fl">0.05</span>, </span>
-<span id="cb29-303"><a href="#cb29-303" aria-hidden="true" tabindex="-1"></a>                  <span class="at">readable =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb29-304"><a href="#cb29-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-305"><a href="#cb29-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-306"><a href="#cb29-306" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb29-307"><a href="#cb29-307" aria-hidden="true" tabindex="-1"></a>**Note 1:** The different organisms with annotation databases available to use with for the <span class="in">`OrgDb`</span> argument can be found <span class="co">[</span><span class="ot">here</span><span class="co">](../img/orgdb_annotation_databases.png)</span>.</span>
+<span id="cb29-291"><a href="#cb29-291" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-292"><a href="#cb29-292" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: GO_upregulated</span></span>
+<span id="cb29-293"><a href="#cb29-293" aria-hidden="true" tabindex="-1"></a><span class="co"># Run GO enrichment analysis </span></span>
+<span id="cb29-294"><a href="#cb29-294" aria-hidden="true" tabindex="-1"></a>egoUp <span class="ot">&lt;-</span> <span class="fu">enrichGO</span>(<span class="at">gene =</span> sigUp_genes, </span>
+<span id="cb29-295"><a href="#cb29-295" aria-hidden="true" tabindex="-1"></a>                  <span class="at">universe =</span> all_genes,</span>
+<span id="cb29-296"><a href="#cb29-296" aria-hidden="true" tabindex="-1"></a>                  <span class="at">keyType =</span> <span class="st">&quot;SYMBOL&quot;</span>,</span>
+<span id="cb29-297"><a href="#cb29-297" aria-hidden="true" tabindex="-1"></a>                  <span class="at">OrgDb =</span> org.Hs.eg.db, </span>
+<span id="cb29-298"><a href="#cb29-298" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ont =</span> <span class="st">&quot;BP&quot;</span>, </span>
+<span id="cb29-299"><a href="#cb29-299" aria-hidden="true" tabindex="-1"></a>                  <span class="at">pAdjustMethod =</span> <span class="st">&quot;BH&quot;</span>, </span>
+<span id="cb29-300"><a href="#cb29-300" aria-hidden="true" tabindex="-1"></a>                  <span class="at">qvalueCutoff =</span> <span class="fl">0.05</span>, </span>
+<span id="cb29-301"><a href="#cb29-301" aria-hidden="true" tabindex="-1"></a>                  <span class="at">readable =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-302"><a href="#cb29-302" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-303"><a href="#cb29-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-304"><a href="#cb29-304" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb29-305"><a href="#cb29-305" aria-hidden="true" tabindex="-1"></a>**Note 1:** The different organisms with annotation databases available to use with for the <span class="in">`OrgDb`</span> argument can be found <span class="co">[</span><span class="ot">here</span><span class="co">](../img/orgdb_annotation_databases.png)</span>.</span>
+<span id="cb29-306"><a href="#cb29-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-307"><a href="#cb29-307" aria-hidden="true" tabindex="-1"></a>**Note 2:** The <span class="in">`keyType`</span> argument may be coded as <span class="in">`keytype`</span> in different versions of clusterProfiler.</span>
 <span id="cb29-308"><a href="#cb29-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-309"><a href="#cb29-309" aria-hidden="true" tabindex="-1"></a>**Note 2:** The <span class="in">`keyType`</span> argument may be coded as <span class="in">`keytype`</span> in different versions of clusterProfiler.</span>
-<span id="cb29-310"><a href="#cb29-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-311"><a href="#cb29-311" aria-hidden="true" tabindex="-1"></a>**Note 3:**  The <span class="in">`ont`</span> argument can accept either &quot;BP&quot; (Biological Process), &quot;MF&quot; (Molecular Function), and &quot;CC&quot; (Cellular Component) subontologies, or &quot;ALL&quot; for all three.</span>
-<span id="cb29-312"><a href="#cb29-312" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb29-313"><a href="#cb29-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-314"><a href="#cb29-314" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb29-315"><a href="#cb29-315" aria-hidden="true" tabindex="-1"></a>Instead of saving just the results summary from the <span class="in">`egoUp`</span> object, it might also be beneficial to save the object itself. The <span class="in">`save()`</span> function enables you to save it as a <span class="in">`.rda`</span> file, e.g. <span class="in">`save(egoUp, file=&quot;results/egoUp.rda&quot;)`</span>. The statistics stored in the object can be used for downstream visualization.</span>
-<span id="cb29-316"><a href="#cb29-316" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb29-317"><a href="#cb29-317" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb29-318"><a href="#cb29-318" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exploring results from over-representation analysis</span></span>
+<span id="cb29-309"><a href="#cb29-309" aria-hidden="true" tabindex="-1"></a>**Note 3:**  The <span class="in">`ont`</span> argument can accept either &quot;BP&quot; (Biological Process), &quot;MF&quot; (Molecular Function), and &quot;CC&quot; (Cellular Component) subontologies, or &quot;ALL&quot; for all three.</span>
+<span id="cb29-310"><a href="#cb29-310" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-311"><a href="#cb29-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-312"><a href="#cb29-312" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb29-313"><a href="#cb29-313" aria-hidden="true" tabindex="-1"></a>Instead of saving just the results summary from the <span class="in">`egoUp`</span> object, it might also be beneficial to save the object itself. The <span class="in">`save()`</span> function enables you to save it as a <span class="in">`.rda`</span> file, e.g. <span class="in">`save(egoUp, file=&quot;results/egoUp.rda&quot;)`</span>. The statistics stored in the object can be used for downstream visualization.</span>
+<span id="cb29-314"><a href="#cb29-314" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-315"><a href="#cb29-315" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb29-316"><a href="#cb29-316" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exploring results from over-representation analysis</span></span>
+<span id="cb29-317"><a href="#cb29-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-318"><a href="#cb29-318" aria-hidden="true" tabindex="-1"></a>Let&#39;s take a look at what terms are identified as over-represented in the genes up-regulated in cold conditions.</span>
 <span id="cb29-319"><a href="#cb29-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-320"><a href="#cb29-320" aria-hidden="true" tabindex="-1"></a>Let&#39;s take a look at what terms are identified as over-represented in the genes up-regulated in cold conditions.</span>
-<span id="cb29-321"><a href="#cb29-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-324"><a href="#cb29-324" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-325"><a href="#cb29-325" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: view_GO_upregulated</span></span>
-<span id="cb29-326"><a href="#cb29-326" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb29-327"><a href="#cb29-327" aria-hidden="true" tabindex="-1"></a><span class="co"># Output results from GO analysis to a table</span></span>
-<span id="cb29-328"><a href="#cb29-328" aria-hidden="true" tabindex="-1"></a>cluster_summaryUp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(egoUp)</span>
-<span id="cb29-329"><a href="#cb29-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-330"><a href="#cb29-330" aria-hidden="true" tabindex="-1"></a><span class="co"># View GO upregulated output</span></span>
-<span id="cb29-331"><a href="#cb29-331" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(cluster_summaryUp)</span>
-<span id="cb29-332"><a href="#cb29-332" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-333"><a href="#cb29-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-336"><a href="#cb29-336" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-337"><a href="#cb29-337" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: table_GO_upregulated</span></span>
-<span id="cb29-338"><a href="#cb29-338" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb29-339"><a href="#cb29-339" aria-hidden="true" tabindex="-1"></a><span class="co"># GO upregulated data table</span></span>
-<span id="cb29-340"><a href="#cb29-340" aria-hidden="true" tabindex="-1"></a>cluster_summaryUp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(egoUp)</span>
-<span id="cb29-341"><a href="#cb29-341" aria-hidden="true" tabindex="-1"></a>cluster_summaryUp <span class="sc">%&gt;%</span> <span class="fu">head</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
-<span id="cb29-342"><a href="#cb29-342" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-322"><a href="#cb29-322" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-323"><a href="#cb29-323" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: view_GO_upregulated</span></span>
+<span id="cb29-324"><a href="#cb29-324" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb29-325"><a href="#cb29-325" aria-hidden="true" tabindex="-1"></a><span class="co"># Output results from GO analysis to a table</span></span>
+<span id="cb29-326"><a href="#cb29-326" aria-hidden="true" tabindex="-1"></a>cluster_summaryUp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(egoUp)</span>
+<span id="cb29-327"><a href="#cb29-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-328"><a href="#cb29-328" aria-hidden="true" tabindex="-1"></a><span class="co"># View GO upregulated output</span></span>
+<span id="cb29-329"><a href="#cb29-329" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(cluster_summaryUp)</span>
+<span id="cb29-330"><a href="#cb29-330" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-331"><a href="#cb29-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-334"><a href="#cb29-334" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-335"><a href="#cb29-335" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: table_GO_upregulated</span></span>
+<span id="cb29-336"><a href="#cb29-336" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb29-337"><a href="#cb29-337" aria-hidden="true" tabindex="-1"></a><span class="co"># GO upregulated data table</span></span>
+<span id="cb29-338"><a href="#cb29-338" aria-hidden="true" tabindex="-1"></a>cluster_summaryUp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(egoUp)</span>
+<span id="cb29-339"><a href="#cb29-339" aria-hidden="true" tabindex="-1"></a>cluster_summaryUp <span class="sc">%&gt;%</span> <span class="fu">head</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb29-340"><a href="#cb29-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-341"><a href="#cb29-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-342"><a href="#cb29-342" aria-hidden="true" tabindex="-1"></a>In the first few columns we see the GO identifier and the descriptive term name. In the next two columns that follow, we observe GeneRatio and BgRatio. These values allows us to compare the overlaps to the background.</span>
 <span id="cb29-343"><a href="#cb29-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-344"><a href="#cb29-344" aria-hidden="true" tabindex="-1"></a>In the first few columns we see the GO identifier and the descriptive term name. In the next two columns that follow, we observe GeneRatio and BgRatio. These values allows us to compare the overlaps to the background.</span>
-<span id="cb29-345"><a href="#cb29-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-346"><a href="#cb29-346" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**BgRatio:** K/N</span>
-<span id="cb29-347"><a href="#cb29-347" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>The total number of genes in the GO term gene set (_K_), divided by the total number of genes in universe (_N_)</span>
-<span id="cb29-348"><a href="#cb29-348" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**GeneRatio**: k/n</span>
-<span id="cb29-349"><a href="#cb29-349" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>The total number of genes in our sig DE gene set which overlap with the GO term gene set (_k_), divided by the total number of genes in our sig DE gene set that overlap with the universe gene set (_n_)</span>
-<span id="cb29-350"><a href="#cb29-350" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Fold Enrichment**: (k/n)/(K/N)</span>
-<span id="cb29-351"><a href="#cb29-351" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>This represents how many fold enriched is the **GeneRatio** compared to the **BgRatio**</span>
+<span id="cb29-344"><a href="#cb29-344" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**BgRatio:** K/N</span>
+<span id="cb29-345"><a href="#cb29-345" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>The total number of genes in the GO term gene set (_K_), divided by the total number of genes in universe (_N_)</span>
+<span id="cb29-346"><a href="#cb29-346" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**GeneRatio**: k/n</span>
+<span id="cb29-347"><a href="#cb29-347" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>The total number of genes in our sig DE gene set which overlap with the GO term gene set (_k_), divided by the total number of genes in our sig DE gene set that overlap with the universe gene set (_n_)</span>
+<span id="cb29-348"><a href="#cb29-348" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Fold Enrichment**: (k/n)/(K/N)</span>
+<span id="cb29-349"><a href="#cb29-349" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>This represents how many fold enriched is the **GeneRatio** compared to the **BgRatio**</span>
+<span id="cb29-350"><a href="#cb29-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-351"><a href="#cb29-351" aria-hidden="true" tabindex="-1"></a>Other columns of interest are the **p.adjust** column (by which results are ordered by default), and the **geneID** column, which lists the gene symbols of the overlapping genes.</span>
 <span id="cb29-352"><a href="#cb29-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-353"><a href="#cb29-353" aria-hidden="true" tabindex="-1"></a>Other columns of interest are the **p.adjust** column (by which results are ordered by default), and the **geneID** column, which lists the gene symbols of the overlapping genes.</span>
-<span id="cb29-354"><a href="#cb29-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-355"><a href="#cb29-355" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span>  </span>
-<span id="cb29-356"><a href="#cb29-356" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/ego_up_clusterprofiler.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;600&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb29-357"><a href="#cb29-357" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-353"><a href="#cb29-353" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span>  </span>
+<span id="cb29-354"><a href="#cb29-354" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/ego_up_clusterprofiler.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;600&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb29-355"><a href="#cb29-355" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-356"><a href="#cb29-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-357"><a href="#cb29-357" aria-hidden="true" tabindex="-1"></a>When cold induces a response in vascular smooth muscle cells (VSMCs), the primary transcriptional change observed is an up-regulation of genes related to vasoconstriction. Vasoconstriction is when the muscles around your blood vessels tighten to make the space inside smaller. In our results table we see **significant terms such as extracellular matrix organization** and **cell proliferation**, which makes sense because the cold temperatures will lead to a shift towards a more **contractile phenotype**. We also observe up-regulation of genes involved in **cell adhesion** and **tight junction formation**, which are processes related to **maintaining vascular integrity**.</span>
 <span id="cb29-358"><a href="#cb29-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-359"><a href="#cb29-359" aria-hidden="true" tabindex="-1"></a>When cold induces a response in vascular smooth muscle cells (VSMCs), the primary transcriptional change observed is an up-regulation of genes related to vasoconstriction. Vasoconstriction is when the muscles around your blood vessels tighten to make the space inside smaller. In our results table we see **significant terms such as extracellular matrix organization** and **cell proliferation**, which makes sense because the cold temperatures will lead to a shift towards a more **contractile phenotype**. We also observe up-regulation of genes involved in **cell adhesion** and **tight junction formation**, which are processes related to **maintaining vascular integrity**.</span>
-<span id="cb29-360"><a href="#cb29-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-361"><a href="#cb29-361" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb29-362"><a href="#cb29-362" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 1**](10_functional_analysis_pseudobulk_Answer-key.qmd#exercise-1)</span></span>
+<span id="cb29-359"><a href="#cb29-359" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb29-360"><a href="#cb29-360" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 1**](10_functional_analysis_pseudobulk_Answer-key.qmd#exercise-1)</span></span>
+<span id="cb29-361"><a href="#cb29-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-362"><a href="#cb29-362" aria-hidden="true" tabindex="-1"></a>Using the code above as a template, run the over-representation analysis on the significantly down-regulated genes from the pseudobulk analysis.</span>
 <span id="cb29-363"><a href="#cb29-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-364"><a href="#cb29-364" aria-hidden="true" tabindex="-1"></a>Using the code above as a template, run the over-representation analysis on the significantly down-regulated genes from the pseudobulk analysis.</span>
-<span id="cb29-365"><a href="#cb29-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-366"><a href="#cb29-366" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>How many significant terms do you find?</span>
-<span id="cb29-367"><a href="#cb29-367" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>What are some of the prominent biological processes that are observed?</span>
+<span id="cb29-364"><a href="#cb29-364" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>How many significant terms do you find?</span>
+<span id="cb29-365"><a href="#cb29-365" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>What are some of the prominent biological processes that are observed?</span>
+<span id="cb29-366"><a href="#cb29-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-367"><a href="#cb29-367" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb29-368"><a href="#cb29-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-369"><a href="#cb29-369" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb29-370"><a href="#cb29-370" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-371"><a href="#cb29-371" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualizing over-representation analysis results</span></span>
-<span id="cb29-372"><a href="#cb29-372" aria-hidden="true" tabindex="-1"></a><span class="in">`clusterProfiler`</span> has a variety of options for viewing the over-represented GO terms. We will explore the dotplot and the enrichment plot in this lesson.</span>
+<span id="cb29-369"><a href="#cb29-369" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualizing over-representation analysis results</span></span>
+<span id="cb29-370"><a href="#cb29-370" aria-hidden="true" tabindex="-1"></a><span class="in">`clusterProfiler`</span> has a variety of options for viewing the over-represented GO terms. We will explore the dotplot and the enrichment plot in this lesson.</span>
+<span id="cb29-371"><a href="#cb29-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-372"><a href="#cb29-372" aria-hidden="true" tabindex="-1"></a>The **dotplot** shows statistics associated with a user-selected top number of significant terms. The color of the dots represents the adjusted p-values for these terms and size of the dots corresponds to the total count of sig DE genes annotated with the GO term (count). This plot displays the top 20 GO terms ordered by gene ratio, not adjusted p-value.</span>
 <span id="cb29-373"><a href="#cb29-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-374"><a href="#cb29-374" aria-hidden="true" tabindex="-1"></a>The **dotplot** shows statistics associated with a user-selected top number of significant terms. The color of the dots represents the adjusted p-values for these terms and size of the dots corresponds to the total count of sig DE genes annotated with the GO term (count). This plot displays the top 20 GO terms ordered by gene ratio, not adjusted p-value.</span>
-<span id="cb29-375"><a href="#cb29-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-376"><a href="#cb29-376" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fig.width=15}</span></span>
-<span id="cb29-377"><a href="#cb29-377" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dotplot_GO_upregulated</span></span>
-<span id="cb29-378"><a href="#cb29-378" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 15</span></span>
-<span id="cb29-379"><a href="#cb29-379" aria-hidden="true" tabindex="-1"></a><span class="co"># Dotplot </span></span>
-<span id="cb29-380"><a href="#cb29-380" aria-hidden="true" tabindex="-1"></a><span class="fu">dotplot</span>(egoUp, <span class="at">showCategory=</span><span class="dv">20</span>)</span>
-<span id="cb29-381"><a href="#cb29-381" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-382"><a href="#cb29-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-383"><a href="#cb29-383" aria-hidden="true" tabindex="-1"></a>**To save the figure,** click on the <span class="in">`Export`</span> button in the RStudio <span class="in">`Plots`</span> tab and <span class="in">`Save as PDF...`</span>. In the pop-up window, change:</span>
-<span id="cb29-384"><a href="#cb29-384" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Orientation:`</span> To <span class="in">`Portrait`</span></span>
-<span id="cb29-385"><a href="#cb29-385" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`PDF size`</span> to <span class="in">`11 x 8`</span> to give a figure of appropriate size for the text labels</span>
+<span id="cb29-374"><a href="#cb29-374" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fig.width=15}</span></span>
+<span id="cb29-375"><a href="#cb29-375" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dotplot_GO_upregulated</span></span>
+<span id="cb29-376"><a href="#cb29-376" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 15</span></span>
+<span id="cb29-377"><a href="#cb29-377" aria-hidden="true" tabindex="-1"></a><span class="co"># Dotplot </span></span>
+<span id="cb29-378"><a href="#cb29-378" aria-hidden="true" tabindex="-1"></a><span class="fu">dotplot</span>(egoUp, <span class="at">showCategory=</span><span class="dv">20</span>)</span>
+<span id="cb29-379"><a href="#cb29-379" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-380"><a href="#cb29-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-381"><a href="#cb29-381" aria-hidden="true" tabindex="-1"></a>**To save the figure,** click on the <span class="in">`Export`</span> button in the RStudio <span class="in">`Plots`</span> tab and <span class="in">`Save as PDF...`</span>. In the pop-up window, change:</span>
+<span id="cb29-382"><a href="#cb29-382" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Orientation:`</span> To <span class="in">`Portrait`</span></span>
+<span id="cb29-383"><a href="#cb29-383" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`PDF size`</span> to <span class="in">`11 x 8`</span> to give a figure of appropriate size for the text labels</span>
+<span id="cb29-384"><a href="#cb29-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-385"><a href="#cb29-385" aria-hidden="true" tabindex="-1"></a>The next plot is the **enrichment GO plot**, which shows the relationship between the top 50 most significantly enriched GO terms (padj) by grouping similar terms together. Before creating the plot, we will need to obtain the similarity between terms using the <span class="in">`pairwise_termsim()`</span> function (<span class="co">[</span><span class="ot">instructions for emapplot</span><span class="co">](https://rdrr.io/github/GuangchuangYu/enrichplot/man/emapplot.html)</span>). In the enrichment plot, the color represents the p-values relative to the other displayed terms (brighter red is more significant), and the size of the terms represents the number of genes that are significant from our list.</span>
 <span id="cb29-386"><a href="#cb29-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-387"><a href="#cb29-387" aria-hidden="true" tabindex="-1"></a>The next plot is the **enrichment GO plot**, which shows the relationship between the top 50 most significantly enriched GO terms (padj) by grouping similar terms together. Before creating the plot, we will need to obtain the similarity between terms using the <span class="in">`pairwise_termsim()`</span> function (<span class="co">[</span><span class="ot">instructions for emapplot</span><span class="co">](https://rdrr.io/github/GuangchuangYu/enrichplot/man/emapplot.html)</span>). In the enrichment plot, the color represents the p-values relative to the other displayed terms (brighter red is more significant), and the size of the terms represents the number of genes that are significant from our list.</span>
-<span id="cb29-388"><a href="#cb29-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-389"><a href="#cb29-389" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fig.height=10, fig.width=10}</span></span>
-<span id="cb29-390"><a href="#cb29-390" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: enrighmap_plot_GO_upregulated</span></span>
-<span id="cb29-391"><a href="#cb29-391" aria-hidden="true" tabindex="-1"></a><span class="co"># Add similarity matrix to the termsim slot of enrichment result</span></span>
-<span id="cb29-392"><a href="#cb29-392" aria-hidden="true" tabindex="-1"></a>egoUp <span class="ot">&lt;-</span> enrichplot<span class="sc">::</span><span class="fu">pairwise_termsim</span>(egoUp)</span>
-<span id="cb29-393"><a href="#cb29-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-394"><a href="#cb29-394" aria-hidden="true" tabindex="-1"></a><span class="co"># Enrichmap clusters the 50 most significant (by padj) GO terms to visualize relationships between terms</span></span>
-<span id="cb29-395"><a href="#cb29-395" aria-hidden="true" tabindex="-1"></a><span class="fu">emapplot</span>(egoUp, <span class="at">showCategory =</span> <span class="dv">50</span>)</span>
-<span id="cb29-396"><a href="#cb29-396" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-387"><a href="#cb29-387" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fig.height=10, fig.width=10}</span></span>
+<span id="cb29-388"><a href="#cb29-388" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: enrighmap_plot_GO_upregulated</span></span>
+<span id="cb29-389"><a href="#cb29-389" aria-hidden="true" tabindex="-1"></a><span class="co"># Add similarity matrix to the termsim slot of enrichment result</span></span>
+<span id="cb29-390"><a href="#cb29-390" aria-hidden="true" tabindex="-1"></a>egoUp <span class="ot">&lt;-</span> enrichplot<span class="sc">::</span><span class="fu">pairwise_termsim</span>(egoUp)</span>
+<span id="cb29-391"><a href="#cb29-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-392"><a href="#cb29-392" aria-hidden="true" tabindex="-1"></a><span class="co"># Enrichmap clusters the 50 most significant (by padj) GO terms to visualize relationships between terms</span></span>
+<span id="cb29-393"><a href="#cb29-393" aria-hidden="true" tabindex="-1"></a><span class="fu">emapplot</span>(egoUp, <span class="at">showCategory =</span> <span class="dv">50</span>)</span>
+<span id="cb29-394"><a href="#cb29-394" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-395"><a href="#cb29-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-396"><a href="#cb29-396" aria-hidden="true" tabindex="-1"></a>**To save the figure,** click on the <span class="in">`Export`</span> button in the RStudio <span class="in">`Plots`</span> tab and <span class="in">`Save as PDF...`</span>. In the pop-up window, ensure that the <span class="in">`Orientation`</span> is <span class="in">`Portrait`</span> and change the <span class="in">`PDF size`</span> to <span class="in">`11 x 8`</span> to give the figure the appropriate size for the text labels.</span>
 <span id="cb29-397"><a href="#cb29-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-398"><a href="#cb29-398" aria-hidden="true" tabindex="-1"></a>**To save the figure,** click on the <span class="in">`Export`</span> button in the RStudio <span class="in">`Plots`</span> tab and <span class="in">`Save as PDF...`</span>. In the pop-up window, ensure that the <span class="in">`Orientation`</span> is <span class="in">`Portrait`</span> and change the <span class="in">`PDF size`</span> to <span class="in">`11 x 8`</span> to give the figure the appropriate size for the text labels.</span>
+<span id="cb29-398"><a href="#cb29-398" aria-hidden="true" tabindex="-1"></a><span class="fu">## Gene Set Enrichment Analysis (GSEA)</span></span>
 <span id="cb29-399"><a href="#cb29-399" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-400"><a href="#cb29-400" aria-hidden="true" tabindex="-1"></a><span class="fu">## Gene Set Enrichment Analysis (GSEA)</span></span>
+<span id="cb29-400"><a href="#cb29-400" aria-hidden="true" tabindex="-1"></a>While over-representation analysis is helpful and commonly used, it does require you to subset your gene list using an arbitrary threshold. There could very well be many genes that very narrowly miss this threshold and are therefore not considered in the functional analysis. To get around this there are there are **functional class scoring (FCS) methods** that can be helpful. For these methods the hypothesis is that **although large changes in individual genes can have significant effects on pathways (and will be detected via ORA methods), weaker but coordinated changes in sets of functionally related genes (i.e., pathways) can also have significant effects**. Thus, rather than setting a threshold to identify &#39;significant genes&#39;, all genes are considered in the analysis. The gene-level statistics from the dataset are aggregated to generate a single pathway-level statistic and statistical significance of each pathway is reported. This type of analysis can be particularly helpful if the differential expression analysis only outputs a small list of significant DE genes.</span>
 <span id="cb29-401"><a href="#cb29-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-402"><a href="#cb29-402" aria-hidden="true" tabindex="-1"></a>While over-representation analysis is helpful and commonly used, it does require you to subset your gene list using an arbitrary threshold. There could very well be many genes that very narrowly miss this threshold and are therefore not considered in the functional analysis. To get around this there are there are **functional class scoring (FCS) methods** that can be helpful. For these methods the hypothesis is that **although large changes in individual genes can have significant effects on pathways (and will be detected via ORA methods), weaker but coordinated changes in sets of functionally related genes (i.e., pathways) can also have significant effects**. Thus, rather than setting a threshold to identify &#39;significant genes&#39;, all genes are considered in the analysis. The gene-level statistics from the dataset are aggregated to generate a single pathway-level statistic and statistical significance of each pathway is reported. This type of analysis can be particularly helpful if the differential expression analysis only outputs a small list of significant DE genes.</span>
+<span id="cb29-402"><a href="#cb29-402" aria-hidden="true" tabindex="-1"></a>A commonly used example of an FCS method is GSEA <span class="co">[</span><span class="ot">(Subramanium A. et al, 2005)</span><span class="co">](https://www.pnas.org/doi/10.1073/pnas.0506580102)</span>. Gene set enrichment analysis utilizes the gene-level statistics or log2-fold changes for all genes to look to see whether gene sets for particular biological pathways (e.g., derived from KEGG pathways, Gene Ontology terms, MSigDB, etc) are enriched among the large positive or negative fold changes.</span>
 <span id="cb29-403"><a href="#cb29-403" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-404"><a href="#cb29-404" aria-hidden="true" tabindex="-1"></a>A commonly used example of an FCS method is GSEA <span class="co">[</span><span class="ot">(Subramanium A. et al, 2005)</span><span class="co">](https://www.pnas.org/doi/10.1073/pnas.0506580102)</span>. Gene set enrichment analysis utilizes the gene-level statistics or log2-fold changes for all genes to look to see whether gene sets for particular biological pathways (e.g., derived from KEGG pathways, Gene Ontology terms, MSigDB, etc) are enriched among the large positive or negative fold changes.</span>
-<span id="cb29-405"><a href="#cb29-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-406"><a href="#cb29-406" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span> </span>
-<span id="cb29-407"><a href="#cb29-407" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/gsea_overview.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;500&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb29-408"><a href="#cb29-408" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-404"><a href="#cb29-404" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> align</span><span class="op">=</span><span class="st">&quot;center&quot;</span><span class="dt">&gt;</span> </span>
+<span id="cb29-405"><a href="#cb29-405" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;../img/gsea_overview.png&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;500&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb29-406"><a href="#cb29-406" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb29-407"><a href="#cb29-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-408"><a href="#cb29-408" aria-hidden="true" tabindex="-1"></a>_Image source: [(Subramanium A. et al, 2005)](https://www.pnas.org/doi/10.1073/pnas.0506580102)_</span>
 <span id="cb29-409"><a href="#cb29-409" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-410"><a href="#cb29-410" aria-hidden="true" tabindex="-1"></a>_Image source: [(Subramanium A. et al, 2005)](https://www.pnas.org/doi/10.1073/pnas.0506580102)_</span>
+<span id="cb29-410"><a href="#cb29-410" aria-hidden="true" tabindex="-1"></a>This image describes the theory of GSEA, with the &#39;gene set S&#39; showing the metric used (in our case, ranked log2-fold changes) to determine enrichment of genes in the gene set. There are four main steps that are being performed:</span>
 <span id="cb29-411"><a href="#cb29-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-412"><a href="#cb29-412" aria-hidden="true" tabindex="-1"></a>This image describes the theory of GSEA, with the &#39;gene set S&#39; showing the metric used (in our case, ranked log2-fold changes) to determine enrichment of genes in the gene set. There are four main steps that are being performed:</span>
-<span id="cb29-413"><a href="#cb29-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-414"><a href="#cb29-414" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Rank genes**:</span>
-<span id="cb29-415"><a href="#cb29-415" aria-hidden="true" tabindex="-1"></a><span class="ss">    * </span>Genes in a data set are ranked based on the given statistic, which in our case is the shrunken log2-fold changes. </span>
-<span id="cb29-416"><a href="#cb29-416" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Calculate enrichment scores for each gene set**</span>
-<span id="cb29-417"><a href="#cb29-417" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>This score reflects how often genes in the set appear at the top or bottom of the ranked list.</span>
-<span id="cb29-418"><a href="#cb29-418" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>The score is calculated by walking down the list of log2-fold changes and increasing the running-sum statistic every time a gene in the gene set is encountered and decreasing it when genes are not part of the gene set.</span>
-<span id="cb29-419"><a href="#cb29-419" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>Increase/decrease is determined by magnitude of fold change.</span>
-<span id="cb29-420"><a href="#cb29-420" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Estimate statistical significance**</span>
-<span id="cb29-421"><a href="#cb29-421" aria-hidden="true" tabindex="-1"></a><span class="ss">   *  </span>A permutation test is used to calculate a null distribution for the enrichment score. This produces a p-value that represents the probability of observing a given enrichment score. </span>
-<span id="cb29-422"><a href="#cb29-422" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Adjust for **multiple hypothesis testing**</span>
-<span id="cb29-423"><a href="#cb29-423" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>Enrichment scores are normalized for the size of each gene set and a false discovery rate is calculated to prevent false positives.</span>
+<span id="cb29-412"><a href="#cb29-412" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Rank genes**:</span>
+<span id="cb29-413"><a href="#cb29-413" aria-hidden="true" tabindex="-1"></a><span class="ss">    * </span>Genes in a data set are ranked based on the given statistic, which in our case is the shrunken log2-fold changes. </span>
+<span id="cb29-414"><a href="#cb29-414" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Calculate enrichment scores for each gene set**</span>
+<span id="cb29-415"><a href="#cb29-415" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>This score reflects how often genes in the set appear at the top or bottom of the ranked list.</span>
+<span id="cb29-416"><a href="#cb29-416" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>The score is calculated by walking down the list of log2-fold changes and increasing the running-sum statistic every time a gene in the gene set is encountered and decreasing it when genes are not part of the gene set.</span>
+<span id="cb29-417"><a href="#cb29-417" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>Increase/decrease is determined by magnitude of fold change.</span>
+<span id="cb29-418"><a href="#cb29-418" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Estimate statistical significance**</span>
+<span id="cb29-419"><a href="#cb29-419" aria-hidden="true" tabindex="-1"></a><span class="ss">   *  </span>A permutation test is used to calculate a null distribution for the enrichment score. This produces a p-value that represents the probability of observing a given enrichment score. </span>
+<span id="cb29-420"><a href="#cb29-420" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Adjust for **multiple hypothesis testing**</span>
+<span id="cb29-421"><a href="#cb29-421" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>Enrichment scores are normalized for the size of each gene set and a false discovery rate is calculated to prevent false positives.</span>
+<span id="cb29-422"><a href="#cb29-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-423"><a href="#cb29-423" aria-hidden="true" tabindex="-1"></a><span class="fu">### Running GSEA with MSigDB gene sets</span></span>
 <span id="cb29-424"><a href="#cb29-424" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-425"><a href="#cb29-425" aria-hidden="true" tabindex="-1"></a><span class="fu">### Running GSEA with MSigDB gene sets</span></span>
+<span id="cb29-425"><a href="#cb29-425" aria-hidden="true" tabindex="-1"></a>The <span class="in">`clusterProfiler`</span> package offers several functions to perform GSEA using different genes sets, including but not limited to GO, KEGG, and MSigDb. We will use the MSigDb gene sets in our example below. The Molecular Signatures Database (also known as <span class="co">[</span><span class="ot">MSigDB</span><span class="co">](https://www.gsea-msigdb.org/gsea/msigdb/mouse/collections.jsp)</span>) is a collection of annotated gene sets. It contains 8 major collections for mouse, and for our analysis we will use C5, which contains the Gene Ontology gene sets. We can see how this aligns with our ORA result.</span>
 <span id="cb29-426"><a href="#cb29-426" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-427"><a href="#cb29-427" aria-hidden="true" tabindex="-1"></a>The <span class="in">`clusterProfiler`</span> package offers several functions to perform GSEA using different genes sets, including but not limited to GO, KEGG, and MSigDb. We will use the MSigDb gene sets in our example below. The Molecular Signatures Database (also known as <span class="co">[</span><span class="ot">MSigDB</span><span class="co">](https://www.gsea-msigdb.org/gsea/msigdb/mouse/collections.jsp)</span>) is a collection of annotated gene sets. It contains 8 major collections for mouse, and for our analysis we will use C5, which contains the Gene Ontology gene sets. We can see how this aligns with our ORA result.</span>
+<span id="cb29-427"><a href="#cb29-427" aria-hidden="true" tabindex="-1"></a>To run GSEA with the MSigDb gene sets, we will use the <span class="in">`msigdbr`</span> R package which provides the MSigDB gene sets in tidy data format that can be used directly with clusterProfiler. The msigdbr package **supports several species**:</span>
 <span id="cb29-428"><a href="#cb29-428" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-429"><a href="#cb29-429" aria-hidden="true" tabindex="-1"></a>To run GSEA with the MSigDb gene sets, we will use the <span class="in">`msigdbr`</span> R package which provides the MSigDB gene sets in tidy data format that can be used directly with clusterProfiler. The msigdbr package **supports several species**:</span>
-<span id="cb29-430"><a href="#cb29-430" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-433"><a href="#cb29-433" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-434"><a href="#cb29-434" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: msigdb_species</span></span>
-<span id="cb29-435"><a href="#cb29-435" aria-hidden="true" tabindex="-1"></a><span class="co"># Show MSigDB species</span></span>
-<span id="cb29-436"><a href="#cb29-436" aria-hidden="true" tabindex="-1"></a><span class="fu">msigdbr_species</span>()</span>
-<span id="cb29-437"><a href="#cb29-437" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-431"><a href="#cb29-431" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-432"><a href="#cb29-432" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: msigdb_species</span></span>
+<span id="cb29-433"><a href="#cb29-433" aria-hidden="true" tabindex="-1"></a><span class="co"># Show MSigDB species</span></span>
+<span id="cb29-434"><a href="#cb29-434" aria-hidden="true" tabindex="-1"></a><span class="fu">msigdbr_species</span>()</span>
+<span id="cb29-435"><a href="#cb29-435" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-436"><a href="#cb29-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-437"><a href="#cb29-437" aria-hidden="true" tabindex="-1"></a>And you can see **what gene sets are available**:</span>
 <span id="cb29-438"><a href="#cb29-438" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-439"><a href="#cb29-439" aria-hidden="true" tabindex="-1"></a>And you can see **what gene sets are available**:</span>
-<span id="cb29-440"><a href="#cb29-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-443"><a href="#cb29-443" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-444"><a href="#cb29-444" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: msigdbr_collection</span></span>
-<span id="cb29-445"><a href="#cb29-445" aria-hidden="true" tabindex="-1"></a><span class="co"># Show MSigDB collections</span></span>
-<span id="cb29-446"><a href="#cb29-446" aria-hidden="true" tabindex="-1"></a><span class="fu">msigdbr_collections</span>()</span>
-<span id="cb29-447"><a href="#cb29-447" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-441"><a href="#cb29-441" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-442"><a href="#cb29-442" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: msigdbr_collection</span></span>
+<span id="cb29-443"><a href="#cb29-443" aria-hidden="true" tabindex="-1"></a><span class="co"># Show MSigDB collections</span></span>
+<span id="cb29-444"><a href="#cb29-444" aria-hidden="true" tabindex="-1"></a><span class="fu">msigdbr_collections</span>()</span>
+<span id="cb29-445"><a href="#cb29-445" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-446"><a href="#cb29-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-447"><a href="#cb29-447" aria-hidden="true" tabindex="-1"></a>For our analysis, we will select the mouse C5 collection, which corresponds to GO gene sets. From the table, we only need two columns, Gene set name and the Gene symbol:</span>
 <span id="cb29-448"><a href="#cb29-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-449"><a href="#cb29-449" aria-hidden="true" tabindex="-1"></a>For our analysis, we will select the mouse C5 collection, which corresponds to GO gene sets. From the table, we only need two columns, Gene set name and the Gene symbol:</span>
-<span id="cb29-450"><a href="#cb29-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-453"><a href="#cb29-453" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-454"><a href="#cb29-454" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: obtain_mouse_msigdbr</span></span>
-<span id="cb29-455"><a href="#cb29-455" aria-hidden="true" tabindex="-1"></a><span class="co"># Use a specific collection; C5 GO signatures</span></span>
-<span id="cb29-456"><a href="#cb29-456" aria-hidden="true" tabindex="-1"></a>m_t2g <span class="ot">&lt;-</span> <span class="fu">msigdbr</span>(<span class="at">species =</span> <span class="st">&quot;Homo sapiens&quot;</span>, <span class="at">category =</span> <span class="st">&quot;C5&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb29-457"><a href="#cb29-457" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(gs_name, gene_symbol)</span>
-<span id="cb29-458"><a href="#cb29-458" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-451"><a href="#cb29-451" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-452"><a href="#cb29-452" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: obtain_mouse_msigdbr</span></span>
+<span id="cb29-453"><a href="#cb29-453" aria-hidden="true" tabindex="-1"></a><span class="co"># Use a specific collection; C5 GO signatures</span></span>
+<span id="cb29-454"><a href="#cb29-454" aria-hidden="true" tabindex="-1"></a>m_t2g <span class="ot">&lt;-</span> <span class="fu">msigdbr</span>(<span class="at">species =</span> <span class="st">&quot;Homo sapiens&quot;</span>, <span class="at">category =</span> <span class="st">&quot;C5&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-455"><a href="#cb29-455" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(gs_name, gene_symbol)</span>
+<span id="cb29-456"><a href="#cb29-456" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-457"><a href="#cb29-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-458"><a href="#cb29-458" aria-hidden="true" tabindex="-1"></a>Now that we have our gene sets, we need to prepare the fold changes. GSEA will use the log2-fold changes obtained from the differential expression analysis for every gene to perform the analysis. We need to create an ordered and named vector for input to clusterProfiler:</span>
 <span id="cb29-459"><a href="#cb29-459" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-460"><a href="#cb29-460" aria-hidden="true" tabindex="-1"></a>Now that we have our gene sets, we need to prepare the fold changes. GSEA will use the log2-fold changes obtained from the differential expression analysis for every gene to perform the analysis. We need to create an ordered and named vector for input to clusterProfiler:</span>
-<span id="cb29-461"><a href="#cb29-461" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-464"><a href="#cb29-464" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-465"><a href="#cb29-465" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: extract_foldchange</span></span>
-<span id="cb29-466"><a href="#cb29-466" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the foldchanges</span></span>
-<span id="cb29-467"><a href="#cb29-467" aria-hidden="true" tabindex="-1"></a>foldchanges <span class="ot">&lt;-</span> dge_sig<span class="sc">$</span>avg_log2FC</span>
-<span id="cb29-468"><a href="#cb29-468" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-469"><a href="#cb29-469" aria-hidden="true" tabindex="-1"></a><span class="co"># Name each fold change with the corresponding gene symbol</span></span>
-<span id="cb29-470"><a href="#cb29-470" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(foldchanges) <span class="ot">&lt;-</span> dge_sig<span class="sc">$</span>gene</span>
-<span id="cb29-471"><a href="#cb29-471" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort fold changes in decreasing order</span></span>
-<span id="cb29-472"><a href="#cb29-472" aria-hidden="true" tabindex="-1"></a>foldchanges <span class="ot">&lt;-</span> <span class="fu">sort</span>(foldchanges, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb29-473"><a href="#cb29-473" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-474"><a href="#cb29-474" aria-hidden="true" tabindex="-1"></a>foldchanges <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb29-475"><a href="#cb29-475" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-462"><a href="#cb29-462" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-463"><a href="#cb29-463" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: extract_foldchange</span></span>
+<span id="cb29-464"><a href="#cb29-464" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the foldchanges</span></span>
+<span id="cb29-465"><a href="#cb29-465" aria-hidden="true" tabindex="-1"></a>foldchanges <span class="ot">&lt;-</span> dge_sig<span class="sc">$</span>avg_log2FC</span>
+<span id="cb29-466"><a href="#cb29-466" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-467"><a href="#cb29-467" aria-hidden="true" tabindex="-1"></a><span class="co"># Name each fold change with the corresponding gene symbol</span></span>
+<span id="cb29-468"><a href="#cb29-468" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(foldchanges) <span class="ot">&lt;-</span> dge_sig<span class="sc">$</span>gene</span>
+<span id="cb29-469"><a href="#cb29-469" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort fold changes in decreasing order</span></span>
+<span id="cb29-470"><a href="#cb29-470" aria-hidden="true" tabindex="-1"></a>foldchanges <span class="ot">&lt;-</span> <span class="fu">sort</span>(foldchanges, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-471"><a href="#cb29-471" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-472"><a href="#cb29-472" aria-hidden="true" tabindex="-1"></a>foldchanges <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb29-473"><a href="#cb29-473" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-474"><a href="#cb29-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-475"><a href="#cb29-475" aria-hidden="true" tabindex="-1"></a>Now we are ready to run GSEA!</span>
 <span id="cb29-476"><a href="#cb29-476" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-477"><a href="#cb29-477" aria-hidden="true" tabindex="-1"></a>Now we are ready to run GSEA!</span>
-<span id="cb29-478"><a href="#cb29-478" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-481"><a href="#cb29-481" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-482"><a href="#cb29-482" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: run_GSEA</span></span>
-<span id="cb29-483"><a href="#cb29-483" aria-hidden="true" tabindex="-1"></a><span class="co"># Run GSEA</span></span>
-<span id="cb29-484"><a href="#cb29-484" aria-hidden="true" tabindex="-1"></a>msig_GSEA <span class="ot">&lt;-</span> <span class="fu">GSEA</span>(foldchanges, <span class="at">TERM2GENE =</span> m_t2g, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb29-485"><a href="#cb29-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-486"><a href="#cb29-486" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the GSEA results</span></span>
-<span id="cb29-487"><a href="#cb29-487" aria-hidden="true" tabindex="-1"></a>msigGSEA_results <span class="ot">&lt;-</span> msig_GSEA<span class="sc">@</span>result</span>
-<span id="cb29-488"><a href="#cb29-488" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-489"><a href="#cb29-489" aria-hidden="true" tabindex="-1"></a><span class="co"># Write results to file</span></span>
-<span id="cb29-490"><a href="#cb29-490" aria-hidden="true" tabindex="-1"></a><span class="co"># write.csv(msigGSEA_results, &quot;results/gsea_msigdb_GO_genesets.csv&quot;, quote=F)</span></span>
-<span id="cb29-491"><a href="#cb29-491" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-492"><a href="#cb29-492" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-493"><a href="#cb29-493" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb29-494"><a href="#cb29-494" aria-hidden="true" tabindex="-1"></a>The permutations are performed using random reordering, so every time we run the function we will get slightly different results. If we would like to use the same permutations every time we run a function, then we use the <span class="in">`set.seed()`</span> function prior to running. The input to set.seed() can be any number.</span>
-<span id="cb29-495"><a href="#cb29-495" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-479"><a href="#cb29-479" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-480"><a href="#cb29-480" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: run_GSEA</span></span>
+<span id="cb29-481"><a href="#cb29-481" aria-hidden="true" tabindex="-1"></a><span class="co"># Run GSEA</span></span>
+<span id="cb29-482"><a href="#cb29-482" aria-hidden="true" tabindex="-1"></a>msig_GSEA <span class="ot">&lt;-</span> <span class="fu">GSEA</span>(foldchanges, <span class="at">TERM2GENE =</span> m_t2g, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb29-483"><a href="#cb29-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-484"><a href="#cb29-484" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the GSEA results</span></span>
+<span id="cb29-485"><a href="#cb29-485" aria-hidden="true" tabindex="-1"></a>msigGSEA_results <span class="ot">&lt;-</span> msig_GSEA<span class="sc">@</span>result</span>
+<span id="cb29-486"><a href="#cb29-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-487"><a href="#cb29-487" aria-hidden="true" tabindex="-1"></a><span class="co"># Write results to file</span></span>
+<span id="cb29-488"><a href="#cb29-488" aria-hidden="true" tabindex="-1"></a><span class="co"># write.csv(msigGSEA_results, &quot;results/gsea_msigdb_GO_genesets.csv&quot;, quote=F)</span></span>
+<span id="cb29-489"><a href="#cb29-489" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-490"><a href="#cb29-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-491"><a href="#cb29-491" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb29-492"><a href="#cb29-492" aria-hidden="true" tabindex="-1"></a>The permutations are performed using random reordering, so every time we run the function we will get slightly different results. If we would like to use the same permutations every time we run a function, then we use the <span class="in">`set.seed()`</span> function prior to running. The input to set.seed() can be any number.</span>
+<span id="cb29-493"><a href="#cb29-493" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-494"><a href="#cb29-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-495"><a href="#cb29-495" aria-hidden="true" tabindex="-1"></a>Take a look at the results table and reorder by NES (normalized enrichment score). **What terms do you see positively enriched? Does this overlap with what we observed from ORA analysis?**</span>
 <span id="cb29-496"><a href="#cb29-496" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-497"><a href="#cb29-497" aria-hidden="true" tabindex="-1"></a>Take a look at the results table and reorder by NES (normalized enrichment score). **What terms do you see positively enriched? Does this overlap with what we observed from ORA analysis?**</span>
-<span id="cb29-498"><a href="#cb29-498" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-501"><a href="#cb29-501" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-502"><a href="#cb29-502" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: view_msigDB_results</span></span>
-<span id="cb29-503"><a href="#cb29-503" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb29-504"><a href="#cb29-504" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at results ordered by NES</span></span>
-<span id="cb29-505"><a href="#cb29-505" aria-hidden="true" tabindex="-1"></a>msigGSEA_results <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="sc">-</span>NES) <span class="sc">%&gt;%</span> <span class="fu">View</span>()</span>
-<span id="cb29-506"><a href="#cb29-506" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-507"><a href="#cb29-507" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-510"><a href="#cb29-510" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-511"><a href="#cb29-511" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: table_msigdb_results</span></span>
-<span id="cb29-512"><a href="#cb29-512" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb29-513"><a href="#cb29-513" aria-hidden="true" tabindex="-1"></a>msigGSEA_results <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="sc">-</span>NES) <span class="sc">%&gt;%</span> <span class="fu">head</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
-<span id="cb29-514"><a href="#cb29-514" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-515"><a href="#cb29-515" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-516"><a href="#cb29-516" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The first few columns of the results table identify the gene set information.</span>
-<span id="cb29-517"><a href="#cb29-517" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The following columns include the associated statistics.</span>
-<span id="cb29-518"><a href="#cb29-518" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The last column will report which genes are part of the &#39;core enrichment&#39;. These are the genes associated with the pathway which contributed to the observed enrichment score (i.e., in the extremes of the ranking).</span>
+<span id="cb29-499"><a href="#cb29-499" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-500"><a href="#cb29-500" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: view_msigDB_results</span></span>
+<span id="cb29-501"><a href="#cb29-501" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb29-502"><a href="#cb29-502" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at results ordered by NES</span></span>
+<span id="cb29-503"><a href="#cb29-503" aria-hidden="true" tabindex="-1"></a>msigGSEA_results <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="sc">-</span>NES) <span class="sc">%&gt;%</span> <span class="fu">View</span>()</span>
+<span id="cb29-504"><a href="#cb29-504" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-505"><a href="#cb29-505" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-508"><a href="#cb29-508" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-509"><a href="#cb29-509" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: table_msigdb_results</span></span>
+<span id="cb29-510"><a href="#cb29-510" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb29-511"><a href="#cb29-511" aria-hidden="true" tabindex="-1"></a>msigGSEA_results <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="sc">-</span>NES) <span class="sc">%&gt;%</span> <span class="fu">head</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb29-512"><a href="#cb29-512" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-513"><a href="#cb29-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-514"><a href="#cb29-514" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The first few columns of the results table identify the gene set information.</span>
+<span id="cb29-515"><a href="#cb29-515" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The following columns include the associated statistics.</span>
+<span id="cb29-516"><a href="#cb29-516" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The last column will report which genes are part of the &#39;core enrichment&#39;. These are the genes associated with the pathway which contributed to the observed enrichment score (i.e., in the extremes of the ranking).</span>
+<span id="cb29-517"><a href="#cb29-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-518"><a href="#cb29-518" aria-hidden="true" tabindex="-1"></a><span class="fu">### GSEA visualization</span></span>
 <span id="cb29-519"><a href="#cb29-519" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-520"><a href="#cb29-520" aria-hidden="true" tabindex="-1"></a><span class="fu">### GSEA visualization</span></span>
+<span id="cb29-520"><a href="#cb29-520" aria-hidden="true" tabindex="-1"></a>Let&#39;s explore the GSEA plot of enrichment of one of the pathways in the ranked list using a built-in function from clusterProfiler. We can pick the top term <span class="in">`GOMF_EXTRACELLULAR_MATRIX_STRUCTURAL_CONSTITUENT`</span>:</span>
 <span id="cb29-521"><a href="#cb29-521" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-522"><a href="#cb29-522" aria-hidden="true" tabindex="-1"></a>Let&#39;s explore the GSEA plot of enrichment of one of the pathways in the ranked list using a built-in function from clusterProfiler. We can pick the top term <span class="in">`GOMF_EXTRACELLULAR_MATRIX_STRUCTURAL_CONSTITUENT`</span>:</span>
-<span id="cb29-523"><a href="#cb29-523" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-526"><a href="#cb29-526" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-527"><a href="#cb29-527" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: create_GSEA_plot</span></span>
-<span id="cb29-528"><a href="#cb29-528" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the GSEA plot for a single enriched GO term</span></span>
-<span id="cb29-529"><a href="#cb29-529" aria-hidden="true" tabindex="-1"></a><span class="fu">gseaplot</span>(msig_GSEA, <span class="at">geneSetID =</span> <span class="st">&#39;GOBP_RESPONSE_TO_BACTERIUM&#39;</span>)</span>
-<span id="cb29-530"><a href="#cb29-530" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-524"><a href="#cb29-524" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-525"><a href="#cb29-525" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: create_GSEA_plot</span></span>
+<span id="cb29-526"><a href="#cb29-526" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the GSEA plot for a single enriched GO term</span></span>
+<span id="cb29-527"><a href="#cb29-527" aria-hidden="true" tabindex="-1"></a><span class="fu">gseaplot</span>(msig_GSEA, <span class="at">geneSetID =</span> <span class="st">&#39;GOBP_RESPONSE_TO_BACTERIUM&#39;</span>)</span>
+<span id="cb29-528"><a href="#cb29-528" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-529"><a href="#cb29-529" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-530"><a href="#cb29-530" aria-hidden="true" tabindex="-1"></a>In this plot, the lines in plot represent the genes in the gene set <span class="in">`GOBP_RESPONSE_TO_BACTERIUM`</span> and where they occur among the log2-fold changes. The largest positive log2-fold changes are on the left-hand side of the plot, while the largest negative log2-fold changes are on the right. The top plot shows the magnitude of the log2-fold changes for each gene, while the bottom plot shows the running sum, with the enrichment score peaking at the red dotted line (which is among the positive log2-fold changes). This suggests the up-regulation of this function.</span>
 <span id="cb29-531"><a href="#cb29-531" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-532"><a href="#cb29-532" aria-hidden="true" tabindex="-1"></a>In this plot, the lines in plot represent the genes in the gene set <span class="in">`GOBP_RESPONSE_TO_BACTERIUM`</span> and where they occur among the log2-fold changes. The largest positive log2-fold changes are on the left-hand side of the plot, while the largest negative log2-fold changes are on the right. The top plot shows the magnitude of the log2-fold changes for each gene, while the bottom plot shows the running sum, with the enrichment score peaking at the red dotted line (which is among the positive log2-fold changes). This suggests the up-regulation of this function.</span>
+<span id="cb29-532"><a href="#cb29-532" aria-hidden="true" tabindex="-1"></a>***</span>
 <span id="cb29-533"><a href="#cb29-533" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-534"><a href="#cb29-534" aria-hidden="true" tabindex="-1"></a>***</span>
+<span id="cb29-534"><a href="#cb29-534" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Next Lesson &gt;&gt;</span><span class="co">](14_svgs.qmd)</span></span>
 <span id="cb29-535"><a href="#cb29-535" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-536"><a href="#cb29-536" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Next Lesson &gt;&gt;</span><span class="co">](14_svgs.qmd)</span></span>
-<span id="cb29-537"><a href="#cb29-537" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-538"><a href="#cb29-538" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Schedule</span><span class="co">](../schedule/schedule.qmd)</span></span>
+<span id="cb29-536"><a href="#cb29-536" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Schedule</span><span class="co">](../schedule/schedule.qmd)</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -1,24 +1,22 @@
 ---
 title: "Seurat Cheatsheet"
 description: |
-  Write a description of the lesson here. 
+  Keep a compact Seurat cheatsheet at hand that summarizes key functions for spatial transcriptomics workflows, from data loading to clustering and plotting. Use this reference to speed up scripting, avoid common syntax errors, and standardize your analysis pipeline.
 author:
   - Noor Sohail
   - Meeta Mistry
   - Will Gammerdinger
 date: "2025-05-30"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Seurat
+  - Cheatsheet
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Plotting
+  - Syntax
+  - Data structures
+  - DimPlot
+  - FeaturePlot
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

@@ -1,22 +1,18 @@
 ---
 title: "Deconvolution"
 description: |
-  Write a description of the lesson here. 
+  Break down multi-cell spatial spots into estimated cell type proportions using deconvolution methods such as RCTD with single-cell RNA-seq references. This lesson covers reference preparation, model fitting, and visualization of cell composition across tissue.
 author:
   - Noor Sohail
 date: "2025-07-22"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Deconvolution
+  - Celltype annotation
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - RCTD
+  - scRNA-seq
+  - Cell proportions
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

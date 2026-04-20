@@ -1,22 +1,19 @@
 ---
 title: "Spatially Variable Genes"
 description: |
-  Write a description of the lesson here. 
+  Identify spatially variable genes whose expression changes across tissue locations. This lesson shows how to detect, visualize, and prioritize SVGs as markers of spatial domains and gradients.
 author:
   - Noor Sohail
 date: "2026-03-20"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - SVGs
+  - Moran's I
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Variable genes
+  - Spatial patterns
+  - Spatial autocorrelation
+  - Spatial gradients
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 
@@ -77,8 +74,7 @@ Ultimately, these genes provide another peek in the spatial context of the tissu
 
 Most of the SVG algorithms are built upon the concept of [Moran's I](https://en.wikipedia.org/wiki/Moran%27s_I) which is defined as "a measure of spatial autocorrelation".
 
-::: {.callout-note collapse="true"}
-# Math behind Moran's I
+The math behind the method is defined like so:
 
 $$
 I =
@@ -90,7 +86,7 @@ I =
 }
 $$
 
-where
+where:
 
 - $N$ is the number of spatial units, indexed by $i$ and $j$;
 - $x$ is the variable of interest;
@@ -98,11 +94,22 @@ where
 - $w_{ij}$ are the elements of the spatial-weights matrix, with $w_{ii} = 0$;
 - $S_0$ is the sum of all spatial weights, $S_0 = \sum_{i=1}^N \sum_{j=1}^N w_{ij}$.
 
+For a random spatial distribution, Moran's I will be near zero. A large positive value indicates the data is clustered. A large negative value indicates that the data is dispersed, meaning units that are close spatially have dissimilar variable values.
+
+::: {#fig-morans_i .fig}
+![](../img/morans_i.png)
+
+Range of Moran's I values, showing the range of scores that correspond to different spatial structures (clustered, random, dispersed).<br>
+_Image source: [Tsui et al. (2022)](https://www.frontiersin.org/journals/built-environment/articles/10.3389/fbuil.2022.954642/full)_
 :::
 
+To see why this is the case, consider the expression $(x_i - \bar{x}) (x_j - \bar{x})$ in the above formula. If $x_i$ and $x_j$ are similar and far from the mean, then this product will be large and positive. If they are dissimilar (in particular, if one is well above the mean and one is far below) then this product will be large and negative.
+
 ::: callout-warning
-Explanation of Moran's I
+Look into the weights that automatically assigned in the `FindSpatiallyVariableFeatures` function
 :::
+
+Note that Moran's I depends strongly on the choice of $w_{ij}$, which encodes the spatial relations of the units. A large value $w_{ij}$ reflects a modeling assumption that the units with variables $x_i$ and $x_j$ are close spatially. Different choices of weights will result in different values of Moran's I. In fact, even the upper and lower bounds of the measure depend on the spatial-weights matrix; caution is needed when choosing the weights and interpreting the corresponding Moran's I.
 
 
 ## Running Moran's I

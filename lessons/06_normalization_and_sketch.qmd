@@ -1,22 +1,18 @@
 ---
 title: "Normalization and Sketch Downsampling"
 description: |
-  Write a description of the lesson here. 
+  Use normalization to normalize your spatial transcriptomics data, which is crucial to make comparisons between samples and bins. You will also learn how sketch-based downsampling accelerates exploratory analysis on large  datasets.
 author:
   - Noor Sohail
 date: "2025-07-22"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Normalization
+  - Downsampling
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Sketch workflow
+  - Leverage score
+  - Highly variable genes
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

@@ -1,22 +1,19 @@
 ---
 title: "Integration"
 description: |
-  Write a description of the lesson here. 
+  Learn how to evaluate whether batch effects are found in your dataset which will inform the decision of whether to integrate or not. Additionally describes the methods behind some common methods for integration.
 author:
   - Noor Sohail
 date: "2025-07-22"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Integration
+  - Batch correction
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - PCA
+  - UMAP
+  - Harmony
+  - CCA
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

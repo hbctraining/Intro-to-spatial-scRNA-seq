@@ -1,22 +1,19 @@
 ---
 title: "Anatomy of a Seurat Object"
 description: |
-  Write a description of the lesson here. 
+  Inspect the internal structure of a Seurat object, including assays, reductions, metadata, and spatial image slots. This aside teaches you how to safely explore and edit these components to comfortably work within the Seurat workflow.
 author:
   - Noor Sohail
 date: "2026-04-15"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Seurat
+  - Assays
+  - Layers
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - meta.data
+  - Metadata
+  - Data structure
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

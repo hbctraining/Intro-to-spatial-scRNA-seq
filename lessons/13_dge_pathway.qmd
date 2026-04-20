@@ -1,23 +1,21 @@
 ---
 title: "Differential Gene Expression"
 description: |
-  Write a description of the lesson here. 
+  Perform differential expression analysis between celltypes of matched cancer and normal. Feed the significant genes into pathway and gene set enrichment analyses to observe trends.
 author:
-  - author_1
-  - author_2
+  - Noor Sohail
+  - Meeta Mistry
 date: "2026-03-25"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Differential gene expression
+  - Pathway analysis
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Wilcoxon test
+  - FindMarkers
+  - Functional analysis
+  - Overrepresentation analysis
+  - GSEA
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

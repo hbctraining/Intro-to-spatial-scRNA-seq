@@ -1,22 +1,19 @@
 ---
 title: "Spatially Derived Clusters"
 description: |
-  Write a description of the lesson here. 
+  Discover how BANKSY leverages neighborhood information to cluster spatial transcriptomics data using both gene expression and spatial context. You will compare BANKSY clusters with expression-only methods and evaluate differences in tissue domain detection.
 author:
   - Noor Sohail
 date: "2025-07-22"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Clustering
+  - Spatial domains
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - BANKSY
+  - Neighborhoods
+  - Niches
+  - Azimuthal gabor filter
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 

@@ -1,22 +1,19 @@
 ---
 title: "Clustering"
 description: |
-  Write a description of the lesson here. 
+  Use graph-based clustering methods k-nearest neighbors and Leiden to define clusters based upon gene expression scores for single-cell datasets. You will examine how parameters like resolution affect cluster size and tissue interpretation.
 author:
   - Noor Sohail
 date: "2025-07-22"
 categories: 
-  - category_1
-  - category_2
-  - category_3
-  - category_4
+  - Spatial transcriptomics
+  - Clustering
+  - k-nearest neighbors
+  - Leiden
 keywords:
-  - keyword_1
-  - keyword_2
-  - keyword_3
-  - keyword_4
-  - keyword_5
-  - keyword_6
+  - Unsupervised
+  - Tissue regions
+  - Project data
 license: "CC-BY-4.0"
 editor_options: 
   markdown: 
