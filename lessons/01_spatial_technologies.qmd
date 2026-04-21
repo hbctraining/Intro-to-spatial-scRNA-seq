@@ -158,7 +158,7 @@ Imaging-based spatial transcriptomics builds upon fluorescence in situ hybridiza
 ![](../img/segmentation.png){width="50%"}
 
 Schematic of how cell boundaries are establieshed using nuclear stain, cell boundary stains, and transcripts to identify cellular boundaries.<br>
-_Image source:[Heidari et al. (2025)](https://www.biorxiv.org/content/10.1101/2025.03.14.643160v1.full)_
+_Image source: [Heidari et al. (2025)](https://www.biorxiv.org/content/10.1101/2025.03.14.643160v1.full)_
 :::
 
 Many of these methods will also use a DAPI stain to identify both nuclear and cellular walls. This allows for the identification of cell boundaries to map transcripts to a singular cell. In this way, imaging-based technologies are able to capture single-cell level resoultion of tissues for the provided set of probes.
