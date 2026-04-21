@@ -71,15 +71,21 @@ For this particular dataset, we have the following metadata available to us abou
 
 Additionally, we want to keep track of some basic information that we would expect to see in our dataset, more specifically the cell types we anticipate seeing:
 
+::: columns
+::: column
 - B cells
 - Endothelial cells
 - Fibroblasts
 - Intenstinal epithelial cells
 - Myeloid cells
+:::
+::: column
 - Neural cells
 - Smooth musle cells
 - T cells
 - Tumor cells
+:::
+:::
 
 ::: {.callout-note collapse="true"}
 # Sample preparation

@@ -631,7 +631,7 @@ marker_list <- list(
 ```{r}
 #| label: save_seurat
 #| eval: false
-saveRDS("data/seurat_banksy.RDS")
+saveRDS(seurat_banksy, "data/seurat_banksy.RDS")
 ```
 
 ***

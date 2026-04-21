@@ -102,7 +102,7 @@ plan("multicore", workers = parallel::detectCores() - 1)
 options(future.globals.maxSize = 8000 * 1024^2)
 
 # Load dataset
-seurat_banksy <- readRDS("data/seurat_banksy.RDS")
+seurat_banksy <- readRDS("data/intermediate_seurat/seurat_banksy.rds")
 ```
 
 
@@ -224,6 +224,7 @@ crc <- RunPCA(crc, reduction.name = "pca.sketch_crc")
 
 ```{r}
 #| label: instructor_crc_processed
+#| echo: false
 # qs2::qs_save(crc, "intermediate/12_crc_sketch.qs")
 crc <- qs2::qs_read("intermediate/12_crc_sketch.qs")
 ```

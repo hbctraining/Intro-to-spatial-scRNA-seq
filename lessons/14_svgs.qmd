@@ -116,6 +116,29 @@ Note that Moran's I depends strongly on the choice of $w_{ij}$, which encodes th
 
 Moran's I will work best if we focus on one sample at a time, as the spatial coordinates will be consistent within a single slide. Furthermore, because this step can take a long time to run, we are going to further subset the data to a singular celltype. In this way, we are attempting to evaluate genes that are specific to spatially defined subtype of a celltype. 
 
+```{r}
+#| label: header_libraries
+#| eval: false
+# Moran's I
+# Visium HD spatial transcriptomics workshop
+# Author: Harvard Chan Bioinformatics Core
+# Created: December 2025
+
+# Load libararies
+library(tidyverse)
+library(Seurat)
+set.seed(12345)
+
+# Set parallelization (multithreading) to speed up calculations
+plan("multicore", workers = parallel::detectCores() - 1)
+
+# Increases the size of the default vector (8GB)
+options(future.globals.maxSize = 8000 * 1024^2)
+
+# Load dataset
+seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
+```
+
 In this case, let us zoom in on the tumor cells in the CRC dataset:
 
 ```{r}
@@ -142,10 +165,10 @@ We are additionally going to specify that we want to evaluate Moran's I on the t
 #| label: run_morans_i
 #| eval: false
 crc_sub <- FindSpatiallyVariableFeatures(crc_sub,
-                                      selection.method = "moransi",
-                                      verbose = TRUE,
-                                      features = VariableFeatures(crc_sub)[1:100],
-                                      image = "P5CRC.008um")
+                                        selection.method = "moransi",
+                                        verbose = TRUE,
+                                        features = VariableFeatures(crc_sub)[1:100],
+                                        image = "P5CRC.008um")
 ```
 
 ```{r}

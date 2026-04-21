@@ -61,6 +61,30 @@ When doing XYZ...
 
 We will run CellChat on one sample at a time.
 
+```{r}
+#| label: header_libraries
+#| eval: false
+# CellChat
+# Visium HD spatial transcriptomics workshop
+# Author: Harvard Chan Bioinformatics Core
+# Created: December 2025
+
+# Load libararies
+library(tidyverse)
+library(Seurat)
+library(CellChat)
+set.seed(12345)
+
+# Set parallelization (multithreading) to speed up calculations
+plan("multicore", workers = parallel::detectCores() - 1)
+
+# Increases the size of the default vector (8GB)
+options(future.globals.maxSize = 8000 * 1024^2)
+
+# Load dataset
+seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
+```
+
 This is the recommended way, where you would run the full workflow on each sample and then compare and contrast.
 
 ```{r}
