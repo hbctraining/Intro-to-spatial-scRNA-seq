@@ -42,24 +42,29 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-When doing XYZ...
+Normalization is the process by which we adjust raw counts to account for technical variation. **Normalization allows us to make fair comparisons of gene expression across different samples, cells, and genes**. The counts are affected by many factors, some of which are "interesting" (e.g. the expression of RNA) and some of which are "uninteresting" (e.g. sequencing depth, technical artifacts). Normalization is the process of adjusting raw count values to account for the "uninteresting" factors.
+
+After normalization, we will be able to identify and downsample to a representative subset of our data. This "sketch" downsampling will allow us to eventually run clustering for large datasets in a computationally and biologically efficient manner.
 
 ## Normalization
 
-Normalization is the process by which we adjust raw counts to account for technical variation. **Normalization allows us to make fair comparisons of gene expression across different samples, cells, and genes**. The counts are affected by many factors, some of which are "interesting" (e.g. the expression of RNA) and some of which are "uninteresting" (e.g. sequencing depth, technical artifacts). Normalization is the process of adjusting raw count values to account for the "uninteresting" factors.
-
 ::: columns
-::: column
-The most common example of an "uninteresting" factor is **sequencing depth**. This is the total number of reads (UMIs) found in a cell. As seen below, sequencing depth can make it appear as though one cell has higher gene expression than another - simply because it was sequenced more deeply. In this example, each gene appears to have doubled in expression in cell 2, however this is a consequence of cell 2 having twice the sequencing depth. Therefore, we need to normalize the counts to account for differences in sequencing depth across cells.
-:::
+
 ::: column
 ::: {#fig-seq_depth .figure}
 ![](../img/sequencing_depth.png){width=350}
 
 Effect of sequencing depth on gene expression.<br>
-_Image source: [M. Love: RNA-seq data analysis](https://www.bioconductor.org/help/course-materials/2016/CSAMA/lect-06-rnaseq-analysis/rnaseq.pdf)_
+_Image source: [Mike Love: RNA-seq data analysis](https://www.bioconductor.org/help/course-materials/2016/CSAMA/lect-06-rnaseq-analysis/rnaseq.pdf)_
 ::: 
 :::
+
+::: column
+The most common example of an "uninteresting" factor is **sequencing depth**. This is the total number of reads (UMIs) found in a cell. As seen below, sequencing depth can make it appear as though one cell has higher gene expression than another - simply because it was sequenced more deeply. 
+
+In this example, each gene appears to have doubled in expression in cell 2, however this is a consequence of cell 2 having twice the sequencing depth. Therefore, we need to normalize the counts to account for differences in sequencing depth across cells.
+:::
+
 :::
 
 
@@ -92,16 +97,9 @@ Regardless, we are not interested in comparing these absolute counts between cel
 
 The most common transformation is a **log transformation**, which is applied in the original Seurat workflow. Other transformations, such as a square root transform, are less commonly used.
 
-::: {.callout-note collapse=true}
-# Complex normalization methods
-Various methods have been developed specifically for scRNA-seq normalization. Some simpler methods resemble what we have seen with bulk RNA-seq; the application of global scale factors adjusting for a count-depth relationship that is assumed common across all genes. However, if those assumptions are not true then this basic normalization can lead to over-correction for lowly and moderately expressed genes and, in some cases, under-normalization of highly expressed genes ([Bacher et al. (2017)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5473255/)).
-
-One such example is the [SCTransform](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1874-1) method, which models gene expression using a regularized negative binomial regression. This method accounts for technical variation. For more information on this methods, the Introduction to scRNA-seq workshop has a [lesson](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/07_SCT_normalization.html#normalization-and-regressing-out-sources-of-unwanted-variation-using-sctransform) on how apply SCTransform and what is does in detail.
-:::
-
 ### Perform log-normalization
 
-Now that we are on a new step of our analysis, let us create another script titled `normalization_and_sketch.R` that will contain our normalization and sketching code. This will help us keep our workflow organized and modular.
+Now that we are on a new step of our analysis, let us create another script titled `02_sketch_scRNA_workflow.R` that will contain our normalization and sketching code. This will help us keep our workflow organized and modular.
 
 After loading the necessary libraries, we will load in the `seurat_filtered` object we created in the previous lesson.
 
@@ -109,6 +107,7 @@ After loading the necessary libraries, we will load in the `seurat_filtered` obj
 #| label: set-up_script
 #| eval: false
 # Normalization and sketch downsampling
+# Dimensionality reduction and clustering
 # Visium HD spatial transcriptomics workshop
 # Author: Harvard Chan Bioinformatics Core
 # Created: December 2025
@@ -118,6 +117,7 @@ library(Seurat)
 library(tidyverse)
 library(scales)
 
+# Load filtered datset
 seurat_filtered <- readRDS("data/seurat_filtered.RDS")
 ```
 
@@ -131,6 +131,13 @@ seurat_sketch
 ```
 
 When we examine our Seurat object, `seurat_sketch`, we see that there is a new addition in the layer line that says "data". This is where our log-normalized counts are stored. The original counts are still stored in the `counts` layer, and the `data` layer contains the normalized counts.
+
+::: {.callout-note collapse=true}
+# Complex normalization methods
+Various methods have been developed specifically for scRNA-seq normalization. Some simpler methods resemble what we have seen with bulk RNA-seq; the application of global scale factors adjusting for a count-depth relationship that is assumed common across all genes. However, if those assumptions are not true then this basic normalization can lead to over-correction for lowly and moderately expressed genes and, in some cases, under-normalization of highly expressed genes ([Bacher et al. (2017)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5473255/)).
+
+One such example is the [SCTransform](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1874-1) method, which models gene expression using a regularized negative binomial regression. This method accounts for technical variation. For more information on this methods, the Introduction to scRNA-seq workshop has a [lesson](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/07_SCT_normalization.html#normalization-and-regressing-out-sources-of-unwanted-variation-using-sctransform) on how apply SCTransform and what is does in detail.
+:::
 
 ## Highly variable genes (HVGs)
 
@@ -183,16 +190,17 @@ As high-throughput sequencing has evolved, the number cells/bins in a dataset ha
 
 But how do we know which cells to keep when downsampling? We want to make sure that we are not just keeping the most abundant cell types, but also retaining rare populations that may be biologically important.
 
-::: callout-warning
-TODO: explain how leverage score is calculated
-:::
-
 ::: {#fig-seq_depth .figure}
 ![](../img/ncells_vs_leverage_score.png){width="50%"}
 
 Contrasting the number of cells per cell type against leverage scores, highlighting how rare populations have higher leverage scores.<br>
 _Image source: [Hao et al. (2024)](https://www.nature.com/articles/s41587-023-01767-y)_
 ::: 
+
+::: callout-warning
+TODO: explain how leverage score is calculated
+:::
+
 
 A [leverage score](https://dl.acm.org/doi/pdf/10.1145/3019134) is calculated for each bin. This value reflects the magnitude of a bin's contribution to the gene-covariance matrix, and its importance to the overall dataset. From these scores, bins are selected and added to the sketch assay. This sketch-based analyses aims to "subsample" large datasets in a way that preserves rare populations. The authors of Seurat found that rare celltype populations (with fewer cells) have higher leverage scores.
 
@@ -226,6 +234,7 @@ We can see that there are four major changes that have taken place:
 - There is a new line listing additional assays that exist in the Seurat object
 
 ```{r}
+# Seurat callout after sketch downsampling
 seurat_sketch
 ```
 
@@ -248,11 +257,12 @@ seurat_sketch@meta.data %>%
 
 ### Visualizing leverage scores
 
-We would not like to see a strong bias in leverage scores across samples, as this would indicate that we are preferentially keeping bins from one sample over another. 
+We would not like to see a strong bias in leverage scores across samples, as this would indicate that we are preferentially keeping bins from one sample over another. Luckily when we view the histogram of distribution, we are seeing a comparable range of scores across both samples.
 
 ```{r}
 #| label: fig-leverage_score_hist
 #| fig-cap: Distribution of leverage scores across samples.
+# Histogram of leverage scores, split by sample
 ggplot(seurat_sketch@meta.data) +
   geom_histogram(aes(x=leverage.score, 
                      fill=orig.ident), 
@@ -273,6 +283,8 @@ SpatialFeaturePlot(seurat_sketch,
                    max.cutoff = 2)
 ```
 
+
+You may notice that many of the bins with higher leverage scores were also the ones we saw in the previous lesson with higher levels of UMIs and genes. This indicates that our spatially unique populations are also going to be represented in our downsampled dataset.
 
 ## Save!
 
