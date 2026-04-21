@@ -40,11 +40,11 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-When doing XYZ...
+In Visium HD data, the main challenge is in **delineating bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
+
+Here we will learn how to identify and set thresholds for filtration so that the dataset contains high-quality bins.
 
 ## Quality metrics
-
-In Visium HD data, the main challenge is in **delineating bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
 
 We will assess a variety of metrics to evaluate which bins are considered low/high quality. **We will apply very permissive filtering here** as it has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq. 
 
@@ -59,13 +59,10 @@ The metrics we will be using to filter low-quality bins from high-quality ones i
 Some of these values we will calculate throughout this lesson and be added to our metadata dataframe.
 
 ```{r}
-#| label: create_meta
-meta <- seurat_merged@meta.data
-```
-
-```{r}
 #| label: meta_view
 #| eval: false
+# Store metadata as variable meta
+meta <- seurat_merged@meta.data
 View(meta)
 ```
 
@@ -73,12 +70,11 @@ View(meta)
 #| label: tbl-meta_dt
 #| tbl-cap: View `@meta.data` dataframe
 #| echo: false
+meta <- seurat_merged@meta.data
 meta %>% 
   head(5) %>%
   knitr::kable()
 ```
-
-We will be using a variety of visualization methods, including looking at the values on the spatial slide as well as the distribution of values before and after filtration.
 
 ::: {.callout-note collapse=true}
 # "Nicer" spatial visualizations
@@ -86,9 +82,10 @@ For "nicer" (subjective) plotting with `SpatialFeaturePlot()` and `SpatialDimPlo
 
 ```{r}
 #| label: fig-nCount_spatial_default
-#| fig-cap: Default `SpatialFeaturePlot()` visualization parameters
+#| fig-cap: Default `SpatialFeaturePlot()` visualization parameters.
 SpatialFeaturePlot(seurat_merged, 
-                   "nCount_Spatial.008um")
+                   "nCount_Spatial.008um",
+                   pt.size.factor = 15)
 ```
 
 Therefore for the rest of this lesson, we will be using the following arguments:
@@ -98,12 +95,19 @@ Therefore for the rest of this lesson, we will be using the following arguments:
 - `max.cutoff` and `min.cutoff`: to not allow the color scale to be driven by smaller populations of cells with high/low values
 :::
 
+We will be using a variety of visualization methods:
+
+- Looking at the values of each bin on the spatial slide .
+- Distribution of values before and after filtration as a density plot.
 
 ### Number of bins
 
+First, we can see how many bins we have per sample. This is a number we should keep in the back of our mind throughout the analysis because it will help us understand the distribution of our spots. For spatial datasets, the number of bins is going to correspond directly to the bin size chosen as well as the bin size selected.
+
 ```{r}
 #| label: fig-n_cells
-#| fig-cap: Number of cells in the dataset, split by sample
+#| fig-cap: Number of bins in the dataset, split by sample.
+# Barplot number of bins per sample
 ggplot(meta) +
   geom_bar(aes(x = orig.ident, fill = orig.ident),
            color = "black") +
@@ -115,15 +119,11 @@ ggplot(meta) +
 
 ### UMI counts (transcripts) per bin
 
-::: callout-warning
-TODO:
+The `nCounts` is the number of unique transcripts (UMIs) detected per bin. Oftentimes, these values will correspond with how transcriptionally active a cell may be, which is typically defined by their celltype. For example, tumor cells will have very high UMI counts.
 
-- talk about celltypes and how we see clear structure of certain cells with higher nUMIs
-:::
+In the density plots, we expect to see a bimodal distribution. One peak should represent bins containing lower-quality bins with fewer UMIs and another peak representing healthy bins with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.
 
-We expect to see a bimodal distribution, with one peak representing bins containing lower-quality cells with fewer UMIs and another peak representing bins containing healthy cells with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.
-
-This is the number of unique transcripts detected per bin. Because the bins are very small, this number is less than what we would expect for non-spatial scRNA-seq data.
+These numbers may be lower than what we would expect for scRNA-seq datasets due to the small size of the bins.
 
 ::: {.panel-tabset}
 
@@ -131,7 +131,7 @@ This is the number of unique transcripts detected per bin. Because the bins are 
 
 ```{r}
 #| label: fig-nCount_spatial
-#| fig-cap: Number of UMIs overlaid over spatial slide
+#| fig-cap: Number of UMIs overlaid over spatial slide.
 SpatialFeaturePlot(seurat_merged, 
                    "nCount_Spatial.008um",
                    pt.size.factor = 15,
@@ -143,7 +143,7 @@ SpatialFeaturePlot(seurat_merged,
 
 ```{r}
 #| label: fig-nCount_density
-#| fig-cap: Number of UMIs density
+#| fig-cap: Number of UMIs density.
 ggplot(meta) +
   geom_density(aes(x = nCount_Spatial.008um, fill = orig.ident),
                alpha = 0.4,
@@ -159,7 +159,7 @@ ggplot(meta) +
 
 ```{r}
 #| label: fig-nCount_density_filt
-#| fig-cap: Number of UMIs density after filtration
+#| fig-cap: Number of UMIs density after filtration.
 meta_filt <- subset(meta,
   ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 30)) |
   ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 10)))
@@ -184,9 +184,9 @@ A commonly asked question is if you have to use the same threshold values across
 
 ### Genes detected per bin
 
-We have similar expectations for gene detection as for UMI detection, although it may be a bit lower than UMIs.
+This is the number of genes (`nFeatures`) detected per bin, or the number of genes that have a non-zero value in a bin. We have similar expectations for gene detection as we did for number of UMIs in terms of the distribution of values.
 
-This is the number of unique genes detected per bin. Again, because the bins are very small, this number is less than what we would expect for non-spatial scRNA-seq data.
+When we look at the spatial slide, we can already beging to see patterns of expression (both with genes and UMIs) that will be helpful in understanding our dataset better.
 
 ::: {.panel-tabset}
 
@@ -194,7 +194,7 @@ This is the number of unique genes detected per bin. Again, because the bins are
 
 ```{r}
 #| label: fig-nFeature_spatial
-#| fig-cap: Number of features overlaid over spatial slide
+#| fig-cap: Number of features overlaid over spatial slide.
 SpatialFeaturePlot(seurat_merged, 
                    "nFeature_Spatial.008um",
                    pt.size.factor = 15,
@@ -206,7 +206,7 @@ SpatialFeaturePlot(seurat_merged,
 
 ```{r}
 #| label: fig-nFeature_density
-#| fig-cap: Number of features density
+#| fig-cap: Number of features density.
 ggplot(meta) +
   geom_density(aes(x = nFeature_Spatial.008um,
                      fill = orig.ident),
@@ -223,7 +223,7 @@ ggplot(meta) +
 
 ```{r}
 #| label: fig-nFeature_density_filt
-#| fig-cap: Number of features density after filtration
+#| fig-cap: Number of features density after filtration.
 meta_filt <- subset(meta,
   ((orig.ident == "P5CRC") & (nFeature_Spatial.008um > 30)) |
   ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 10)))
@@ -243,9 +243,9 @@ ggplot(meta_filt) +
 
 ### Complexity (novelty) score
 
-If there are many captured transcripts (high nUMI) and a low number of genes detected in a bin, this likely means that you only captured a low number of genes and simply sequenced transcripts from those lower number of genes over and over again. These low complexity (low novelty) bins could represent a specific cell type (i.e. red blood cells, which lack a typical transcriptome), or could be due to an artifact or contamination. Generally, we expect the complexity score to be above 0.80 for good-quality bins.
+Sometimes there may be bins with high `nCounts` (UMIs) and low `nFeatures` (genes). This would indicate that few genes were sequenced many times over. We consider these instances to be cases of "low complexity" where we are getting high expression from few genes. Some celltypes, such as red blood cells, are known for such behavior. However, we should be cautious when interpreting these results, as contamination or technical artifact could also contribute to this. Generally, we expect the complexity score to be above 0.80 for good-quality bins.
 
-The novelty score is computed as shown below:
+The novelty score is computed as a ration of genes to UMIs, as shown below:
 
 $$
 \text{Complexity Score} = \frac{\text{Number of Genes}}{\text{Number of UMIs}}
@@ -269,7 +269,7 @@ seurat_merged$log10GenesPerUMI[is.na(seurat_merged$log10GenesPerUMI)] <- 0
 
 ```{r}
 #| label: fig-log10GenesPerUMI_spatial
-#| fig-cap: Complexity score overlaid over spatial slide
+#| fig-cap: Complexity score overlaid over spatial slide.
 SpatialFeaturePlot(seurat_merged, 
                    "log10GenesPerUMI",
                    pt.size.factor = 17,
@@ -281,7 +281,7 @@ SpatialFeaturePlot(seurat_merged,
 
 ```{r}
 #| label: fig-log10GenesPerUMI_density
-#| fig-cap: Complexity score density
+#| fig-cap: Complexity score density.
 meta <- seurat_merged@meta.data
 ggplot(meta) +
   geom_density(aes(x = log10GenesPerUMI,
@@ -297,7 +297,7 @@ ggplot(meta) +
 
 ```{r}
 #| label: fig-log10GenesPerUMI_density_filt
-#| fig-cap: Complexity score density after filtration
+#| fig-cap: Complexity score density after filtration.
 meta_filt <- subset(meta, log10GenesPerUMI > 0.80)
 ggplot(meta_filt) +
   geom_density(aes(x = log10GenesPerUMI,
@@ -312,7 +312,9 @@ ggplot(meta_filt) +
 
 ### Mitochondrial counts ratio
 
-This metric can identify whether there is a large amount of mitochondrial contamination from dead or dying cells. We define poor-quality samples for mitochondrial counts as bins which surpass the 0.2 mitochondrial ratio threshold, unless of course you are expecting this in your sample. This ratio is computed as:
+During sequencing, we do not only measure the levels of expression the nuclear genome - we also the mitochondrial genome! High levels of mitochondrial expression is a sign that the cell is dying or dead. Therefore, we can calculate the proportion of reads (UMIs) that come from the mitochondria out of all the transcripts in a cell as another metric.
+
+ We define poor-quality samples for mitochondrial counts as bins which surpass the 0.25 mitochondrial ratio threshold, unless of course you are expecting this in your sample. This ratio is computed as:
 
 $$
 \text{Mitochondrial Ratio} = 
@@ -345,7 +347,7 @@ seurat_merged$mitoRatio[is.na(seurat_merged$mitoRatio)] <- 1.00
 
 ```{r}
 #| label: fig-mitoRatio_spatial
-#| fig-cap: Mitochondrial ratio overlaid over spatial slide
+#| fig-cap: Mitochondrial ratio overlaid over spatial slide.
 SpatialFeaturePlot(seurat_merged, 
                    "mitoRatio",
                    pt.size.factor = 15,
@@ -357,7 +359,7 @@ SpatialFeaturePlot(seurat_merged,
 
 ```{r}
 #| label: fig-mitoRatio_density
-#| fig-cap: Mitochondrial ratio density
+#| fig-cap: Mitochondrial ratio density.
 meta <- seurat_merged@meta.data
 ggplot(meta) +
   geom_density(aes(x = mitoRatio,
@@ -373,7 +375,7 @@ ggplot(meta) +
 
 ```{r}
 #| label: fig-mitoRatio_density_filt
-#| fig-cap: Mitochondrial ratio density after filtration
+#| fig-cap: Mitochondrial ratio density after filtration.
 meta_filt <- subset(meta, mitoRatio < 0.25)
 
 ggplot(meta_filt) +
@@ -400,9 +402,9 @@ seurat_merged@meta.data %>%
   # Sorting by mitoRatio to make high scores appear on top of the plot
   arrange(mitoRatio) %>%
   ggplot() +
-  geom_point(aes(x = ?, 
-                 y = ?,
-                 color = ?),
+  geom_point(aes(x = ???, 
+                 y = ???,
+                 color = ???),
              size = 0.5) +
   # Setting limits so that outliers don't determine scale of the plot
   ylim(0, 3500) + xlim(0, 3500) +
@@ -417,32 +419,38 @@ We will apply very minimal filtering here. It has been shown that low expression
 
 ```{r}
 #| label: filter_cells
-# TODO there has to be a cleaner way to do this
+# Per-sample nCount thresholds
 seurat_filtered <- subset(seurat_merged,
   ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 30)) |
   ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 10)))
 
+# Per-sample nFeature thresholds
 seurat_filtered <- subset(seurat_filtered,
   ((orig.ident == "P5CRC") & (nFeature_Spatial.008um > 30)) |
   ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 10)))
   
+# Global thresholds for mitochondrial ratio and complexity
 seurat_filtered <- subset(seurat_filtered, mitoRatio < 0.25)
 seurat_filtered <- subset(seurat_filtered, log10GenesPerUMI > 0.80)
 
+# Print seurat object after filtration
 seurat_filtered
 ```
 
+
+::: callout-warning
 After subsetting, you may get the following warning message:
 
 ```
+Warning: Not validating Centroids objects 
 Warning: Not validating FOV objects
 Warning: Not validating FOV objects
 Warning: Not validating FOV objects
 Warning: Not validating Seurat objects
 ```
 
-::: callout-warning
-TODO: explain this warning message. It is fine that it happens, it does not break anything
+This warning message can be ignored as it is Seurat internalling checking bin barcodes against the image. After every `subset` step this message may appear, but can ignored as ultimately the subsetting is still accomplished.
+
 :::
 
 
@@ -450,6 +458,7 @@ How many cells did we remove in this filtration process?
 
 ```{r}
 #| label: calc_ncells_filtered
+# Differences of cells before and after filtration
 ncol(seurat_merged) - ncol(seurat_filtered)
 ```
 
@@ -468,7 +477,7 @@ Let’s start with a violin plot to look at the distribution of UMI counts and g
 
 ```{r}
 #| label: fig-vln_ncount_nfeature
-#| fig-cap: Violin plot of nCounts and nFeatures after filtration
+#| fig-cap: Violin plot of nCounts and nFeatures after filtration.
 p_ncount <- VlnPlot(seurat_filtered, 
                     features = "nCount_Spatial.008um", 
                     pt.size = 0, group.by = 'orig.ident') +
@@ -490,7 +499,7 @@ Next, we can look at the same metrics and the distribution on the actual image i
 
 ```{r}
 #| label: fig-nFeature_nCount_spatial
-#| fig-cap: Number of features and counts overlaid over spatial slide
+#| fig-cap: Number of features and counts overlaid over spatial slide.
 #| fig-width: 10
 #| fig-height: 8
 SpatialFeaturePlot(seurat_filtered, 
@@ -503,7 +512,7 @@ SpatialFeaturePlot(seurat_filtered,
 
 ## Save!
 
-Now is a great spot to save our `seurat_filtered` object as we have finished filtered.
+Now is a great spot to save our `seurat_filtered` object as we have finished filtering.
 
 ```{r}
 #| label: save_seurat_filtered
