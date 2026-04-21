@@ -39,7 +39,9 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-When doing XYZ...
+Before we touch any data, we need to orient ourselves on the spatial transcriptomics landscape. In this lesson we compare imaging- (MERFish, Xenium) and sequencing-based platforms (Visium HD, Slide-seq) so that you can make sense of which technology is right for your research question. Each method is different in its resolution, coverage, tissue compatibility, and practical constraints. 
+
+Knowing the pros and cons of each method will allow you to make an informed decision about which technology is best for your research. In addition, some computational methods/algorithms are better suited to certain types of spatial transcriptomics results.
 
 ## High-throughput sequencing overview
 
@@ -98,15 +100,16 @@ TODO: want a visual representation of differences between seq and imaging techno
 
 ## Sequencing-based technologies
 
+Sequencing-based methods are sometimes referred to as "spot-based methods" because the tissue is placed on a slide with a grid-like pattern. Similar to a microarray, each _spot_ on the grid has a unique sequence (barcode) associated with its location. After the permeabilization step, RNA from the tissue binds to these barcode capture probes. Because we already know the location of each barcode in advance, we know which bin/spot a read comes from. Therefore, the output is the gene-expression of each bin as well as its associated location on the tissue.
+
 ::: {#fig-seq_tech .figure}
 ![](../img/visum_vs_visHD.png){width=700}
 
 Comparison of Visium and Visium HD data in FFPE human colorectal cancer,  showcasing the resolution that can be achieved with sequencing-based methods.<br>
-_Image source: [10X Genomics: Your introduction to Visium HD](https://www.10xgenomics.com/blog/your-introduction-to-visium-hd-spatial-biology-in-high-definition)_
+_Image source: [10X Genomics: Your Introduction to Visium HD](https://www.10xgenomics.com/blog/your-introduction-to-visium-hd-spatial-biology-in-high-definition)_
 ::: 
 
-Sequencing-based methods focus on capturing the full transcriptome of the cells in the dataset. To accomplish this, the tissue is "binned" into different spots which are then sequenced to measure expression levels. At times, a spot can be comprised of multiple cells (i.e., not single-cell level). As the technology has evolved, the bin sizes have become smaller, allowing for near single-cell resolution.
-
+The sizes of these spots vary per technology. Earlier sequecing-based methods has larger bins, which could contain several cells per spot. As the technology has evolved, the bin sizes have become smaller, allowing for near single-cell resolution.
 
 ### Summary of popular methods
 
@@ -145,11 +148,21 @@ We will be using Visium HD for the hands-on portion of this workshop.
 ::: {#fig-img_tech .figure}
 ![](../img/vizgen_merfish.png){width=700}
 
-Showcase of MERFISH, an imaging-based technology, which can achieve single-cell resolution.<br>
+Showcase of MERFISH, an imaging-based technology, which can achieve single-cell resolution of tissues.<br>
 _Image source: [Vizgen: Leading the Global Expansion of Spatial Transcriptomics](https://vizgen.com/vizgen-leading-the-global-expansion-of-spatial-transcriptomics/)_
 :::
 
-These methods utilize fluorescence to quantify gene expression on a tissue slide, specifically fluorescence in situ hybridization (FISH) to measure expression of a selected panel of genes using probes. Therefore, we are able to evaluate expression for each individual cell after segmentation.
+Imaging-based spatial transcriptomics builds upon fluorescence in situ hybridization (FISH) to measure expression of genes using probes on a tissue. The transcripts are amplified such that multiple copies are located within a small spot. These reads then go through multiple cycles of imaging, where the probes will fluoresce when specific sequences are present. A camera captures these images and ultimately identifies the location and sequences for each of these reads.
+
+::: {#fig-segmentation .figure}
+![](../img/segmentation.png){width="50%"}
+
+Schematic of how cell boundaries are establieshed using nuclear stain, cell boundary stains, and transcripts to identify cellular boundaries.<br>
+_Image source:[Heidari et al. (2025)](https://www.biorxiv.org/content/10.1101/2025.03.14.643160v1.full)_
+:::
+
+Many of these methods will also use a DAPI stain to identify both nuclear and cellular walls. This allows for the identification of cell boundaries to map transcripts to a singular cell. In this way, imaging-based technologies are able to capture single-cell level resoultion of tissues for the provided set of probes.
+
 
 ### Summary of popular methods
 
@@ -180,7 +193,7 @@ Table: Summary of popular imaging-based methods for spatial transcriptomics. {#t
 
 ## Summary of comparison
 
-: Table: Summary of the advantages and disadvantages of sequencing- and imaging-based spatial transcriptomics technologies.<br>_Adapted from:[Single Cell Discoveries](https://www.scdiscoveries.com/blog/sequencing-vs-imaging-in-spatial-transcriptomics/)_ {#tbl-comparison}
+: Summary of the advantages and disadvantages of sequencing- and imaging-based spatial transcriptomics technologies.<br>_Adapted from: [Single Cell Discoveries](https://www.scdiscoveries.com/blog/sequencing-vs-imaging-in-spatial-transcriptomics/)_ {#tbl-comparison}
 
 | **Feature**            | Sequencing-based                                    | Imaging-based                         |
 |------------------------|-----------------------------------------------------|---------------------------------------|
@@ -200,13 +213,6 @@ When designing a spatial transcriptomics experiment, there are several factors t
 ::: callout-warning
 TODO: Talk with single-cell core about good design
 :::
-
-## References
-
-- https://www.nature.com/articles/s41581-024-00841-1 
-- https://www.sciencedirect.com/science/article/pii/S1044532325000302
-- https://www.nature.com/articles/s41581-024-00841-1/tables/1
-
 
 ***
 

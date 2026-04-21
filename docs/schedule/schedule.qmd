@@ -8,7 +8,7 @@ toc: false
 
 1. [Spatial Technology Overview](../lessons/01_spatial_technologies.qmd)
 2. [Space Ranger Summary](../lessons/02_spaceranger.qmd)
-3. [Download Project](TODO: dropbox link to project files here)
+3. [Download Project](https://www.dropbox.com/scl/fo/053p46ab36e53u6hr5jnl/ABPN8Bh7sKPUfG1O8L1TbRI?rlkey=lva3uunugrxp99xyo7xyf1mul&st=xqpfvj2f&dl=0)
 
 ## Day 1
 
@@ -181,3 +181,9 @@ II. **Submit your work**:
 - [Additional Resource 1](link_to_additonal_resource_1)
 - [Additional Resource 2](link_to_additonal_resource_2)
 - [Additional Resource 3](link_to_additonal_resource_3)
+
+### References
+
+- https://www.nature.com/articles/s41581-024-00841-1
+- https://www.nature.com/articles/s41592-024-02325-3
+

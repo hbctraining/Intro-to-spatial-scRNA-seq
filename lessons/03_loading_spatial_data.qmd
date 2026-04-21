@@ -39,14 +39,16 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-When doing XYZ...
+At this point in the experiment, we have sequenced our Visium HD dataset and ran it through the Space Ranger pipeline. With the outputs, we will learn what files are necessary to load the data into `Seurat`. In addition to creating a Seurat object, we will also become familiar with how the Seurat data structure is formatted so that we can access each part of our dataset in future lesson. Once the basics of working in Seurat and R are established, we will then load multiple samples at once in an automated manner.
+
+**This is the starting point for a standard spatial transcriptomics analysis!**
 
 ## Exploring the example Visium HD dataset
 
 Throughout this workshop, we will be working with a Visium HD dataset that came from a [larger study on human colorectal cancer](https://www.nature.com/articles/s41588-025-02193-3). The focus of this study was to understand the tumor microenvironment in colorectal cancer (CRC) by utilizing multiple sequencing modalities, including Visium HD, Xenium, and FLEX single-cell sequencing.
 
 ::: {#fig-experiment_design .figure}
-![](../img/crc_study.png){width=700}
+![](../img/crc_study.png){width="100%"}
 
 Celltype annotation overlaid over three colorectral samples sequenced with Visium HD.<br>
 _Image source: [Oliveira et al. (2025)](https://www.nature.com/articles/s41588-025-02193-3)_
@@ -133,10 +135,10 @@ dir_tree("data", recurse = 1)
 # Cropped images
 You may notice that we are working with **cropped** folders for this workshop. This is due to the limitations of how much data can be loaded on a laptop. So here, we have cropped the image so that we have a smaller cross-section of the tissue to work with, ultimately reducing the number of cells for this example dataset.
 
-The code used to create all the files for this workshop can be found [here](TODO: link).
+The code used to create all the files for this workshop can be found [here](Aside_crop_slide.qmd).
 
 ::: callout-warning
-TODO: link for aside lesson on cropping dataset
+TODO: lesson on cropping unfinished
 :::
 
 :::

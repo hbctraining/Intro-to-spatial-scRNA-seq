@@ -275,7 +275,7 @@ Segmentation is not a key step when working with sequencing-based spatial transc
 
 However, **segmentation is a critical step when working with imaging-based spatial transcriptomics** data, such as MERFISH or Xenium. This is because we need to identify the boundaries of each cell to assigned transcript counts to that cell. These boundaries are typically identified with stains for the nuclei and cell walls in conjunction with expression data. 
 
-Segmentatin is a challenging problem, especially when cells have irregular shapes (e.g., neuron cells).
+Segmentation is a challenging problem, especially when cells have irregular shapes (e.g., neuron cells).
 Some methods for segmentation that have been published include, but are not limited to:
 
 - [Cellpose](https://www.cellpose.org/)
@@ -283,6 +283,11 @@ Some methods for segmentation that have been published include, but are not limi
 
 :::
 
+:::{.callout-tip}
+# **Exercise 1**
+1. Open the `web_summary.html` files for the two samples in the `data` folder and start exploring some basic QC in the datasets we will we be using throughout this workshop!
+
+:::
 
 ***
 
