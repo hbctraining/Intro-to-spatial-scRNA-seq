@@ -306,8 +306,8 @@ What does each column represent?
 | Column        | Description                                   |
 |---------------|-----------------------------------------------|
 | orig.ident    | Sample identity if known; defaults to “s”     |
-| nCount_RNA    | Number of UMIs per cell                       |
-| nFeature_RNA  | Number of genes detected per cell             |
+| nCount_Spatial    | Number of UMIs per cell                       |
+| nFeature_Spatial  | Number of genes detected per cell             |
 
 : Columns automatically populated in `@meta.data` {#tbl-metadata_cols}
 
@@ -352,8 +352,10 @@ Today we will use it to **iterate over the two sample folders** and execute comm
 
 1. Generate path to `data.dir` by pasting "_cropped" to the sample name
 2. Create the Seurat objects from the SpaceRanger data (`Load10X_Spatial()`) 
-  - Set `slice` to sample
-  - Use `bin.size` of 8um
+
+    - Set `slice` to sample
+    - Use `bin.size` of 8um
+
 3. Set `orig.ident` to be sample
 
 Once those steps run, we will store the newly generated Seurat object to a list called `list_seurat` so that we can eventually merge both samples together.
