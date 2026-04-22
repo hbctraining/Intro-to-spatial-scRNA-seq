@@ -5,7 +5,6 @@ execute:
   eval: false
 ---
 
-
 # Spatial Transcriptomics
 
 | Audience | Computational skills required| Duration |
@@ -42,7 +41,7 @@ These materials were developed for a trainer-led workshop, but are also amenable
 ### Lessons
 
 - [Workshop schedule (trainer-led learning)](schedule/schedule.qmd)
-- [Self-learning](schedule/links-to-lessons.qmd)
+- [Self-learning](schedule/self-learning.qmd)
 
 ### Installation Requirements
 
