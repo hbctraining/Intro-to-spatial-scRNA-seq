@@ -41,7 +41,8 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-When doing XYZ...
+At this point, we have loaded our dataset, filtered to high quality bins, and downsampled. Even though we have reduced the number of bins, ulimately we still have thousands of genes to contend with. The goal is summarize the information across genes to identify bins that are similar to one another in gene-expression space. We will lean how reduce the number of dimensions (genes) using principal component analysis (PCA) and UMAP. These embeddings become the backbone for clustering, visualization, and downstream analyses in futer lessons.
+
 
 ## Single-cell RNA-seq (scRNA-seq) workflow
 
@@ -83,6 +84,8 @@ steps.
 
 ## Variation in the dataset
 
+We will continue where we left off in the previous lesson and load in the `seurat_sketch` object. With this sketch assay, we need to once again ask, what genes are diving the variation in the dataset?
+
 ```{r}
 #| label: header
 #| eval: false
@@ -90,12 +93,16 @@ steps.
 # Visium HD spatial transcriptomics workshop
 # Author: Harvard Chan Bioinformatics Core
 # Created: December 2025
+
+# Load libraries
 library(Seurat)
 library(tidyverse)
 set.seed(12345)
 
 seurat_sketch <- readRDS("data/seurat_sketch.RDS")
 ```
+
+Therefore the first step of this workflow will be computing the top variable features, but this time for our sketch assay.
 
 
 ### Identify highly variable genes (HVGs)
@@ -260,22 +267,10 @@ DimPlot(seurat_processed,
         reduction = "pca.sketch")
 ```
 
-Ultimately what we have calculated with PCA are values that can represent how similar cells are to one another. We would expect that cells with similar gene expression will have similar PC values. For example, we would anticipate that two Fibroblast cells would have comparable gene expression - which would also results in similar scores in principal components. This is why many of the downstream steps in the remainder of this lesson use PCA as the input.
+Ultimately what we have calculated with PCA are values that can represent how similar cells are to one another. We would expect that cells with similar gene expression will have similar PC values. For example, we would anticipate that two Fibroblast cells would have comparable gene expression - which would also results in similar scores in principal components. This is why many of the downstream steps use PCA as the input.
 
-Also assess the differences in coordinates based on batch variables.
-
-```{r}
-#| label: fig-PCA_plot_batch
-#| fig-cap: PCA plot of PC1 vs PC2 with bins colored and split by sample.
-# Plot PCA, split by sample
-DimPlot(seurat_processed,
-        pt.size = 2,
-        reduction = "pca.sketch",
-        group.by = "orig.ident",
-        split.by = "orig.ident")
-```
-
-### Selecting PC dimensions
+::: {.callout-note collapse="true"}
+# Selecting PC dimensions
 
 To overcome the extensive technical noise in the expression of any single gene for scRNA-seq data, Seurat assigns cells to clusters based on their PCA scores derived from the expression of the integrated most variable genes. Each PC essentially representing a "metagene" that combines information across a correlated gene set. **Determining how many PCs to include in the clustering step is therefore important to ensure that we are capturing the majority of the variation**, or cell types, present in our dataset. 
 
@@ -296,13 +291,34 @@ ElbowPlot(object = seurat_processed,
 
 Based on this plot, we could roughly determine the majority of the variation by where the elbow occurs around PC8 - PC10, or one could argue that it should be when the data points start to get close to the X-axis, PC30 or so. This gives us a very rough idea of the number of PCs needed to be included.
 
+:::
+
 **We will be using 50 PCs for our downstream steps.**
 
 ## UMAP
 
-To visualize the cell clusters, there are a few different dimensionality reduction techniques that can be helpful. The most popular methods include [t-distributed stochastic neighbor embedding (t-SNE)](https://kb.10xgenomics.com/hc/en-us/articles/217265066-What-is-t-Distributed-Stochastic-Neighbor-Embedding-t-SNE-) and [Uniform Manifold Approximation and Projection (UMAP)](https://umap-learn.readthedocs.io/en/latest/index.html) techniques. 
+To visualize the cell clusters, there are a few different [dimensionality reduction techniques](https://www.nature.com/articles/s41598-025-14301-8) that can be helpful. The most popular methods include:
 
-Both methods aim to place cells with similar local neighborhoods in high-dimensional space together in low-dimensional space. These methods will require you to input number of PCA dimentions to use for the visualization, we suggest using the same number of PCs as input to the clustering analysis. Here, we will proceed with the [UMAP method](https://umap-learn.readthedocs.io/en/latest/how_umap_works.html) for visualizing the clusters.
+- t-distributed stochastic neighbor embedding: [t-SNE](https://www.nature.com/articles/s41467-019-13056-x)
+- Uniform Manifold Approximation and Projection:[UMAP](https://www.scdiscoveries.com/blog/knowledge/what-is-a-umap-plot/)
+- Singular valude decomposition: [SVD](https://pmc.ncbi.nlm.nih.gov/articles/PMC12753137/)
+
+::: {.callout-note collapse="true"}
+# UMAP vs t-SNE vs SVD
+
+Both UMAP and t-SNE are buit under the same general structure of taking a larger dimensional space (PCA) and flattening it to two dimension uses manifolds. UMAP has come out on top between the two due its ability to balance both local and global structures of the dataset. Additionally, it is less sensitive to parameter choice, making it easier to tune. To contrast, the output of t-SNE plots tend to emphasize the local neighborhood to the detriment of the global structure of the data.
+
+::: {#fig-umap_vs_tsne .figure}
+![](../img/umap_vs_tsne.png){width=500}
+
+Schematic of how parameters are tuned for manifold learning algorithms to emphasize either local or global structure.<br>
+_Image source: [Marx (2024)](https://www.nature.com/articles/s41592-024-02301-x)_
+::: 
+
+SVD is another form of reduction that is best suited for sparse, scATAC-seq datasets.
+:::
+
+Each methods aim to place cells with similar local neighborhoods in high-dimensional space together in low-dimensional space. These methods will require you to input number of PCA dimensions to use for the visualization, we suggest using the same number of PCs as input to the clustering analysis. Here, we will proceed with the [UMAP method](https://umap-learn.readthedocs.io/en/latest/how_umap_works.html) for visualizing the clusters.
 
 ```{r}
 #| label: run_umap
@@ -323,9 +339,28 @@ These UMAP coordinates are now stored in the `dimensional reductions calculated:
 #| fig-cap: UMAP plot with bins colored by sample.
 # Plot UMAP
 DimPlot(seurat_processed, 
-        group.by="orig.ident",
-        reduction="umap.sketch")
+        group.by = "orig.ident",
+        reduction = "umap.sketch")
 ```
+
+
+::: {.callout-note collapse="true"}
+# My UMAP plot looks rotated!
+
+As with PCA, the values on the UMAP axes are not meaningful. What actually matters is the **distance and relative arrangement of points** in the UMAP space. Rotations or reflections of the plot do not change these relationships, as the distance will be preserved. This is why many figures omit axis tick labels entirely.
+
+So if you got different UMAP coordinates, that is within expectation - long as the overall structure and patterns are preserved.
+
+
+::: {#fig-rotated_umap .figure}
+![](../img/rotate_umap.png){width="50%"}
+
+Possible UMAP rotation of the dataset.
+::: 
+
+Many paper discuss the difficulties of interpreting results when plotted on a UMAP. So while we acknowledge the usefulness of a UMAP plot as a first pass look at the data, we encourage you all to utilize other plots (violin plots, dot plots, bar plots, etc.) to showcase your data in a more quantitative manner.
+
+:::
 
 ::: callout-tip
 # [**Exercise 2**](07_dim_reduction-Answer_key.qmd#exercise-2)

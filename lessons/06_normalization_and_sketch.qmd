@@ -99,7 +99,7 @@ The most common transformation is a **log transformation**, which is applied in 
 
 ### Perform log-normalization
 
-Now that we are on a new step of our analysis, let us create another script titled `02_sketch_scRNA_workflow.R` that will contain our normalization and sketching code. This will help us keep our workflow organized and modular.
+Now that we are on a new step of our analysis, let us create another script titled `02_normalization_and_sketch.R` that will contain our normalization and sketching code. This will help us keep our workflow organized and modular.
 
 After loading the necessary libraries, we will load in the `seurat_filtered` object we created in the previous lesson.
 
@@ -107,7 +107,6 @@ After loading the necessary libraries, we will load in the `seurat_filtered` obj
 #| label: set-up_script
 #| eval: false
 # Normalization and sketch downsampling
-# Dimensionality reduction and clustering
 # Visium HD spatial transcriptomics workshop
 # Author: Harvard Chan Bioinformatics Core
 # Created: December 2025
@@ -116,6 +115,7 @@ After loading the necessary libraries, we will load in the `seurat_filtered` obj
 library(Seurat)
 library(tidyverse)
 library(scales)
+set.seed(12345)
 
 # Load filtered datset
 seurat_filtered <- readRDS("data/seurat_filtered.RDS")
@@ -234,6 +234,7 @@ We can see that there are four major changes that have taken place:
 - There is a new line listing additional assays that exist in the Seurat object
 
 ```{r}
+#| label: seurat_sketch_callout
 # Seurat callout after sketch downsampling
 seurat_sketch
 ```
