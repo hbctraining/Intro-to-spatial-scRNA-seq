@@ -1,7 +1,7 @@
 ---
 title: "Spatial Transcriptomics Technologies"
 description: |
-    Explore the current landscape of spatial transcriptomics technologies. Focusing on contrasting sequencing-based and imaging-based platforms to show how they differ in resolution, throughput, and sensitivity. By the end, you will be informed on which technology is best suited for your biological question.
+    Explore the current landscape of spatial transcriptomics technologies. Focusing on contrasting sequencing-based and imaging-based platforms to show how they differ in resolution, throughput and sensitivity. By the end, you will be informed on which technology is best suited for your biological question.
 author:
   - Noor Sohail
 date: "2025-07-22"
@@ -33,15 +33,15 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Follow the evolution of high-throughput sequencing
-- Describe the differences in sequencing- and imaging-based technologies
+- Describe the evolution of high-throughput sequencing
+- Highlight the differences between sequencing- and imaging-based technologies
 - Define the advantages and disadvantages of different spatial transcriptomics technologies
 
 ## Overview of lesson
 
-Before we touch any data, we need to orient ourselves on the spatial transcriptomics landscape. In this lesson we compare imaging- (MERFish, Xenium) and sequencing-based platforms (Visium HD, Slide-seq) so that you can make sense of which technology is right for your research question. Each method is different in its resolution, coverage, tissue compatibility, and practical constraints. 
+Before we touch any data, we need to orient ourselves on the spatial transcriptomics landscape. In this lesson we compare imaging- (MERFish, Xenium) and sequencing-based platforms (Visium HD, Slide-seq) so that you can make sense of which technology is right for your research question. Each method is different in its resolution, coverage, tissue compatibility and practical constraints. 
 
-Knowing the pros and cons of each method will allow you to make an informed decision about which technology is best for your research. In addition, some computational methods/algorithms are better suited to certain types of spatial transcriptomics results.
+Knowing the advantages and disadvantages of each method will allow you to make an informed decision about which technology is best for your research question. In addition, some computational methods/algorithms are better suited to certain types of spatial transcriptomics results.
 
 ## High-throughput sequencing overview
 
@@ -57,9 +57,9 @@ _Image source: [Bo Xia Lab](https://www.boxialab.org/news)_
 
 ### Bulk and single-cell sequencing
 
-**Bulk RNA-seq** is a method for comparing the averages of cellular expression for a population of cells. This method can be a good choice if looking at **comparative transcriptomics** (e.g. samples of the same tissue from different species), and for quantifying expression signatures in disease studies. It also has potential for the discovery of disease biomarkers if you are not expecting or not concerned about cellular heterogeneity in the sample.
+**Bulk RNA-seq** is a method for comparing the averages of cellular expression for a population of cells. This method can be a good choice if looking at **comparative transcriptomics** (e.g. samples of the same tissue from different species) and for quantifying expression signatures in disease studies. It also has potential for the discovery of disease biomarkers if you are not expecting or not concerned about cellular heterogeneity in the sample.
 
-To contrast, **single-cell sequencing** is a method for measuring gene expression on a per-cell basis. This method is ideal for studies of **cellular heterogeneity** where the differences between celltypes or cell states are the primary focus.
+To contrast, **single-cell sequencing** is a method for measuring gene expression on a per-cell basis. This method is ideal for studies containing **cellular heterogeneity** where the differences between celltypes or cell states are the primary focus.
 
 ::: {#fig-sc_vs_bulk .figure}
 ![](../img/sc_vs_bulk_cells.png){width=500}
@@ -91,8 +91,7 @@ Many of the challenges that arise in single-cell experiments are also present in
 - Technical variability across cells/samples
 - Biological variability across cells/samples
 
-
-These technologies can be broadly categorized into two groups: **sequencing-based** and **imaging-based**. We will now discuss the different technologies within each of these categories as well as their advantages and disadvantages.
+Spatial transcriptomic technologies can be broadly categorized into two groups: **sequencing-based** and **imaging-based**. We will now discuss the different technologies within each of these categories as well as their advantages and disadvantages.
 
 ::: callout-warning
 TODO: want a visual representation of differences between seq and imaging technologies
@@ -109,7 +108,7 @@ Comparison of Visium and Visium HD data in FFPE human colorectal cancer,  showca
 _Image source: [10X Genomics: Your Introduction to Visium HD](https://www.10xgenomics.com/blog/your-introduction-to-visium-hd-spatial-biology-in-high-definition)_
 ::: 
 
-The sizes of these spots vary per technology. Earlier sequecing-based methods has larger bins, which could contain several cells per spot. As the technology has evolved, the bin sizes have become smaller, allowing for near single-cell resolution.
+The sizes of these spots vary per technology. Earlier sequecing-based methods had larger bins, which could contain several cells per spot. As the technology has evolved, the bin sizes have become smaller, allowing for near single-cell resolution.
 
 ### Summary of popular methods
 
@@ -119,12 +118,12 @@ Table: Summary of popular sequencing-based methods for spatial transcriptomics. 
 
 |                      | Visium              | Visium HD            | Stereo-seq          | Slide-seq          |
 |----------------------|---------------------|----------------------|---------------------|--------------------|
-| **vendor**           | 10x Genomics        | 10x Genomics         | BGI Group           | Curio Biosciences* |
-| **capture size**     | ~6.5 × 6.5 mm capture area (×4 per slide) | ~11 × 11 mm–scale capture area (single array) | Up to ~1 × 1 cm chip (cm²‑scale field of view) | ~1 cm diameter puck (~80 mm²) |
-| **resolution**       | 55 µm spot diameter; multicellular        | ~2 µm “pixel” size; near single‑cell          | 220 nm DNA nanoball spacing; subcellular       | 10 µm beads; near single‑cell  |
+| **Vendor**           | 10x Genomics        | 10x Genomics         | BGI Group           | Curio Biosciences* |
+| **Capture size**     | ~6.5 × 6.5 mm capture area (×4 per slide) | ~11 × 11 mm–scale capture area (single array) | Up to ~1 × 1 cm chip (cm²‑scale field of view) | ~1 cm diameter puck (~80 mm²) |
+| **Resolution**       | 55 µm spot diameter; multicellular        | ~2 µm “pixel” size; near single‑cell          | 220 nm DNA nanoball spacing; subcellular       | 10 µm beads; near single‑cell  |
 | **H&E**              | Yes (same section)  | Yes (same section)   | No                  | No                 |
-| **tissue preservation** | FFPE and fresh frozen | Primarily FFPE; FF also supported | Fresh frozen          | Fresh frozen        |
-| **year released**    | 2019                | 2023–2024            | 2022 (atlas)        | 2019               |
+| **Tissue preservation** | FFPE and fresh frozen | Primarily FFPE; FF also supported | Fresh frozen          | Fresh frozen        |
+| **Year released**    | 2019                | 2023–2024            | 2022 (atlas)        | 2019               |
 
 ::: callout-important
 # Visium HD 
@@ -140,7 +139,7 @@ We will be using Visium HD for the hands-on portion of this workshop.
 
 **Disadvantages:**
 
-- High resolution experiments (Visium HD) can be very expensive 
+- High-resolution experiments (Visium HD) can be very expensive 
 - Spots are not guaranteed to be a single-cell (can be multiple cells, or no cells at all)
 
 ## Imaging-based technologies
@@ -171,25 +170,25 @@ Table: Summary of popular imaging-based methods for spatial transcriptomics. {#t
 |                      | seqFISH                 | MERFISH                     | Xenium                      |
 |----------------------|-------------------------|-----------------------------|-----------------------------|
 | **vendor**           | NA (academic method)    | Vizgen                      | 10x Genomics               |
-| **capture size**     | Variable FOV; tiled imaging fields (typically mm-scale regions stitched across section) | Variable FOV; tiled imaging fields (mm-scale regions, stitchable to large areas) | Variable FOV; tiled high‑plex imaging over tissue sections (up to whole‑slide via tiling) |
-| **resolution**       | Subcellular, subdiffraction (seqFISH/seqFISH+) | Subcellular (single‑molecule FISH) | Subcellular, targeted in situ (per‑cell calls with subcellular localization) |
+| **Capture size**     | Variable FOV; tiled imaging fields (typically mm-scale regions stitched across section) | Variable FOV; tiled imaging fields (mm-scale regions, stitchable to large areas) | Variable FOV; tiled high‑plex imaging over tissue sections (up to whole‑slide via tiling) |
+| **Resolution**       | Subcellular, subdiffraction (seqFISH/seqFISH+) | Subcellular (single‑molecule FISH) | Subcellular, targeted in situ (per‑cell calls with subcellular localization) |
 | **H&E**              | No (standard workflow uses fluorescence imaging only) | No (fluorescence imaging only) | (Yes) — H&E‑like morphology and protein markers supported; H&E compatibility in active development at time of review |
-| **tissue preservation** | Fresh frozen           | FFPE and fresh frozen       | FFPE and fresh frozen       |
-| **year released**    | 2014 (first seqFISH paper) | 2015 (first MERFISH paper) | 2022 (commercial launch of Xenium platform) |
+| **Tissue preservation** | Fresh frozen           | FFPE and fresh frozen       | FFPE and fresh frozen       |
+| **Year released**    | 2014 (first seqFISH paper) | 2015 (first MERFISH paper) | 2022 (commercial launch of Xenium platform) |
 
 ### Advantages and disadvantages
 
 **Advantages:**
 
-- Can be used to evaluate the expression of a select panel of genes with high sensitivity and specificity.
+- Can be used to evaluate the expression of a select panel of genes with high sensitivity and specificity
 - Single-cell resolution
 
 
 **Disadvantages:**
 
-- Limited to a select panel of genes.
-- Segmentation is not a trivial task and requires careful preprocessing.
-- Challenging with non-model organisms as probes are necessary.
+- Limited to a select panel of genes
+- Segmentation is not a trivial task and requires careful pre-processing
+- Challenging with non-model organisms as probes are necessary
 
 ## Summary of comparison
 

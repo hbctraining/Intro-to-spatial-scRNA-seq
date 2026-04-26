@@ -11,3 +11,5 @@ lessons/intermediates
 *.RDS
 scripts/data
 scripts/intermediates
+
+**/*.quarto_ipynb
