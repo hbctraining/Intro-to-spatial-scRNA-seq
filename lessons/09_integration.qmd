@@ -35,13 +35,13 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Identify when integration is necessary
+- Evaluate potential batch effect in our datset
+- Understand common integration algorithms
 
 ## Overview of lesson
 
-When doing XYZ...
+When working with multiple samples, integration may **sometimes** be a necessary step. When there is a clear bias due to batch effect (date sequenced, replicate, etc.), it can be difficult to identify what is true biology and what is technical artifacts. Integration is a tool meant to align multiple datasets together. However, integration is **not always necessary**. The key is to assess the biology of your samples to evaluate whether to integration is a necessary step for your analysis.
 
 ## What is integration
 
@@ -60,7 +60,7 @@ We want to identify **cell types which are present in all samples/conditions/mod
 
 ## To integrate or not to integrate
 
-But how you know when you should integrate?
+But how do you know when you should integrate?
 
 We recommend that you always first look at your clustering **without integration** before running any alignment methods. This will allow you to identify if there are any batch effects present in your data, and if so, what is driving the batch effect.
 
@@ -141,23 +141,37 @@ ggplot(seurat_processed@meta.data) +
 Notably, we see that that clusters 1 and 11 contain almost exclusively `P5CRC` bins. So let us zoom in on these bins to see if there is a biological explanation for this observation, or if it is a technical artifact that we need to correct for with integration.
 
 ::: {.callout-note collapse=true}
-# Zoom in on clusters of interest with `DimPlot()`
+# Zoom in on clusters of interest with `DimPlot()` functions
 
 First, we will identify which bins belong to clusters 1 and 11 with the `WhichCells()` function. We will supply that output to the `cells.highlight` argument in `DimPlot()` to highlight these bins on the UMAP.
 
 ```{r}
 #| label: fig-highlight_clusters
-#| fig-cap: Highlight clusters 2 and 12 on the UMAP.
+#| fig-cap: Highlight clusters 1 and 11 on the UMAP.
 Idents(seurat_processed) <- "seurat_cluster.projected"
 p <- DimPlot(seurat_processed,
              cells.highlight = WhichCells(seurat_processed, 
                                           idents = c("1", "11"))) +
-  ggtitle("Clusters 2 and 12")
+  ggtitle("Clusters 1 and 11")
 LabelClusters(p, id = "ident",  fontface = "bold", size = 5, 
               bg.colour = "white", bg.r = .2, force = 0)
 ```
 
 Now bins that have the label of cluster 1 or 11 are colored red while the rest are gray in the UMAP.
+
+We can similarly highlight these bins in on the slide as well:
+
+```{r}
+#| label: fig-spatial_highlight_clusters
+#| fig-cap: Highlight clusters 1 and 11 on the tissue.
+#| fig-width: 10
+SpatialDimPlot(seurat_processed,
+               pt.size.factor = 16,
+               image.alpha = 0.2,
+               cells.highlight = WhichCells(seurat_processed, 
+                                            idents = c("1", "11")))
+```
+
 :::
 
 ## Possible explanations for batch
@@ -243,16 +257,11 @@ From this, we have the additional knowledge that there are likely some tumor cel
 
 ## Final integration decision
 
-Clusters 2 and 12 are dominated by `P5CRC` bins and have higher expression of tumor marker genes. Therefore, it is likely that these clusters represent tumor cells that are present in the `P5CRC` sample but not in the `P5NAT` sample. 
+Clusters 1 and 11 are dominated by `P5CRC` bins and have higher expression of tumor marker genes. Therefore, it is likely that these clusters represent tumor cells that are present in the `P5CRC` sample but not in the `P5NAT` sample. 
 
 So the lack of overlap in samples/batch has a biological answer! We would not want to integrate the dataset across samples because we would be trying to force the tumor cells to cluster together with other cell types. However, that is not the biological reality of our dataset, and therefore not in the best interest of our analysis.
 
-## Integration Algorithms
-
-::: callout-warning
-# Anecdote
-Integration typically is not the best way to go for spatial datasets
-:::
+## Integration algorithms
 
 In this spatial transcriptomics workflow, integration would be performed on the sketch dataset, which we would then project back to the full dataset. While we may not be running integration on this dataset, here we will describe a few of the most commonly used algorithms for integration in single-cell data analysis. 
 
@@ -260,9 +269,9 @@ In this spatial transcriptomics workflow, integration would be performed on the 
 
 ### Harmony
 
-[Harmony](https://www.nature.com/articles/s41592-019-0619-0) was devleoped in 2019, and is an example of **a tool that can work with complex integration tasks**. It is available as an [R package on GitHub](https://github.com/immunogenomics/harmony), and it has functions for standalone and Seurat pipeline analyses. It has been shown to perform incredibly well from recent benchmarking studies [[1]](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9). 
+[Harmony](https://www.nature.com/articles/s41592-019-0619-0) was devleoped in 2019, and is an example of **a tool that can work with complex integration tasks**. It is available as an [R package on GitHub](https://github.com/immunogenomics/harmony), and it has functions for standalone and Seurat pipeline analyses. It has been shown to perform incredibly well from [benchmarking studies](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9). 
 
-In this section, we illustrate the use of [`Harmony`](https://portals.broadinstitute.org/harmony/articles/quickstart.html) as a possible alternative to the `Seurat` integration workflow. Compared to other algorithms, `Harmony` notably presents the following advantages ([Korsunsky et al. 2019](https://www.nature.com/articles/s41592-019-0619-0), [Tran et al. 2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9)): 
+In this section, we illustrate the use of [`Harmony`](https://portals.broadinstitute.org/harmony/articles/quickstart.html) as a possible alternative to the `Seurat` integration workflow. Compared to other algorithms, `Harmony` notably presents the following advantages ([Korsunsky et al. 2019](https://www.nature.com/articles/s41592-019-0619-0), [Tran et al. (2020)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9)): 
 
 1. Possibility to integrate data across several variables (for example, by experimental batch and by condition)
 2. Significant gain in speed and lower memory requirements for integration of large datasets
@@ -274,10 +283,10 @@ Instead of using CCA, `Harmony` applies a transformation to the principal compon
 ![](../img/harmony_overview.jpeg){width=600}
 
 Overview of the Harmony algorithm for batch correction and integration of single-cell datasets.<br>
-_Image Source: [Korsunsky et al., 2019](https://www.nature.com/articles/s41592-019-0619-0)_
+_Image Source: [Korsunsky et al. (2019)](https://www.nature.com/articles/s41592-019-0619-0)_
 :::
 
-For a more detailed breakdown of the `Harmony` algorithm, we recommend checking [this advanced vignette](http://htmlpreview.github.io/?https://github.com/immunogenomics/harmony/blob/master/docs/advanced.html) from the package developers.
+For a more detailed breakdown of the `Harmony` algorithm, we recommend checking [this advanced vignette](https://htmlpreview.github.io/?https://github.com/immunogenomics/harmony/blob/master/doc/detailedWalkthrough.html) from the package developers.
 
 
 ### CCA

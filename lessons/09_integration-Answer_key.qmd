@@ -16,7 +16,6 @@ editor_options:
 library(Seurat)
 library(tidyverse)
 seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
-
 ```
 
 # Exercise 1
