@@ -963,7 +963,7 @@
     "href": "lessons/10_seurat_cheatsheet.html#learning-objectives",
     "title": "Seurat Cheatsheet",
     "section": "Learning objectives",
-    "text": "Learning objectives\nIn this lesson, we will:\n\nLearning Objective 1\nLearning Objective 2\nLearning Objective 3",
+    "text": "Learning objectives\nIn this lesson, we will:\n\nAccess various slots of the Seurat object\nGenerate a variety of plots with the plotting functions within Seurat",
     "crumbs": [
       "Day 2 Self-learning:",
       "Seurat Cheatsheet"
@@ -974,7 +974,7 @@
     "href": "lessons/10_seurat_cheatsheet.html#overview-of-lesson",
     "title": "Seurat Cheatsheet",
     "section": "Overview of lesson",
-    "text": "Overview of lesson\nWhen doing XYZ…",
+    "text": "Overview of lesson\nHere, you’ve already used Seurat through several steps and seen many function calls. In this lesson you consolidate the core Seurat commands and object operations for spatial analysis into a concise reference. It doesn’t introduce new analysis concepts - instead, it makes it easier to reproduce and script what you’ve learned without constantly searching documentation. This quick reference speeds up all later work when you adapt the pipeline to your own data.",
     "crumbs": [
       "Day 2 Self-learning:",
       "Seurat Cheatsheet"
@@ -985,7 +985,7 @@
     "href": "lessons/10_seurat_cheatsheet.html#seurat-cheatsheet",
     "title": "Seurat Cheatsheet",
     "section": "Seurat Cheatsheet",
-    "text": "Seurat Cheatsheet\nThis cheatsheet is meant to provide examples of the various functions available in Seurat. This includes how to access certain information, handy tips, and visualization functions built into the package. We have pulled together all of this information with examples using the dataset used throughout this workshop so that there are clear visuals on what the output of each function is.\nThese materials were developed by referencing the following pages from the Seurat website:\n\nhttps://satijalab.org/seurat/articles/essential_commands.html\nhttps://satijalab.org/seurat/articles/visualization_vignette.html",
+    "text": "Seurat Cheatsheet\nThis cheatsheet is meant to provide examples of the various functions available in Seurat. This includes how to access certain information, handy tips, and visualization functions built into the package. We have pulled together all of this information with examples using the dataset used throughout this workshop so that there are clear visuals on what the output of each function is.\nThese materials were developed by referencing the following pages from the Seurat website:\n\nEssential commands\nVisualization vignette",
     "crumbs": [
       "Day 2 Self-learning:",
       "Seurat Cheatsheet"

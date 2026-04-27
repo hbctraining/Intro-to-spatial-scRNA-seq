@@ -38,13 +38,12 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Access various slots of the Seurat object
+- Generate a variety of plots with the plotting functions within Seurat
 
 ## Overview of lesson
 
-When doing XYZ...
+Here, you’ve already used Seurat through several steps and seen many function calls. In this lesson you consolidate the core Seurat commands and object operations for spatial analysis into a concise reference. It doesn’t introduce new analysis concepts - instead, it makes it easier to reproduce and script what you’ve learned without constantly searching documentation. This quick reference speeds up all later work when you adapt the pipeline to your own data.
 
 ## Seurat Cheatsheet
 
@@ -52,8 +51,8 @@ This cheatsheet is meant to provide examples of the various functions available 
 
 These materials were developed by referencing the following pages from the Seurat website:
 
-- https://satijalab.org/seurat/articles/essential_commands.html
-- https://satijalab.org/seurat/articles/visualization_vignette.html
+- [Essential commands](https://satijalab.org/seurat/articles/essential_commands.html)
+- [Visualization vignette](https://satijalab.org/seurat/articles/visualization_vignette.html)
 
 
 ## Dataset
