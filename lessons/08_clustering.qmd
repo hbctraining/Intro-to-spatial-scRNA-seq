@@ -37,13 +37,14 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Compute a neighborhood graph to identify similar phenotypes in bins
+- Group bins into clusters based upon their gene expression profiles
+- Evaluate the quality of clustering against biological knowns
 
 ## Overview of lesson
 
-When doing XYZ...
+At this point in the analysis, we have succesfully calculated PC scores, creating meaningful embeddings of our bins. Using this principal component, we can now evaluate the similarity of bins through clustering. This is a two-step process where we first calcualte k-nearest neighbors to build a graph structure, linking similar bins together. Then, we will utilize the Leiden algorithm to cluster bins into larger groups. These cluster labels will be reused to identify spatial domains and major celltypes in the dataset.
+
 
 ## Grouping similar bins together
 
@@ -96,11 +97,18 @@ We use the SNN graph because it considers both the distance beteween two bins an
 
 ## Clustering
 
-The next step in the workflow is to **group bins together based upon the graph to assign cluster labels to each bin**.
+The next step in the spatial transcriptomics workflow is to **group bins into clusters based on the neigborhood graph**.
 
-The `FindClusters()` function accomplishes this by iteratively grouping bins together with the goal of optimizing the standard modularity function. This function is a measure of the strength of division of a network into clusters, with higher values indicating a stronger clustering structure. The `FindClusters()` function uses the Louvain algorithm to optimize this modularity function and assign cluster labels to each bin by default. We can also use the Leiden algorithm by setting the `algorithm = 4`. The Leiden algorithm is an improvement on the Louvain algorithm that is faster and more accurate in finding clusters in large datasets.
+The `FindClusters()` function iteratively groups bins with the goal of optimizing the standard modularity function (a measure of how well a network is partitioned into clusters). Higher modularity values indicate a clearer cluster structure. By default, `FindClusters()` uses the Louvain algorithm, but we will be setting `algorithm = 4` to [use the Leiden algorithm](https://www.nature.com/articles/s41598-019-41695-z) due to its increased speed and ability to connect communities. 
 
-An important parameter is `resolution` which sets the "granularity" of the downstream clustering and will need to be optimized for every individual experiment. **Larger resolution values lead to a greater number of clusters**, which is often required for larger datasets. For datasets of 3,000 - 5,000 cells, the `resolution` set between `0.4`-`1.4` generally yields good clustering.
+::: {#fig-leiden .figure}
+![](../img/leiden_schematic.png){width=600}
+
+Schematic showing how bins are connected in neighborhood space, where clusters are iteratively identified following the Leiden algorithm.<br>
+_Image source: [Traag et al. (2019)](https://www.nature.com/articles/s41598-019-41695-z)_.
+:::
+
+Another key parameter is `resolution`, which controls the **granularity of the clustering** and must be tuned for each experiment. **Higher resolution values produce more clusters**. For a first-pass look at the data, a lower resolution is sufficient to broad patterns and communities. Typically, we recommend that datasets on the order of 30,000–50,000 cells/bins, setting a `resolution` between `0.4` and `1.4` typically yields reasonable clustering. So for a much larger dataset, such as this one, we will be setting a low resolution parameter to start.
 
 
 ::: callout-note
@@ -132,7 +140,8 @@ seurat_processed@meta.data %>%
 #| tbl-cap: Updated `@meta.data` with sketch Leiden clusters. 
 #| eval: true
 #| echo: false
-seurat_processed@meta.data %>% head() %>% 
+seurat_processed@meta.data %>% 
+  head() %>% 
   relocate("seurat_cluster.sketched") %>%
   knitr::kable()
 ```
@@ -166,14 +175,14 @@ LabelClusters(p, id = "ident",  fontface = "bold", size = 5,
               bg.colour = "white", bg.r = .2, force = 0)
 ```
 
-Ideally we would see distinct clusters of bins that are well separated from each other. If we see a lot of overlap between clusters, this may indicate that the clustering is not optimal and we may need to adjust our `resolution` parameter or re-consider our previous steps (QC, filtration, highly variable gene selection, etc.) to improve the clustering.
+Ideally we would see **distinct clusters of bins that are well separated from each other**. If we see a lot of overlap between clusters, this may indicate that the clustering is not optimal and we may need to adjust our `resolution` parameter or re-consider our previous steps (QC, filtration, highly variable gene selection, etc.) to improve the clustering.
 
 ## Project back to entire dataset
 
 Recall that we have been calculating all of these steps on our sketched dataset of 10,000 bins. Now, we want to know what the cluster labels are for all of the bins in our full dataset. We can do this with the `ProjectData()` function.
 
 ::: callout-warning
-Struggling to find method used to project sketch to full data
+TODO: what method is used for ProjectData()
 :::
 
 ### Run `ProjectData()`
@@ -189,8 +198,7 @@ The we specify the `assay` with the full dataset that we want to project onto (i
 ```{r}
 #| label: ProjectData
 #| eval: false
-# Increases the size of the default vector
-# 8GB
+# Increases the size of the default vector (8GB)
 options(future.globals.maxSize = 8000 * 1024^2)
 
 # Project from sketch assay onto entire dataset
@@ -246,7 +254,7 @@ seurat_processed@meta.data %>% head() %>% knitr::kable()
 ::: callout-tip
 # [**Exercise 2**](08_clustering-Answer_key.qmd#exercise-2)
 
-2. How many bins are in each cluster? Use the `table()` function to count the number of bins in each cluster. Do you notice any patterns in the number of bins per cluster?
+2. How many bins are in each cluster with the new projected values? Use the `table()` function to count the number of bins in each cluster for each sample. 
 :::
 
 
@@ -299,6 +307,8 @@ seurat_processed$seurat_cluster.projected %>% head()
 Now we should see the levels in numeric order on our UMAP legend.
 
 ```{r}
+#| label: fig-umap_numeric
+#| fig-cap: UMAP scatterplot with bins colored and labeled by projected Leiden cluster annotation (in numerical order).
 # Change the idents to the projected cluster assignments
 Idents(seurat_processed) <- "seurat_cluster.projected"
 
