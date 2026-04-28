@@ -47,13 +47,13 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Calculate BANKSY counts matrix which incorporates neighborhood structure
+- Run harmony integration
+- Evaluate spatially constrained clusters
 
 ## Overview of lesson
 
-When doing XYZ...
+At this point in the analysis, we have clusters and UMAP coordinates calculated based **solely upon the gene expression**. As this is a spatial dataset, we also have the ability to incorporate the location of bins, or the neighborhood structure, in the clustering process. Here, we will make use of the BANKY method that adds the local structure as information to ultimately calculate new clusters that are spatially constrained.
 
 ## BANKSY
 
@@ -264,7 +264,7 @@ seurat_banksy
 
 ### BANKSY matrix
 
-The `RunBanksy()` step generated a **new counts** matrix from the original counts matrix. In actually what happens it that BANKSY will concatenate 3 different matrices together, all of which are computed from the top highly variable features.
+The `RunBanksy()` step generated a **new counts matrix** from the original counts matrix. In actually what happens it that BANKSY will concatenate 3 different matrices together, all of which are computed from the top highly variable features.
 
 If we take a look at the beginning, middle, and end of the `Features()` in the BANKSY matrix we can see each component of the 3 matrices:
 
@@ -472,7 +472,7 @@ seurat_banksy <- readRDS("data/intermediate_seurat/seurat_banksy.rds")
 
 :::
 
-Now is also a great point to assess how well the integration step worked when looking at each of our clusters:
+Now is also a great point to assess how well the integration step worked when looking at each of our clusters. As we would hope, most of the clusters are comprised of both samples:
 
 ```{r}
 #| label: fig-cell_proportion_barplot

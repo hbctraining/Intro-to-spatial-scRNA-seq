@@ -71,7 +71,7 @@ DimPlot(seurat_banksy,
         label = TRUE)
 ```
 
-The BANKSY clusters align much better with the BANKSY derived UMAP coordinates. This is due to the fact that they have the same underlying structure.
+The BANKSY clusters align much better with the BANKSY derived UMAP coordinates. This is due to the fact that they have the same underlying structure. We can also see more clearly that the cluster 1 tumor cells we identified earlier appears to have been split into different sub-groups. This aligns with what we see in the spatial slide, where there appears to be spatially constrained clusters tumor groups in the BANKSY clusters.
 
 # Exercise 3
 
