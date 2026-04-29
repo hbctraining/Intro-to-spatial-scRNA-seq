@@ -9,7 +9,7 @@ execute:
 
 | Audience | Computational skills required| Duration |
 :----------|:----------|:----------|
-| Biologists | [Introduction to R](https://hbctraining.github.io/Intro-to-R-flipped/) | 4-session online workshop (~7.5 hours of trainer-led time)|
+| Biologists | [Introduction to R](https://hbctraining.github.io/Intro-to-R-flipped/) | 4-session online workshop (~8 hours of trainer-led time)|
 
 ### Description
 
@@ -48,7 +48,7 @@ These materials were developed for a trainer-led workshop, but are also amenable
 #### Applications
 Download the most recent versions of R and RStudio for your laptop:
 
- - [R](http://lib.stat.cmu.edu/R/CRAN/) **(version 4.0.0 or above)**
+ - [R](http://lib.stat.cmu.edu/R/CRAN/) **(version 4.2.0 or above)**
  - [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
 
 #### Packages for R
@@ -61,19 +61,22 @@ Download the most recent versions of R and RStudio for your laptop:
 2. **All the package names listed below are case sensitive.**
 
 3. **Mac with Apple Silicon (M1/M2/etc.):**  
-   Download and install the gfortran tool *before* installing your packages:  
+    - If running R 4.2.0 up to 4.4.3, download and install this gfortran tool *before* installing your packages:  
    <https://mac.r-project.org/tools/gfortran-12.2-universal.pkg>
+    - If running R 4.5.0 or newer, download and install this gfortran tool *before* installing your packages:  
+   <https://mac.r-project.org/tools/gfortran-14.2-universal.pkg>
+   - More information on this can be found [here](https://mac.r-project.org/tools/)
 
 4. **Updating old packages:**  
    If R asks in the console:  
    `Update all/some/none? [a/s/n]:`  
-   type **`a`** and press Enter to update any old packages.  
+   type **`a`** and press <kbd>Enter</kbd>/<kbd>Return</kbd> to update any old packages.  
    _Note: Updating can take a while, so allow extra time before starting._
 
 5. **“Binary version available but the source version is later” message:**  
    If you see:  
    `Do you want to install from sources the package which needs compilation? y/n`  
-   type **`n`** (no) and press Enter.
+   type **`n`** (no) and press <kbd>Enter</kbd>/<kbd>Return</kbd>
 :::
 
 **(1)** Install the following packages:
@@ -94,7 +97,7 @@ install.packages("R.utils")
 install.packages("arrow")
 install.packages("hdf5r")
 install.packages("qs2")
-install.packages('Rfast2')
+install.packages("Rfast2")
 install.packages("leidenbase")
 install.packages("harmony")
 install.packages("Seurat")
@@ -113,8 +116,89 @@ remotes::install_github("satijalab/seurat-wrappers")
 devtools::install_github("dmcable/spacexr", 
                          build_vignettes = FALSE)
 devtools::install_github("jinworks/CellChat")
-devtools::install_github('immunogenomics/presto')
+devtools::install_github("immunogenomics/presto")
 ```
+
+::: callout-note
+If you get the following error when trying to download packages from GitHub:
+
+```{r}
+#| label: package_install_error
+#| eval: false
+Using GitHub PAT from the git credential store.
+Error: Failed to install '<Github_package>' from GitHub:
+HTTP error 401.
+Bad credentials
+```
+
+You will need to update your GitHub token. You can do this by installing the `usethis` and `gitcreds` packages:
+
+```{r}
+#| label: install_usethis
+#| eval: false
+# Install usethis and gitcreds packages
+install.packages("usethis")
+install.packages("gitcreds")
+```
+
+Once `usethis` have been installed, we will need to create a new GitHub token for our computer using:
+
+```{r}
+#| label: create_github_token
+#| eval: false
+# Create a new GitHub token
+usethis::create_github_token()
+```
+
+This should take you to GitHub and allow you to create a new token. Enter a name for the token in the "Note" field, select an expiration for the token and click <kbd>Generate token</kbd> at the bottom of the webpage. This should generate a token for you that you can use.
+
+Now we will need to set that token in R Studio, so run this command:
+
+```{r}
+#| label: set_token
+#| eval: false
+gitcreds::gitcreds_set()
+```
+
+It should return an option that looks like:
+
+```{r}
+#| label: set_token_prompt
+#| eval: false
+-> Your current credentials for 'https://github.com':
+
+  protocol: https
+  host    : github.com
+  username: PersonalAccessToken
+  password: <-- hidden -->
+-> What would you like to do? 
+
+1: Abort update with error, and keep the existing credentials
+2: Replace these credentials
+3: See the password / token
+```
+
+From here, you will select `2` and press <kbd>Enter</kbd>/<kbd>Return</kbd>. You should then be prompted with:
+
+```{r}
+#| label: enter_token
+#| eval: false
+-> Removing current credentials...
+? Enter new password or token: 
+```
+
+Copy and paste your newly generated token in this field and press <kbd>Enter</kbd>/<kbd>Return</kbd>. It should return:
+
+```{r}
+#| label: successfully_add_token
+#| eval: false
+-> Adding new credentials...
+-> Removing credentials from cache...
+-> Done.
+```
+
+At this point you have successfully updated your GitHub token and you can try re-installing the packages from GitHub.
+:::
 
 **(2)** Finally, please check that all the packages were installed successfully by **loading them one at a time** using the `library()` function.  
 
@@ -122,6 +206,7 @@ devtools::install_github('immunogenomics/presto')
 # Package managers
 library(remotes)
 library(devtools)
+library(BiocManager)
 
 # CRAN
 library(tidyverse)
@@ -131,6 +216,7 @@ library(R.utils)
 library(arrow)
 library(hdf5r)
 library(qs2)
+library(Rfast2)
 library(leidenbase)
 library(harmony)
 library(Seurat)
@@ -140,21 +226,33 @@ library(EnhancedVolcano)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 library(msigdbr)
+library(ComplexHeatmap)
+library(BiocNeighbors)
 
 # GitHub
 library(Banksy)
 library(SeuratWrappers)
 library(spacexr)
 library(CellChat)
+library(presto)
 ```
 
-**(3)** Once all packages have been loaded, run sessionInfo().  
+**(3)** Once all packages have been loaded, run `sessionInfo()`.  
 
 ```{r}
 sessionInfo()
 ```
 
 ---
+
+**(4)** Copy the output of `sessioninfo()` and paste it in the input text box below or on [this website](https://hcbc.connect.hms.harvard.edu/spatial_transcriptomics_sessionInfo_checks/). Then click the <kbd>Check my sessionInfo()</kbd> button. It will let you know if you are missing any packages. Take a screenshot of the message confirming that all packages have been successfully installed (you will get a message letting you know that no packages are missing) and email it to us before the first session.
+
+<p align="center">
+
+<iframe src="https://hcbc.connect.hms.harvard.edu/spatial_transcriptomics_sessionInfo_checks/" width="800px" height="800px" data-external="1">
+
+</iframe>
+
 
 ### Citation
 
@@ -165,4 +263,4 @@ To cite material from this course in your publications, please use:
 **Create Zenodo citation**
 :::
 
-A lot of time and effort went into the preparation of these materials. Citations help us understand the needs of the community, gain recognition for our work, and attract further funding to support our teaching activities. Thank you for citing this material if it helped you in your data analysis.
+A lot of time and effort went into the preparation of these materials. Citations help us understand the needs of the community, gain recognition for our work and attract further funding to support our teaching activities. Thank you for citing this material if it helped you in your data analysis!
