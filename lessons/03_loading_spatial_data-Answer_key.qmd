@@ -32,7 +32,7 @@ editor_options:
 
 We do not have any replicates, so we cannot make any conclusions about the generalizability of our findings with statistical confidence. 
 
-It can be challenging to evaluate differences in cell type composition between the tumor and normal samples as the bin-based method potentially includes a mixture of cells in each bin. Furthermore we are looking at a single section of the tissue, so we may not be capturing the full heterogeneity of the tumor microenvironment.
+It can be challenging to evaluate differences in cell type composition between the tumor and normal samples as the bin-based method potentially includes a mixture of cells in each bin. Furthermore, we are looking at a single section of the tissue, so we may not be capturing the full heterogeneity of the tumor microenvironment.
 
 # Exercise 2
 

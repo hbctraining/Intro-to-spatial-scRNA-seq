@@ -1,7 +1,7 @@
 ---
 title: "Loading Spatial Data"
 description: |
-  Learn how to load Visium HD spatial transcriptomics data into R and build Seurat objects. This lesson prepares your spatial dataset for quality control, visualization, and downstream analysis.
+  Learn how to load Visium HD spatial transcriptomics data into R and build Seurat objects. This lesson prepares your spatial dataset for quality control, visualization and downstream analysis.
 author:
   - Noor Sohail
 date: "2025-07-25"
@@ -39,13 +39,13 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-At this point in the experiment, we have sequenced our Visium HD dataset and ran it through the Space Ranger pipeline. With the outputs, we will learn what files are necessary to load the data into `Seurat`. In addition to creating a Seurat object, we will also become familiar with how the Seurat data structure is formatted so that we can access each part of our dataset in future lesson. Once the basics of working in Seurat and R are established, we will then load multiple samples at once in an automated manner.
+At this point in the experiment, we have sequenced our Visium HD dataset and ran it through the Space Ranger pipeline. With the outputs, we will learn what files are necessary to load the data into `Seurat`. In addition to creating a Seurat object, we will also become familiar with how the Seurat data structure is formatted so that we can access each part of our dataset in future lessons. Once the basics of working in Seurat and R are established, we will then load multiple samples at once in an automated manner.
 
 **This is the starting point for a standard spatial transcriptomics analysis!**
 
 ## Exploring the example Visium HD dataset
 
-Throughout this workshop, we will be working with a Visium HD dataset that came from a [larger study on human colorectal cancer](https://www.nature.com/articles/s41588-025-02193-3). The focus of this study was to understand the tumor microenvironment in colorectal cancer (CRC) by utilizing multiple sequencing modalities, including Visium HD, Xenium, and FLEX single-cell sequencing.
+Throughout this workshop, we will be working with a Visium HD dataset that came from a [larger study on human colorectal cancer](https://www.nature.com/articles/s41588-025-02193-3). The focus of this study was to understand the tumor microenvironment in colorectal cancer (CRC) by utilizing multiple sequencing modalities, including Visium HD, Xenium and FLEX single-cell sequencing.
 
 ::: {#fig-experiment_design .figure}
 ![](../img/crc_study.png){width="100%"}
@@ -54,7 +54,7 @@ Celltype annotation overlaid over three colorectral samples sequenced with Visiu
 _Image source: [Oliveira et al. (2025)](https://www.nature.com/articles/s41588-025-02193-3)_
 ::: 
 
-In particular, we are going to be working with the **P5CRC** sample as there is a matched, normal adjacent tissue **P5NAT** sample that we can use to compare tumor versus normal tissue.
+In particular, we are going to be working with the **P5CRC** colorectal cancer sample as there is a matched, normal adjacent **P5NAT** sample that we can use to compare tumor versus normal tissue.
 
 ::: callout-note
 # Dataset availability
@@ -95,7 +95,7 @@ It is also good to keep track of the sample preparation and sequencing protocols
 
 - 5 µm sections were taken from the FFPE tissue blocks with a microtome
 - Sectioning followed the Visium CytAssist v2 WT Panel Gene Expression protocol
-- FFPE tissue sections were place on plain glass slides for deparaffinization, H&E staining and imaging following the Visium HD FFPE Tissue Preparation Handboo
+- FFPE tissue sections were place on plain glass slides for deparaffinization, H&E staining and imaging following the Visium HD FFPE Tissue Preparation Handbook
 - Sequencing was performed on an Illumina NovaSeq 6000 with paired-end reads
 - Samples processed with Space Ranger v3.0
 :::
@@ -111,7 +111,7 @@ With this information in mind, we can now move forward with loading our data and
 
 ## Set up
 
-We have assembled an R Project for you to download that includes the data along with a basic file structure for good data management. Whenever you start a new project, is is a good habit to set up a similar directory structure to clearly organize your data, scripts, and results. This will make it easier to keep track of your files and to share your work with others.
+We have assembled an R Project for you to download that includes the data along with a basic file structure for good data management. Whenever you start a new project, is is a good habit to set up a similar directory structure to clearly organize your data, scripts and results. This will make it easier to keep track of your files and to share your work with others.
 
 ::: callout-important
 # Download the data
@@ -151,15 +151,11 @@ TODO: Image of R project file structure
 
 ### Project organization
 
-When you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as **data management is often an afterthought** when it should be a key part of the workflow from the very beginning. The [HMS Data Management Working Group](https://datamanagement.hms.harvard.edu/), discusses in-depth some things to consider beyond the data creation and analysis.
+When you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as **data management is often an afterthought** when it should be a key part of the workflow from the very beginning. The [HMS Data Management Working Group](https://datamanagement.hms.harvard.edu/) discusses in-depth some things to consider beyond the data creation and analysis.
 
 One important aspect of data management is organization. For each experiment you work on and analyze data for, it is considered best practice to get organized by creating **a planned storage space**. We will do that for our spatial transcriptomics analysis. 
 
 Look inside your project space and you will find that a directory structure has been setup for you:
-
-::: callout-warning
-TODO: is this the right directory structure? Do we need to add anything else?
-:::
 
 ```{r}
 #| label: data_structure
@@ -174,21 +170,21 @@ spatial_transcriptomics/
 
 ::: callout-important
 # Note for Windows OS users
-When you open the project folder after unzipping, please check if you have a `data` folder with a sub folder also called `data`. If this is the case, please move all the files from the subfolder into the parent `data` folder.
+When you open the project folder after unzippingit, please check if you have a `data` folder with a sub folder also called `data`. If this is the case, please move all the files from the subfolder into the parent `data` folder.
 :::
 
 ### New script
 
-Next, open a new Rscript file, and start with some comments to indicate what this file is going to contain. Ideally we will have one script per major step in our analysis. For this first script, we will be loading our data and performing quality control - as indicated in the header.
+Next, open a new Rscript file and start with some comments to indicate what this file is going to contain. Ideally, we will have one script per major step in our analysis. For this first script, we will be loading our data and performing quality control - as indicated in the header.
 
-Loading your libraries at the top of the script also allows you to easily keep track of which libraries you are using and to load them all at once in the beginning.
+Loading your libraries at the top of the script will also allow you to easily keep track of which libraries you are using and to load them all at once in the beginning.
 
 ```{r}
 #| label: header_libraries
 # Load Visium HD samples and QC
 # Visium HD spatial transcriptomics workshop
 # Author: Harvard Chan Bioinformatics Core
-# Created: December 2025
+# Created: May 2026
 
 # Load libraries
 library(tidyverse)
@@ -208,7 +204,7 @@ There are several different tools that can used for loading and analyzing spatia
 
 - Python's [Squidpy](https://squidpy.readthedocs.io/en/stable/)
 - R's [Spatial Experiment](https://bioconductor.org/packages/release/bioc/html/SpatialExperiment.html)
-- R's [Seurat](https://satijalab.org/seurat/). 
+- R's [Seurat](https://satijalab.org/seurat/)
 
 **For this workshop, we will be using the Seurat workflow.**
 
@@ -233,12 +229,12 @@ Table: Seurat's `Load10X_Spatial()` arguments. {#tbl-Load10X_Spatial_arguments}
 
 | Argument | Description |
 |---------|-------------|
-| data.dir | Directory containing the H5 file specified by filename and the image data in a subdirectory called spatial |
-| bin.size | Specifies the bin sizes to read in (defaults to c(16, 8)) |
+| data.dir | Directory containing the H5 file specified by filename and the image data in a subdirectory called `spatial` |
+| bin.size | Specifies the bin sizes to read in (defaults to `c(16, 8)`) |
 | slice    | Name for the stored image of the tissue slice |
 
 
-Before loading in the data, let us take a look at the files we will supplying to the function. In particular, let us take a look at sample `data/P5CRC_cropped` which is the path would supply as `data.dir` in the `Load10X_Spatial()` function.
+Before loading in the data, let us take a look at the files we will supplying to the function. In particular, let us take a look at sample `data/P5CRC_cropped` which is the path we would supply as `data.dir` in the `Load10X_Spatial()` function.
  
 ```{r}
 #| label: fig-Space Ranger_outs
@@ -247,13 +243,13 @@ Before loading in the data, let us take a look at the files we will supplying to
 dir_tree("data/P5CRC_cropped/", recurse = 1)
 ```
 
-In the Visium HD assay, Space Ranger bins the image into 2µm x 2µm, 8µm x 8µm, and 16µm x 16µm bins. **The output from each of these resolution is found in the `binned_outputs` folder.**
+In the Visium HD assay, Space Ranger bins the image into 2µm x 2µm, 8µm x 8µm and 16µm x 16µm bins. **The output from each of these resolution is found in the `binned_outputs` folder.**
 
 ::: callout-important
 # How do I know what bin size to use?
 This is not an easy question to answer! 
 
-The typical recommendation for a Visium HD analysis is to use the 8µm x 8µm resolution of the dataset. However, it is important to consider the dataset you are working with. For example, neuron cells are know to be a larger celltype in size. Therefore it would be good to consider a large bin size in order to fully represent each cell within a bin. At the same time, the smaller the bin size is, the more resources it takes to compute anything. 
+The typical recommendation for a Visium HD analysis is to use the 8µm x 8µm resolution of the dataset. However, it is important to consider the dataset you are working with. For example, neuron cells are know to be a larger celltype in size. Therefore, it would be good to consider a large bin size in order to fully represent each cell within a bin. At the same time, the smaller the bin size is, the more resources it takes to compute anything. 
 
 So this is the first (of many) example where you must juggle computational practicality and biology when making a decision.
 :::
