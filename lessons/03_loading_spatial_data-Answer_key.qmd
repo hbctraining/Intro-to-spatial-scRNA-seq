@@ -38,7 +38,7 @@ It can be challenging to evaluate differences in cell type composition between t
 
 3. What differences do you see between the `8um` and `16um` bins?
 
-There are more cells in the `8um` compared to the `16um`. The number of features/genes remain the same.
+There are more bins in the `8um` compared to the `16um`. The number of features/genes remain the same.
 
 This is why the bin value matters, it determines how many "cells" are ultimately generated. A smaller bin size results in more spots. This is because we are taking smaller sections of the same data, meaning we use more bins to cover the same area as a large bin size.
 
