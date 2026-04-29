@@ -344,7 +344,7 @@ for (variable in input){
 
 :::
 
-Today we will use it to **iterate over the two sample folders** and execute commands for each sample as we did above for a single sample:
+Today, we will use it to **iterate over the two sample folders** and execute commands for each sample as we did above for a single sample:
 
 1. Generate path to `data.dir` by pasting "_cropped" to the sample name
 2. Create the Seurat objects from the SpaceRanger data (`Load10X_Spatial()`) 
@@ -398,11 +398,11 @@ list_seurat <- qs2::qs_read("intermediate/03_list_seurat.qs")
 list_seurat
 ```
 
-This is exactly what we had hoped to see! So now we can move on to the next step which is merging the sample together into a singular Seurat object.
+This is exactly what we had hoped to see! So now we can move on to the next step which is merging the samples together into a singular Seurat object.
 
 ### Merge datasets together
 
-We merge samples together because it make it easier to run the QC steps for both sample groups together. It also enables us to easily compare the data quality for all cells at one time. To create this combined Seurat object, we use the `merge()` function. Because the same cell IDs can be used in different samples, we add a **sample-specific prefix** to each of our cell IDs using the `add.cell.id` argument to ensure the cell names are unique.
+We will merge the samples together because it make it easier to run the quality control steps. It also enables us to easily compare the data quality for all cells at one time. To create this combined Seurat object, we use the `merge()` function. Because the same cell IDs can be used in different samples, we add a **sample-specific prefix** to each of our cell IDs using the `add.cell.id` argument to ensure the cell names are unique.
 
 ```{r}
 #| label: list_seurat_merge
@@ -413,12 +413,12 @@ seurat_merged <- merge(x = list_seurat[["P5CRC"]],
 seurat_merged
 ```
 
-From the callout we can see that we now have: `2 layers present: counts.1, counts.2` 
+From the output, we can see that we now have: `2 layers present: counts.1, counts.2` 
 
 ::: {.callout-note collapse=true}
 # What if I am merging more than two samples?
 
-Seurat has functionality to merge many samples together. You can do this by adding all but one Seurat object to the `y` argument in a vector format. An example is provided below, assuming you use the list structured we used previously: 
+Seurat has functionality to merge many samples together. You can do this by adding all but one Seurat object to the `y` argument in a vector format. An example is provided below, assuming you use the list structure we used previously: 
 
 ```{r}
 #| label: merging_multiple_objects
@@ -431,7 +431,10 @@ merged_seurat <- merge(x = seurat_list[[1]],
 
 :::
 
-The two separate `counts` indicates that our raw counts matrices are being stored as separate layers in the Seurat object. This is because we have not yet concatenated the matrices together yet with the `JoinLayers()` function. We want to run this step for two reasons, (1) some calculations may be done on one matrix and not the other or (2) later steps will require a singular, joined matrix.
+The two separate `counts` indicates that our raw counts matrices are being stored as separate layers in the Seurat object. This is because we have not yet concatenated the matrices together yet with the `JoinLayers()` function. We want to run this step for two reasons:
+
+- Some calculations may be done on one matrix and not the other
+- Later steps will require a singular, joined matrix
 
 ```{r}
 #| label: seurat_merged_JoinLayers
@@ -455,11 +458,11 @@ Let’s also double check that we have the correct number of cells. First, let u
 
 ```{r}
 #| label: ncells_math
-# Sum of cells in P5CRC and `P5NAT in seurat_list
+# Sum of cells in P5CRC and P5NAT in seurat_list
 ncol(list_seurat[["P5CRC"]]) + ncol(list_seurat[["P5NAT"]])
 ```
 
-Which is the same as the number of samples in our Seurat callout!
+Which is the same as the number of samples displayed when we call our Seurat object!
 
 ```{r}
 #| label: seurat_merged_callout
@@ -467,7 +470,7 @@ Which is the same as the number of samples in our Seurat callout!
 seurat_merged
 ```
 
-If we look at the metadata of the merged object we should be able to see the prefixes in the rownames (`Cells`) as well as the updated `orig.ident` we set in the for loop earlier.
+If we look at the metadata of the merged Seurat object, we should be able to see the prefixes in the rownames (`Cells`) as well as the updated `orig.ident` we set in the `for` loop earlier.
 
 ```{r}
 #| label: seurat_merged_metadata_head
@@ -526,7 +529,7 @@ saveRDS(seurat_merged, "data/01_seurat_merged.RDS")
 qs2::qs_save(seurat_merged, "intermediate/03_seurat_merged.qs")
 ```
 
-A good rule of thumb is to save your intermediate objects before any filtration or after running a computational step that takes a long time to run.
+A good rule of thumb is to save your intermediate objects before any filtration or after running a computationally heavy step that takes a long time to run.
 
 ***
 
