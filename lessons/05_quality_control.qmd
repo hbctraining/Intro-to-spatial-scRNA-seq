@@ -1,7 +1,7 @@
 ---
 title: "Quality Control"
 description: |
-  Focus on quality control strategies for Visium HD, using thresholds on genes, UMIs, and mitochondrial content to filter low-quality spots. This lesson helps you detect technical artifacts and sample issues before downstream analyses.
+  Focus on quality control strategies for Visium HD, using thresholds on genes, UMIs and mitochondrial content to filter low-quality spots. This lesson helps you detect technical artifacts and sample issues before downstream analyses.
 author:
   - "Noor Sohail"
 date: "2025-07-22"
@@ -245,10 +245,11 @@ ggplot(meta_filt) +
 
 Sometimes there may be bins with high `nCounts` (UMIs) and low `nFeatures` (genes). This would indicate that few genes were sequenced many times over. We consider these instances to be cases of "low complexity" where we are getting high expression from few genes. Some celltypes, such as red blood cells, are known for such behavior. However, we should be cautious when interpreting these results, as contamination or technical artifact could also contribute to this. Generally, we expect the complexity score to be above 0.80 for good-quality bins.
 
-The novelty score is computed as a ration of genes to UMIs, as shown below:
+The novelty score is computed as a ratio of genes to UMIs, as shown below:
 
 $$
-\text{Complexity Score} = \frac{\text{Number of Genes}}{\text{Number of UMIs}}
+\text{Complexity Score}
+= \frac{\log_{10}(\text{Number of Genes})}{\log_{10}(\text{Number of UMIs})}
 $$
 
 Which we can now calculate using R and store in our `@meta.data`:
@@ -312,7 +313,7 @@ ggplot(meta_filt) +
 
 ### Mitochondrial counts ratio
 
-During sequencing, we do not only measure the levels of expression the nuclear genome - we also the mitochondrial genome! High levels of mitochondrial expression is a sign that the cell is dying or dead. Therefore, we can calculate the proportion of reads (UMIs) that come from the mitochondria out of all the transcripts in a cell as another metric.
+During sequencing, we do not only measure the levels of expression the nuclear genome - we are also capturing the mitochondrial genome! High levels of mitochondrial expression is a sign that the cell is dying or dead. Therefore, we can calculate the proportion of reads (UMIs) that come from the mitochondria out of all the transcripts in a cell as another metric.
 
  We define poor-quality samples for mitochondrial counts as bins which surpass the 0.25 mitochondrial ratio threshold, unless of course you are expecting this in your sample. This ratio is computed as:
 
@@ -391,7 +392,7 @@ ggplot(meta_filt) +
 
 :::{.callout-tip}
 # [**Exercise 1**](05_quality_control-Answer_key.qmd#exercise-1)
-1. Do you notice a pattern in cells in regards to the number of UMIs and feature? Make a `geom_point` plots to compare these values on a per-cell basis and color each point by the mitochondrial ratio following the structure provided here:
+1. Do you notice a pattern in cells in regards to the number of UMIs and features? Make a `geom_point` plots to compare these values on a per-cell basis and color each point by the mitochondrial ratio following the structure provided here:
 
 ```{r}
 #| label: exercise_geom_point

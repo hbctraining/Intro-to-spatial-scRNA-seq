@@ -36,9 +36,9 @@ seurat_merged@meta.data %>%
   # Sorting by mitoRatio to make high scores appear on top of the plot
   arrange(mitoRatio) %>%
   ggplot() +
-  geom_point(aes(x = ?, 
-                 y = ?,
-                 color = ?),
+  geom_point(aes(x = ???, 
+                 y = ???,
+                 color = ???),
              size = 0.5) +
   # Setting limits so that outliers don't determine scale of the plot
   ylim(0, 3500) + xlim(0, 3500) +
