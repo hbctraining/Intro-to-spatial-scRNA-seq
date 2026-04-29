@@ -156,7 +156,7 @@ Yes, `PC_1` explains `r pct_var_explained[1]` and `PC_2` explains `r pct_var_exp
 
 # Exercise 3
 
-Create a plot of the Principal Components Analysis derived from `prcomp()`. Is it the same as the plot we derived except only rotated 180&deg;?
+Create a plot of the Principal Components Analysis derived from `prcomp()`. Is it the same as the plot we derived except only reflected over the x-axis?
 
 ```{r plotting_PCA_prcomp}
 # Create a tibble to hold the PC scores prcomp() found and also make the Cell IDs into a column
@@ -178,7 +178,7 @@ ggplot(prcomp_pc_scores_tibble, aes(x = PC1, y = PC2, label = cells)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Yes, it is the same plot just rotated 180&deg;.
+Yes, it is the same plot just reflected over the x-axis.
 
 ***
 

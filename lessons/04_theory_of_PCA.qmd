@@ -37,6 +37,8 @@ Approximate time: 45 minutes
 
 # Learning Objectives
 
+In this lesson, we will:
+
 -   Derive the covariance matrix used for Principal Components Analysis
 -   Explain the roles of eigenvectors and eigenvalues within a Principal Components Analysis
 -   Compare and contrast our Principal Components Analysis to the output of `prcomp()`
@@ -50,12 +52,12 @@ Consider a single-cell experiment where you have the expression value for every 
 From a high-level perspective, what we will be doing is:
 
 - Finding the vector in that 25,000-dimensional space that has the most variance in it.
-- Looking for another vector that is orthogonal (a 90&deg; angle but in multi-dimensional space) to the first vector that explains the most of the remaining variance. We continue this process until you have exhausted all source of variantion from your dataset. However, in practice, people oftentimes stop after a few dozen. 
+- Looking for another vector that is orthogonal (a 90&deg; angle but in multi-dimensional space) to the first vector that explains the most of the remaining variance. We continue this process until you have exhausted all sources of variation from your dataset. However, in practice, people oftentimes stop after a few dozen. 
 - Use these vectors to transform your original data into Principal Components space.
 
 # Setting up to calculate Eigenvalues and Eigenvectors
 
-Let's open a new R script and save it as `PCA-example.R`. Next, we will be using some functions from `tidyverse` in the lesson, so we will need to load it:
+Let's open a new R script and save it as `PCA-example.R` and place it within our `scripts` directory. Next, we will be using some functions from `tidyverse` in the lesson, so we will need to load it:
 
 ```{r load_tidyverse}
 library(tidyverse)
@@ -175,7 +177,7 @@ ggplot(recentered_expression_tibble, aes(x = Gene_A, y = Gene_B, label = cells))
 
 ## Create a covariance matrix
 
-The next step that we will do after we have re-centered our data around the origin is to calculate a covariance matrix. As a reminder, the covariance is the joint variability of two random variables. In this case our random variables are the genes. The illustration below we provide examples for positive and negative covariance values along with a covariance that is near zero.
+The next step that we will do after we have re-centered our data around the origin is to calculate a covariance matrix. As a reminder, the covariance is the joint variability of two random variables. In this case, our random variables are the genes. The illustration below we provide examples for positive and negative covariance values along with a covariance that is near zero.
 
 <img src="../img/Covariance.png" width="800">
 
@@ -518,7 +520,7 @@ Once again, the values are the same, but the only difference is the sign, which 
 
 ::: callout-tip
 # [**Exercise 3**](04_theory_of_PCA-Answer_key.qmd#exercise-3)
-Create a plot of the Principal Components Analysis derived from `prcomp()`. Is it the same as the plot we derived except only rotated 180&deg;?
+Create a plot of the Principal Components Analysis derived from `prcomp()`. Is it the same as the plot we derived except only reflected over the x-axis?
 :::
 
 # Number of PCs
