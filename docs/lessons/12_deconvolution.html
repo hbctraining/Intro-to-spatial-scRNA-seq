@@ -5587,12 +5587,12 @@ Structure of <code>reference</code>
 </section>
 <section id="create-query" class="level3">
 <h3 class="anchored" data-anchor-id="create-query">Create query</h3>
-<p>We are going to <em>annotate the slides one a time</em>. There are extensions of the RCTD package in order to take into account <a href="https://raw.githack.com/dmcable/spacexr/master/vignettes/replicates.html">replicates and multiple samples</a> which we will not use at this time due to time constraints.</p>
-<p><strong>Deconvolution is very computationally expensive!</strong> So we can once again make use the <code>sketch</code> workflow to downsample our dataset in a careful manner. Additionally, we are going to split our Seurat object into a single sample <code>P5CRC</code>.</p>
+<p><strong>Deconvolution is very computationally expensive!</strong> So we can once again make use the <code>sketch</code> workflow to downsample our dataset in a careful manner. Additionally, we are going to split our Seurat object into a <em>single sample</em> <code>P5CRC</code>. There are extensions of the RCTD package in order to take into account <a href="https://raw.githack.com/dmcable/spacexr/master/vignettes/replicates.html">replicates and multiple samples</a> which we will not use at this time due to time constraints.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">subset</span>(seurat_banksy, </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">subset =</span> (orig.ident <span class="sc">==</span> <span class="st">&quot;P5CRC&quot;</span>))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>crc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to P5CRC sample</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">subset</span>(seurat_banksy, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">subset =</span> (orig.ident <span class="sc">==</span> <span class="st">&quot;P5CRC&quot;</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>crc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>An object of class Seurat 
 36170 features across 57463 samples within 2 assays 
@@ -5861,12 +5861,12 @@ Table 1: Table of RCTD results for each bin, showing first and second type pred
 </div>
 <p>We can also visualize the number of identifications established for each <code>first_type</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_rctd_results,</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> first_type, </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> first_type)) <span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">NoLegend</span>() <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of cell types annotated to each bin in sketch assay</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_rctd_results,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> first_type, </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> first_type)) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">NoLegend</span>() <span class="sc">+</span></span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;P5CRC: RCTD First Type Results&quot;</span>) <span class="sc">+</span></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -5882,7 +5882,7 @@ Figure 4: Number of sketched bins assigned to a celltype with RCTD.
 </div>
 </div>
 </div>
-<p>Just be looking at the total number of bins, this is a good reminder that we only have the RCTD results for the 10,000 bins we sketched to.</p>
+<p>Just by looking at the total number of bins, this is a good reminder that we only have the RCTD results for the 5,000 bins we sketched to.</p>
 </section>
 <section id="project-rctd-results-on-all-bins" class="level3">
 <h3 class="anchored" data-anchor-id="project-rctd-results-on-all-bins">Project RCTD results on all bins</h3>
@@ -5893,16 +5893,15 @@ Figure 4: Number of sketched bins assigned to a celltype with RCTD.
 <pre><code>[1] 4809</code></pre>
 </div>
 </div>
-<p>But didn’t our <code>sketch</code> assay include 5,000 bins? RCTD runs its own QC and when it cannot identify what the annotation for a specific bin is, then it is removed from the final results.</p>
-<p>So we are going to do some data wrangling to ensure that we keep track of all information. Including those ~200 bins without <code>first_type</code> labels.</p>
+<p>But didn’t our <code>sketch</code> assay include 5,000 bins? RCTD runs its own QC step that filters out bins with low expression or <em>rejects</em> bins where it is unable to map a cell type from the reference dataset. This is why we have fewer bins than we expected. So we are going to do some data wrangling to ensure that we keep track of all information. Including those ~200 bins without <code>first_type</code> labels.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update column names to have _sketch</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This is so that we can create a projected column</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Add &quot;sketch&quot; to column names</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df_rctd_results) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">colnames</span>(df_rctd_results), </span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;_sketch&quot;</span>)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create column cell to merge on</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Also removing factors</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create column &quot;cell&quot; to merge on</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing factors for easier merging later</span></span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="ot">&lt;-</span> df_rctd_results <span class="sc">%&gt;%</span></span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cell =</span> <span class="fu">rownames</span>(df_rctd_results)) <span class="sc">%&gt;%</span></span>
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">first_type_sketch =</span> <span class="fu">as.character</span>(first_type_sketch),</span>
@@ -5937,6 +5936,7 @@ Figure 4: Number of sketched bins assigned to a celltype with RCTD.
 </section>
 <section id="project-back-to-full-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="project-back-to-full-dataset">Project back to full dataset</h2>
+<p>Now we can run the <code>ProjectData()</code>, just like we did last time.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Project back first_type to new column called first_type</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This will fail</span></span>
@@ -5955,7 +5955,7 @@ Figure 4: Number of sketched bins assigned to a celltype with RCTD.
 ! wrong weights matrix input</code></pre>
 </div>
 </div>
-<p>Why did we get an error when we tried to get RCTD labels for the entire dataset? This is because we have those <code>NA</code> values for some of the bins in sketch. The <code>ProjectData()</code> function expects actual values for every sketched bin. Therefore, to get around this issue, we are going to set the bins with no label as “unassigned” in the metadata.</p>
+<p>Why did we get an error when we tried to get RCTD labels for the entire dataset? This is because we have those <code>NA</code> values for some of the bins in sketch. The <code>ProjectData()</code> function expects actual values for every sketched bin. Therefore, to get around this issue, we are going to set the bins with no label as <code>unassigned</code> in the metadata.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set value ot unassigned to sketch bins that do not have values</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This is because ProjectData will throw errors otherwise</span></span>
@@ -6022,29 +6022,14 @@ Intestinal Epithelial               Myeloid              Neuronal
 <section id="barplot" class="level3">
 <h3 class="anchored" data-anchor-id="barplot">Barplot</h3>
 <p>We can get an overview of how many bins we have with a barplot. As we might expect, the number of unassigned bins increased as we extrapolate the labels out to the larger dataset.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Need to add better expalanation of why RCTD just doesn’t return all values</p>
-<p>And how this is a limitation of the methods</p>
-</div>
-</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Barplot of first_type labels after ProjectData()</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crc<span class="sc">@</span>meta.data,</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> first_type, <span class="at">fill =</span> first_type)) <span class="sc">+</span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">NoLegend</span>() <span class="sc">+</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;P5CRC: Projected First Type RCTD&quot;</span>) <span class="sc">+</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">NoLegend</span>() <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;P5CRC: Projected First Type RCTD&quot;</span>) <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-barplot_n_first_type" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -6082,7 +6067,7 @@ Figure 6: Spatial overlay of the first type RCTD results after <code>ProjectDat
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -6091,7 +6076,7 @@ Alternative spatial visualization
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab x, y coordiantes and first_type celltype labels</span></span>
@@ -6153,9 +6138,10 @@ Figure 8: UMAP of the first type RCTD results after <code>ProjectData()</code>.
 </section>
 <section id="p5crc-and-p5nat-results" class="level2">
 <h2 class="anchored" data-anchor-id="p5crc-and-p5nat-results">P5CRC and P5NAT results</h2>
-<p>We have run RCTD on each sample (without the sketch workflow) for you to load and use for the remainder of the workshop:</p>
+<p>We have run RCTD of the full dataset for both P5CRC and P5NAT for you all to load and run the rest of the workshop with:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>seurat_rctd <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/intermediate_seurat/seurat_RCTD.rds&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Seurat object with P5CRC and P5NAT cell type annotations</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>seurat_rctd <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/intermediate_seurat/seurat_RCTD.rds&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -6168,8 +6154,8 @@ Figure 8: UMAP of the first type RCTD results after <code>ProjectData()</code>.
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>What is the sample-specific proportion for each <code>first_type</code>?</li>
-<li>Create a dotplot using the known marker genes for each celltype to see if the <code>first_type</code> labels align with known celltype genes.</li>
+<li><p>What is the sample-specific proportion for each <code>first_type</code>? Create a ggplot barplot showing the proportions of each cell type. <em>Hint: Refer back to the code we used <a href="../lessons/09_integration.html#fig-cell_proportion_barplot">here</a></em></p></li>
+<li><p>Create a dotplot using the known marker genes for each celltype to see if the <code>first_type</code> labels align with known celltype genes.</p></li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>marker_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
@@ -6845,435 +6831,429 @@ Figure 8: UMAP of the first type RCTD results after <code>ProjectData()</code>.
 <span id="cb34-209"><a href="#cb34-209" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-210"><a href="#cb34-210" aria-hidden="true" tabindex="-1"></a><span class="fu">### Create query</span></span>
 <span id="cb34-211"><a href="#cb34-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-212"><a href="#cb34-212" aria-hidden="true" tabindex="-1"></a>We are going to _annotate the slides one a time_. There are extensions of the RCTD package in order to take into account <span class="co">[</span><span class="ot">replicates and multiple samples</span><span class="co">](https://raw.githack.com/dmcable/spacexr/master/vignettes/replicates.html)</span> which we will not use at this time due to time constraints.</span>
-<span id="cb34-213"><a href="#cb34-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-212"><a href="#cb34-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-213"><a href="#cb34-213" aria-hidden="true" tabindex="-1"></a>**Deconvolution is very computationally expensive!** So we can once again make use the <span class="in">`sketch`</span> workflow to downsample our dataset in a careful manner. Additionally, we are going to split our Seurat object into a _single sample_ <span class="in">`P5CRC`</span>. There are extensions of the RCTD package in order to take into account <span class="co">[</span><span class="ot">replicates and multiple samples</span><span class="co">](https://raw.githack.com/dmcable/spacexr/master/vignettes/replicates.html)</span> which we will not use at this time due to time constraints.</span>
 <span id="cb34-214"><a href="#cb34-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-215"><a href="#cb34-215" aria-hidden="true" tabindex="-1"></a>**Deconvolution is very computationally expensive!** So we can once again make use the <span class="in">`sketch`</span> workflow to downsample our dataset in a careful manner. Additionally, we are going to split our Seurat object into a single sample <span class="in">`P5CRC`</span>.</span>
-<span id="cb34-216"><a href="#cb34-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-219"><a href="#cb34-219" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-220"><a href="#cb34-220" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: subset_crc</span></span>
-<span id="cb34-221"><a href="#cb34-221" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">subset</span>(seurat_banksy, </span>
-<span id="cb34-222"><a href="#cb34-222" aria-hidden="true" tabindex="-1"></a>              <span class="at">subset =</span> (orig.ident <span class="sc">==</span> <span class="st">&quot;P5CRC&quot;</span>))</span>
-<span id="cb34-223"><a href="#cb34-223" aria-hidden="true" tabindex="-1"></a>crc</span>
-<span id="cb34-224"><a href="#cb34-224" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-225"><a href="#cb34-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-226"><a href="#cb34-226" aria-hidden="true" tabindex="-1"></a>We cannot use the same sketch information from the <span class="co">[</span><span class="ot">previous lessons</span><span class="co">](06_normalization_and_sketch.qmd)</span> since this is one sample (and not both). Therefore we are going to quickly run through the sketch workflow one more time. However we will not be running the entire workflow, as we only need the PCA scores to project back to the larger dataset.</span>
-<span id="cb34-227"><a href="#cb34-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-230"><a href="#cb34-230" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-231"><a href="#cb34-231" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_sketch_workflow</span></span>
-<span id="cb34-232"><a href="#cb34-232" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb34-233"><a href="#cb34-233" aria-hidden="true" tabindex="-1"></a><span class="co"># Create sketch of CRC subset</span></span>
-<span id="cb34-234"><a href="#cb34-234" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(crc) <span class="ot">&lt;-</span> <span class="st">&#39;Spatial.008um&#39;</span></span>
-<span id="cb34-235"><a href="#cb34-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-236"><a href="#cb34-236" aria-hidden="true" tabindex="-1"></a><span class="co"># HVGs are required input for SketchData</span></span>
-<span id="cb34-237"><a href="#cb34-237" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">FindVariableFeatures</span>(<span class="at">object =</span> crc,</span>
-<span id="cb34-238"><a href="#cb34-238" aria-hidden="true" tabindex="-1"></a>                            <span class="at">assay =</span> <span class="st">&quot;Spatial.008um&quot;</span>)</span>
-<span id="cb34-239"><a href="#cb34-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-240"><a href="#cb34-240" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate leverage score</span></span>
-<span id="cb34-241"><a href="#cb34-241" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">SketchData</span>(</span>
-<span id="cb34-242"><a href="#cb34-242" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> crc,</span>
-<span id="cb34-243"><a href="#cb34-243" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncells =</span> <span class="dv">5000</span>,</span>
-<span id="cb34-244"><a href="#cb34-244" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;LeverageScore&quot;</span>,</span>
-<span id="cb34-245"><a href="#cb34-245" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.assay =</span> <span class="st">&quot;sketch_crc&quot;</span>,</span>
-<span id="cb34-246"><a href="#cb34-246" aria-hidden="true" tabindex="-1"></a>  <span class="at">var.name =</span> <span class="st">&quot;leverage.score_crc&quot;</span>)</span>
-<span id="cb34-247"><a href="#cb34-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-248"><a href="#cb34-248" aria-hidden="true" tabindex="-1"></a><span class="co"># Run through processing workflow</span></span>
-<span id="cb34-249"><a href="#cb34-249" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop at PCA</span></span>
-<span id="cb34-250"><a href="#cb34-250" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">FindVariableFeatures</span>(crc)</span>
-<span id="cb34-251"><a href="#cb34-251" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">ScaleData</span>(crc)</span>
-<span id="cb34-252"><a href="#cb34-252" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(crc, <span class="at">reduction.name =</span> <span class="st">&quot;pca.sketch_crc&quot;</span>)</span>
-<span id="cb34-253"><a href="#cb34-253" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-254"><a href="#cb34-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-257"><a href="#cb34-257" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-258"><a href="#cb34-258" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: instructor_crc_processed</span></span>
-<span id="cb34-259"><a href="#cb34-259" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb34-260"><a href="#cb34-260" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(crc, &quot;intermediate/12_crc_sketch.qs&quot;)</span></span>
-<span id="cb34-261"><a href="#cb34-261" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/12_crc_sketch.qs&quot;</span>)</span>
-<span id="cb34-262"><a href="#cb34-262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-263"><a href="#cb34-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-264"><a href="#cb34-264" aria-hidden="true" tabindex="-1"></a>RCTD requires another unique data structure as input to run. So we create our query object with <span class="in">`SpatialRNA()`</span> by suppling the spatial coordinates and raw counts for the bins. Note that we do not have to supply any celltype information, like we did with the reference object earlier. This is becuase we don&#39;t have any celltype information yet! That is the output we are hoping to generate from running RCTD.</span>
-<span id="cb34-265"><a href="#cb34-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-268"><a href="#cb34-268" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-269"><a href="#cb34-269" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: query_rctd</span></span>
-<span id="cb34-270"><a href="#cb34-270" aria-hidden="true" tabindex="-1"></a><span class="co"># Get raw counts of downsampled sketch assay</span></span>
-<span id="cb34-271"><a href="#cb34-271" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(crc) <span class="ot">&lt;-</span> <span class="st">&quot;sketch_crc&quot;</span></span>
-<span id="cb34-272"><a href="#cb34-272" aria-hidden="true" tabindex="-1"></a>counts_sketch <span class="ot">&lt;-</span> crc[[<span class="st">&quot;sketch_crc&quot;</span>]]<span class="sc">$</span>counts</span>
-<span id="cb34-273"><a href="#cb34-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-274"><a href="#cb34-274" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab barcodes for sketched bins</span></span>
-<span id="cb34-275"><a href="#cb34-275" aria-hidden="true" tabindex="-1"></a>cells_sketch <span class="ot">&lt;-</span> <span class="fu">colnames</span>(crc[[<span class="st">&quot;sketch_crc&quot;</span>]])</span>
-<span id="cb34-276"><a href="#cb34-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-277"><a href="#cb34-277" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial coordinates for each bin in sketch assay</span></span>
-<span id="cb34-278"><a href="#cb34-278" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">GetTissueCoordinates</span>(crc)[cells_sketch, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
-<span id="cb34-279"><a href="#cb34-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-280"><a href="#cb34-280" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab nUMI per sketch bin</span></span>
-<span id="cb34-281"><a href="#cb34-281" aria-hidden="true" tabindex="-1"></a>nUMI_sketch <span class="ot">&lt;-</span> crc<span class="sc">@</span>meta.data[cells_sketch, <span class="st">&quot;nCounts_Spatial.008um&quot;</span>]</span>
-<span id="cb34-282"><a href="#cb34-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-283"><a href="#cb34-283" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the RCTD query object</span></span>
-<span id="cb34-284"><a href="#cb34-284" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="fu">SpatialRNA</span>(<span class="at">coords =</span> coords, </span>
-<span id="cb34-285"><a href="#cb34-285" aria-hidden="true" tabindex="-1"></a>                    <span class="at">counts =</span> counts_sketch, </span>
-<span id="cb34-286"><a href="#cb34-286" aria-hidden="true" tabindex="-1"></a>                    <span class="at">nUMI =</span> nUMI_sketch)</span>
-<span id="cb34-287"><a href="#cb34-287" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-288"><a href="#cb34-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-289"><a href="#cb34-289" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
-<span id="cb34-290"><a href="#cb34-290" aria-hidden="true" tabindex="-1"></a><span class="fu"># Structure of `query`</span></span>
-<span id="cb34-291"><a href="#cb34-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-292"><a href="#cb34-292" aria-hidden="true" tabindex="-1"></a>When we look at the structure of this <span class="in">`reference`</span> object, we can see that we have our <span class="in">`nUMI`</span>, <span class="in">`counts`</span>, and <span class="in">`coords`</span> in this object.</span>
-<span id="cb34-293"><a href="#cb34-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-296"><a href="#cb34-296" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-297"><a href="#cb34-297" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: str_query</span></span>
-<span id="cb34-298"><a href="#cb34-298" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(query)</span>
-<span id="cb34-299"><a href="#cb34-299" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-300"><a href="#cb34-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-301"><a href="#cb34-301" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-302"><a href="#cb34-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-303"><a href="#cb34-303" aria-hidden="true" tabindex="-1"></a><span class="fu">### Run RCTD</span></span>
-<span id="cb34-304"><a href="#cb34-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-305"><a href="#cb34-305" aria-hidden="true" tabindex="-1"></a>The more celltypes you have the longer this will take.</span>
-<span id="cb34-306"><a href="#cb34-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-307"><a href="#cb34-307" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
-<span id="cb34-308"><a href="#cb34-308" aria-hidden="true" tabindex="-1"></a>We need to provide a time estimate for this step</span>
-<span id="cb34-309"><a href="#cb34-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-310"><a href="#cb34-310" aria-hidden="true" tabindex="-1"></a>This took me ~5 minutes</span>
-<span id="cb34-311"><a href="#cb34-311" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-312"><a href="#cb34-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-315"><a href="#cb34-315" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-316"><a href="#cb34-316" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: run_RCTD</span></span>
-<span id="cb34-317"><a href="#cb34-317" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb34-318"><a href="#cb34-318" aria-hidden="true" tabindex="-1"></a><span class="co"># Set-up for RCTD run by supplying both query and reference</span></span>
-<span id="cb34-319"><a href="#cb34-319" aria-hidden="true" tabindex="-1"></a>RCTD <span class="ot">&lt;-</span> <span class="fu">create.RCTD</span>(<span class="at">spatialRNA =</span> query, </span>
-<span id="cb34-320"><a href="#cb34-320" aria-hidden="true" tabindex="-1"></a>                    <span class="at">reference =</span> reference, </span>
-<span id="cb34-321"><a href="#cb34-321" aria-hidden="true" tabindex="-1"></a>                    <span class="at">max_cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb34-322"><a href="#cb34-322" aria-hidden="true" tabindex="-1"></a><span class="co"># Run devonlution</span></span>
-<span id="cb34-323"><a href="#cb34-323" aria-hidden="true" tabindex="-1"></a>RCTD <span class="ot">&lt;-</span> <span class="fu">run.RCTD</span>(RCTD, <span class="at">doublet_mode =</span> <span class="st">&quot;doublet&quot;</span>) <span class="co"># This step takes a while</span></span>
-<span id="cb34-324"><a href="#cb34-324" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-325"><a href="#cb34-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-328"><a href="#cb34-328" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-329"><a href="#cb34-329" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: instructor_load_rctd</span></span>
-<span id="cb34-330"><a href="#cb34-330" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb34-331"><a href="#cb34-331" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(RCTD, &quot;intermediate/12_RCTD_crc.qs&quot;)</span></span>
-<span id="cb34-332"><a href="#cb34-332" aria-hidden="true" tabindex="-1"></a>RCTD <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/12_RCTD_crc.qs&quot;</span>)</span>
-<span id="cb34-333"><a href="#cb34-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-334"><a href="#cb34-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-335"><a href="#cb34-335" aria-hidden="true" tabindex="-1"></a><span class="fu">### RCTD results</span></span>
-<span id="cb34-336"><a href="#cb34-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-337"><a href="#cb34-337" aria-hidden="true" tabindex="-1"></a>The resultant dataframe from RCTD will contain the following columns according to the <span class="co">[</span><span class="ot">documentation</span><span class="co">](https://mirror.accum.se/mirror/bioconductor.org/packages/devel/bioc/vignettes/spacexr/inst/doc/rctd-tutorial.html)</span>:</span>
-<span id="cb34-338"><a href="#cb34-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-339"><a href="#cb34-339" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column       <span class="pp">|</span> Description                                                                                   <span class="pp">|</span></span>
-<span id="cb34-340"><a href="#cb34-340" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------------|--------------------------------------------------------------------------------------------------------|</span></span>
-<span id="cb34-341"><a href="#cb34-341" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`spot_class`</span> <span class="pp">|</span> RCTD’s classification (doublet mode):<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>• <span class="in">`singlet`</span> – 1 cell type on pixel<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>• <span class="in">`doublet_certain`</span> – 2 cell types on pixel<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>• <span class="in">`doublet_uncertain`</span> – 2 cell types on pixel, but only confident of 1<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>• <span class="in">`reject`</span> – no prediction given for pixel <span class="pp">|</span></span>
-<span id="cb34-342"><a href="#cb34-342" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`first_type`</span> <span class="pp">|</span> First cell type predicted on the bead; defined for all <span class="in">`spot_class`</span> values except <span class="in">`reject`</span>.           <span class="pp">|</span></span>
-<span id="cb34-343"><a href="#cb34-343" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`second_type`</span><span class="pp">|</span> Second cell type predicted on the bead for doublet <span class="in">`spot_class`</span> (<span class="in">`doublet_certain`</span>, <span class="in">`doublet_uncertain`</span>); not a confident prediction in the <span class="in">`doublet_uncertain`</span> case. <span class="pp">|</span></span>
+<span id="cb34-217"><a href="#cb34-217" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-218"><a href="#cb34-218" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: subset_crc</span></span>
+<span id="cb34-219"><a href="#cb34-219" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to P5CRC sample</span></span>
+<span id="cb34-220"><a href="#cb34-220" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">subset</span>(seurat_banksy, </span>
+<span id="cb34-221"><a href="#cb34-221" aria-hidden="true" tabindex="-1"></a>              <span class="at">subset =</span> (orig.ident <span class="sc">==</span> <span class="st">&quot;P5CRC&quot;</span>))</span>
+<span id="cb34-222"><a href="#cb34-222" aria-hidden="true" tabindex="-1"></a>crc</span>
+<span id="cb34-223"><a href="#cb34-223" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-224"><a href="#cb34-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-225"><a href="#cb34-225" aria-hidden="true" tabindex="-1"></a>We cannot use the same sketch information from the <span class="co">[</span><span class="ot">previous lessons</span><span class="co">](06_normalization_and_sketch.qmd)</span> since this is one sample (and not both). Therefore we are going to quickly run through the sketch workflow one more time. However we will not be running the entire workflow, as we only need the PCA scores to project back to the larger dataset.</span>
+<span id="cb34-226"><a href="#cb34-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-229"><a href="#cb34-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-230"><a href="#cb34-230" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_sketch_workflow</span></span>
+<span id="cb34-231"><a href="#cb34-231" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb34-232"><a href="#cb34-232" aria-hidden="true" tabindex="-1"></a><span class="co"># Create sketch of CRC subset</span></span>
+<span id="cb34-233"><a href="#cb34-233" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(crc) <span class="ot">&lt;-</span> <span class="st">&#39;Spatial.008um&#39;</span></span>
+<span id="cb34-234"><a href="#cb34-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-235"><a href="#cb34-235" aria-hidden="true" tabindex="-1"></a><span class="co"># HVGs are required input for SketchData</span></span>
+<span id="cb34-236"><a href="#cb34-236" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">FindVariableFeatures</span>(<span class="at">object =</span> crc,</span>
+<span id="cb34-237"><a href="#cb34-237" aria-hidden="true" tabindex="-1"></a>                            <span class="at">assay =</span> <span class="st">&quot;Spatial.008um&quot;</span>)</span>
+<span id="cb34-238"><a href="#cb34-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-239"><a href="#cb34-239" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate leverage score</span></span>
+<span id="cb34-240"><a href="#cb34-240" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">SketchData</span>(</span>
+<span id="cb34-241"><a href="#cb34-241" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> crc,</span>
+<span id="cb34-242"><a href="#cb34-242" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncells =</span> <span class="dv">5000</span>,</span>
+<span id="cb34-243"><a href="#cb34-243" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;LeverageScore&quot;</span>,</span>
+<span id="cb34-244"><a href="#cb34-244" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.assay =</span> <span class="st">&quot;sketch_crc&quot;</span>,</span>
+<span id="cb34-245"><a href="#cb34-245" aria-hidden="true" tabindex="-1"></a>  <span class="at">var.name =</span> <span class="st">&quot;leverage.score_crc&quot;</span>)</span>
+<span id="cb34-246"><a href="#cb34-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-247"><a href="#cb34-247" aria-hidden="true" tabindex="-1"></a><span class="co"># Run through processing workflow</span></span>
+<span id="cb34-248"><a href="#cb34-248" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop at PCA</span></span>
+<span id="cb34-249"><a href="#cb34-249" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">FindVariableFeatures</span>(crc)</span>
+<span id="cb34-250"><a href="#cb34-250" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">ScaleData</span>(crc)</span>
+<span id="cb34-251"><a href="#cb34-251" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(crc, <span class="at">reduction.name =</span> <span class="st">&quot;pca.sketch_crc&quot;</span>)</span>
+<span id="cb34-252"><a href="#cb34-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-253"><a href="#cb34-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-256"><a href="#cb34-256" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-257"><a href="#cb34-257" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: instructor_crc_processed</span></span>
+<span id="cb34-258"><a href="#cb34-258" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb34-259"><a href="#cb34-259" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(crc, &quot;intermediate/12_crc_sketch.qs&quot;)</span></span>
+<span id="cb34-260"><a href="#cb34-260" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/12_crc_sketch.qs&quot;</span>)</span>
+<span id="cb34-261"><a href="#cb34-261" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-262"><a href="#cb34-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-263"><a href="#cb34-263" aria-hidden="true" tabindex="-1"></a>RCTD requires another unique data structure as input to run. So we create our query object with <span class="in">`SpatialRNA()`</span> by suppling the spatial coordinates and raw counts for the bins. Note that we do not have to supply any celltype information, like we did with the reference object earlier. This is becuase we don&#39;t have any celltype information yet! That is the output we are hoping to generate from running RCTD.</span>
+<span id="cb34-264"><a href="#cb34-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-267"><a href="#cb34-267" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-268"><a href="#cb34-268" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: query_rctd</span></span>
+<span id="cb34-269"><a href="#cb34-269" aria-hidden="true" tabindex="-1"></a><span class="co"># Get raw counts of downsampled sketch assay</span></span>
+<span id="cb34-270"><a href="#cb34-270" aria-hidden="true" tabindex="-1"></a><span class="fu">DefaultAssay</span>(crc) <span class="ot">&lt;-</span> <span class="st">&quot;sketch_crc&quot;</span></span>
+<span id="cb34-271"><a href="#cb34-271" aria-hidden="true" tabindex="-1"></a>counts_sketch <span class="ot">&lt;-</span> crc[[<span class="st">&quot;sketch_crc&quot;</span>]]<span class="sc">$</span>counts</span>
+<span id="cb34-272"><a href="#cb34-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-273"><a href="#cb34-273" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab barcodes for sketched bins</span></span>
+<span id="cb34-274"><a href="#cb34-274" aria-hidden="true" tabindex="-1"></a>cells_sketch <span class="ot">&lt;-</span> <span class="fu">colnames</span>(crc[[<span class="st">&quot;sketch_crc&quot;</span>]])</span>
+<span id="cb34-275"><a href="#cb34-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-276"><a href="#cb34-276" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial coordinates for each bin in sketch assay</span></span>
+<span id="cb34-277"><a href="#cb34-277" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">GetTissueCoordinates</span>(crc)[cells_sketch, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb34-278"><a href="#cb34-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-279"><a href="#cb34-279" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab nUMI per sketch bin</span></span>
+<span id="cb34-280"><a href="#cb34-280" aria-hidden="true" tabindex="-1"></a>nUMI_sketch <span class="ot">&lt;-</span> crc<span class="sc">@</span>meta.data[cells_sketch, <span class="st">&quot;nCounts_Spatial.008um&quot;</span>]</span>
+<span id="cb34-281"><a href="#cb34-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-282"><a href="#cb34-282" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the RCTD query object</span></span>
+<span id="cb34-283"><a href="#cb34-283" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="fu">SpatialRNA</span>(<span class="at">coords =</span> coords, </span>
+<span id="cb34-284"><a href="#cb34-284" aria-hidden="true" tabindex="-1"></a>                    <span class="at">counts =</span> counts_sketch, </span>
+<span id="cb34-285"><a href="#cb34-285" aria-hidden="true" tabindex="-1"></a>                    <span class="at">nUMI =</span> nUMI_sketch)</span>
+<span id="cb34-286"><a href="#cb34-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-287"><a href="#cb34-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-288"><a href="#cb34-288" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
+<span id="cb34-289"><a href="#cb34-289" aria-hidden="true" tabindex="-1"></a><span class="fu"># Structure of `query`</span></span>
+<span id="cb34-290"><a href="#cb34-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-291"><a href="#cb34-291" aria-hidden="true" tabindex="-1"></a>When we look at the structure of this <span class="in">`reference`</span> object, we can see that we have our <span class="in">`nUMI`</span>, <span class="in">`counts`</span>, and <span class="in">`coords`</span> in this object.</span>
+<span id="cb34-292"><a href="#cb34-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-295"><a href="#cb34-295" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-296"><a href="#cb34-296" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: str_query</span></span>
+<span id="cb34-297"><a href="#cb34-297" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(query)</span>
+<span id="cb34-298"><a href="#cb34-298" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-299"><a href="#cb34-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-300"><a href="#cb34-300" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-301"><a href="#cb34-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-302"><a href="#cb34-302" aria-hidden="true" tabindex="-1"></a><span class="fu">### Run RCTD</span></span>
+<span id="cb34-303"><a href="#cb34-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-304"><a href="#cb34-304" aria-hidden="true" tabindex="-1"></a>The more celltypes you have the longer this will take.</span>
+<span id="cb34-305"><a href="#cb34-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-306"><a href="#cb34-306" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb34-307"><a href="#cb34-307" aria-hidden="true" tabindex="-1"></a>We need to provide a time estimate for this step</span>
+<span id="cb34-308"><a href="#cb34-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-309"><a href="#cb34-309" aria-hidden="true" tabindex="-1"></a>This took me ~5 minutes</span>
+<span id="cb34-310"><a href="#cb34-310" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-311"><a href="#cb34-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-314"><a href="#cb34-314" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-315"><a href="#cb34-315" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: run_RCTD</span></span>
+<span id="cb34-316"><a href="#cb34-316" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb34-317"><a href="#cb34-317" aria-hidden="true" tabindex="-1"></a><span class="co"># Set-up for RCTD run by supplying both query and reference</span></span>
+<span id="cb34-318"><a href="#cb34-318" aria-hidden="true" tabindex="-1"></a>RCTD <span class="ot">&lt;-</span> <span class="fu">create.RCTD</span>(<span class="at">spatialRNA =</span> query, </span>
+<span id="cb34-319"><a href="#cb34-319" aria-hidden="true" tabindex="-1"></a>                    <span class="at">reference =</span> reference, </span>
+<span id="cb34-320"><a href="#cb34-320" aria-hidden="true" tabindex="-1"></a>                    <span class="at">max_cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb34-321"><a href="#cb34-321" aria-hidden="true" tabindex="-1"></a><span class="co"># Run devonlution</span></span>
+<span id="cb34-322"><a href="#cb34-322" aria-hidden="true" tabindex="-1"></a>RCTD <span class="ot">&lt;-</span> <span class="fu">run.RCTD</span>(RCTD, <span class="at">doublet_mode =</span> <span class="st">&quot;doublet&quot;</span>) <span class="co"># This step takes a while</span></span>
+<span id="cb34-323"><a href="#cb34-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-324"><a href="#cb34-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-327"><a href="#cb34-327" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-328"><a href="#cb34-328" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: instructor_load_rctd</span></span>
+<span id="cb34-329"><a href="#cb34-329" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb34-330"><a href="#cb34-330" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(RCTD, &quot;intermediate/12_RCTD_crc.qs&quot;)</span></span>
+<span id="cb34-331"><a href="#cb34-331" aria-hidden="true" tabindex="-1"></a>RCTD <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/12_RCTD_crc.qs&quot;</span>)</span>
+<span id="cb34-332"><a href="#cb34-332" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-333"><a href="#cb34-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-334"><a href="#cb34-334" aria-hidden="true" tabindex="-1"></a><span class="fu">### RCTD results</span></span>
+<span id="cb34-335"><a href="#cb34-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-336"><a href="#cb34-336" aria-hidden="true" tabindex="-1"></a>The resultant dataframe from RCTD will contain the following columns according to the <span class="co">[</span><span class="ot">documentation</span><span class="co">](https://mirror.accum.se/mirror/bioconductor.org/packages/devel/bioc/vignettes/spacexr/inst/doc/rctd-tutorial.html)</span>:</span>
+<span id="cb34-337"><a href="#cb34-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-338"><a href="#cb34-338" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column       <span class="pp">|</span> Description                                                                                   <span class="pp">|</span></span>
+<span id="cb34-339"><a href="#cb34-339" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------------|--------------------------------------------------------------------------------------------------------|</span></span>
+<span id="cb34-340"><a href="#cb34-340" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`spot_class`</span> <span class="pp">|</span> RCTD’s classification (doublet mode):<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>• <span class="in">`singlet`</span> – 1 cell type on pixel<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>• <span class="in">`doublet_certain`</span> – 2 cell types on pixel<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>• <span class="in">`doublet_uncertain`</span> – 2 cell types on pixel, but only confident of 1<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>• <span class="in">`reject`</span> – no prediction given for pixel <span class="pp">|</span></span>
+<span id="cb34-341"><a href="#cb34-341" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`first_type`</span> <span class="pp">|</span> First cell type predicted on the bead; defined for all <span class="in">`spot_class`</span> values except <span class="in">`reject`</span>.           <span class="pp">|</span></span>
+<span id="cb34-342"><a href="#cb34-342" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`second_type`</span><span class="pp">|</span> Second cell type predicted on the bead for doublet <span class="in">`spot_class`</span> (<span class="in">`doublet_certain`</span>, <span class="in">`doublet_uncertain`</span>); not a confident prediction in the <span class="in">`doublet_uncertain`</span> case. <span class="pp">|</span></span>
+<span id="cb34-343"><a href="#cb34-343" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-344"><a href="#cb34-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-345"><a href="#cb34-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-346"><a href="#cb34-346" aria-hidden="true" tabindex="-1"></a>The results of deconvolution are stored in the <span class="in">`results$results_df`</span> slot of the <span class="in">`RCTD`</span> object:</span>
-<span id="cb34-347"><a href="#cb34-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-350"><a href="#cb34-350" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-351"><a href="#cb34-351" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: rctd_results</span></span>
-<span id="cb34-352"><a href="#cb34-352" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb34-353"><a href="#cb34-353" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab results dataframe and view first few rows</span></span>
-<span id="cb34-354"><a href="#cb34-354" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="ot">&lt;-</span> RCTD<span class="sc">@</span>results<span class="sc">$</span>results_df</span>
-<span id="cb34-355"><a href="#cb34-355" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb34-356"><a href="#cb34-356" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-357"><a href="#cb34-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-360"><a href="#cb34-360" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-361"><a href="#cb34-361" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-rctd_results</span></span>
-<span id="cb34-362"><a href="#cb34-362" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: Table of RCTD results for each bin, showing first and second type predictions for each bin.</span></span>
-<span id="cb34-363"><a href="#cb34-363" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb34-364"><a href="#cb34-364" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab results dataframe and view first few rows</span></span>
-<span id="cb34-365"><a href="#cb34-365" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="ot">&lt;-</span> RCTD<span class="sc">@</span>results<span class="sc">$</span>results_df</span>
-<span id="cb34-366"><a href="#cb34-366" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="sc">%&gt;%</span> <span class="fu">head</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
-<span id="cb34-367"><a href="#cb34-367" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-368"><a href="#cb34-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-369"><a href="#cb34-369" aria-hidden="true" tabindex="-1"></a>We can also visualize the number of identifications established for each <span class="in">`first_type`</span>:</span>
-<span id="cb34-370"><a href="#cb34-370" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-373"><a href="#cb34-373" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-374"><a href="#cb34-374" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-barplot_n_first_type_sketch</span></span>
-<span id="cb34-375"><a href="#cb34-375" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Number of sketched bins assigned to a celltype with RCTD.</span></span>
+<span id="cb34-345"><a href="#cb34-345" aria-hidden="true" tabindex="-1"></a>The results of deconvolution are stored in the <span class="in">`results$results_df`</span> slot of the <span class="in">`RCTD`</span> object:</span>
+<span id="cb34-346"><a href="#cb34-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-349"><a href="#cb34-349" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-350"><a href="#cb34-350" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: rctd_results</span></span>
+<span id="cb34-351"><a href="#cb34-351" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb34-352"><a href="#cb34-352" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab results dataframe and view first few rows</span></span>
+<span id="cb34-353"><a href="#cb34-353" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="ot">&lt;-</span> RCTD<span class="sc">@</span>results<span class="sc">$</span>results_df</span>
+<span id="cb34-354"><a href="#cb34-354" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb34-355"><a href="#cb34-355" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-356"><a href="#cb34-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-359"><a href="#cb34-359" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-360"><a href="#cb34-360" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-rctd_results</span></span>
+<span id="cb34-361"><a href="#cb34-361" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: Table of RCTD results for each bin, showing first and second type predictions for each bin.</span></span>
+<span id="cb34-362"><a href="#cb34-362" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb34-363"><a href="#cb34-363" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab results dataframe and view first few rows</span></span>
+<span id="cb34-364"><a href="#cb34-364" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="ot">&lt;-</span> RCTD<span class="sc">@</span>results<span class="sc">$</span>results_df</span>
+<span id="cb34-365"><a href="#cb34-365" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="sc">%&gt;%</span> <span class="fu">head</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb34-366"><a href="#cb34-366" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-367"><a href="#cb34-367" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-368"><a href="#cb34-368" aria-hidden="true" tabindex="-1"></a>We can also visualize the number of identifications established for each <span class="in">`first_type`</span>:</span>
+<span id="cb34-369"><a href="#cb34-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-372"><a href="#cb34-372" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-373"><a href="#cb34-373" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-barplot_n_first_type_sketch</span></span>
+<span id="cb34-374"><a href="#cb34-374" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Number of sketched bins assigned to a celltype with RCTD.</span></span>
+<span id="cb34-375"><a href="#cb34-375" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of cell types annotated to each bin in sketch assay</span></span>
 <span id="cb34-376"><a href="#cb34-376" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_rctd_results,</span>
 <span id="cb34-377"><a href="#cb34-377" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> first_type, </span>
 <span id="cb34-378"><a href="#cb34-378" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> first_type)) <span class="sc">+</span></span>
 <span id="cb34-379"><a href="#cb34-379" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb34-380"><a href="#cb34-380" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb34-381"><a href="#cb34-381" aria-hidden="true" tabindex="-1"></a>  <span class="fu">NoLegend</span>() <span class="sc">+</span></span>
-<span id="cb34-382"><a href="#cb34-382" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;P5CRC: RCTD First Type Results&quot;</span>) <span class="sc">+</span></span>
-<span id="cb34-383"><a href="#cb34-383" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span>
-<span id="cb34-384"><a href="#cb34-384" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-385"><a href="#cb34-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-386"><a href="#cb34-386" aria-hidden="true" tabindex="-1"></a>Just be looking at the total number of bins, this is a good reminder that we only have the RCTD results for the 10,000 bins we sketched to.</span>
-<span id="cb34-387"><a href="#cb34-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-388"><a href="#cb34-388" aria-hidden="true" tabindex="-1"></a><span class="fu">### Project RCTD results on all bins</span></span>
-<span id="cb34-389"><a href="#cb34-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-390"><a href="#cb34-390" aria-hidden="true" tabindex="-1"></a>Let us take a look at how many rows (bins) we have these annotations for:</span>
-<span id="cb34-391"><a href="#cb34-391" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-394"><a href="#cb34-394" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-395"><a href="#cb34-395" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: nrow_rctd</span></span>
-<span id="cb34-396"><a href="#cb34-396" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(df_rctd_results)</span>
-<span id="cb34-397"><a href="#cb34-397" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-398"><a href="#cb34-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-399"><a href="#cb34-399" aria-hidden="true" tabindex="-1"></a>But didn&#39;t our <span class="in">`sketch`</span> assay include 5,000 bins? RCTD runs its own QC and when it cannot identify what the annotation for a specific bin is, then it is removed from the final results.</span>
-<span id="cb34-400"><a href="#cb34-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-401"><a href="#cb34-401" aria-hidden="true" tabindex="-1"></a>So we are going to do some data wrangling to ensure that we keep track of all information. Including those ~200 bins without <span class="in">`first_type`</span> labels.</span>
-<span id="cb34-402"><a href="#cb34-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-405"><a href="#cb34-405" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-406"><a href="#cb34-406" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: sketch_rctd_df</span></span>
-<span id="cb34-407"><a href="#cb34-407" aria-hidden="true" tabindex="-1"></a><span class="co"># Update column names to have _sketch</span></span>
-<span id="cb34-408"><a href="#cb34-408" aria-hidden="true" tabindex="-1"></a><span class="co"># This is so that we can create a projected column</span></span>
-<span id="cb34-409"><a href="#cb34-409" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df_rctd_results) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">colnames</span>(df_rctd_results), </span>
-<span id="cb34-410"><a href="#cb34-410" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;_sketch&quot;</span>)</span>
-<span id="cb34-411"><a href="#cb34-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-412"><a href="#cb34-412" aria-hidden="true" tabindex="-1"></a><span class="co"># Create column cell to merge on</span></span>
-<span id="cb34-413"><a href="#cb34-413" aria-hidden="true" tabindex="-1"></a><span class="co"># Also removing factors</span></span>
-<span id="cb34-414"><a href="#cb34-414" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="ot">&lt;-</span> df_rctd_results <span class="sc">%&gt;%</span></span>
-<span id="cb34-415"><a href="#cb34-415" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cell =</span> <span class="fu">rownames</span>(df_rctd_results)) <span class="sc">%&gt;%</span></span>
-<span id="cb34-416"><a href="#cb34-416" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">first_type_sketch =</span> <span class="fu">as.character</span>(first_type_sketch),</span>
-<span id="cb34-417"><a href="#cb34-417" aria-hidden="true" tabindex="-1"></a>         <span class="at">second_type_sketch =</span> <span class="fu">as.character</span>(second_type_sketch),</span>
-<span id="cb34-418"><a href="#cb34-418" aria-hidden="true" tabindex="-1"></a>         <span class="at">spot_class_sketch =</span> <span class="fu">as.character</span>(spot_class_sketch))</span>
-<span id="cb34-419"><a href="#cb34-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-420"><a href="#cb34-420" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure columns were generated</span></span>
-<span id="cb34-421"><a href="#cb34-421" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df_rctd_results)</span>
-<span id="cb34-422"><a href="#cb34-422" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-423"><a href="#cb34-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-424"><a href="#cb34-424" aria-hidden="true" tabindex="-1"></a>Now let us merge this information into our Seurat object. This step is necessary because in order to <span class="in">`ProjectData()`</span>, we need the RCTD results to live in our <span class="in">`@meta.data`</span> slot.</span>
-<span id="cb34-425"><a href="#cb34-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-428"><a href="#cb34-428" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-429"><a href="#cb34-429" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: merge_rctd</span></span>
-<span id="cb34-430"><a href="#cb34-430" aria-hidden="true" tabindex="-1"></a><span class="co"># Create cell barcode in metadata</span></span>
-<span id="cb34-431"><a href="#cb34-431" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">$</span>cell <span class="ot">&lt;-</span> <span class="fu">rownames</span>(crc<span class="sc">@</span>meta.data)</span>
-<span id="cb34-432"><a href="#cb34-432" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> crc<span class="sc">@</span>meta.data</span>
-<span id="cb34-433"><a href="#cb34-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-434"><a href="#cb34-434" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge together RCTD results and metadata</span></span>
-<span id="cb34-435"><a href="#cb34-435" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">left_join</span>(<span class="at">x =</span> meta, </span>
-<span id="cb34-436"><a href="#cb34-436" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> df_rctd_results,</span>
-<span id="cb34-437"><a href="#cb34-437" aria-hidden="true" tabindex="-1"></a>                  <span class="at">by =</span> <span class="st">&quot;cell&quot;</span>)</span>
-<span id="cb34-438"><a href="#cb34-438" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-439"><a href="#cb34-439" aria-hidden="true" tabindex="-1"></a><span class="co"># Put meta into crc Seurat object</span></span>
-<span id="cb34-440"><a href="#cb34-440" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(meta) <span class="ot">&lt;-</span> meta<span class="sc">$</span>cell</span>
-<span id="cb34-441"><a href="#cb34-441" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="ot">&lt;-</span> meta</span>
-<span id="cb34-442"><a href="#cb34-442" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-380"><a href="#cb34-380" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">NoLegend</span>() <span class="sc">+</span></span>
+<span id="cb34-381"><a href="#cb34-381" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;P5CRC: RCTD First Type Results&quot;</span>) <span class="sc">+</span></span>
+<span id="cb34-382"><a href="#cb34-382" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span>
+<span id="cb34-383"><a href="#cb34-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-384"><a href="#cb34-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-385"><a href="#cb34-385" aria-hidden="true" tabindex="-1"></a>Just by looking at the total number of bins, this is a good reminder that we only have the RCTD results for the 5,000 bins we sketched to.</span>
+<span id="cb34-386"><a href="#cb34-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-387"><a href="#cb34-387" aria-hidden="true" tabindex="-1"></a><span class="fu">### Project RCTD results on all bins</span></span>
+<span id="cb34-388"><a href="#cb34-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-389"><a href="#cb34-389" aria-hidden="true" tabindex="-1"></a>Let us take a look at how many rows (bins) we have these annotations for:</span>
+<span id="cb34-390"><a href="#cb34-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-393"><a href="#cb34-393" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-394"><a href="#cb34-394" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: nrow_rctd</span></span>
+<span id="cb34-395"><a href="#cb34-395" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(df_rctd_results)</span>
+<span id="cb34-396"><a href="#cb34-396" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-397"><a href="#cb34-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-398"><a href="#cb34-398" aria-hidden="true" tabindex="-1"></a>But didn&#39;t our <span class="in">`sketch`</span> assay include 5,000 bins? RCTD runs its own QC step that filters out bins with low expression or _rejects_ bins where it is unable to map a cell type from the reference dataset. This is why we have fewer bins than we expected. So we are going to do some data wrangling to ensure that we keep track of all information. Including those ~200 bins without <span class="in">`first_type`</span> labels.</span>
+<span id="cb34-399"><a href="#cb34-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-402"><a href="#cb34-402" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-403"><a href="#cb34-403" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: sketch_rctd_df</span></span>
+<span id="cb34-404"><a href="#cb34-404" aria-hidden="true" tabindex="-1"></a><span class="co"># Update column names to have _sketch</span></span>
+<span id="cb34-405"><a href="#cb34-405" aria-hidden="true" tabindex="-1"></a><span class="co"># Add &quot;sketch&quot; to column names</span></span>
+<span id="cb34-406"><a href="#cb34-406" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df_rctd_results) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">colnames</span>(df_rctd_results), </span>
+<span id="cb34-407"><a href="#cb34-407" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;_sketch&quot;</span>)</span>
+<span id="cb34-408"><a href="#cb34-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-409"><a href="#cb34-409" aria-hidden="true" tabindex="-1"></a><span class="co"># Create column &quot;cell&quot; to merge on</span></span>
+<span id="cb34-410"><a href="#cb34-410" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing factors for easier merging later</span></span>
+<span id="cb34-411"><a href="#cb34-411" aria-hidden="true" tabindex="-1"></a>df_rctd_results <span class="ot">&lt;-</span> df_rctd_results <span class="sc">%&gt;%</span></span>
+<span id="cb34-412"><a href="#cb34-412" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cell =</span> <span class="fu">rownames</span>(df_rctd_results)) <span class="sc">%&gt;%</span></span>
+<span id="cb34-413"><a href="#cb34-413" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">first_type_sketch =</span> <span class="fu">as.character</span>(first_type_sketch),</span>
+<span id="cb34-414"><a href="#cb34-414" aria-hidden="true" tabindex="-1"></a>         <span class="at">second_type_sketch =</span> <span class="fu">as.character</span>(second_type_sketch),</span>
+<span id="cb34-415"><a href="#cb34-415" aria-hidden="true" tabindex="-1"></a>         <span class="at">spot_class_sketch =</span> <span class="fu">as.character</span>(spot_class_sketch))</span>
+<span id="cb34-416"><a href="#cb34-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-417"><a href="#cb34-417" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure columns were generated</span></span>
+<span id="cb34-418"><a href="#cb34-418" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df_rctd_results)</span>
+<span id="cb34-419"><a href="#cb34-419" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-420"><a href="#cb34-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-421"><a href="#cb34-421" aria-hidden="true" tabindex="-1"></a>Now let us merge this information into our Seurat object. This step is necessary because in order to <span class="in">`ProjectData()`</span>, we need the RCTD results to live in our <span class="in">`@meta.data`</span> slot.</span>
+<span id="cb34-422"><a href="#cb34-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-425"><a href="#cb34-425" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-426"><a href="#cb34-426" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: merge_rctd</span></span>
+<span id="cb34-427"><a href="#cb34-427" aria-hidden="true" tabindex="-1"></a><span class="co"># Create cell barcode in metadata</span></span>
+<span id="cb34-428"><a href="#cb34-428" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">$</span>cell <span class="ot">&lt;-</span> <span class="fu">rownames</span>(crc<span class="sc">@</span>meta.data)</span>
+<span id="cb34-429"><a href="#cb34-429" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> crc<span class="sc">@</span>meta.data</span>
+<span id="cb34-430"><a href="#cb34-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-431"><a href="#cb34-431" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge together RCTD results and metadata</span></span>
+<span id="cb34-432"><a href="#cb34-432" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">left_join</span>(<span class="at">x =</span> meta, </span>
+<span id="cb34-433"><a href="#cb34-433" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> df_rctd_results,</span>
+<span id="cb34-434"><a href="#cb34-434" aria-hidden="true" tabindex="-1"></a>                  <span class="at">by =</span> <span class="st">&quot;cell&quot;</span>)</span>
+<span id="cb34-435"><a href="#cb34-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-436"><a href="#cb34-436" aria-hidden="true" tabindex="-1"></a><span class="co"># Put meta into crc Seurat object</span></span>
+<span id="cb34-437"><a href="#cb34-437" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(meta) <span class="ot">&lt;-</span> meta<span class="sc">$</span>cell</span>
+<span id="cb34-438"><a href="#cb34-438" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="ot">&lt;-</span> meta</span>
+<span id="cb34-439"><a href="#cb34-439" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-440"><a href="#cb34-440" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-441"><a href="#cb34-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-442"><a href="#cb34-442" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project back to full dataset</span></span>
 <span id="cb34-443"><a href="#cb34-443" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-444"><a href="#cb34-444" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-445"><a href="#cb34-445" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project back to full dataset</span></span>
-<span id="cb34-446"><a href="#cb34-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-449"><a href="#cb34-449" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-450"><a href="#cb34-450" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: failed_project_data</span></span>
-<span id="cb34-451"><a href="#cb34-451" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: true</span></span>
-<span id="cb34-452"><a href="#cb34-452" aria-hidden="true" tabindex="-1"></a><span class="co"># Project back first_type to new column called first_type</span></span>
-<span id="cb34-453"><a href="#cb34-453" aria-hidden="true" tabindex="-1"></a><span class="co"># This will fail</span></span>
-<span id="cb34-454"><a href="#cb34-454" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">ProjectData</span>(</span>
-<span id="cb34-455"><a href="#cb34-455" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> crc,</span>
-<span id="cb34-456"><a href="#cb34-456" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay =</span> <span class="st">&quot;Spatial.008um&quot;</span>,</span>
-<span id="cb34-457"><a href="#cb34-457" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.assay =</span> <span class="st">&quot;sketch_crc&quot;</span>,</span>
-<span id="cb34-458"><a href="#cb34-458" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.reduction =</span> <span class="st">&quot;pca_crc&quot;</span>,</span>
-<span id="cb34-459"><a href="#cb34-459" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.reduction =</span> <span class="st">&quot;pca.sketch_crc&quot;</span>,</span>
-<span id="cb34-460"><a href="#cb34-460" aria-hidden="true" tabindex="-1"></a>  <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>,</span>
-<span id="cb34-461"><a href="#cb34-461" aria-hidden="true" tabindex="-1"></a>  <span class="at">refdata =</span> <span class="fu">list</span>(<span class="at">spot_class =</span> <span class="st">&quot;spot_class_sketch&quot;</span>,</span>
-<span id="cb34-462"><a href="#cb34-462" aria-hidden="true" tabindex="-1"></a>                 <span class="at">first_type =</span> <span class="st">&quot;first_type_sketch&quot;</span>,</span>
-<span id="cb34-463"><a href="#cb34-463" aria-hidden="true" tabindex="-1"></a>                 <span class="at">second_type =</span> <span class="st">&quot;second_type_sketch&quot;</span>))</span>
-<span id="cb34-464"><a href="#cb34-464" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-465"><a href="#cb34-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-466"><a href="#cb34-466" aria-hidden="true" tabindex="-1"></a>Why did we get an error when we tried to get RCTD labels for the entire dataset? This is because we have those <span class="in">`NA`</span> values for some of the bins in sketch. The <span class="in">`ProjectData()`</span> function expects actual values for every sketched bin. Therefore, to get around this issue, we are going to set the bins with no label as &quot;unassigned&quot; in the metadata.</span>
-<span id="cb34-467"><a href="#cb34-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-470"><a href="#cb34-470" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-471"><a href="#cb34-471" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: set_unassigned</span></span>
-<span id="cb34-472"><a href="#cb34-472" aria-hidden="true" tabindex="-1"></a><span class="co"># Set value ot unassigned to sketch bins that do not have values</span></span>
-<span id="cb34-473"><a href="#cb34-473" aria-hidden="true" tabindex="-1"></a><span class="co"># This is because ProjectData will throw errors otherwise</span></span>
-<span id="cb34-474"><a href="#cb34-474" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spot_class_sketch&quot;</span>, </span>
-<span id="cb34-475"><a href="#cb34-475" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;first_type_sketch&quot;</span>, </span>
-<span id="cb34-476"><a href="#cb34-476" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;second_type_sketch&quot;</span>)</span>
-<span id="cb34-477"><a href="#cb34-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-478"><a href="#cb34-478" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate through each column to set &quot;unassigned&quot; to NA values</span></span>
-<span id="cb34-479"><a href="#cb34-479" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (col <span class="cf">in</span> cols) {</span>
-<span id="cb34-480"><a href="#cb34-480" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find rows that are in sketch_cells and are NA</span></span>
-<span id="cb34-481"><a href="#cb34-481" aria-hidden="true" tabindex="-1"></a>  na_rows <span class="ot">&lt;-</span> cells_sketch[<span class="fu">is.na</span>(crc<span class="sc">@</span>meta.data[cells_sketch, col])]</span>
-<span id="cb34-482"><a href="#cb34-482" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Assign the value to unassigned</span></span>
-<span id="cb34-483"><a href="#cb34-483" aria-hidden="true" tabindex="-1"></a>  crc<span class="sc">@</span>meta.data[na_rows, col] <span class="ot">&lt;-</span> <span class="st">&quot;unassigned&quot;</span></span>
-<span id="cb34-484"><a href="#cb34-484" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb34-485"><a href="#cb34-485" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-486"><a href="#cb34-486" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-487"><a href="#cb34-487" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
-<span id="cb34-488"><a href="#cb34-488" aria-hidden="true" tabindex="-1"></a><span class="fu"># Number of unassigned bins</span></span>
-<span id="cb34-489"><a href="#cb34-489" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-490"><a href="#cb34-490" aria-hidden="true" tabindex="-1"></a>We can use the <span class="in">`table()`</span> function to quickly see how many unassigned bins we have in our dataset:</span>
-<span id="cb34-491"><a href="#cb34-491" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-494"><a href="#cb34-494" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-495"><a href="#cb34-495" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: table_unassigned</span></span>
-<span id="cb34-496"><a href="#cb34-496" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(crc<span class="sc">@</span>meta.data<span class="sc">$</span>first_type_sketch)</span>
-<span id="cb34-497"><a href="#cb34-497" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-498"><a href="#cb34-498" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-499"><a href="#cb34-499" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-500"><a href="#cb34-500" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-501"><a href="#cb34-501" aria-hidden="true" tabindex="-1"></a>Now we can once again run <span class="in">`ProjectData()`</span> to actually get celltype labels for each bin in our dataset.</span>
-<span id="cb34-502"><a href="#cb34-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-505"><a href="#cb34-505" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-506"><a href="#cb34-506" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: project_data</span></span>
-<span id="cb34-507"><a href="#cb34-507" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb34-508"><a href="#cb34-508" aria-hidden="true" tabindex="-1"></a><span class="co"># Project back first_type to new column called first_type</span></span>
-<span id="cb34-509"><a href="#cb34-509" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">ProjectData</span>(</span>
-<span id="cb34-510"><a href="#cb34-510" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> crc,</span>
-<span id="cb34-511"><a href="#cb34-511" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay =</span> <span class="st">&quot;Spatial.008um&quot;</span>,</span>
-<span id="cb34-512"><a href="#cb34-512" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.assay =</span> <span class="st">&quot;sketch_crc&quot;</span>,</span>
-<span id="cb34-513"><a href="#cb34-513" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.reduction =</span> <span class="st">&quot;pca_crc&quot;</span>,</span>
-<span id="cb34-514"><a href="#cb34-514" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.reduction =</span> <span class="st">&quot;pca.sketch_crc&quot;</span>,</span>
-<span id="cb34-515"><a href="#cb34-515" aria-hidden="true" tabindex="-1"></a>  <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>,</span>
-<span id="cb34-516"><a href="#cb34-516" aria-hidden="true" tabindex="-1"></a>  <span class="at">refdata =</span> <span class="fu">list</span>(<span class="at">spot_class =</span> <span class="st">&quot;spot_class_sketch&quot;</span>,</span>
-<span id="cb34-517"><a href="#cb34-517" aria-hidden="true" tabindex="-1"></a>                 <span class="at">first_type =</span> <span class="st">&quot;first_type_sketch&quot;</span>,</span>
-<span id="cb34-518"><a href="#cb34-518" aria-hidden="true" tabindex="-1"></a>                 <span class="at">second_type =</span> <span class="st">&quot;second_type_sketch&quot;</span>))</span>
-<span id="cb34-519"><a href="#cb34-519" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-520"><a href="#cb34-520" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-523"><a href="#cb34-523" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-524"><a href="#cb34-524" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: instructor_crc_rctd</span></span>
-<span id="cb34-525"><a href="#cb34-525" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb34-526"><a href="#cb34-526" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(crc, &quot;intermediate/12_crc_RCTD_seurat.qs&quot;)</span></span>
-<span id="cb34-527"><a href="#cb34-527" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/12_crc_RCTD_seurat.qs&quot;</span>)</span>
-<span id="cb34-528"><a href="#cb34-528" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-529"><a href="#cb34-529" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-530"><a href="#cb34-530" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visualize RCTD results</span></span>
-<span id="cb34-531"><a href="#cb34-531" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-532"><a href="#cb34-532" aria-hidden="true" tabindex="-1"></a>Now that we have <span class="in">`first_type`</span> values associated with each bin, we can visualize our dataset in a variety of different ways.</span>
-<span id="cb34-533"><a href="#cb34-533" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-534"><a href="#cb34-534" aria-hidden="true" tabindex="-1"></a><span class="fu">### Barplot</span></span>
-<span id="cb34-535"><a href="#cb34-535" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-536"><a href="#cb34-536" aria-hidden="true" tabindex="-1"></a>We can get an overview of how many bins we have with a barplot. As we might expect, the number of unassigned bins increased as we extrapolate the labels out to the larger dataset.</span>
-<span id="cb34-537"><a href="#cb34-537" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-538"><a href="#cb34-538" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
-<span id="cb34-539"><a href="#cb34-539" aria-hidden="true" tabindex="-1"></a>Need to add better expalanation of why RCTD just doesn&#39;t return all values</span>
-<span id="cb34-540"><a href="#cb34-540" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-541"><a href="#cb34-541" aria-hidden="true" tabindex="-1"></a>And how this is a limitation of the methods</span>
-<span id="cb34-542"><a href="#cb34-542" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-543"><a href="#cb34-543" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-546"><a href="#cb34-546" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-547"><a href="#cb34-547" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-barplot_n_first_type</span></span>
-<span id="cb34-548"><a href="#cb34-548" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Number of bins assigned to a celltype with RCTD after `ProjectData()`.</span></span>
-<span id="cb34-549"><a href="#cb34-549" aria-hidden="true" tabindex="-1"></a><span class="co"># Barplot of first_type labels after ProjectData()</span></span>
-<span id="cb34-550"><a href="#cb34-550" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crc<span class="sc">@</span>meta.data,</span>
-<span id="cb34-551"><a href="#cb34-551" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> first_type, <span class="at">fill =</span> first_type)) <span class="sc">+</span></span>
-<span id="cb34-552"><a href="#cb34-552" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb34-553"><a href="#cb34-553" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb34-554"><a href="#cb34-554" aria-hidden="true" tabindex="-1"></a>  <span class="fu">NoLegend</span>() <span class="sc">+</span></span>
-<span id="cb34-555"><a href="#cb34-555" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;P5CRC: Projected First Type RCTD&quot;</span>) <span class="sc">+</span></span>
-<span id="cb34-556"><a href="#cb34-556" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span>
-<span id="cb34-557"><a href="#cb34-557" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-558"><a href="#cb34-558" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-559"><a href="#cb34-559" aria-hidden="true" tabindex="-1"></a><span class="fu">### Spatial overlay</span></span>
-<span id="cb34-560"><a href="#cb34-560" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-561"><a href="#cb34-561" aria-hidden="true" tabindex="-1"></a>We can also see how the bins are located on the slide itself.</span>
-<span id="cb34-562"><a href="#cb34-562" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-565"><a href="#cb34-565" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-566"><a href="#cb34-566" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-spatial_first_type</span></span>
-<span id="cb34-567"><a href="#cb34-567" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Spatial overlay of the first type RCTD results after `ProjectData()`.</span></span>
-<span id="cb34-568"><a href="#cb34-568" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial plot of first_type labels after ProjectData()</span></span>
-<span id="cb34-569"><a href="#cb34-569" aria-hidden="true" tabindex="-1"></a><span class="fu">SpatialDimPlot</span>(crc,</span>
-<span id="cb34-570"><a href="#cb34-570" aria-hidden="true" tabindex="-1"></a>               <span class="at">group.by =</span> <span class="st">&quot;first_type&quot;</span>,</span>
-<span id="cb34-571"><a href="#cb34-571" aria-hidden="true" tabindex="-1"></a>               <span class="at">pt.size.factor =</span> <span class="dv">15</span>,</span>
-<span id="cb34-572"><a href="#cb34-572" aria-hidden="true" tabindex="-1"></a>               <span class="at">image.alpha =</span> <span class="fl">0.5</span>)</span>
-<span id="cb34-573"><a href="#cb34-573" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-574"><a href="#cb34-574" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-575"><a href="#cb34-575" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-576"><a href="#cb34-576" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
-<span id="cb34-577"><a href="#cb34-577" aria-hidden="true" tabindex="-1"></a><span class="fu"># Alternative spatial visualization</span></span>
-<span id="cb34-578"><a href="#cb34-578" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-581"><a href="#cb34-581" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-582"><a href="#cb34-582" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-spatial_first_type_split</span></span>
-<span id="cb34-583"><a href="#cb34-583" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Spatial overlay of the first type RCTD results after `ProjectData()`, split by first_type.</span></span>
-<span id="cb34-584"><a href="#cb34-584" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 12</span></span>
-<span id="cb34-585"><a href="#cb34-585" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb34-586"><a href="#cb34-586" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab x, y coordiantes and first_type celltype labels</span></span>
-<span id="cb34-587"><a href="#cb34-587" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">FetchData</span>(crc,</span>
-<span id="cb34-588"><a href="#cb34-588" aria-hidden="true" tabindex="-1"></a>                <span class="at">vars =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, </span>
-<span id="cb34-589"><a href="#cb34-589" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;first_type&quot;</span>))</span>
-<span id="cb34-590"><a href="#cb34-590" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-591"><a href="#cb34-591" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatterplot</span></span>
-<span id="cb34-592"><a href="#cb34-592" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df,</span>
-<span id="cb34-593"><a href="#cb34-593" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y,</span>
-<span id="cb34-594"><a href="#cb34-594" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> first_type)) <span class="sc">+</span></span>
-<span id="cb34-595"><a href="#cb34-595" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb34-596"><a href="#cb34-596" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb34-597"><a href="#cb34-597" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Split by celltype label</span></span>
-<span id="cb34-598"><a href="#cb34-598" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>first_type) <span class="sc">+</span></span>
-<span id="cb34-599"><a href="#cb34-599" aria-hidden="true" tabindex="-1"></a>  <span class="fu">NoLegend</span>()</span>
-<span id="cb34-600"><a href="#cb34-600" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-601"><a href="#cb34-601" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-602"><a href="#cb34-602" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-603"><a href="#cb34-603" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-604"><a href="#cb34-604" aria-hidden="true" tabindex="-1"></a><span class="fu">### UMAP</span></span>
-<span id="cb34-605"><a href="#cb34-605" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-606"><a href="#cb34-606" aria-hidden="true" tabindex="-1"></a>We can now see how the celltypes fall on our UMAP space.</span>
-<span id="cb34-607"><a href="#cb34-607" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-610"><a href="#cb34-610" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-611"><a href="#cb34-611" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-UMAP_first_type</span></span>
-<span id="cb34-612"><a href="#cb34-612" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: UMAP of the first type RCTD results after `ProjectData()`.</span></span>
-<span id="cb34-613"><a href="#cb34-613" aria-hidden="true" tabindex="-1"></a><span class="co"># UMAP of reference dataset</span></span>
-<span id="cb34-614"><a href="#cb34-614" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(crc) <span class="ot">&lt;-</span> <span class="st">&quot;first_type&quot;</span></span>
-<span id="cb34-615"><a href="#cb34-615" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(crc,</span>
-<span id="cb34-616"><a href="#cb34-616" aria-hidden="true" tabindex="-1"></a>             <span class="at">reduction =</span> <span class="st">&quot;full.umap.sketch&quot;</span>) <span class="sc">+</span></span>
-<span id="cb34-617"><a href="#cb34-617" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;P5CRC RCTD First Type&quot;</span>)</span>
-<span id="cb34-618"><a href="#cb34-618" aria-hidden="true" tabindex="-1"></a><span class="fu">LabelClusters</span>(p, <span class="at">id =</span> <span class="st">&quot;ident&quot;</span>,  <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, </span>
-<span id="cb34-619"><a href="#cb34-619" aria-hidden="true" tabindex="-1"></a>              <span class="at">bg.colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">bg.r =</span> .<span class="dv">2</span>, <span class="at">force =</span> <span class="dv">0</span>)</span>
-<span id="cb34-620"><a href="#cb34-620" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-621"><a href="#cb34-621" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-622"><a href="#cb34-622" aria-hidden="true" tabindex="-1"></a><span class="fu">## P5CRC and P5NAT results</span></span>
-<span id="cb34-623"><a href="#cb34-623" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-624"><a href="#cb34-624" aria-hidden="true" tabindex="-1"></a>We have run RCTD on each sample (without the sketch workflow) for you to load and use for the remainder of the workshop:</span>
-<span id="cb34-625"><a href="#cb34-625" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-628"><a href="#cb34-628" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-629"><a href="#cb34-629" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: instructor_gen_rctd</span></span>
-<span id="cb34-630"><a href="#cb34-630" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb34-631"><a href="#cb34-631" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb34-632"><a href="#cb34-632" aria-hidden="true" tabindex="-1"></a><span class="co"># # Load RCTD results (run on FAS)</span></span>
-<span id="cb34-633"><a href="#cb34-633" aria-hidden="true" tabindex="-1"></a><span class="co"># df_rctd &lt;- read.csv(&quot;intermediate/12.1_rctd_all_samples.csv&quot;) %&gt;%</span></span>
-<span id="cb34-634"><a href="#cb34-634" aria-hidden="true" tabindex="-1"></a><span class="co">#   dplyr::rename(&quot;cell&quot; = &quot;X&quot;)</span></span>
-<span id="cb34-635"><a href="#cb34-635" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb34-636"><a href="#cb34-636" aria-hidden="true" tabindex="-1"></a><span class="co"># # Join RCTD and metadata together</span></span>
-<span id="cb34-637"><a href="#cb34-637" aria-hidden="true" tabindex="-1"></a><span class="co"># meta &lt;- left_join(seurat_banksy@meta.data,</span></span>
-<span id="cb34-638"><a href="#cb34-638" aria-hidden="true" tabindex="-1"></a><span class="co">#                   df_rctd,</span></span>
-<span id="cb34-639"><a href="#cb34-639" aria-hidden="true" tabindex="-1"></a><span class="co">#                   by = &quot;cell&quot;)</span></span>
-<span id="cb34-640"><a href="#cb34-640" aria-hidden="true" tabindex="-1"></a><span class="co"># rownames(meta) &lt;- meta$cell</span></span>
-<span id="cb34-641"><a href="#cb34-641" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb34-642"><a href="#cb34-642" aria-hidden="true" tabindex="-1"></a><span class="co"># # Set NA to unassigned</span></span>
-<span id="cb34-643"><a href="#cb34-643" aria-hidden="true" tabindex="-1"></a><span class="co"># meta[is.na(meta$first_type), &quot;first_type&quot;] &lt;- &quot;unassigned&quot;</span></span>
-<span id="cb34-644"><a href="#cb34-644" aria-hidden="true" tabindex="-1"></a><span class="co"># meta[is.na(meta$second_type), &quot;second_type&quot;] &lt;- &quot;unassigned&quot;</span></span>
-<span id="cb34-645"><a href="#cb34-645" aria-hidden="true" tabindex="-1"></a><span class="co"># meta[is.na(meta$spot_class), &quot;spot_class&quot;] &lt;- &quot;unassigned&quot;</span></span>
-<span id="cb34-646"><a href="#cb34-646" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb34-647"><a href="#cb34-647" aria-hidden="true" tabindex="-1"></a><span class="co"># seurat_banksy@meta.data &lt;- meta</span></span>
-<span id="cb34-648"><a href="#cb34-648" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb34-649"><a href="#cb34-649" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(seurat_banksy, &quot;intermediate/12_seurat_RCTD.qs&quot;)</span></span>
-<span id="cb34-650"><a href="#cb34-650" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(seurat_banksy, &quot;data/intermediate_seurat/seurat_RCTD.rds&quot;)</span></span>
-<span id="cb34-651"><a href="#cb34-651" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-652"><a href="#cb34-652" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-655"><a href="#cb34-655" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-656"><a href="#cb34-656" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load_seurat_rctd</span></span>
-<span id="cb34-657"><a href="#cb34-657" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb34-658"><a href="#cb34-658" aria-hidden="true" tabindex="-1"></a>seurat_rctd <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/intermediate_seurat/seurat_RCTD.rds&quot;</span>)</span>
-<span id="cb34-659"><a href="#cb34-659" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-444"><a href="#cb34-444" aria-hidden="true" tabindex="-1"></a>Now we can run the <span class="in">`ProjectData()`</span>, just like we did last time.</span>
+<span id="cb34-445"><a href="#cb34-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-448"><a href="#cb34-448" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-449"><a href="#cb34-449" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: failed_project_data</span></span>
+<span id="cb34-450"><a href="#cb34-450" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: true</span></span>
+<span id="cb34-451"><a href="#cb34-451" aria-hidden="true" tabindex="-1"></a><span class="co"># Project back first_type to new column called first_type</span></span>
+<span id="cb34-452"><a href="#cb34-452" aria-hidden="true" tabindex="-1"></a><span class="co"># This will fail</span></span>
+<span id="cb34-453"><a href="#cb34-453" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">ProjectData</span>(</span>
+<span id="cb34-454"><a href="#cb34-454" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> crc,</span>
+<span id="cb34-455"><a href="#cb34-455" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay =</span> <span class="st">&quot;Spatial.008um&quot;</span>,</span>
+<span id="cb34-456"><a href="#cb34-456" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.assay =</span> <span class="st">&quot;sketch_crc&quot;</span>,</span>
+<span id="cb34-457"><a href="#cb34-457" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.reduction =</span> <span class="st">&quot;pca_crc&quot;</span>,</span>
+<span id="cb34-458"><a href="#cb34-458" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.reduction =</span> <span class="st">&quot;pca.sketch_crc&quot;</span>,</span>
+<span id="cb34-459"><a href="#cb34-459" aria-hidden="true" tabindex="-1"></a>  <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>,</span>
+<span id="cb34-460"><a href="#cb34-460" aria-hidden="true" tabindex="-1"></a>  <span class="at">refdata =</span> <span class="fu">list</span>(<span class="at">spot_class =</span> <span class="st">&quot;spot_class_sketch&quot;</span>,</span>
+<span id="cb34-461"><a href="#cb34-461" aria-hidden="true" tabindex="-1"></a>                 <span class="at">first_type =</span> <span class="st">&quot;first_type_sketch&quot;</span>,</span>
+<span id="cb34-462"><a href="#cb34-462" aria-hidden="true" tabindex="-1"></a>                 <span class="at">second_type =</span> <span class="st">&quot;second_type_sketch&quot;</span>))</span>
+<span id="cb34-463"><a href="#cb34-463" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-464"><a href="#cb34-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-465"><a href="#cb34-465" aria-hidden="true" tabindex="-1"></a>Why did we get an error when we tried to get RCTD labels for the entire dataset? This is because we have those <span class="in">`NA`</span> values for some of the bins in sketch. The <span class="in">`ProjectData()`</span> function expects actual values for every sketched bin. Therefore, to get around this issue, we are going to set the bins with no label as <span class="in">`unassigned`</span> in the metadata.</span>
+<span id="cb34-466"><a href="#cb34-466" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-469"><a href="#cb34-469" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-470"><a href="#cb34-470" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: set_unassigned</span></span>
+<span id="cb34-471"><a href="#cb34-471" aria-hidden="true" tabindex="-1"></a><span class="co"># Set value ot unassigned to sketch bins that do not have values</span></span>
+<span id="cb34-472"><a href="#cb34-472" aria-hidden="true" tabindex="-1"></a><span class="co"># This is because ProjectData will throw errors otherwise</span></span>
+<span id="cb34-473"><a href="#cb34-473" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spot_class_sketch&quot;</span>, </span>
+<span id="cb34-474"><a href="#cb34-474" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;first_type_sketch&quot;</span>, </span>
+<span id="cb34-475"><a href="#cb34-475" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;second_type_sketch&quot;</span>)</span>
+<span id="cb34-476"><a href="#cb34-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-477"><a href="#cb34-477" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate through each column to set &quot;unassigned&quot; to NA values</span></span>
+<span id="cb34-478"><a href="#cb34-478" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (col <span class="cf">in</span> cols) {</span>
+<span id="cb34-479"><a href="#cb34-479" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find rows that are in sketch_cells and are NA</span></span>
+<span id="cb34-480"><a href="#cb34-480" aria-hidden="true" tabindex="-1"></a>  na_rows <span class="ot">&lt;-</span> cells_sketch[<span class="fu">is.na</span>(crc<span class="sc">@</span>meta.data[cells_sketch, col])]</span>
+<span id="cb34-481"><a href="#cb34-481" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Assign the value to unassigned</span></span>
+<span id="cb34-482"><a href="#cb34-482" aria-hidden="true" tabindex="-1"></a>  crc<span class="sc">@</span>meta.data[na_rows, col] <span class="ot">&lt;-</span> <span class="st">&quot;unassigned&quot;</span></span>
+<span id="cb34-483"><a href="#cb34-483" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-484"><a href="#cb34-484" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-485"><a href="#cb34-485" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-486"><a href="#cb34-486" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
+<span id="cb34-487"><a href="#cb34-487" aria-hidden="true" tabindex="-1"></a><span class="fu"># Number of unassigned bins</span></span>
+<span id="cb34-488"><a href="#cb34-488" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-489"><a href="#cb34-489" aria-hidden="true" tabindex="-1"></a>We can use the <span class="in">`table()`</span> function to quickly see how many unassigned bins we have in our dataset:</span>
+<span id="cb34-490"><a href="#cb34-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-493"><a href="#cb34-493" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-494"><a href="#cb34-494" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: table_unassigned</span></span>
+<span id="cb34-495"><a href="#cb34-495" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(crc<span class="sc">@</span>meta.data<span class="sc">$</span>first_type_sketch)</span>
+<span id="cb34-496"><a href="#cb34-496" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-497"><a href="#cb34-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-498"><a href="#cb34-498" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-499"><a href="#cb34-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-500"><a href="#cb34-500" aria-hidden="true" tabindex="-1"></a>Now we can once again run <span class="in">`ProjectData()`</span> to actually get celltype labels for each bin in our dataset.</span>
+<span id="cb34-501"><a href="#cb34-501" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-504"><a href="#cb34-504" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-505"><a href="#cb34-505" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: project_data</span></span>
+<span id="cb34-506"><a href="#cb34-506" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb34-507"><a href="#cb34-507" aria-hidden="true" tabindex="-1"></a><span class="co"># Project back first_type to new column called first_type</span></span>
+<span id="cb34-508"><a href="#cb34-508" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">ProjectData</span>(</span>
+<span id="cb34-509"><a href="#cb34-509" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> crc,</span>
+<span id="cb34-510"><a href="#cb34-510" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay =</span> <span class="st">&quot;Spatial.008um&quot;</span>,</span>
+<span id="cb34-511"><a href="#cb34-511" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.assay =</span> <span class="st">&quot;sketch_crc&quot;</span>,</span>
+<span id="cb34-512"><a href="#cb34-512" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.reduction =</span> <span class="st">&quot;pca_crc&quot;</span>,</span>
+<span id="cb34-513"><a href="#cb34-513" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketched.reduction =</span> <span class="st">&quot;pca.sketch_crc&quot;</span>,</span>
+<span id="cb34-514"><a href="#cb34-514" aria-hidden="true" tabindex="-1"></a>  <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>,</span>
+<span id="cb34-515"><a href="#cb34-515" aria-hidden="true" tabindex="-1"></a>  <span class="at">refdata =</span> <span class="fu">list</span>(<span class="at">spot_class =</span> <span class="st">&quot;spot_class_sketch&quot;</span>,</span>
+<span id="cb34-516"><a href="#cb34-516" aria-hidden="true" tabindex="-1"></a>                 <span class="at">first_type =</span> <span class="st">&quot;first_type_sketch&quot;</span>,</span>
+<span id="cb34-517"><a href="#cb34-517" aria-hidden="true" tabindex="-1"></a>                 <span class="at">second_type =</span> <span class="st">&quot;second_type_sketch&quot;</span>))</span>
+<span id="cb34-518"><a href="#cb34-518" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-519"><a href="#cb34-519" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-522"><a href="#cb34-522" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-523"><a href="#cb34-523" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: instructor_crc_rctd</span></span>
+<span id="cb34-524"><a href="#cb34-524" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb34-525"><a href="#cb34-525" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(crc, &quot;intermediate/12_crc_RCTD_seurat.qs&quot;)</span></span>
+<span id="cb34-526"><a href="#cb34-526" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/12_crc_RCTD_seurat.qs&quot;</span>)</span>
+<span id="cb34-527"><a href="#cb34-527" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-528"><a href="#cb34-528" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-529"><a href="#cb34-529" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visualize RCTD results</span></span>
+<span id="cb34-530"><a href="#cb34-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-531"><a href="#cb34-531" aria-hidden="true" tabindex="-1"></a>Now that we have <span class="in">`first_type`</span> values associated with each bin, we can visualize our dataset in a variety of different ways.</span>
+<span id="cb34-532"><a href="#cb34-532" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-533"><a href="#cb34-533" aria-hidden="true" tabindex="-1"></a><span class="fu">### Barplot</span></span>
+<span id="cb34-534"><a href="#cb34-534" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-535"><a href="#cb34-535" aria-hidden="true" tabindex="-1"></a>We can get an overview of how many bins we have with a barplot. As we might expect, the number of unassigned bins increased as we extrapolate the labels out to the larger dataset.</span>
+<span id="cb34-536"><a href="#cb34-536" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-539"><a href="#cb34-539" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-540"><a href="#cb34-540" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-barplot_n_first_type</span></span>
+<span id="cb34-541"><a href="#cb34-541" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Number of bins assigned to a celltype with RCTD after `ProjectData()`.</span></span>
+<span id="cb34-542"><a href="#cb34-542" aria-hidden="true" tabindex="-1"></a><span class="co"># Barplot of first_type labels after ProjectData()</span></span>
+<span id="cb34-543"><a href="#cb34-543" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crc<span class="sc">@</span>meta.data,</span>
+<span id="cb34-544"><a href="#cb34-544" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> first_type, <span class="at">fill =</span> first_type)) <span class="sc">+</span></span>
+<span id="cb34-545"><a href="#cb34-545" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb34-546"><a href="#cb34-546" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">NoLegend</span>() <span class="sc">+</span></span>
+<span id="cb34-547"><a href="#cb34-547" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;P5CRC: Projected First Type RCTD&quot;</span>) <span class="sc">+</span></span>
+<span id="cb34-548"><a href="#cb34-548" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span>
+<span id="cb34-549"><a href="#cb34-549" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-550"><a href="#cb34-550" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-551"><a href="#cb34-551" aria-hidden="true" tabindex="-1"></a><span class="fu">### Spatial overlay</span></span>
+<span id="cb34-552"><a href="#cb34-552" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-553"><a href="#cb34-553" aria-hidden="true" tabindex="-1"></a>We can also see how the bins are located on the slide itself.</span>
+<span id="cb34-554"><a href="#cb34-554" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-557"><a href="#cb34-557" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-558"><a href="#cb34-558" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-spatial_first_type</span></span>
+<span id="cb34-559"><a href="#cb34-559" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Spatial overlay of the first type RCTD results after `ProjectData()`.</span></span>
+<span id="cb34-560"><a href="#cb34-560" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial plot of first_type labels after ProjectData()</span></span>
+<span id="cb34-561"><a href="#cb34-561" aria-hidden="true" tabindex="-1"></a><span class="fu">SpatialDimPlot</span>(crc,</span>
+<span id="cb34-562"><a href="#cb34-562" aria-hidden="true" tabindex="-1"></a>               <span class="at">group.by =</span> <span class="st">&quot;first_type&quot;</span>,</span>
+<span id="cb34-563"><a href="#cb34-563" aria-hidden="true" tabindex="-1"></a>               <span class="at">pt.size.factor =</span> <span class="dv">15</span>,</span>
+<span id="cb34-564"><a href="#cb34-564" aria-hidden="true" tabindex="-1"></a>               <span class="at">image.alpha =</span> <span class="fl">0.5</span>)</span>
+<span id="cb34-565"><a href="#cb34-565" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-566"><a href="#cb34-566" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-567"><a href="#cb34-567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-568"><a href="#cb34-568" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
+<span id="cb34-569"><a href="#cb34-569" aria-hidden="true" tabindex="-1"></a><span class="fu"># Alternative spatial visualization</span></span>
+<span id="cb34-570"><a href="#cb34-570" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-573"><a href="#cb34-573" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-574"><a href="#cb34-574" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-spatial_first_type_split</span></span>
+<span id="cb34-575"><a href="#cb34-575" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Spatial overlay of the first type RCTD results after `ProjectData()`, split by first_type.</span></span>
+<span id="cb34-576"><a href="#cb34-576" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 12</span></span>
+<span id="cb34-577"><a href="#cb34-577" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb34-578"><a href="#cb34-578" aria-hidden="true" tabindex="-1"></a><span class="co"># Grab x, y coordiantes and first_type celltype labels</span></span>
+<span id="cb34-579"><a href="#cb34-579" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">FetchData</span>(crc,</span>
+<span id="cb34-580"><a href="#cb34-580" aria-hidden="true" tabindex="-1"></a>                <span class="at">vars =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, </span>
+<span id="cb34-581"><a href="#cb34-581" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;first_type&quot;</span>))</span>
+<span id="cb34-582"><a href="#cb34-582" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-583"><a href="#cb34-583" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatterplot</span></span>
+<span id="cb34-584"><a href="#cb34-584" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df,</span>
+<span id="cb34-585"><a href="#cb34-585" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y,</span>
+<span id="cb34-586"><a href="#cb34-586" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> first_type)) <span class="sc">+</span></span>
+<span id="cb34-587"><a href="#cb34-587" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb34-588"><a href="#cb34-588" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb34-589"><a href="#cb34-589" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Split by celltype label</span></span>
+<span id="cb34-590"><a href="#cb34-590" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>first_type) <span class="sc">+</span></span>
+<span id="cb34-591"><a href="#cb34-591" aria-hidden="true" tabindex="-1"></a>  <span class="fu">NoLegend</span>()</span>
+<span id="cb34-592"><a href="#cb34-592" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-593"><a href="#cb34-593" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-594"><a href="#cb34-594" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-595"><a href="#cb34-595" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-596"><a href="#cb34-596" aria-hidden="true" tabindex="-1"></a><span class="fu">### UMAP</span></span>
+<span id="cb34-597"><a href="#cb34-597" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-598"><a href="#cb34-598" aria-hidden="true" tabindex="-1"></a>We can now see how the celltypes fall on our UMAP space.</span>
+<span id="cb34-599"><a href="#cb34-599" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-602"><a href="#cb34-602" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-603"><a href="#cb34-603" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-UMAP_first_type</span></span>
+<span id="cb34-604"><a href="#cb34-604" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: UMAP of the first type RCTD results after `ProjectData()`.</span></span>
+<span id="cb34-605"><a href="#cb34-605" aria-hidden="true" tabindex="-1"></a><span class="co"># UMAP of reference dataset</span></span>
+<span id="cb34-606"><a href="#cb34-606" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(crc) <span class="ot">&lt;-</span> <span class="st">&quot;first_type&quot;</span></span>
+<span id="cb34-607"><a href="#cb34-607" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(crc,</span>
+<span id="cb34-608"><a href="#cb34-608" aria-hidden="true" tabindex="-1"></a>             <span class="at">reduction =</span> <span class="st">&quot;full.umap.sketch&quot;</span>) <span class="sc">+</span></span>
+<span id="cb34-609"><a href="#cb34-609" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;P5CRC RCTD First Type&quot;</span>)</span>
+<span id="cb34-610"><a href="#cb34-610" aria-hidden="true" tabindex="-1"></a><span class="fu">LabelClusters</span>(p, <span class="at">id =</span> <span class="st">&quot;ident&quot;</span>,  <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, </span>
+<span id="cb34-611"><a href="#cb34-611" aria-hidden="true" tabindex="-1"></a>              <span class="at">bg.colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">bg.r =</span> .<span class="dv">2</span>, <span class="at">force =</span> <span class="dv">0</span>)</span>
+<span id="cb34-612"><a href="#cb34-612" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-613"><a href="#cb34-613" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-614"><a href="#cb34-614" aria-hidden="true" tabindex="-1"></a><span class="fu">## P5CRC and P5NAT results</span></span>
+<span id="cb34-615"><a href="#cb34-615" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-616"><a href="#cb34-616" aria-hidden="true" tabindex="-1"></a>We have run RCTD of the full dataset for both P5CRC and P5NAT for you all to load and run the rest of the workshop with:</span>
+<span id="cb34-617"><a href="#cb34-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-620"><a href="#cb34-620" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-621"><a href="#cb34-621" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: instructor_gen_rctd</span></span>
+<span id="cb34-622"><a href="#cb34-622" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb34-623"><a href="#cb34-623" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb34-624"><a href="#cb34-624" aria-hidden="true" tabindex="-1"></a><span class="co"># # Load RCTD results (run on FAS)</span></span>
+<span id="cb34-625"><a href="#cb34-625" aria-hidden="true" tabindex="-1"></a><span class="co"># df_rctd &lt;- read.csv(&quot;intermediate/12.1_rctd_all_samples.csv&quot;) %&gt;%</span></span>
+<span id="cb34-626"><a href="#cb34-626" aria-hidden="true" tabindex="-1"></a><span class="co">#   dplyr::rename(&quot;cell&quot; = &quot;X&quot;)</span></span>
+<span id="cb34-627"><a href="#cb34-627" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb34-628"><a href="#cb34-628" aria-hidden="true" tabindex="-1"></a><span class="co"># # Join RCTD and metadata together</span></span>
+<span id="cb34-629"><a href="#cb34-629" aria-hidden="true" tabindex="-1"></a><span class="co"># meta &lt;- left_join(seurat_banksy@meta.data,</span></span>
+<span id="cb34-630"><a href="#cb34-630" aria-hidden="true" tabindex="-1"></a><span class="co">#                   df_rctd,</span></span>
+<span id="cb34-631"><a href="#cb34-631" aria-hidden="true" tabindex="-1"></a><span class="co">#                   by = &quot;cell&quot;)</span></span>
+<span id="cb34-632"><a href="#cb34-632" aria-hidden="true" tabindex="-1"></a><span class="co"># rownames(meta) &lt;- meta$cell</span></span>
+<span id="cb34-633"><a href="#cb34-633" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb34-634"><a href="#cb34-634" aria-hidden="true" tabindex="-1"></a><span class="co"># # Set NA to unassigned</span></span>
+<span id="cb34-635"><a href="#cb34-635" aria-hidden="true" tabindex="-1"></a><span class="co"># meta[is.na(meta$first_type), &quot;first_type&quot;] &lt;- &quot;unassigned&quot;</span></span>
+<span id="cb34-636"><a href="#cb34-636" aria-hidden="true" tabindex="-1"></a><span class="co"># meta[is.na(meta$second_type), &quot;second_type&quot;] &lt;- &quot;unassigned&quot;</span></span>
+<span id="cb34-637"><a href="#cb34-637" aria-hidden="true" tabindex="-1"></a><span class="co"># meta[is.na(meta$spot_class), &quot;spot_class&quot;] &lt;- &quot;unassigned&quot;</span></span>
+<span id="cb34-638"><a href="#cb34-638" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb34-639"><a href="#cb34-639" aria-hidden="true" tabindex="-1"></a><span class="co"># seurat_banksy@meta.data &lt;- meta</span></span>
+<span id="cb34-640"><a href="#cb34-640" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb34-641"><a href="#cb34-641" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(seurat_banksy, &quot;intermediate/12_seurat_RCTD.qs&quot;)</span></span>
+<span id="cb34-642"><a href="#cb34-642" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(seurat_banksy, &quot;data/intermediate_seurat/seurat_RCTD.rds&quot;)</span></span>
+<span id="cb34-643"><a href="#cb34-643" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-644"><a href="#cb34-644" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-647"><a href="#cb34-647" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-648"><a href="#cb34-648" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load_seurat_rctd</span></span>
+<span id="cb34-649"><a href="#cb34-649" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb34-650"><a href="#cb34-650" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Seurat object with P5CRC and P5NAT cell type annotations</span></span>
+<span id="cb34-651"><a href="#cb34-651" aria-hidden="true" tabindex="-1"></a>seurat_rctd <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/intermediate_seurat/seurat_RCTD.rds&quot;</span>)</span>
+<span id="cb34-652"><a href="#cb34-652" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-653"><a href="#cb34-653" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-654"><a href="#cb34-654" aria-hidden="true" tabindex="-1"></a>:::{.callout-tip}</span>
+<span id="cb34-655"><a href="#cb34-655" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 1**](12_deconvolution-Answer_key.qmd#exercise-1)</span></span>
+<span id="cb34-656"><a href="#cb34-656" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-657"><a href="#cb34-657" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>What is the sample-specific proportion for each <span class="in">`first_type`</span>? Create a ggplot barplot showing the proportions of each cell type. _Hint: Refer back to the code we used [here](09_integration.qmd#fig-cell_proportion_barplot)_</span>
+<span id="cb34-658"><a href="#cb34-658" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-659"><a href="#cb34-659" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Create a dotplot using the known marker genes for each celltype to see if the <span class="in">`first_type`</span> labels align with known celltype genes.</span>
 <span id="cb34-660"><a href="#cb34-660" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-661"><a href="#cb34-661" aria-hidden="true" tabindex="-1"></a>:::{.callout-tip}</span>
-<span id="cb34-662"><a href="#cb34-662" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 1**](12_deconvolution-Answer_key.qmd#exercise-1)</span></span>
-<span id="cb34-663"><a href="#cb34-663" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-664"><a href="#cb34-664" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>What is the sample-specific proportion for each <span class="in">`first_type`</span>?</span>
-<span id="cb34-665"><a href="#cb34-665" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Create a dotplot using the known marker genes for each celltype to see if the <span class="in">`first_type`</span> labels align with known celltype genes.</span>
-<span id="cb34-666"><a href="#cb34-666" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-669"><a href="#cb34-669" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-670"><a href="#cb34-670" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: marker_list</span></span>
-<span id="cb34-671"><a href="#cb34-671" aria-hidden="true" tabindex="-1"></a>marker_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb34-672"><a href="#cb34-672" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;B cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;IGKC&quot;</span>, <span class="st">&quot;IGHM&quot;</span>, <span class="st">&quot;CD79A&quot;</span>, <span class="st">&quot;MS4A1&quot;</span>, <span class="st">&quot;MZB1&quot;</span>),</span>
-<span id="cb34-673"><a href="#cb34-673" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Endothelial cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;PECAM1&quot;</span>, <span class="st">&quot;VWF&quot;</span>, <span class="st">&quot;PLVAP&quot;</span>, <span class="st">&quot;ENG&quot;</span>, <span class="st">&quot;KLF2&quot;</span>),</span>
-<span id="cb34-674"><a href="#cb34-674" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Fibroblasts&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;COL1A1&quot;</span>, <span class="st">&quot;COL3A1&quot;</span>, <span class="st">&quot;DCN&quot;</span>, <span class="st">&quot;LUM&quot;</span>, <span class="st">&quot;COL6A2&quot;</span>),</span>
-<span id="cb34-675"><a href="#cb34-675" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Intestinal epithelial cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;CLCA1&quot;</span>, <span class="st">&quot;FCGBP&quot;</span>, <span class="st">&quot;MUC2&quot;</span>, <span class="st">&quot;PIGR&quot;</span>, <span class="st">&quot;ZG16&quot;</span>),</span>
-<span id="cb34-676"><a href="#cb34-676" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Myeloid cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;C1QC&quot;</span>, <span class="st">&quot;SELENOP&quot;</span>, <span class="st">&quot;SPP1&quot;</span>, <span class="st">&quot;LYZ&quot;</span>, <span class="st">&quot;CD68&quot;</span>),</span>
-<span id="cb34-677"><a href="#cb34-677" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Neural cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;NRXN1&quot;</span>, <span class="st">&quot;L1CAM&quot;</span>, <span class="st">&quot;NCAM1&quot;</span>, <span class="st">&quot;VIP&quot;</span>, <span class="st">&quot;CALB2&quot;</span>),</span>
-<span id="cb34-678"><a href="#cb34-678" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Smooth muscle cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;TAGLN&quot;</span>, <span class="st">&quot;ACTA2&quot;</span>, <span class="st">&quot;MYH11&quot;</span>, <span class="st">&quot;MYL9&quot;</span>, <span class="st">&quot;CNN1&quot;</span>),</span>
-<span id="cb34-679"><a href="#cb34-679" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;T cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;TRAC&quot;</span>, <span class="st">&quot;CD3E&quot;</span>, <span class="st">&quot;TRBC2&quot;</span>, <span class="st">&quot;IL7R&quot;</span>, <span class="st">&quot;CD52&quot;</span>),</span>
-<span id="cb34-680"><a href="#cb34-680" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Tumor cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;CEACAM6&quot;</span>, <span class="st">&quot;CEACAM5&quot;</span>, <span class="st">&quot;EPCAM&quot;</span>, <span class="st">&quot;KRT8&quot;</span>, <span class="st">&quot;LCN2&quot;</span>)</span>
-<span id="cb34-681"><a href="#cb34-681" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-682"><a href="#cb34-682" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-663"><a href="#cb34-663" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-664"><a href="#cb34-664" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: marker_list</span></span>
+<span id="cb34-665"><a href="#cb34-665" aria-hidden="true" tabindex="-1"></a>marker_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb34-666"><a href="#cb34-666" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;B cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;IGKC&quot;</span>, <span class="st">&quot;IGHM&quot;</span>, <span class="st">&quot;CD79A&quot;</span>, <span class="st">&quot;MS4A1&quot;</span>, <span class="st">&quot;MZB1&quot;</span>),</span>
+<span id="cb34-667"><a href="#cb34-667" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Endothelial cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;PECAM1&quot;</span>, <span class="st">&quot;VWF&quot;</span>, <span class="st">&quot;PLVAP&quot;</span>, <span class="st">&quot;ENG&quot;</span>, <span class="st">&quot;KLF2&quot;</span>),</span>
+<span id="cb34-668"><a href="#cb34-668" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Fibroblasts&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;COL1A1&quot;</span>, <span class="st">&quot;COL3A1&quot;</span>, <span class="st">&quot;DCN&quot;</span>, <span class="st">&quot;LUM&quot;</span>, <span class="st">&quot;COL6A2&quot;</span>),</span>
+<span id="cb34-669"><a href="#cb34-669" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Intestinal epithelial cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;CLCA1&quot;</span>, <span class="st">&quot;FCGBP&quot;</span>, <span class="st">&quot;MUC2&quot;</span>, <span class="st">&quot;PIGR&quot;</span>, <span class="st">&quot;ZG16&quot;</span>),</span>
+<span id="cb34-670"><a href="#cb34-670" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Myeloid cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;C1QC&quot;</span>, <span class="st">&quot;SELENOP&quot;</span>, <span class="st">&quot;SPP1&quot;</span>, <span class="st">&quot;LYZ&quot;</span>, <span class="st">&quot;CD68&quot;</span>),</span>
+<span id="cb34-671"><a href="#cb34-671" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Neural cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;NRXN1&quot;</span>, <span class="st">&quot;L1CAM&quot;</span>, <span class="st">&quot;NCAM1&quot;</span>, <span class="st">&quot;VIP&quot;</span>, <span class="st">&quot;CALB2&quot;</span>),</span>
+<span id="cb34-672"><a href="#cb34-672" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Smooth muscle cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;TAGLN&quot;</span>, <span class="st">&quot;ACTA2&quot;</span>, <span class="st">&quot;MYH11&quot;</span>, <span class="st">&quot;MYL9&quot;</span>, <span class="st">&quot;CNN1&quot;</span>),</span>
+<span id="cb34-673"><a href="#cb34-673" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;T cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;TRAC&quot;</span>, <span class="st">&quot;CD3E&quot;</span>, <span class="st">&quot;TRBC2&quot;</span>, <span class="st">&quot;IL7R&quot;</span>, <span class="st">&quot;CD52&quot;</span>),</span>
+<span id="cb34-674"><a href="#cb34-674" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Tumor cells&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;CEACAM6&quot;</span>, <span class="st">&quot;CEACAM5&quot;</span>, <span class="st">&quot;EPCAM&quot;</span>, <span class="st">&quot;KRT8&quot;</span>, <span class="st">&quot;LCN2&quot;</span>)</span>
+<span id="cb34-675"><a href="#cb34-675" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-676"><a href="#cb34-676" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-677"><a href="#cb34-677" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-678"><a href="#cb34-678" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-679"><a href="#cb34-679" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-680"><a href="#cb34-680" aria-hidden="true" tabindex="-1"></a>***</span>
+<span id="cb34-681"><a href="#cb34-681" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-682"><a href="#cb34-682" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Next Lesson &gt;&gt;</span><span class="co">](13_dge_pathway.qmd)</span></span>
 <span id="cb34-683"><a href="#cb34-683" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-684"><a href="#cb34-684" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-685"><a href="#cb34-685" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-686"><a href="#cb34-686" aria-hidden="true" tabindex="-1"></a>***</span>
-<span id="cb34-687"><a href="#cb34-687" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-688"><a href="#cb34-688" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Next Lesson &gt;&gt;</span><span class="co">](13_dge_pathway.qmd)</span></span>
-<span id="cb34-689"><a href="#cb34-689" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-690"><a href="#cb34-690" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Schedule</span><span class="co">](../schedule/schedule.qmd)</span></span>
+<span id="cb34-684"><a href="#cb34-684" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Schedule</span><span class="co">](../schedule/schedule.qmd)</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
