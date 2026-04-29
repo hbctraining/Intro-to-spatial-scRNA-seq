@@ -44,15 +44,17 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Define the Moran's I calculation
+- Run Moran's I to identify spatially variable genes
+- Visualize spatialy variable genes
 
 ## Overview of lesson
 
-When doing XYZ...
+At this step, instead of comparing defined cell types, you might ask which genes vary as a function of spatial location. In this lesson you apply methods for detecting spatially variable genes (SVGs), then map and visualize their expression patterns across the tissue. These genes often serve as interpretable anchors for defining domains, building signatures, and linking expression to morphology.
 
 ## Spatially variable genes (SVGs)
+
+Spatially variable genes (SVGs) are similar in concept to highly variable genes (HVGs). These were identifies by evaluating the variability of gene expression across the entire dataset. However, now we have the additional layer of the spatial location of each bin. Therefore we are able to identify genes that have different levels of expression depending on which area of the tissue they are found on.
 
 
 ::: {#fig-svg_schematic .fig}
@@ -63,7 +65,6 @@ _Image source: [Yan et al. (2025)](https://www.nature.com/articles/s41467-025-56
 :::
 
 
-Spatially variable genes (SVGs) are similar in concept to highly variable genes (HVGs). These were identifies by evaluating the variability of gene expression across the entire dataset. However, now we have the additional layer of the spatial location of each bin. Therefore we are able to identify genes that have different levels of expression depending on which area of the tissue they are found on.
 
 These methods can be used to identify genes that have strong strong spatial associations for downstream analyses - similar to how we used HVGs to calculate PCA. These SVGs can also be used to evaluate spatial niches within cell-types to assist in find subtypes with the tissue. 
 
@@ -72,9 +73,7 @@ Ultimately, these genes provide another peek in the spatial context of the tissu
 
 ##  Moran's I
 
-Most of the SVG algorithms are built upon the concept of [Moran's I](https://en.wikipedia.org/wiki/Moran%27s_I) which is defined as "a measure of spatial autocorrelation".
-
-The math behind the method is defined like so:
+Many of the SVG algorithms are built upon the concept of [Moran's I](https://en.wikipedia.org/wiki/Moran%27s_I) which is defined as "a measure of spatial autocorrelation". The math behind the method is defined like so:
 
 $$
 I =
@@ -96,6 +95,8 @@ where:
 
 For a random spatial distribution, Moran's I will be near zero. A large positive value indicates the data is clustered. A large negative value indicates that the data is dispersed, meaning units that are close spatially have dissimilar variable values.
 
+**The range of values for Moran's I E(I) in spatial transcriptomics is usually [-1, 1].**
+
 ::: {#fig-morans_i .fig}
 ![](../img/morans_i.png)
 
@@ -103,14 +104,7 @@ Range of Moran's I values, showing the range of scores that correspond to differ
 _Image source: [Tsui et al. (2022)](https://www.frontiersin.org/journals/built-environment/articles/10.3389/fbuil.2022.954642/full)_
 :::
 
-To see why this is the case, consider the expression $(x_i - \bar{x}) (x_j - \bar{x})$ in the above formula. If $x_i$ and $x_j$ are similar and far from the mean, then this product will be large and positive. If they are dissimilar (in particular, if one is well above the mean and one is far below) then this product will be large and negative.
-
-::: callout-warning
-Look into the weights that automatically assigned in the `FindSpatiallyVariableFeatures` function
-:::
-
-Note that Moran's I depends strongly on the choice of $w_{ij}$, which encodes the spatial relations of the units. A large value $w_{ij}$ reflects a modeling assumption that the units with variables $x_i$ and $x_j$ are close spatially. Different choices of weights will result in different values of Moran's I. In fact, even the upper and lower bounds of the measure depend on the spatial-weights matrix; caution is needed when choosing the weights and interpreting the corresponding Moran's I.
-
+To see why this is the case, consider the expression $(x_i - \bar{x}) (x_j - \bar{x})$ in the above formula. If $x_i$ and $x_j$ are similar and far from the mean, then this product will be large and positive. If they are dissimilar (in particular, if one is well above the mean and one is far below) then this product will be large and negative. Note that Moran's I depends strongly on the calculation of $w_{ij}$, which represents the spatial relations of the bins. A large value $w_{ij}$ indicates that bins $x_i$ and $x_j$ are close spatially.
 
 ## Running Moran's I
 
@@ -143,27 +137,30 @@ In this case, let us zoom in on the tumor cells in the CRC dataset:
 
 ```{r}
 #| label: subset_crc_tumor
+# Subset to tumor P5CRC bins
 crc_sub <- subset(seurat_rctd,
               subset = (orig.ident == "P5CRC") &
                        (first_type == "Tumor"))
 crc_sub
 ```
 
-For the best results we are going to make use of the `scale.data` assay (this was originally calculated right before the PCA step). However, we deleted this layer in the interest of storing memory, so we re-calculate it now:
+For the best results we are going to make use of the `scale.data` assay (this is typically calculated right before the PCA step). We only ever calculated this on the `sketch` assay, so here we will run the `ScaleData()` function on our entire subsetted dataset.
 
 ```{r}
 #| label: ScaleData
+# Scale log-normalized counts
 crc_sub <- ScaleData(crc_sub)
 crc_sub
 ```
 
-Now we can actually calculate Moran's I with `FindSpatiallyVariableFeatures()` and set the `selection.method = "moransi"`.
+Now we can actually calculate Moran's I with `FindSpatiallyVariableFeatures()` and set the `selection.method = "moransi"`. We are additionally going to specify that we want to evaluate Moran's I on the top 100 highly variable genes. A gene that is spatially variable is likely to also be highly variable because ultimately we are assessing changes in gene expression across different populations. We take the top 100 to reduce the number of calculations that take place (so we can reasonably run this on a laptop).
 
-We are additionally going to specify that we want to evaluate Moran's I on the top 100 highly variable genes to reduce the number of calculations that take place (so we can reasonably run this on a laptop).
+**This step may take a few minutes to run.**
 
 ```{r}
 #| label: run_morans_i
 #| eval: false
+# Run Moran's I on the top 100 highly variable genes
 crc_sub <- FindSpatiallyVariableFeatures(crc_sub,
                                         selection.method = "moransi",
                                         verbose = TRUE,
@@ -178,7 +175,31 @@ crc_sub <- FindSpatiallyVariableFeatures(crc_sub,
 crc_sub <- qs2::qs_read("intermediate/14_crc_svg.qs")
 ```
 
-We can now access the features that have the top 
+Once the calculation completes, we can evaluate the Moran's I scores and associated p-values for each of the genes. We will have to do a bit of subsetting as we only calculated these values for 100 genes.
+
+```{r}
+#| label: SVFInfo
+#| eval: false
+# Moran's I scores for each gene
+SVFInfo(crc_sub, method = "moransi") %>%
+  subset(!is.na(MoransI_observed)) %>%
+  arrange(desc(MoransI_observed)) %>%
+  head()
+```
+
+```{r}
+#| label: tbl-SVFInfo
+#| tbl-cap: Results of `FindSpatiallyVariableFeatures()` with associated Moran's I scores and p-values.
+#| echo: false
+# Moran's I scores for each gene
+SVFInfo(crc_sub, method = "moransi") %>%
+  subset(!is.na(MoransI_observed)) %>%
+  arrange(desc(MoransI_observed)) %>%
+  head() %>%
+  knitr::kable()
+```
+
+Then, we can use the `SpatiallyVariableFeatures()` to get the list of SVGs that were just calculated. For visualization purposes, we are going to grab the top 10 genes.
 
 ```{r}
 #| label: top_svgs
@@ -189,32 +210,47 @@ top10_svg <- top10_svg[1:10]
 top10_svg
 ```
 
-And visualize the expression on the spatial slide:
+And visualize the expression of these genes on the spatial slide:
 
 ```{r}
 #| label: fig-top_svgs
 #| fig-cap: Top spatially variable gene expression for tumor cells, plotted on top of the tissue.
-#| fig-width: 6
+#| fig-width: 15
 #| fig-height: 6
-# Spatial plot of top spatially variable features
+# Spatial plot of top SVGs
 SpatialFeaturePlot(crc_sub,
-                   features = top10_svg[1:4],
+                   features = top10_svg,
                    pt.size.factor = 15,
                    image.alpha = 0.1, 
-                   ncol = 2)
+                   ncol = 5)
 ```
 
 Recall in the [BANKSY lesson](11_banksy_clustering.qmd) we noted that the BANKSY algorithm identified different, spatially constrained subtypes in this cancerous region. Now we can clearly see which of those genes were defining the phenotype of these tumor subtypes.
 
+```{r}
+#| label: fig-dotplot_tumor_svgs
+#| fig-cap: DotPlot of BANKSY cancerous clusters, showing top tumor spatially variable genes.
+#| fig-width: 10
+# Dotplot of tumor clusters for top SVGs
+DotPlot(crc_sub,
+        top10_svg,
+        group.by = "banksy_cluster",
+        idents = c(6, 13, 14, 15, 19))
+```
+
+Now we can see that there is a phenotype that is distinct between each of these groups of cancerous regions. For example, cluster 15 and 19 appear to be have different expression patterns compared to the other groups of tumor bins.
+
+**Using these spatially variable genes, we can identify subtypes of broader cell types.**
+
 ## Other SVG methods
 
-Some popular methods include, but are not limited to:
+As the field of spatial transcriptomics is ever evolving, there are other algorithms that use other priors and calcluations to identify spatially variable genes. Some methods include, but are not limited to:
 
 - [SpatialDE](https://www.nature.com/articles/nmeth.4636)
 - [MERINGUE](https://genome.cshlp.org/content/31/10/1843.long)
 - [BinSpect](https://link.springer.com/article/10.1186/s13059-021-02286-2)
 
-Some of these algorithms are written in Python.
+Note that several of these are written in Python.
 
 ***
 

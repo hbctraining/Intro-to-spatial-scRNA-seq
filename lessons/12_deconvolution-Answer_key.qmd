@@ -21,8 +21,7 @@ seurat_rctd <- qs2::qs_read("intermediate/12_seurat_RCTD.qs")
 
 # Exercise 1
 
-1. What is the sample-specific proportion for each `first_type`?
-
+1. What is the sample-specific proportion for each `first_type`? Create a ggplot barplot showing the proportions of each cell type. _Hint: Refer back to the code we used [here](09_integration.qmd#fig-cell_proportion_barplot)_
 ```{r}
 # Barplot of proportion of cells in each first_type by sample
 ggplot(seurat_rctd@meta.data) +
