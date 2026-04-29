@@ -43,13 +43,13 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Load and investigate our reference dataset, used for cell type annotation
+- Convert our Seurat object into an RCTD data structure
+- Deconvolve bins to assign cell types and assess the annotation
 
 ## Overview of lesson
 
-When doing XYZ...
+While the clusters are helpful in identifying groups of bins that are similar to one another, we have not yet determined the cell type for each bin. For sequencing-based methods, deconvolution is a great first step in determining the cell type for each spot, given that a spot may have multiple cells contained within. We will be using the method Robust Cell Type Deconvolution (RCTD) to assign cell type labels for each bin. These deconvolution outputs are reused in subsequent analyses, such as cell–cell communication.
 
 ## What is deconvolution?
 
@@ -75,17 +75,11 @@ To annotate your dataset, we recommend to do a mixture of the following:
 
 - Use [marker genes from the literature](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/11_clustering_quality_control.html#exploring-known-cell-type-markers) that are specific to a celltype
 - Identify [top genes per cluster](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/13_marker_identification.html) to map celltypes to clusters
-- Automate celltyping (i.e [Azimuth](https://azimuth.hubmapconsortium.org/), [CellTypist](https://www.celltypist.org/encyclopedia/Immune/v2), [SingleR](https://bioconductor.org/packages/devel/bioc/vignettes/SingleR/inst/doc/SingleR.html), etc.)
+- Apply automatic celltyping algorithms (i.e [Azimuth](https://azimuth.hubmapconsortium.org/), [CellTypist](https://www.celltypist.org/encyclopedia/Immune/v2), [SingleR](https://bioconductor.org/packages/devel/bioc/vignettes/SingleR/inst/doc/SingleR.html), etc.)
 :::
 
 
 ### Robust Cell Type Deconvolution (RCTD)
-
-To perform accurate annotation of cell types, we must also take into consideration that our 8µm x 8µm bins may contain **multiple cells**. The method [Robust Cell Type Deconvolution](https://www.nature.com/articles/s41587-021-00830-w) (RCTD) has been shown to accurately annotate spatial datasets from a variety of technologies while taking into consideration that a single bin may exhibit multiple cell type profiles.
-
-::: callout-warning
-Write outline of algorithm
-:::
 
 ```{r}
 #| label: load_data
@@ -105,10 +99,27 @@ options(future.globals.maxSize = 8000 * 1024^2)
 seurat_banksy <- readRDS("data/intermediate_seurat/seurat_banksy.rds")
 ```
 
+To perform accurate annotation of cell types, we must also take into consideration that our 8µm x 8µm bins may contain **multiple cells**. The method [Robust Cell Type Deconvolution](https://www.nature.com/articles/s41587-021-00830-w) (RCTD) has been shown to accurately annotate spatial datasets from a variety of technologies while taking into consideration that a single bin may exhibit multiple cell type profiles.
 
-We are going to _annotate the slides one a time_. There are extensions of the RCTD package in order to take into account [replicates and multiple samples](https://raw.githack.com/dmcable/spacexr/master/vignettes/replicates.html) which we will not use at this time due to time constraints.
+::: {#fig-BANKSY_schematic .figure}
+![](../img/RCTD_schematic.png){width=700}
 
-RCTD uses an **annotated scRNA-seq dataset (reference) and our spatial dataset (query)** as input.
+Schematic of how RCTD creates a probabilistic model to represent bins as a mixture of cell types in spatial datasets.<br>
+_Image source: [Cable et al. (2021)](https://www.nature.com/articles/s41587-021-00830-w)_
+::: 
+
+The overaching process of RCTD involves several steps:
+
+1. RCTD calculates the average gene expression for each cell type in a reference single-cell RNA sequencing dataset.
+2. Each bin/pixel in the query spatial transcriptomics data is treated as containing an unknown mix of multiple cell types.
+3. RCTD fits each pixel as a combination of different cell types, where each cell type contributes a proportion of the gene counts observed.
+4. For each pixel and gene, the observed gene counts are assumed to follow a Poisson distribution in the probability model.
+5. Estimates for cell type proportions in each pixel are calculated with a maximum-likelihood estimate (MLE).
+6. Lastly, RCTD can be run in two ways:
+   - **Standard mode**: no limit on the number of cell types per pixel.
+   - **Doublet mode**: restricts each pixel to a maximum of one or two cell types.
+
+RCTD uses an **annotated scRNA-seq dataset (reference) and our spatial dataset (query)** as input. Creating these objects will be the first step of this analysis.
 
 ## Reference dataset
 
@@ -185,6 +196,9 @@ str(reference)
 :::
 
 ### Create query
+
+We are going to _annotate the slides one a time_. There are extensions of the RCTD package in order to take into account [replicates and multiple samples](https://raw.githack.com/dmcable/spacexr/master/vignettes/replicates.html) which we will not use at this time due to time constraints.
+
 
 **Deconvolution is very computationally expensive!** So we can once again make use the `sketch` workflow to downsample our dataset in a careful manner. Additionally, we are going to split our Seurat object into a single sample `P5CRC`.
 
