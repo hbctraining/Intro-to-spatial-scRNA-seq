@@ -30,9 +30,9 @@ library(qs2)
 
 # Increases the size of the default vector (8GB)
 options(future.globals.maxSize = 8000 * 1024^2)
-
 # Set parallelization (multithreading) to speed up calculations
-plan("multicore", workers = parallel::detectCores() - 1)
+library(future)
+plan(multisession, workers = parallel::detectCores() - 1)
 
 # Load dataset
 seurat_rctd <- qs_read("intermediate/12_seurat_RCTD.qs")
@@ -123,11 +123,11 @@ library(tidyverse)
 library(Seurat)
 set.seed(12345)
 
-# Set parallelization (multithreading) to speed up calculations
-plan("multicore", workers = parallel::detectCores() - 1)
-
 # Increases the size of the default vector (8GB)
 options(future.globals.maxSize = 8000 * 1024^2)
+# Set parallelization (multithreading) to speed up calculations
+library(future)
+plan(multisession, workers = parallel::detectCores() - 1)
 
 # Load dataset
 seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
@@ -153,18 +153,18 @@ crc_sub <- ScaleData(crc_sub)
 crc_sub
 ```
 
-Now we can actually calculate Moran's I with `FindSpatiallyVariableFeatures()` and set the `selection.method = "moransi"`. We are additionally going to specify that we want to evaluate Moran's I on the top 100 highly variable genes. A gene that is spatially variable is likely to also be highly variable because ultimately we are assessing changes in gene expression across different populations. We take the top 100 to reduce the number of calculations that take place (so we can reasonably run this on a laptop).
+Now we can actually calculate Moran's I with `FindSpatiallyVariableFeatures()` and set the `selection.method = "moransi"`. We are additionally going to specify that we want to evaluate Moran's I on the top 50 highly variable genes. A gene that is spatially variable is likely to also be highly variable because ultimately we are assessing changes in gene expression across different populations. We take the top 50 to reduce the number of calculations that take place (so we can reasonably run this on a laptop).
 
 **This step may take a few minutes to run.**
 
 ```{r}
 #| label: run_morans_i
 #| eval: false
-# Run Moran's I on the top 100 highly variable genes
+# Run Moran's I on the top 50 highly variable genes
 crc_sub <- FindSpatiallyVariableFeatures(crc_sub,
                                         selection.method = "moransi",
                                         verbose = TRUE,
-                                        features = VariableFeatures(crc_sub)[1:100],
+                                        features = VariableFeatures(crc_sub)[1:50],
                                         image = "P5CRC.008um")
 ```
 
@@ -175,7 +175,7 @@ crc_sub <- FindSpatiallyVariableFeatures(crc_sub,
 crc_sub <- qs2::qs_read("intermediate/14_crc_svg.qs")
 ```
 
-Once the calculation completes, we can evaluate the Moran's I scores and associated p-values for each of the genes. We will have to do a bit of subsetting as we only calculated these values for 100 genes.
+Once the calculation completes, we can evaluate the Moran's I scores and associated p-values for each of the genes. We will have to do a bit of subsetting as we only calculated these values for 50 genes.
 
 ```{r}
 #| label: SVFInfo
