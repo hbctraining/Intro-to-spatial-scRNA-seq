@@ -57,6 +57,19 @@ Here, you likely have deconvolved cell type proportions or at least well‑annot
 
 ## Cell-cell communication
 
+::: {#fig-ccc_schematic .fig}
+![](../img/ccc_schematic.png)
+
+Schematic of representative signal pathways for cell-cell communication.<br>
+_Image source: [Su et al. (2024)](https://www.nature.com/articles/s41392-024-01888-z)_
+:::
+
+We know that cells do not exist in an isolated environment, where they do not interact with anything. To evaluate how different cells are interacting with one another, cell-cell communication analyses will calculate scores of interaction between cell types. Spatial transcriptomics is a great input dataset for these methods because cells are most likely to interact with other cells that are closeby spatially. Identifying these cellular communication networks enhances understanding of differentiation, organ development, and metabolism.
+
+
+### CellChat
+
+CellChat facilitates the analysis of intercellular interactions and communication networks by providing cell interaction network diagrams and communication pathway analysis. It has expanded its coverage to include 229 signaling pathways, classified into three categories: contact between cells, receptors in the ECM, and signaling via secretion. CellChat emphasizes differential overexpressed ligands and receptors to measure the association between LRPs under the principle of mass action.
 
 ## P5CRC
 
@@ -76,11 +89,11 @@ library(Seurat)
 library(CellChat)
 set.seed(12345)
 
-# Set parallelization (multithreading) to speed up calculations
-plan("multicore", workers = parallel::detectCores() - 1)
-
 # Increases the size of the default vector (8GB)
 options(future.globals.maxSize = 8000 * 1024^2)
+# Set parallelization (multithreading) to speed up calculations
+library(future)
+plan(multisession, workers = parallel::detectCores() - 1)
 
 # Load dataset
 seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
@@ -92,6 +105,7 @@ This is the recommended way, where you would run the full workflow on each sampl
 crc <- subset(seurat_rctd,
               subset = (orig.ident == "P5CRC") &
                        (first_type != "unassigned"))
+crc$samples <- factor(crc$orig.ident)
 crc
 ```
 
@@ -148,33 +162,46 @@ We are working with human samples so we can make use of the human database. So w
 ```{r}
 # Load CellChat databases
 cellchat_db <- CellChatDB.human
-ppi <- PPI.human
 
 # Assign DB to cellchat object
 cellchat_crc@DB <- cellchat_db
 ```
 
 ```{r}
-# Subset to signaling genes only – reduces memory and speeds up computation.
+# Subset step is required even if you have not filtered databset
 cellchat_crc <- subsetData(cellchat_crc)
 
 # Identify genes that are over-expressed relative to other cell types
 cellchat_crc <- identifyOverExpressedGenes(cellchat_crc)
-cellchat_crc <- identifyOverExpressedInteractions(cellchat_crc)
 ```
+
+
+::: callout-important
+# Load RDS object
+These next three steps take a long time to run, so we have created an RDS object for you to load in with the results from these steps:
+
+```{r}
+#| label: load_cellchat_rds
+#| eval: false
+# Load processed cellchat object
+cellchat_crc <- readRDS("data/intermediate_seurat/cellchat_crc_computeCommunProb.rds")
+```
+
+:::
 
 ```{r}
 #| eval: false
+# DO NOT RUN
+# Identify interactions that are over-expressed relative to other cell types
+cellchat_crc <- identifyOverExpressedInteractions(cellchat_crc)
+
 # (Optional) Smooth expression over the protein-protein interaction network to
 # reduce dropout noise. If you run this, set raw.use = FALSE below.
 cellchat_crc <- smoothData(cellchat_crc, adj = PPI.human)
 # cellchat <- projectData(cellchat, PPI.human) # older version
-```
 
-Here we actually run the ligand-receptor analysis:
 
-```{r}
-#| eval: false
+
 # distance.use = TRUE  : spatial distances constrain which cell pairs can talk
 # interaction.range    : max diffusion distance in µm (literature: ~250 µm)
 # scale.distance       : scaling factor; tune if you get warnings about distances
@@ -193,9 +220,11 @@ cellchat_crc <- computeCommunProb(
   raw.use            = FALSE
 )
 ```
+
 ```{r}
 #| echo: false
 # qs2::qs_save(cellchat_crc, "intermediate/15_cellchat_crc_computeCommunProb.qs")
+# saveRDS(cellchat_crc, "data/intermediate_seurat/cellchat_crc_computeCommunProb.rds")
 cellchat_crc <- qs2::qs_read("intermediate/15_cellchat_crc_computeCommunProb.qs")
 ```
 
@@ -216,7 +245,7 @@ cellchat_crc <- netAnalysis_computeCentrality(cellchat_crc, slot.name = "netP")
 
 ```{r}
 #| echo: false
-#qs2::qs_save(cellchat_crc, "intermediate/15_cellchat_crc.qs")
+# qs2::qs_save(cellchat_crc, "intermediate/15_cellchat_crc.qs")
 cellchat_crc <- qs2::qs_read("intermediate/15_cellchat_crc.qs")
 ```
 
@@ -330,9 +359,9 @@ df_lr %>% head(10)
 As an example, we are going to look an interaction occuring between two different population (not circular):
 
 ```{r}
-idx <- 7
-ligand <- df_lr[idx, "ligand"]
-receptor <- df_lr[idx, "receptor"]
+# idx <- 7
+# ligand <- df_lr[idx, "ligand"]
+# receptor <- df_lr[idx, "receptor"]
 
 ligand <- "COL3A1"
 receptor <- "ADGRG1"
