@@ -1,0 +1,35 @@
+---
+title: "Differential Gene Expression - Answer Key"
+author:
+  - Noor Sohail
+date: "2026-04-29"
+license: "CC-BY-4.0"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: load_libraries_data
+#| echo: false
+# Load libraries and data
+
+```
+
+# Exercise 1
+
+1. Pick a different cell type and run `FindMarkers()`. Name the population you chose and print the top 6 genes in the results.
+
+# Exercise 2
+
+2. Run ORA analysis on the cell type that you calculated DE results for in the previous exercise. What is the top pathway that appears?
+
+# Exercise 3
+
+3. Run GSEA on the cell type that you calculated DE results for in the first exercise. What is the top pathway that appears?
+
+***
+
+[Back to Lesson >>](13_dge_pathway.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)
