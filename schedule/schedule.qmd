@@ -14,11 +14,11 @@ toc: false
 
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
-| 10:00 - 10:15 | [Workshop Introduction](../slides/workshop_intro_slides.pdf) |  Instructor_name |
-| 10:45 - 11:45| [Introduction to Spatial Transcriptomics](../slides/single_cell_slides.pdf) | [Dr. Mandovi Chatterjee](https://singlecellcore.hms.harvard.edu/people/mandovi-chatterjee) |
+| 10:00 - 10:15 | [Workshop Introduction](../slides/workshop_intro_slides.pdf) |  Will |
+| 10:45 - 11:45| [Introduction to Spatial Transcriptomics](../slides/single_cell_slides.pdf) | [Dr. Pratyusha Bala](https://singlecellcore.hms.harvard.edu/people/pratyusha-bala) |
 | 10:45 - 10:50 | Break | |
-| 10:50 - 11:25 | [Load Visium HD Data](../lessons/03_loading_spatial_data.qmd) | Instructor_name |
-| 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
+| 10:50 - 11:25 | [Load Visium HD Data](../lessons/03_loading_spatial_data.qmd) | Noor |
+| 11:55 - 12:00 | Overview of self-learning materials and homework submission | Will |
 
 ### Before the next class:
 
@@ -27,30 +27,30 @@ I. Please **study the contents** and **work through all the code** within the fo
    1. [Principal Component Analysis (PCA)](../lessons/04_theory_of_PCA.qmd)
       
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
-      Brief description of the lesson.
+      This lesson introduces participants to the theory and mechanics of Principal Components Analysis (PCA). Through a step‑by‑step, hands‑on walkthrough, participants learn how to derive the covariance matrix, obtain eigenvalues and eigenvectors, compute principal component scores and compare their manual PCA results with the output of `prcomp()`.
       
       In this lesson, you will:
       
-        - Learning Objective 1
-        - Learning Objective 2
-        - Learning Objective 3
+        - Derive the covariance matrix used for Principal Components Analysis
+        - Explain the roles of eigenvectors and eigenvalues within a Principal Components Analysis
+        - Compare and contrast our Principal Components Analysis to the output of `prcomp()`
       :::
       
-   1. [Quality Control](../lessons/05_quality_control.qmd)
+   2. [Quality Control](../lessons/05_quality_control.qmd)
       
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
-      Brief description of the lesson.
+      This lesson focuses on quality control strategies for Visium HD, using thresholds on genes, UMIs and mitochondrial content to filter low-quality spots. This lesson helps you detect technical artifacts and sample issues before downstream analyses.
       
       In this lesson, you will:
       
-        - Learning Objective 1
-        - Learning Objective 2
-        - Learning Objective 3
+        - Construct quality control metrics and visually evaluate the quality of the data
+        - Apply appropriate filters to remove low quality cells
+        - Create a filtered seurat object
       :::
 
 II. **Submit your work**:
    * Each lesson above contains exercises; please go through each of them.
-   * **Submit your answers** to the exercises using [this Google form]() on **the day *before* the next class**.
+   * **Submit your answers** to the exercises using [this Google form](https://forms.gle/PFk1fcCj8phzsLb88) on **the day *before* the next class**.
    
 ### Questions?
 * ***If you get stuck due to an error*** while running code in the lesson, [email us](mailto:hbctraining@hsph.harvard.edu) 
@@ -64,8 +64,8 @@ II. **Submit your work**:
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
 | 10:30 - 10:55 | [Normalization and Sketch Downsampling](../lessons/06_normalization_and_sketch.qmd) | Instructor_name |
 | 10:55 - 11:00 | Break | |
-| 11:00 - 11:55 | [Dimensionality Reduction](../lessons/07_dim_reduction.qmd) | Instructor_name |
-| 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
+| 11:00 - 11:55 | [Dimensionality Reduction](../lessons/07_dim_reduction.qmd) | Will |
+| 11:55 - 12:00 | Overview of self-learning materials and homework submission | Will |
 
 ### Before the next class:
 
@@ -74,42 +74,41 @@ I. Please **study the contents** and **work through all the code** within the fo
    1. [Clustering](../lessons/08_clustering.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
-      Brief description of the lesson.
+      This lesson will use graph-based clustering methods k-nearest neighbors and Leiden to define clusters based upon gene expression scores for single-cell datasets. You will examine how parameters like resolution affect cluster size and tissue interpretation.
       
       In this lesson, you will:
       
-        - Learning Objective 1
-        - Learning Objective 2
-        - Learning Objective 3
+        - Compute a neighborhood graph to identify similar phenotypes in bins
+        - Group bins into clusters based upon their gene expression profiles
+        - Evaluate the quality of clustering against biological knowns
       :::
 
    2. [Integration](../lessons/09_integration.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
-      Brief description of the lesson.
-      
+      This lesson will introduce how to evaluate whether batch effects are found in your dataset which will inform the decision of whether to integrate or not. Additionally describes the methods behind some common methods for integration.
+
       In this lesson, you will:
       
-        - Learning Objective 1
-        - Learning Objective 2
-        - Learning Objective 3
+        - Identify when integration is necessary
+        - Evaluate potential batch effect in our datset
+        - Compare common integration algorithms
       :::
 
    3. [Seurat Cheatsheet](../lessons/10_seurat_cheatsheet.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
-      Brief description of the lesson.
+      This lesson will introduce a compact Seurat cheatsheet to keep at hand that summarizes key functions for spatial transcriptomics workflows, from data loading to clustering and plotting. Use this reference to speed up scripting, avoid common syntax errors, and standardize your analysis pipeline.
       
       In this lesson, you will:
       
-        - Learning Objective 1
-        - Learning Objective 2
-        - Learning Objective 3
+        - Access various slots of the Seurat object
+        - Generate a variety of plots with the plotting functions within Seurat
       :::
          
 II. **Submit your work**:
    * Each lesson above contains exercises; please go through each of them.
-   * **Submit your answers** to the exercises using [this Google form]() on **the day *before* the next class**.
+   * **Submit your answers** to the exercises using [this Google form](https://forms.gle/ZnxTMvaNLweRruvp6) on **the day *before* the next class**.
    
 ### Questions?
 * ***If you get stuck due to an error*** while running code in the lesson, [email us](mailto:hbctraining@hsph.harvard.edu) 
@@ -121,10 +120,10 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 10:55 | [BANKSY Spatial Clustering](../lessons/11_banksy_clustering.qmd) | Instructor_name |
+| 10:30 - 10:55 | [BANKSY Spatial Clustering](../lessons/11_banksy_clustering.qmd) | Will |
 | 10:55 - 11:00 | Break | |
-| 11:00 - 11:55 | [Deconvolution](../lessons/12_deconvolution.qmd) | Instructor_name |
-| 11:55 - 12:00 | Overview of self-learning materials and homework submission | Instructor_name |
+| 11:00 - 11:55 | [Deconvolution](../lessons/12_deconvolution.qmd) | Noor |
+| 11:55 - 12:00 | Overview of self-learning materials and homework submission | Noor |
 
 ### Before the next class:
 
@@ -133,30 +132,30 @@ I. Please **study the contents** and **work through all the code** within the fo
    1. [Differential Expression and Pathway Analysis](../lessons/13_dge_pathway.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
-      Brief description of the lesson.
-      
+      This lesson will perform differential expression analysis between celltypes of matched cancer and normal. Feed the significant genes into pathway and gene set enrichment analyses to observe trends.
+
       In this lesson, you will:
       
-        - Learning Objective 1
-        - Learning Objective 2
-        - Learning Objective 3
+        - Run differential gene expression analysis using a Wilcox test
+        - Calculate over-representated pathways
+        - Identify gene set enrichment scores for pathways
       :::
 
    2. [Spatially Variable Genes](../lessons/14_svgs.qmd)
 
       :::{.callout-note collapse="true" title="Click here for a preview of this lesson"}
-      Brief description of the lesson.
+      This lesson will identify spatially variable genes whose expression changes across tissue locations. This lesson shows how to detect, visualize and prioritize SVGs as markers of spatial domains and gradients.
       
       In this lesson, you will:
       
-        - Learning Objective 1
-        - Learning Objective 2
-        - Learning Objective 3
+        - Define the Moran’s I calculation
+        - Run Moran’s I to identify spatially variable genes
+        - Visualize spatialy variable genes
       :::
          
 II. **Submit your work**:
    * Each lesson above contains exercises; please go through each of them.
-   * **Submit your answers** to the exercises using [this Google form]() on **the day *before* the next class**.
+   * **Submit your answers** to the exercises using [this Google form](https://forms.gle/9nuZirspfo2KGzSu7) on **the day *before* the next class**.
    
 ### Questions?
 * ***If you get stuck due to an error*** while running code in the lesson, [email us](mailto:hbctraining@hsph.harvard.edu) 
@@ -169,10 +168,10 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 11:25 | [Cell-Cell Communication](../lessons/15_cellchat.qmd) | Instructor_name |
+| 10:30 - 11:25 | [Cell-Cell Communication](../lessons/15_cellchat.qmd) | Noor |
 | 11:25 - 11:30 | Break | |
-| 11:30 - 11:45 | Discussion, Q & A | Instructor_name |
-| 11:45 - 12:00 | [Wrap Up](../slides/workshop_wrapup_slides.pdf) | Instructor_name |
+| 11:30 - 11:45 | Discussion, Q & A | All |
+| 11:45 - 12:00 | [Wrap Up](../slides/workshop_wrapup_slides.pdf) | Will |
 
 ***
 
