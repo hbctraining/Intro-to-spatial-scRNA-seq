@@ -249,9 +249,9 @@ In the Visium HD assay, Space Ranger bins the image into 2µm x 2µm, 8µm x 8µ
 # How do I know what bin size to use?
 This is not an easy question to answer! 
 
-The typical recommendation for a Visium HD analysis is to use the 8µm x 8µm resolution of the dataset. However, it is important to consider the dataset you are working with. For example, neuron cells are know to be a larger celltype in size. Therefore, it would be good to consider a large bin size in order to fully represent each cell within a bin. At the same time, the smaller the bin size is, the more resources it takes to compute anything. 
+The typical recommendation for a Visium HD analysis is to use the 8µm x 8µm resolution of the dataset. However, it is important to consider the dataset you are working with. For example, neuron cells are know to be a larger celltype in size. Therefore, it would be good to consider a large bin size in order to fully represent each cell within a bin. The trade-off for choosing a larger bin size is that the odds of a bin containing multiple cells goes up.
 
-So this is the first (of many) example where you must juggle computational practicality and biology when making a decision.
+The smaller the bin size is, the more resources it takes to compute anything. So this is the first (of many) example where you must juggle computational practicality and biology when making a decision.
 :::
 
 ### Creating the Seurat object
@@ -273,14 +273,30 @@ We can print out some basic information of our Seurat object to examine its data
 #| label: crc_callout
 crc
 ```
+
 ::: callout-note
 # Anatomy of Seurat object
 
 The Seurat object contains many different parts with specific functions to access each slot. To better understand how to access each component, we have created a lesson going through the [anatomy of a Seurat object](Aside_seurat_anatomy.qmd) for the `crc` object we have just created.
 :::
 
+We can assess how many bins belong to each bin size by using the `ncol()` function on our datasets:
+
+```{r}
+#| label: crc_ncol
+ncol(crc[["Spatial.008um"]])
+ncol(crc[["Spatial.016um"]])
+```
+
+::: callout-tip
+# [**Exercise 2**](03_loading_spatial_data-Answer_key.qmd#exercise-2)
+3. What differences do you see between the `8um` and `16um` bins?
+:::
+
 
 **Seurat automatically creates some metadata** for each of the cells when the object is created. This information is stored in the `@meta.data` slot within the Seurat object. The rownames are automatically set to be the cell names.
+
+_Note that the 16um columns will contain `NA` values, which is expected because Seurat will only calculate statistics for the first bin size specified in the `bin.size` argument._
 
 ```{r}
 #| label: crc_meta_data_1
@@ -441,12 +457,6 @@ The two separate `counts` indicates that our raw counts matrices are being store
 seurat_merged <- JoinLayers(seurat_merged)
 ```
 
-::: callout-tip
-# [**Exercise 3**](03_loading_spatial_data-Answer_key.qmd#exercise-3)
-4. What function can we use to double check that we have a singular `counts` _layer_ after running `JoinLayers()`?
-:::
-
-
 ::: {.callout-note collapse=true}
 # Merging vs. integration
 A common point of confusion is the distinction between **integration** and merging. In the field, integration is considered to be modifying either your counts or latent space in a way to correct for a batch variable. Whereas what we are doing now is **merging** or concatenating multiple samples together. This process of merging does not transform the values in the count matrices.
@@ -503,7 +513,8 @@ seurat_merged@meta.data %>%
   knitr::kable()
 ```
 
-Lastly we want to make sure that the `Idents` of our cells is a useful piece of information, for example like `orig.ident`, which contains our sample IDs.
+
+The bin identities are stored as `Idents()`, which contain the default way to label bins. So the last step here is making sure that the `Idents` of our bins is a useful piece of information, for example like `orig.ident`, which contains our sample IDs.
 
 ```{r}
 #| label: seurat_merged_idents
@@ -530,6 +541,11 @@ qs2::qs_save(seurat_merged, "intermediate/03_seurat_merged.qs")
 ```
 
 A good rule of thumb is to save your intermediate objects before any filtration or after running a computationally heavy step that takes a long time to run.
+
+::: callout-important
+# Limited RAM
+As we go throughout the workshop, we recommend that you clear your environment after we save an RDS object to avoid taxing your laptop with objects that are too large. 
+:::
 
 ***
 

@@ -126,10 +126,6 @@ ncol(crc[["Spatial.008um"]])
 ncol(crc[["Spatial.016um"]])
 ```
 
-::: callout-tip
-# [**Exercise 2**](03_loading_spatial_data-Answer_key.qmd#exercise-2)
-3. What differences do you see between the `8um` and `16um` bins?
-:::
 
 ### Layers
 

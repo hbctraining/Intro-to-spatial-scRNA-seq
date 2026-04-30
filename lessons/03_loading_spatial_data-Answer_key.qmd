@@ -43,15 +43,6 @@ There are more bins in the `8um` compared to the `16um`. The number of features/
 This is why the bin value matters, it determines how many "cells" are ultimately generated. A smaller bin size results in more spots. This is because we are taking smaller sections of the same data, meaning we use more bins to cover the same area as a large bin size.
 
 
-# Exercise 3
-
-3. What function can we use to double check that we have a singular `counts` _layer_?
-
-```{r}
-#| eval: false
-Layers(seurat_merged)
-```
-
 ***
 
 [Back to Lesson >>](03_loading_spatial_data.qmd)
