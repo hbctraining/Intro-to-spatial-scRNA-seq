@@ -36,6 +36,8 @@ library(clusterProfiler)
 library(org.Hs.eg.db)
 library(msigdbr)
 
+set.seed(12345)
+
 seurat_rctd <- qs2::qs_read("intermediate/12_seurat_RCTD.qs")
 ```
 
@@ -76,7 +78,7 @@ library(clusterProfiler)
 library(org.Hs.eg.db)
 library(msigdbr)
 
-
+set.seed(12345)
 # Load dataset
 seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
 ```
@@ -454,7 +456,7 @@ For our analysis, we will use `C5`, which contains the Gene Ontology gene sets. 
 ```{r}
 #| label: obtain_mouse_msigdbr
 # Use a specific collection; C5 GO signatures
-m_t2g <- msigdbr(species = "Homo sapiens", category = "C5") %>%
+m_t2g <- msigdbr(species = "Homo sapiens", collection = "C5") %>%
   dplyr::select(gs_name, gene_symbol)
 ```
 
