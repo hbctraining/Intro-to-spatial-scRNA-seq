@@ -52,7 +52,8 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-When doing XYZ...
+Here, you likely have deconvolved cell type proportions or at least well‑annotated clusters, and you want to understand how they may interact. In this lesson you use tools like CellChat to infer ligand–receptor interactions between cell types or spatial regions, building directed signaling networks. You examine which pathways are active where, and how spatial proximity relates to predicted communication strength. These interaction maps help connect static expression patterns to dynamic biological processes such as immune infiltration, niche signaling, or tumor–stroma crosstalk.
+
 
 ## Cell-cell communication
 
@@ -134,13 +135,14 @@ spatial_factors_crc
 ```{r}
 # Create cellchat object
 cellchat_crc <- createCellChat(
-  object          = counts_norm_crc,
-  meta            = crc@meta.data,
-  group.by        = "first_type",
-  datatype        = "spatial",
-  coordinates     = coords_crc,
+  object = counts_norm_crc,
+  meta = crc@meta.data,
+  group.by = "first_type",
+  datatype = "spatial",
+  coordinates = coords_crc,
   spatial.factors = spatial_factors_crc)
 ```
+
 We are working with human samples so we can make use of the human database. So we assign this to our cellchat object.
 
 ```{r}
