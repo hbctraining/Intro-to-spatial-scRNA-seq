@@ -233,7 +233,7 @@ Now we can begin visualizing how the bins in `P5CRC` are interacting with one an
 Count + strength of interactions:
 
 ```{r}
-par(mfrow = c(1, 2), xpd = TRUE)
+par(mfrow = c(1, 2), xpd = TRUE) # change plotting device to be one row, two columns
 netVisual_circle(cellchat_crc@net$count,
                  weight.scale   = TRUE,
                  label.edge     = FALSE,
@@ -244,6 +244,7 @@ netVisual_circle(cellchat_crc@net$weight,
                  label.edge     = FALSE,
                  edge.width.max = 12,
                  title.name     = "Interaction strength")
+par(mfrow = c(1, 1)) # reset par to not affect later plots
 ```
 
 
