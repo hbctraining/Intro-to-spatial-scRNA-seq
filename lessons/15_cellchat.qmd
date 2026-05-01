@@ -58,22 +58,32 @@ Here, you likely have deconvolved cell type proportions or at least well‑annot
 ## Cell-cell communication
 
 ::: {#fig-ccc_schematic .fig}
-![](../img/ccc_schematic.png)
+![](../img/ccc_schematic.png){width=500}
 
 Schematic of representative signal pathways for cell-cell communication.<br>
 _Image source: [Su et al. (2024)](https://www.nature.com/articles/s41392-024-01888-z)_
 :::
 
-We know that cells do not exist in an isolated environment, where they do not interact with anything. To evaluate how different cells are interacting with one another, cell-cell communication analyses will calculate scores of interaction between cell types. Spatial transcriptomics is a great input dataset for these methods because cells are most likely to interact with other cells that are closeby spatially. Identifying these cellular communication networks enhances understanding of differentiation, organ development, and metabolism.
+We know that cells do not exist in an isolated environment, where they do not interact with anything. The opposite is true, where cells interact with one another and exchange information through various mechanisms such as signal transduction for activating proteins. Understanding which cells interact with each other is crucial for understanding how cell differentiation, organ development, and metabolism is modulated.
 
+Spatial transcriptomics is a great input dataset for these methods because **many cell interactions are observed between cells in close proximity**. The coordinates become a powerful input parameter to improve the accuracy of interaction results.
 
 ### CellChat
 
-CellChat facilitates the analysis of intercellular interactions and communication networks by providing cell interaction network diagrams and communication pathway analysis. It has expanded its coverage to include 229 signaling pathways, classified into three categories: contact between cells, receptors in the ECM, and signaling via secretion. CellChat emphasizes differential overexpressed ligands and receptors to measure the association between LRPs under the principle of mass action.
+CellChat is a method that was originally published by [Jin et. al (2021)](https://www.nature.com/articles/s41467-021-21246-9) and then updated several years [Jin et al. (2025)](https://www.nature.com/articles/s41596-024-01045-4) to incorporate spatial coordinates into the model. The output is are lists of significant ligand-receptor interactions between cell types
 
-## P5CRC
+::: {#fig-cellchat_schematic .fig}
+![](../img/cellchat_schematic.png){width=500}
 
-We will run CellChat on one sample at a time.
+Overview of CellChat method.<br>
+_Image source: [Hao et al. (2021)](https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2021.751158/full)_
+:::
+
+First, the authors created a database of known ligand-receptor interactions from the literature classified as: secreted signaling, extracellular matrix recepotrs, and cell-cell contact. This database is used in conjunction with your own dataset and its cell type labels to identify communcations between populations. In essence, the method identifies overexpressed ligand receptors from the database in your own data to measure association using the principle of mass action.
+
+## Running cellchat
+
+CellChat was written such that you run the workflow on one sample at a time and then merge all datasets together to run a comparative analysis. So here, we are going to focus on the ligand-receptor results for our `P5CRC` dataset. As this is a new analysis, we will create a new script titled `0X_cellchat.R`:
 
 ```{r}
 #| label: header_libraries
@@ -99,23 +109,32 @@ plan(multisession, workers = parallel::detectCores() - 1)
 seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
 ```
 
-This is the recommended way, where you would run the full workflow on each sample and then compare and contrast.
+For now, let us say that our biological question is which populations that tumor cells are interacting with from our dataset. So first, we are going to subset the Seurat object to our relevant bins.
 
 ```{r}
+#| label: subset_crc
+# Subset to CRC sample
+# Remove unassigned bins
 crc <- subset(seurat_rctd,
               subset = (orig.ident == "P5CRC") &
                        (first_type != "unassigned"))
+
+# CellChat expects a "samples" column that is a factor
 crc$samples <- factor(crc$orig.ident)
 crc
 ```
 
-To create a CellChat object, we need the following information:
+Similar to RCTD, CellChat has its own data structure for storing information. In order to create this object with the `createCellChat()` function, we must provide the following pieces of information:
 
-- Normalized counts matrix
-- Spatial coordinates for each bin
-- Spatial factors (stored in json file)
+- `object`: Normalized counts matrix
+- `coordinates`: Spatial coordinates for each bin
+- `spatial.factors`: Spatial factors (stored in json file)
+
+To generate these, we can use the `GetAssayData()` to grab the log-normalized counts from the `crc` Seurat object:
 
 ```{r}
+#| label: get_assay
+#| eval: false
 # Get normalized counts matrices
 counts_norm_crc <- GetAssayData(crc,
                                 assay = "Spatial.008um",
@@ -123,11 +142,34 @@ counts_norm_crc <- GetAssayData(crc,
 counts_norm_crc[1:5, 1:5]
 ```
 
+```{r}
+#| label: tbl-get_assay
+#| tbl-cap: First 5 bins and genes of log-normalized counts in the P5CRC dataset.
+#| echo: false
+# Get normalized counts matrices
+counts_norm_crc <- GetAssayData(crc,
+                                assay = "Spatial.008um",
+                                layer = "data")
+counts_norm_crc[1:5, 1:5] %>% knitr::kable()
+```
+
+Next we will grab the spatial coordinates associated with each bin. Here, we will use the `FetchData()` function to grab the coordinates we stored in the `@meta.data` in the . You could also use the ouput from the `GetTissueCoordinates()` function as well.
 
 ```{r}
+#| label: get_coords
+#| eval: false
 # Get spatial coordinates
 coords_crc <- FetchData(crc, vars = c("x", "y"))
 coords_crc %>% head()
+```
+
+```{r}
+#| label: tbl-get_coords
+#| tbl-cap: Spatial coordinates of the first 5 bins in the P5CRC dataset.
+#| echo: false
+# Get spatial coordinates
+coords_crc <- FetchData(crc, vars = c("x", "y"))
+coords_crc %>% head() %>% knitr::kable()
 ```
 
 Now we need to grab the `spatial.factors` which is defined as:
