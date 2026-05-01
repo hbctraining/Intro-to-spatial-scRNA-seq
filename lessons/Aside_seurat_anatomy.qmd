@@ -27,19 +27,19 @@ editor_options:
 
 ```
 
-Approximate time: XX minutes
+Approximate time: 10 minutes
 
 ## Learning objectives 
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Use the assay functionality of Seurat to store multiple counts matrices
+- Access counts matrices and spatial coordinates
+- Update default representations of data
 
 ## Overview of lesson
 
-When doing XYZ...
+At first glance, the Seurat object may appear scary due to the large amount of information that is stored within a single variables. Throughout this lesson, we will walk through the different slots and components of a Seurat object to better familiarize ourselves with how to access and manipulate data stored within a Seurat object.
 
 ## Load dataset
 
@@ -197,7 +197,7 @@ Or visualize what our slide looks like with `SpatialDimPlot()`:
 ```{r}
 #| label: fig-crc_SpatialDimPlot
 #| fig-cap: Spatial visualization of spots with `SpatialDimPlot()`
-SpatialDimPlot(crc, pt.size.factor = 15)
+SpatialDimPlot(crc, pt.size.factor = 7)
 ```
 
 ### Metadata
