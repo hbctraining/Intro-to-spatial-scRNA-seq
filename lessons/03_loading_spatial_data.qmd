@@ -134,23 +134,13 @@ When you open the project folder after unzipping it, please check if you have a 
 
 We can open the R Project up and see that the provided file structure should look like:
 
-```{r}
-#| label: file_structure
-#| eval: false
-spatial_transcriptomics/
-├── data/
-├── figures/
-├── README.txt
-├── results/
-├── scripts/
-└── spatial_transcriptomics.Rproj
-```
+::: {#fig-file_structure .figure}
+![](../img/File_structure_annotated.png){width="500px"}
 
-If your R Project looks like below, then you are ready to start!
+R Project file structure.<br>
+::: 
 
-::: callout-warning
-TODO: Image of R project file structure
-:::
+If your R Project looks like above, then you are ready to start!
 
 We can also double check that all the files we need for our analysis can be found within `data/`:
 
@@ -194,10 +184,22 @@ library(Seurat)
 
 Save the Rscript as `01_loading_visium_hd_and_qc.R` and place it into the `scripts` folder. Your working directory should look something like this:
 
-::: callout-warning
-TODO: Image of R project file structure with new script
-:::
-
+```{r}
+#| label: full_data_structure
+#| eval: false
+spatial_transcriptomics/
+├── data/
+│   ├── P5CRC_cropped/
+│   ├── P5NAT_cropped/
+│   ├── crc_flex_ref_downsample.RDS
+│   └── intermediate_seurat/
+├── figures/
+├── README.txt
+├── results/
+├── scripts/
+│   └── 01_loading_visium_hd_and_qc.R
+└── spatial_transcriptomics.Rproj
+```
 
 ## Loading data into Seurat
 
