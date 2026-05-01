@@ -44,13 +44,34 @@ In Visium HD data, the main challenge is in **delineating bins that are poor qua
 
 Here we will learn how to identify and set thresholds for filtration so that the dataset contains high-quality bins.
 
+## Number of bins before filtration
+
+Before doing any filtration, we can see how many bins we have per sample. This is a number we should keep in the back of our mind throughout the analysis because it will help us understand the distribution of our spots. For spatial datasets, the number of bins is going to correspond directly to the bin size selected.
+
+```{r}
+#| label: fig-n_cells
+#| fig-cap: Number of bins in the dataset, split by sample.
+# Barplot number of bins per sample
+ggplot(seurat_merged@meta.data) +
+  geom_bar(aes(x = orig.ident, fill = orig.ident),
+           color = "black") +
+  geom_text(aes(x = orig.ident, label=after_stat(count)), 
+            stat='count', vjust=-1) +
+  theme_classic()
+```
+
 ## Quality metrics
 
 We will assess a variety of metrics to evaluate which bins are considered low/high quality. **We will apply very permissive filtering here** as it has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq. 
 
+::: callout-note
+# Sample specific thresholds
+
+We are frequently asked if you you have to use the same threshold values across all your samples. We recommend that you follow what the data is telling you and apply values on a per sample basis. Ultimately the end goal is to retain **high-quality bins**, even if that means using different values for each sample.
+:::
+
 The metrics we will be using to filter low-quality bins from high-quality ones include:
 
-- Cell counts
 - UMI counts per cell
 - Genes detected per cell
 - Complexity (novelty score)
@@ -76,6 +97,25 @@ meta %>%
   knitr::kable()
 ```
 
+
+**We will be using a variety of visualization methods:**
+
+- Looking at the values of each bin on the spatial slide .
+- Distribution of values **before and after** filtration as a density plot.
+
+
+### UMI counts (transcripts) per bin
+
+The `nCounts` is the number of unique transcripts (UMIs) detected per bin. Oftentimes, these values will correspond with how transcriptionally active a cell may be, which is typically defined by their celltype. For example, tumor cells will have very high UMI counts.
+
+In the density plots, we expect to see a bimodal distribution. One peak should represent bins containing lower-quality bins with fewer UMIs and another peak representing healthy bins with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.
+
+These numbers may be lower than what we would expect for scRNA-seq datasets due to the small size of the bins.
+
+::: {.panel-tabset}
+
+#### Spatial overlay
+
 ::: {.callout-note collapse=true}
 # "Nicer" spatial visualizations
 For "nicer" (subjective) plotting with `SpatialFeaturePlot()` and `SpatialDimPlot()`, we will add some extra parameters to gain a clearer image beyond the default plot (shown here):
@@ -94,40 +134,6 @@ Therefore for the rest of this lesson, we will be using the following arguments:
 - `image.alpha = 0`: to remove the H&E stained image in the background of the image
 - `max.cutoff` and `min.cutoff`: to not allow the color scale to be driven by smaller populations of cells with high/low values
 :::
-
-We will be using a variety of visualization methods:
-
-- Looking at the values of each bin on the spatial slide .
-- Distribution of values before and after filtration as a density plot.
-
-### Number of bins
-
-First, we can see how many bins we have per sample. This is a number we should keep in the back of our mind throughout the analysis because it will help us understand the distribution of our spots. For spatial datasets, the number of bins is going to correspond directly to the bin size chosen as well as the bin size selected.
-
-```{r}
-#| label: fig-n_cells
-#| fig-cap: Number of bins in the dataset, split by sample.
-# Barplot number of bins per sample
-ggplot(meta) +
-  geom_bar(aes(x = orig.ident, fill = orig.ident),
-           color = "black") +
-  geom_text(aes(x = orig.ident, label=after_stat(count)), 
-            stat='count', vjust=-1) +
-  theme_classic()
-```
-
-
-### UMI counts (transcripts) per bin
-
-The `nCounts` is the number of unique transcripts (UMIs) detected per bin. Oftentimes, these values will correspond with how transcriptionally active a cell may be, which is typically defined by their celltype. For example, tumor cells will have very high UMI counts.
-
-In the density plots, we expect to see a bimodal distribution. One peak should represent bins containing lower-quality bins with fewer UMIs and another peak representing healthy bins with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.
-
-These numbers may be lower than what we would expect for scRNA-seq datasets due to the small size of the bins.
-
-::: {.panel-tabset}
-
-#### Spatial overlay
 
 ```{r}
 #| label: fig-nCount_spatial
@@ -175,11 +181,6 @@ ggplot(meta_filt) +
   theme_classic()
 ```
 
-:::
-
-::: {.callout-note collapse=true}
-# Sample specific values
-A commonly asked question is if you have to use the same threshold values across all your samples. We recommend that you follow what the data is telling you and do it on a per sample basis. Ultimately the end goal is to retain **high-quality bins**, even if that means using different values for each sample.
 :::
 
 ### Genes detected per bin
@@ -440,9 +441,12 @@ seurat_filtered
 
 
 ::: callout-warning
+# Warning: Not validating
 After subsetting, you may get the following warning message:
 
-```
+```{r}
+#| label: warning_fov
+#| eval: false
 Warning: Not validating Centroids objects 
 Warning: Not validating FOV objects
 Warning: Not validating FOV objects
@@ -455,17 +459,9 @@ This warning message can be ignored as it is Seurat internalling checking bin ba
 :::
 
 
-How many cells did we remove in this filtration process?
-
-```{r}
-#| label: calc_ncells_filtered
-# Differences of cells before and after filtration
-ncol(seurat_merged) - ncol(seurat_filtered)
-```
-
 :::{.callout-tip}
 # [**Exercise 2**](05_quality_control-Answer_key.qmd#exercise-2)
-2. How many bins do we have per sample after this filtration step?
+2. How many bins did we remove in this filtration process? _Hint: We can use the `ncol()` function to count the number of bins in a Seurat object._
 :::
 
 ## Visualizing counts data

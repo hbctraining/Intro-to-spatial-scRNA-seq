@@ -70,6 +70,16 @@ seurat_merged@meta.data %>%
 
 2. How many bins do we have per sample after this filtration step?
 
+We can calculate the difference in the number of columns (bin) to see how many were removed after our filtration step.
+
+```{r}
+#| label: nbins_filtered
+# Difference in number of bins
+ncol(seurat_merged) - ncol(seurat_filtered)
+```
+
+We can also create a barplot to directly compare against the first visual made in the lesson too!
+
 ```{r}
 #| label: fig-ncells
 #| fig-cap: Number of cells per sample after filtration
