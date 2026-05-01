@@ -35,12 +35,12 @@ Approximate time: XX minutes
 In this lesson, we will:
 
 - Construct quality control metrics and visually evaluate the quality of the data
-- Apply appropriate filters to remove low quality cells
-- Create a filtered seurat object
+- Apply appropriate filters to remove low-quality bins
+- Create a filtered Seurat object
 
 ## Overview of lesson
 
-In Visium HD data, the main challenge is in **delineating bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
+In Visium HD data, the main challenge is in **delineating bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared to other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
 
 Here we will learn how to identify and set thresholds for filtration so that the dataset contains high-quality bins.
 
@@ -65,7 +65,7 @@ ggplot(seurat_merged@meta.data) +
 We will assess a variety of metrics to evaluate which bins are considered low/high quality. **We will apply very permissive filtering here** as it has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq. 
 
 ::: callout-note
-# Sample specific thresholds
+# Sample-specific thresholds
 
 We are frequently asked if you you have to use the same threshold values across all your samples. We recommend that you follow what the data is telling you and apply values on a per sample basis. Ultimately the end goal is to retain **high-quality bins**, even if that means using different values for each sample.
 :::
@@ -77,7 +77,7 @@ The metrics we will be using to filter low-quality bins from high-quality ones i
 - Complexity (novelty score)
 - Mitochondrial counts ratio
 
-Some of these values we will calculate throughout this lesson and be added to our metadata dataframe.
+We will calculate some of these values throughout this lesson. Others (UMIs and genes per cell), already exist in our `@meta.data`:
 
 ```{r}
 #| label: meta_view
@@ -105,7 +105,7 @@ meta %>%
 
 ### UMI counts (transcripts) per bin
 
-The `nCounts` is the number of unique transcripts (UMIs) detected per bin. Oftentimes, these values will correspond with how transcriptionally active a cell may be, which is typically defined by their celltype. For example, tumor cells will have very high UMI counts.
+The `nCount` is the number of unique transcripts (UMIs) detected per bin. Oftentimes, these values will correspond with how transcriptionally active a cell may be, which is typically defined by their cell type. For example, tumor cells will have very high UMI counts.
 
 In the density plots, we expect to see a bimodal distribution. One peak should represent bins containing lower-quality bins with fewer UMIs and another peak representing healthy bins with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.
 
@@ -152,7 +152,7 @@ SpatialFeaturePlot(seurat_merged,
 ```{r}
 #| label: fig-nCount_density
 #| fig-cap: Number of UMIs density.
-# log10-transformed density of UMIS for each sample
+# log10-transformed density of UMIs for each sample
 # Vertical lines are sample-specific filtering thresholds
 ggplot(meta) +
   geom_density(aes(x = nCount_Spatial.008um, fill = orig.ident),
@@ -175,7 +175,7 @@ meta_filt <- subset(meta,
   ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 30)) |
   ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 10)))
 
-# log10-transformed density of UMIS for each sample after filtration
+# log10-transformed density of UMIs for each sample after filtration
 ggplot(meta_filt) +
   geom_density(aes(x = nCount_Spatial.008um,
                      fill = orig.ident),
@@ -191,9 +191,9 @@ ggplot(meta_filt) +
 
 ### Genes detected per bin
 
-This is the number of genes (`nFeatures`) detected per bin, or the number of genes that have a non-zero value in a bin. We have similar expectations for gene detection as we did for number of UMIs in terms of the distribution of values.
+This is the number of genes (`nFeature`) detected per bin, or the number of genes that have a non-zero value in a bin. We have similar expectations for gene detection as we did for number of UMIs in terms of the distribution of values.
 
-When we look at the spatial slide, we can already beging to see patterns of expression (both with genes and UMIs) that will be helpful in understanding our dataset better.
+When we look at the spatial slide, we can already begin to see patterns of expression (both with genes and UMIs) that will be helpful in understanding our dataset better.
 
 ::: {.panel-tabset}
 
@@ -255,7 +255,7 @@ ggplot(meta_filt) +
 
 ### Complexity (novelty) score
 
-Sometimes there may be bins with high `nCounts` (UMIs) and low `nFeatures` (genes). This would indicate that few genes were sequenced many times over. We consider these instances to be cases of "low complexity" where we are getting high expression from few genes. Some celltypes, such as red blood cells, are known for such behavior. However, we should be cautious when interpreting these results, as contamination or technical artifact could also contribute to this. Generally, we expect the complexity score to be above 0.80 for good-quality bins.
+Sometimes there may be bins with high `nCount` (UMIs) and low `nFeature` (genes). This would indicate that few genes were sequenced many times over. We consider these instances to be cases of "low complexity" where we are getting high expression from few genes. Some cell types, such as red blood cells, are known for such behavior. However, we should be cautious when interpreting these results, as contamination or technical artifact could also contribute to this. Generally, we expect the complexity score to be above 0.80 for good-quality bins.
 
 The novelty score is computed as a ratio of genes to UMIs, as shown below:
 
@@ -336,9 +336,11 @@ ggplot(meta_filt) +
 
 ### Mitochondrial counts ratio
 
-During sequencing, we do not only measure the levels of expression the nuclear genome - we are also capturing the mitochondrial genome! High levels of mitochondrial expression is a sign that the cell is dying or dead. Therefore, we can calculate the proportion of reads (UMIs) that come from the mitochondria out of all the transcripts in a cell as another metric.
+During sequencing, we do not only measure the levels of expression from the nuclear genome - we also capture the mitochondrial genome! High levels of mitochondrial expression can be a sign of dead or dying cells. Therefore, we can calculate the proportion of reads (UMIs) that come from the mitochondria out of all the transcripts in a cell as another metric.
 
- We define poor-quality samples for mitochondrial counts as bins which surpass the 0.25 mitochondrial ratio threshold, unless of course you are expecting this in your sample. This ratio is computed as:
+Bins with greater than `0.25` (25%) mitochondrial reads are typically defined as poor-quality. However, if you have reason to believe that the mitochondrial content is meant to be on the higher end you can adjust this threshold. 
+
+This ratio is computed as:
 
 $$
 \text{Mitochondrial Ratio} = 
@@ -348,7 +350,7 @@ $$
 
 ::: {.callout-note collapse=true}
 # Think about your biological question
-While using a baseline score of 0.25 is an acceptable threshold for removing high mitochondrial content cells, it is important to always go back to your original biological question. What samples are you working with? Do you expect there to be high values of mitochondria due to your experimental condition?
+While using a baseline score of 0.25 is an acceptable threshold for removing high mitochondrial content cells, it is important to always go back to your original biological question. What samples are you working with? Do you expect there to be high values of mitochondrial expression due to your experimental condition?
 
 For example, if you were studying renal oncocytomas would you make this same choice? This disease is characterized as having [aberrantly high mitochondrial expression](https://www.nature.com/articles/modpathol2015101), would it make sense to remove cells with high mitochondrial ratio?
 :::
@@ -366,7 +368,7 @@ The same issue that caused the `NA` values in the complexity score will appear i
 
 ```{r}
 #| label: hundred_mitoRatio
-# Turn NA values into 100 for now
+# Turn NA values into 1.00 for now
 seurat_merged$mitoRatio[is.na(seurat_merged$mitoRatio)] <- 1.00
 ```
 
@@ -427,7 +429,7 @@ ggplot(meta_filt) +
 
 :::{.callout-tip}
 # [**Exercise 1**](05_quality_control-Answer_key.qmd#exercise-1)
-1. Do you notice a pattern in cells in regards to the number of UMIs and features? Make a `geom_point` plots to compare these values on a per-cell basis and color each point by the mitochondrial ratio following the structure provided here:
+1. Do you notice a pattern in cells in regards to the number of UMIs and features? Make a `geom_point` plot to compare these values on a per-cell basis and color each point by the mitochondrial ratio following the structure provided here:
 
 ```{r}
 #| label: exercise_geom_point
@@ -488,7 +490,7 @@ Warning: Not validating FOV objects
 Warning: Not validating Seurat objects
 ```
 
-This warning message can be ignored as it is Seurat internalling checking bin barcodes against the image. After every `subset` step this message may appear, but can ignored as ultimately the subsetting is still accomplished.
+This warning message can be ignored as it is Seurat internally checking bin barcodes against the image. In future lessons, after every `subset` step, this message may appear again, but can be disregarded as the subsetting is ultimately accomplished.
 
 :::
 
@@ -508,7 +510,7 @@ Let’s start with a violin plot to look at the distribution of UMI counts and g
 
 ```{r}
 #| label: fig-vln_ncount_nfeature
-#| fig-cap: Violin plot of nCounts and nFeatures after filtration.
+#| fig-cap: Violin plot of nCount and nFeature after filtration.
 # Violin plot of UMIs
 p_ncount <- VlnPlot(seurat_filtered, 
                     features = "nCount_Spatial.008um", 
@@ -525,7 +527,7 @@ p_nfeats <- VlnPlot(seurat_filtered,
 p_ncount | p_nfeats
 ```
 
-We see that both violin plots have a similar peak. However, the nUMI (`nCounts`) distribution has a much longer tail than the number of genes distribution (`nFeatures`). This is expected, because while the small physical size of the bins means that most genes will be detected only once or twice, a minority of bins under very transcriptionally active cells may exhibit multiple transcripts of the same gene.
+We see that both violin plots have a similar peak. However, the UMI (`nCount`) distribution has a much longer tail than the number of genes distribution (`nFeature`). This is expected, because while the small physical size of the bins means that most genes will be detected only once or twice, a minority of bins under very transcriptionally active cells may exhibit multiple transcripts of the same gene.
 
 ### Spatial overlay
 

@@ -25,7 +25,7 @@ seurat_filtered <- qs2::qs_read("intermediate/05_seurat_filtered.qs")
 
 # Exercise 1
 
-1. Do you notice a pattern in cells in regards to the number of UMIs and feature? Make a `geom_point` plots to compare these values on a per-cell basis and color each point by the mitochondrial ratio following the structure provided here:
+1. Do you notice a pattern in cells in regards to the number of UMIs and feature? Make a `geom_point` plot to compare these values on a per-cell basis and color each point by the mitochondrial ratio following the structure provided here:
 
 ```{r}
 #| label: exercise_geom_point
