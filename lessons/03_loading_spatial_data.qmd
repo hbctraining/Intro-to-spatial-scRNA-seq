@@ -119,7 +119,7 @@ TODO: download link update
 
 ::: callout-important
 # Download the data
-If you haven’t done this already, the project can be accessed using this [link](https://www.dropbox.com/scl/fo/053p46ab36e53u6hr5jnl/ABPN8Bh7sKPUfG1O8L1TbRI?rlkey=lva3uunugrxp99xyo7xyf1mul&st=xqpfvj2f&dl=0). You will have to left-click the link and select `Save Link As..` or `Download Linked File As..`, then select a place on your computer where you would like to place this R Project.
+If you haven’t done this already, the project can be accessed using this [link](https://www.dropbox.com/scl/fi/mo3aanm1zn0wc0x6c9tlh/spatial_transcriptomics.zip?rlkey=hjueb17tqo03phsokz9czrjaa&st=9p1q6la7&dl=1). You will have to left-click the link and select `Save Link As..` or `Download Linked File As..`, then select a place on your computer where you would like to place this R Project.
 ::::
 
 ### Project organization

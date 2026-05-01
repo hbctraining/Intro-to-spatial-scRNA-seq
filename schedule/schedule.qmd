@@ -8,7 +8,7 @@ toc: false
 
 1. [Spatial Technology Overview](../lessons/01_spatial_technologies.qmd)
 2. [Space Ranger Summary](../lessons/02_spaceranger.qmd)
-3. [Download Project](https://www.dropbox.com/scl/fo/053p46ab36e53u6hr5jnl/ABPN8Bh7sKPUfG1O8L1TbRI?rlkey=lva3uunugrxp99xyo7xyf1mul&st=xqpfvj2f&dl=1)
+3. [Download Project](https://www.dropbox.com/scl/fi/mo3aanm1zn0wc0x6c9tlh/spatial_transcriptomics.zip?rlkey=hjueb17tqo03phsokz9czrjaa&st=9p1q6la7&dl=1)
 
 ## Day 1
 
