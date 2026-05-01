@@ -16,12 +16,6 @@ editor_options:
 library(fs)
 ```
 
-# Tasks left on lesson
-
-- Improve exercise
-- Run lesson on O2 in order to get directory tree and images following the loop then put those parts in the download.sh and embed them in the lesson
-- Polish
-
 Approximate time: 45 minutes
 
 # Learning Objectives
@@ -73,9 +67,9 @@ function:
 #| label: load_spatial_object
 # Load spatial data into Seurat object
 seurat_obj <- Load10X_Spatial(
-  data.dir = "data/fresh_frozen",
+  data.dir = "data/P5CRC",
   bin.size = 16,
-  slice = "fresh_frozen")
+  slice = "P5CRC")
 ```
 
 The parameters we are using are: 
@@ -254,24 +248,18 @@ Run the `Load10X_Spatial()` function again and also add the `filter.matrix = FAL
 #| label: load_exercise_object
 # Load spatial data into Seurat object
 exercise_obj <- Load10X_Spatial(
-  data.dir = "data/fresh_frozen",
+  data.dir = "data/P5CRC",
   bin.size = 16,
-  slice = "fresh_frozen",
+  slice = "P5CRC",
   filter.matrix = FALSE)
 
 # Extract tissue coordinates from the Seurat object
 exercise_coordinates <- GetTissueCoordinates(exercise_obj)
 ```
 
-2.  In a single 6.5mm x 6.5mm capture area from Visium HD, we would
-    expect that to correspond to about 20,000 pixels by 20,000 pixels.
-    Do our expectations match our observed data?
+2.  In a single 6.5mm x 6.5mm capture area from Visium HD, we would expect that to correspond to about 20,000 pixels by 20,000 pixels. Do our expectations match our observed data?
 
-3.  By comparing the dimensions of `coordinates`, which only includes
-    coordinates for locations that Space Ranger detected tissue, and
-    `exercise_coordinates`, which contains all coordinates with and
-    without tissue detected by Space Ranger, how many pixels didn't have
-    tissue detected in them?
+3.  By comparing the dimensions of `coordinates`, which only includes coordinates for locations that Space Ranger detected tissue, and `exercise_coordinates`, which contains all coordinates with and without tissue detected by Space Ranger, how many pixels didn't have tissue detected in them?
 
 After completing this exercise, be sure to remove `exercise_obj` and
 `exercise_coordinates` from our R environment to save on memory by

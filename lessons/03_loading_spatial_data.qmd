@@ -113,13 +113,9 @@ With this information in mind, we can now move forward with loading our data and
 
 We have assembled an R Project for you to download that includes the data along with a basic file structure for good data management. Whenever you start a new project, it is a good habit to set up a similar directory structure to clearly organize your data, scripts and results. This will make it easier to keep track of your files and to share your work with others.
 
-::: callout-warning
-TODO: download link update
-:::
-
 ::: callout-important
 # Download the data
-If you haven’t done this already, the project can be accessed using this [link](https://www.dropbox.com/scl/fi/mo3aanm1zn0wc0x6c9tlh/spatial_transcriptomics.zip?rlkey=hjueb17tqo03phsokz9czrjaa&st=9p1q6la7&dl=1). You will have to left-click the link and select `Save Link As..` or `Download Linked File As..`, then select a place on your computer where you would like to place this R Project.
+If you haven’t done this already, the project can be accessed using this [link](https://www.dropbox.com/scl/fi/kowvbpx01iao4skuintm9/spatial_transcriptomics.zip?rlkey=ilhhec3iu9b4cdllsg0n8gitw&st=ujvl4ydc&dl=1). You will have to left-click the link and select `Save Link As..` or `Download Linked File As..`, then select a place on your computer where you would like to place this R Project.
 ::::
 
 ### Project organization
@@ -131,7 +127,7 @@ One important aspect of data management is organization. For each experiment you
 
 ::: callout-important
 # Note for Windows OS users
-When you open the project folder after unzipping it, please check if you have a `data` folder with a sub folder also called `data`. If this is the case, please move all the files from the subfolder into the parent `data` folder.
+When you open the project folder after unzipping it, please check if you have a `spatial_transcriptomics` folder with a subfolder also called `spatial_transcriptomics`. If this is the case, please move all the files from the subfolder into the parent `spatial_transcriptomics` folder and remove the child `spatial_transcriptomics` subfolder.
 :::
 
 ### Opening R Studio
@@ -142,10 +138,11 @@ We can open the R Project up and see that the provided file structure should loo
 #| label: file_structure
 #| eval: false
 spatial_transcriptomics/
-├── data
-├── figures
-├── results
-├── scripts
+├── data/
+├── figures/
+├── README.txt
+├── results/
+├── scripts/
 └── spatial_transcriptomics.Rproj
 ```
 
@@ -348,6 +345,8 @@ In practice, you will likely have several samples that you will need to read in 
 ::: {.callout-note collapse=true}
 # `for` loop syntax
 
+We can use `for` loops in order to iterate over a vector. Each time the loop iterates, it takes an element from the vector and assigns it to a variable, then it processes a series of commands on that variable. Once it has completed all of the commands for that variable, it will take the next element in the vector and repeat the process. This continues until all of the elements in the vector have been processed.
+
 In R, the `for` loop has the following structure/syntax:
 
 ```{r}
@@ -355,7 +354,7 @@ In R, the `for` loop has the following structure/syntax:
 #| eval: false
 ## DO NOT RUN
 # For loop syntax
-for (variable in input){
+for (element in vector){
     command1
     command2
     command3
