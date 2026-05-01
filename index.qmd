@@ -119,7 +119,8 @@ devtools::install_github("jinworks/CellChat")
 devtools::install_github("immunogenomics/presto")
 ```
 
-::: callout-note
+::: {.callout-warning collapse="true"}
+# Error: Failed to install `<Github_package>` from GitHub:
 If you get the following error when trying to download packages from GitHub:
 
 ```{r}
