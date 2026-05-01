@@ -97,7 +97,6 @@ meta %>%
   knitr::kable()
 ```
 
-
 **We will be using a variety of visualization methods:**
 
 - Looking at the values of each bin on the spatial slide .
@@ -123,6 +122,8 @@ For "nicer" (subjective) plotting with `SpatialFeaturePlot()` and `SpatialDimPlo
 ```{r}
 #| label: fig-nCount_spatial_default
 #| fig-cap: Default `SpatialFeaturePlot()` visualization parameters.
+# Visualize the spatial distribution of total UMIs 
+# Default parameters
 SpatialFeaturePlot(seurat_merged, 
                    "nCount_Spatial.008um",
                    pt.size.factor = 15)
@@ -138,6 +139,7 @@ Therefore for the rest of this lesson, we will be using the following arguments:
 ```{r}
 #| label: fig-nCount_spatial
 #| fig-cap: Number of UMIs overlaid over spatial slide.
+# Visualize the spatial distribution of total UMIs
 SpatialFeaturePlot(seurat_merged, 
                    "nCount_Spatial.008um",
                    pt.size.factor = 15,
@@ -150,6 +152,8 @@ SpatialFeaturePlot(seurat_merged,
 ```{r}
 #| label: fig-nCount_density
 #| fig-cap: Number of UMIs density.
+# log10-transformed density of UMIS for each sample
+# Vertical lines are sample-specific filtering thresholds
 ggplot(meta) +
   geom_density(aes(x = nCount_Spatial.008um, fill = orig.ident),
                alpha = 0.4,
@@ -166,10 +170,12 @@ ggplot(meta) +
 ```{r}
 #| label: fig-nCount_density_filt
 #| fig-cap: Number of UMIs density after filtration.
+# Apply filtration thresholds
 meta_filt <- subset(meta,
   ((orig.ident == "P5CRC") & (nCount_Spatial.008um > 30)) |
   ((orig.ident == "P5NAT") & (nCount_Spatial.008um > 10)))
 
+# log10-transformed density of UMIS for each sample after filtration
 ggplot(meta_filt) +
   geom_density(aes(x = nCount_Spatial.008um,
                      fill = orig.ident),
@@ -196,6 +202,7 @@ When we look at the spatial slide, we can already beging to see patterns of expr
 ```{r}
 #| label: fig-nFeature_spatial
 #| fig-cap: Number of features overlaid over spatial slide.
+# Visualize the spatial distribution of number of genes
 SpatialFeaturePlot(seurat_merged, 
                    "nFeature_Spatial.008um",
                    pt.size.factor = 15,
@@ -208,6 +215,8 @@ SpatialFeaturePlot(seurat_merged,
 ```{r}
 #| label: fig-nFeature_density
 #| fig-cap: Number of features density.
+# log10-transformed density of number of genes for each sample
+# Vertical lines are sample-specific filtering thresholds
 ggplot(meta) +
   geom_density(aes(x = nFeature_Spatial.008um,
                      fill = orig.ident),
@@ -225,10 +234,12 @@ ggplot(meta) +
 ```{r}
 #| label: fig-nFeature_density_filt
 #| fig-cap: Number of features density after filtration.
+# Apply filtration thresholds
 meta_filt <- subset(meta,
   ((orig.ident == "P5CRC") & (nFeature_Spatial.008um > 30)) |
   ((orig.ident == "P5NAT") & (nFeature_Spatial.008um > 10)))
 
+# log10-transformed density of number of genes for each sample after filtration
 ggplot(meta_filt) +
   geom_density(aes(x = nFeature_Spatial.008um,
                      fill = orig.ident),
@@ -260,7 +271,12 @@ Which we can now calculate using R and store in our `@meta.data`:
 # Add number of genes per UMI for each cell to metadata
 seurat_merged$log10GenesPerUMI <- log10(seurat_merged$nFeature_Spatial.008um) / 
                                   log10(seurat_merged$nCount_Spatial.008um)
+```
 
+There are several `NA` values in this newly generated column. This is because there are some bins with `nCount_Spatial.008um = 0`. These will naturally be filtered out once we complete our filtration, so strictly for the purposes of visualization, we are going to set these `NA` values to 0:
+
+```{r}
+#| label: zero_log10GenesPerUMI
 # Turn NA values into 0 for now
 seurat_merged$log10GenesPerUMI[is.na(seurat_merged$log10GenesPerUMI)] <- 0
 ```
@@ -272,6 +288,7 @@ seurat_merged$log10GenesPerUMI[is.na(seurat_merged$log10GenesPerUMI)] <- 0
 ```{r}
 #| label: fig-log10GenesPerUMI_spatial
 #| fig-cap: Complexity score overlaid over spatial slide.
+# Visualize the spatial distribution of calculated complexity score
 SpatialFeaturePlot(seurat_merged, 
                    "log10GenesPerUMI",
                    pt.size.factor = 17,
@@ -284,6 +301,8 @@ SpatialFeaturePlot(seurat_merged,
 ```{r}
 #| label: fig-log10GenesPerUMI_density
 #| fig-cap: Complexity score density.
+# log10-transformed density of complexity score for each sample
+# Vertical line is filtering threshold
 meta <- seurat_merged@meta.data
 ggplot(meta) +
   geom_density(aes(x = log10GenesPerUMI,
@@ -300,7 +319,10 @@ ggplot(meta) +
 ```{r}
 #| label: fig-log10GenesPerUMI_density_filt
 #| fig-cap: Complexity score density after filtration.
+# Apply filtration thresholds
 meta_filt <- subset(meta, log10GenesPerUMI > 0.80)
+
+# log10-transformed density of complexity score for each sample after filtration
 ggplot(meta_filt) +
   geom_density(aes(x = log10GenesPerUMI,
                    fill = orig.ident),
@@ -338,7 +360,12 @@ For example, if you were studying renal oncocytomas would you make this same cho
 seurat_merged$mitoRatio <- PercentageFeatureSet(object = seurat_merged, 
                                                 pattern = "^MT-")
 seurat_merged$mitoRatio <- seurat_merged@meta.data$mitoRatio / 100
+```
 
+The same issue that caused the `NA` values in the complexity score will appear in the calculated `mitoRatio`. So here we will set these values to be `1.00`:
+
+```{r}
+#| label: hundred_mitoRatio
 # Turn NA values into 100 for now
 seurat_merged$mitoRatio[is.na(seurat_merged$mitoRatio)] <- 1.00
 ```
@@ -350,6 +377,7 @@ seurat_merged$mitoRatio[is.na(seurat_merged$mitoRatio)] <- 1.00
 ```{r}
 #| label: fig-mitoRatio_spatial
 #| fig-cap: Mitochondrial ratio overlaid over spatial slide.
+# Visualize the spatial distribution of mitochondrial ratio
 SpatialFeaturePlot(seurat_merged, 
                    "mitoRatio",
                    pt.size.factor = 15,
@@ -362,7 +390,11 @@ SpatialFeaturePlot(seurat_merged,
 ```{r}
 #| label: fig-mitoRatio_density
 #| fig-cap: Mitochondrial ratio density.
+# Update meta to grab mitoRatio column
 meta <- seurat_merged@meta.data
+
+# log10-transformed density of mitochondrial ratio for each sample
+# Vertical line is filtering threshold
 ggplot(meta) +
   geom_density(aes(x = mitoRatio,
                    fill = orig.ident),
@@ -378,8 +410,10 @@ ggplot(meta) +
 ```{r}
 #| label: fig-mitoRatio_density_filt
 #| fig-cap: Mitochondrial ratio density after filtration.
+# Apply filtration thresholds
 meta_filt <- subset(meta, mitoRatio < 0.25)
 
+# log10-transformed density of mitochondrial ratio for each sample after filtration
 ggplot(meta_filt) +
   geom_density(aes(x = mitoRatio,
                    fill = orig.ident),
@@ -475,30 +509,34 @@ Let’s start with a violin plot to look at the distribution of UMI counts and g
 ```{r}
 #| label: fig-vln_ncount_nfeature
 #| fig-cap: Violin plot of nCounts and nFeatures after filtration.
+# Violin plot of UMIs
 p_ncount <- VlnPlot(seurat_filtered, 
                     features = "nCount_Spatial.008um", 
                     pt.size = 0, group.by = 'orig.ident') +
   NoLegend()
 
+# Violin plot of number of genes
 p_nfeats <- VlnPlot(seurat_filtered, 
                     features = "nFeature_Spatial.008um", 
                     pt.size = 0, group.by = 'orig.ident') + 
   NoLegend()
 
+# Plot UMIs and gene count violin plots side-by-side
 p_ncount | p_nfeats
 ```
 
-We see that both distributions have a similar peak but the nUMI distribution has a much longer tail. This is expected, because while the small physical size of the bins means that most genes will be detected only once or twice, a minority of bins under very transcriptionally active cells may exhibit multiple transcripts of the same gene.
+We see that both violin plots have a similar peak. However, the nUMI (`nCounts`) distribution has a much longer tail than the number of genes distribution (`nFeatures`). This is expected, because while the small physical size of the bins means that most genes will be detected only once or twice, a minority of bins under very transcriptionally active cells may exhibit multiple transcripts of the same gene.
 
 ### Spatial overlay
 
-Next, we can look at the same metrics and the distribution on the actual image itself. Note that many spots have very few counts, in part due to low cellular density or cell types with low complexity in certain tissue regions.
+Next, we can look at the same metrics and the distribution on the actual image itself after filtration. Note that some spots will have lower counts compared to others, in part due to low cellular density or cell types with low complexity in certain tissue regions.
 
 ```{r}
 #| label: fig-nFeature_nCount_spatial
 #| fig-cap: Number of features and counts overlaid over spatial slide.
 #| fig-width: 10
 #| fig-height: 8
+# Visualize the spatial distribution of total UMIs and number of genes after filtration
 SpatialFeaturePlot(seurat_filtered, 
                    c("nFeature_Spatial.008um", 
                      "nCount_Spatial.008um"),
