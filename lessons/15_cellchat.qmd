@@ -29,6 +29,12 @@ library(Seurat)
 library(tidyverse)
 library(CellChat)
 
+# devtools::install_github("KlugerLab/ALRA")
+# remotes::install_github('JEFworks-Lab/MERINGUE', build_vignettes = TRUE)
+# devtools::install_github("jinworks/SpatialCellChat")
+# library(SpatialCellChat)
+
+
 set.seed(12345)
 
 # Set parallelization (multithreading) to speed up calculations
@@ -46,14 +52,13 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
+- Create CellChat object
+- Run CellChat workflow to calculate ligand-receptor interactions
+- Visualize ligand receptor interactions
 
 ## Overview of lesson
 
-Here, you likely have deconvolved cell type proportions or at least well‑annotated clusters, and you want to understand how they may interact. In this lesson you use tools like CellChat to infer ligand–receptor interactions between cell types or spatial regions, building directed signaling networks. You examine which pathways are active where, and how spatial proximity relates to predicted communication strength. These interaction maps help connect static expression patterns to dynamic biological processes such as immune infiltration, niche signaling, or tumor–stroma crosstalk.
-
+At this point in our analysis, we are comfortable with the different cell type annotations in our dataset. So we might start asking questions about how each of those populations are interacting with one another. In this lesson we will use CellChat, building directed signaling networks. These interaction maps help connect static expression patterns to dynamic biological processes such as immune infiltration, niche signaling, or tumor–stroma crosstalk.
 
 ## Cell-cell communication
 
@@ -109,7 +114,7 @@ plan(multisession, workers = parallel::detectCores() - 1)
 seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
 ```
 
-For now, let us say that our biological question is identifying which populations are interacting with the tumor cells in colorectal cancer. So first, we are going to subset the Seurat object to our relevant bins.
+For now, let us say that our biological question is to identify which populations are interacting with the tumor cells in colorectal cancer. So first, we are going to subset the Seurat object to our relevant bins.
 
 ```{r}
 #| label: subset_crc
@@ -174,58 +179,223 @@ coords_crc <- FetchData(crc, vars = c("x", "y"))
 coords_crc %>% head() %>% knitr::kable()
 ```
 
-Now we need to grab the `spatial.factors` which is defined as:
+Now we need to grab the `spatial.factors` which is described as a dataframe with `ratio` and `tol`, where:
 
->  data frame containing two distance factors 'ratio' and 'tol', which is dependent on spatial transcriptomics technologies (and specific datasets).
+- `ratio` – conversion from image units (e.g., pixels) to micrometers. For example: `ratio = 0.18` means `1 pixel = 0.18 µm`.
+- `tol` – distance tolerance to make center-to-center distance comparisons more robust, often set to about _half_ the cell/spot size (in µm).
+
+Luckily, these values are stored in the `scalefactors_json.json` file that Space Ranger outputs. So we will need to load in the file using `jsonlite` and then create a dataframe with the relevant information.
 
 ```{r}
-# Scale factors
+#| label: spatial_factors
+# Scale factors stored in Space Ranger json output file
 sf_json <- jsonlite::fromJSON("data/P5CRC_cropped/binned_outputs/square_008um/spatial/scalefactors_json.json")
+
+# Create spatial.factors dataframe
 spatial_factors_crc <- data.frame(
   # pixels-to-µm conversion factor
   ratio = sf_json$bin_size_um / sf_json$spot_diameter_fullres,
   # neighbour tolerance radius in µm
-  tol   = sf_json$bin_size_um / 2)
+  tol = sf_json$bin_size_um / 2)
 spatial_factors_crc
 ```
 
+Now that we have generated all three input files needed for `createCellChat()`, we can start the CellChat workflow. We will additionally supply our metadata as well as the column which contains our cell type annotations (`first_type`).
 
 ```{r}
+#| label: create_cellchat
 # Create cellchat object
 cellchat_crc <- createCellChat(
   object = counts_norm_crc,
+  coordinates = coords_crc,
+  spatial.factors = spatial_factors_crc,
+
   meta = crc@meta.data,
   group.by = "first_type",
-  datatype = "spatial",
-  coordinates = coords_crc,
-  spatial.factors = spatial_factors_crc)
+  datatype = "spatial")
+
+# Callout CellChat object
+cellchat_crc
 ```
 
 ### CellChat databset
 
-We are working with human samples so we can make use of the human database. So we assign this to our cellchat object.
+CellChatDB is the database that contains the manually curated set of ligand-receptor interactions created by the authors. It includes the following types of interations:
+
+- Secretory autocrine/paracrine signaling interactions
+- Cell-cell contact interactions
+- Extracellular matrix (ECM)-receptor interactions
+- Non-protein signaling
+
+We want to incorporate this information into our `cellchat_crc` so that when we run CellChat, the workflow will automatically know which interactions to include in the analysis. This database is available for both mouse and human. Since we are working with human samples, we will use `CellChatDB.human` and we assign this to our CellChat object.
 
 ```{r}
+#| label: load_cellchat_db
 # Load CellChat databases
 cellchat_db <- CellChatDB.human
 
-# Assign DB to cellchat object
+# Assign DB to cellchat object in the DB slot
 cellchat_crc@DB <- cellchat_db
 ```
 
+
+::: callout-note
+# Subset CellChatDB
+If you are not interested in the full set of interactions, you can subset the CellChatDB object like so:
+
 ```{r}
+#| label: subset_DB
+#| eval: false
+# DO NOT RUN
+# Subset CellChatDB for cell-cell communication analysis
+cellchat_db <- subsetDB(CellChatDB, 
+                            search = c("Secreted Signaling",
+                                       "ECM-Receptor", 
+                                       "Cell-Cell Contact"), 
+                            non_protein = FALSE)
+```
+
+:::
+
+Now that the database is linked to our dataset, we next **must** run the `subsetData()` function to filter the dataset to the signaling genes to save on computation.
+
+```{r}
+#| label: subsetdata_cellchat
 # Subset step is required even if you have not filtered databset
 cellchat_crc <- subsetData(cellchat_crc)
+```
 
+Next, we identify which genes are overexpressed in each cell type (unique values in `group.by` column). These scores are calculated with a [wilcoxon and auROC test](https://rdrr.io/github/immunogenomics/presto/man/wilcoxauc.html) from the `calculateOverExpressed()` function. 
+
+This is very similar to how we ran `FindMarkers()` in a [previous lesson](13_dge_pathway.qmd). The results are stored in the `@var.features` slot of the CellChat object. To preview what is happening behind the scenes, we can take a look at the top genes per clusters, ranked by the adjusted p-value and log-fold change.
+
+```{r}
+#| label: identify_overexpressed_genes
+#| eval: false
 # Identify genes that are over-expressed relative to other cell types
 cellchat_crc <- identifyOverExpressedGenes(cellchat_crc)
+
+# Print top genes per cell type
+cellchat_crc@var.features$features.info %>%
+  group_by(clusters) %>%
+  arrange(pvalues.adj, logFC) %>%
+  slice_head(n = 2) %>% 
+  View()
 ```
+
+```{r}
+#| label: tbl-identify_overexpressed_genes
+#| tbl-cap: Top over expressed genes in each cell type.
+#| echo: false
+# Identify genes that are over-expressed relative to other cell types
+cellchat_crc <- identifyOverExpressedGenes(cellchat_crc)
+
+# Print top genes per cell type
+cellchat_crc@var.features$features.info %>%
+  group_by(clusters) %>%
+  arrange(pvalues.adj, desc(logFC)) %>%
+  slice_head(n = 2) %>%
+  knitr::kable()
+```
+
+Some of these genes may look familiar!
 
 ### Run CellChat and filter results
 
+**We will not be running the following three steps during class due to the time it takes to compute.** We will provide an RDS object with the output in the appropriate step of the workflow.
+
+Similar to how we identified over-expressed genes per cell type, we can also calculate over expressed **interactions**, or ligand-receptor pairs. 
+
+```{r}
+#| label: identifyOverExpressedInteractions
+#| eval: false
+# DO NOT RUN
+# Identify interactions that are over-expressed relative to other cell types
+cellchat_crc <- identifyOverExpressedInteractions(cellchat_crc)
+```
+
+This next step of `smoothData()` (or `projectData()` in older version of CellChat) is **optional**. Here, we use the protein-protein network (`PPI.human`) to identify genes that can be smoothed based upon the neighborhood structure of the data. The [authors note](https://github.com/jinworks/CellChat/blob/main/R/utilities.R#L817) that "This function is useful when analyzing single-cell data with **shallow sequencing depth** because the projection reduces the dropout effects of signaling genes, in particular for possible zero expression of subunits of ligands/receptors"
+
+```{r}
+#| label: smoothdata
+#| eval: false
+# DO NOT RUN
+# (Optional) 
+# Smooth expression over the protein-protein interaction network to reduce dropout noise. 
+# If you run this, set raw.use = FALSE in computeCommunProb()
+cellchat_crc <- smoothData(cellchat_crc, adj = PPI.human)
+# cellchat <- projectData(cellchat, PPI.human) # older version of function
+```
+
+The last computationally heavy step of this workflow is `computeCommunProb()`, which calculates the interaction strengths and probabilities of cell types. The steps are to:
+
+1. Summarize gene expression per cell type by average and normalize (`triMean`)
+2. Create ligand-receptor (LR) pairs and assign values based on expression patterns for each cell type
+3. Assign weights to cell types based upon spatial proximity, where higher weights indicates closeness
+4. Computer communication strength for LR and cell type pairs, incorporating spatial weights
+5. Run permutation test for significance testing
+
+These steps run under the principles of mass action, where high expression of ligand and receptors in cell types indicate a higher interaction strength.
+
+```{r}
+#| label: tbl-computeCommunProb_params
+#| tbl-cap: Parameters for `computeCommunProb()` function.
+#| echo: false
+library(knitr)
+library(kableExtra)
+
+args <- data.frame(
+  Argument = c("object", "type", "raw.use", "distance.use",
+               "interaction.range", "scale.distance",
+               "contact.dependent", "contact.range"),
+  Description = c(
+    "CellChat object.",
+    'Method for average expression; "triMean" (default) or "truncatedMean" (needs trim).',
+    "Use raw (TRUE) or if smoothData() was run (FALSE).",
+    "Apply spatial distance constraints (TRUE/FALSE).",
+    "Max ligand interaction distance (µm).",
+    "Scaling factor for spatial distances (e.g., 1, 0.2).",
+    "Whether signaling is contact-dependent (TRUE/FALSE).",
+    "Max distance (µm) for cells to be considered in contact."
+  )
+)
+
+kable(args, col.names = c("Argument", "Description")) |>
+  kable_styling(full_width = FALSE) |>
+  column_spec(1, width = "20%") |>
+  column_spec(2, width = "80%")
+```
+
+```{r}
+#| label: computeCommunProb
+#| eval: false
+# DO NOT RUN
+# Calculate community probability
+cellchat_crc <- computeCommunProb(
+  cellchat_crc,
+  type = "trimean",
+  distance.use = TRUE,
+  interaction.range = 200,
+  scale.distance = 0.2,
+  contact.dependent = TRUE,
+  contact.range = 10,
+  raw.use = FALSE,
+  seed.use = 12345)
+```
+
+```{r}
+#| label: instructor_15_cellchat_crc_computeCommunProb
+#| echo: false
+# qs2::qs_save(cellchat_crc, "intermediate/15_cellchat_crc_computeCommunProb.qs")
+# saveRDS(cellchat_crc, "data/intermediate_seurat/cellchat_crc_computeCommunProb.rds")
+cellchat_crc <- qs2::qs_read("intermediate/15_cellchat_crc_computeCommunProb.qs")
+```
+
+This creates a new slot in the CellChat object called, `@net`, where the interaction strengths are stored.
+
 ::: callout-important
 # Load RDS object
-These next three steps take a long time to run, so we have created an RDS object for you to load in with the results from these steps:
+Those three steps take a long time to run, so we have created an RDS object for you to load in with the results from these steps:
 
 ```{r}
 #| label: load_cellchat_rds
@@ -236,52 +406,19 @@ cellchat_crc <- readRDS("data/intermediate_seurat/cellchat_crc_computeCommunProb
 
 :::
 
-```{r}
-#| eval: false
-# DO NOT RUN
-# Identify interactions that are over-expressed relative to other cell types
-cellchat_crc <- identifyOverExpressedInteractions(cellchat_crc)
 
-# (Optional) Smooth expression over the protein-protein interaction network to
-# reduce dropout noise. If you run this, set raw.use = FALSE below.
-cellchat_crc <- smoothData(cellchat_crc, adj = PPI.human)
-# cellchat <- projectData(cellchat, PPI.human) # older version
-
-
-
-# distance.use = TRUE  : spatial distances constrain which cell pairs can talk
-# interaction.range    : max diffusion distance in µm (literature: ~250 µm)
-# scale.distance       : scaling factor; tune if you get warnings about distances
-# contact.dependent    : TRUE adds juxtacrine / cell-contact signalling
-# contact.range        : max distance (µm) for contact-dependent signals;
-#                        ~8-10 µm = cell diameter for single-cell res data,
-#                        ~100 µm  = centre-to-centre distance for 10x Visium
-
-cellchat_crc <- computeCommunProb(
-  cellchat_crc,
-  distance.use       = TRUE,
-  interaction.range = 200,
-  scale.distance     = 0.2,
-  contact.dependent  = TRUE,
-  contact.range      = 10,
-  raw.use            = FALSE
-)
-```
+We can now filter results based first on the how many bins belong to each cell type.
 
 ```{r}
-#| echo: false
-# qs2::qs_save(cellchat_crc, "intermediate/15_cellchat_crc_computeCommunProb.qs")
-# saveRDS(cellchat_crc, "data/intermediate_seurat/cellchat_crc_computeCommunProb.rds")
-cellchat_crc <- qs2::qs_read("intermediate/15_cellchat_crc_computeCommunProb.qs")
-```
-
-Now we do a final step of filtration and calculate probability of interactions occuring based upon the number and weights of the interactions:
-
-```{r}
-# removes cell-type pairs with too few cells
-# and drops pathways that end up with no valid interactions
+#| label: filtercommunication
+# Removes cell-type pairs with too few cells
 cellchat_crc <- filterCommunication(cellchat_crc, min.cells = 5)
+```
 
+Each of the ligands and receptors are associated with different signaling pathways. So to summarize the results, we can aggregate the values to create a pathway-level score to identify more general trends in the data.
+
+```{r}
+#| label: summarize_pathways
 # Summarise L-R pair probabilities into signalling pathway probabilities
 cellchat_crc <- computeCommunProbPathway(cellchat_crc)
 # Count interactions and sum weights into a flat network matrix
@@ -291,81 +428,94 @@ cellchat_crc <- netAnalysis_computeCentrality(cellchat_crc, slot.name = "netP")
 ```
 
 ```{r}
+#| label: instructor_cellchat_crc
 #| echo: false
 # qs2::qs_save(cellchat_crc, "intermediate/15_cellchat_crc.qs")
 cellchat_crc <- qs2::qs_read("intermediate/15_cellchat_crc.qs")
 ```
 
-We can see the structure of how data is stored within the CellChat object:
-
-```{r}
-# str(cellchat_crc)
-```
-
 ## Visualize CellChat results
 
-Now we can begin visualizing how the bins in `P5CRC` are interacting with one another:
+Now we can begin visualizing how the bins in `P5CRC` are interacting with one another. The CellChat package comes built in with a variety of different ways to visualize the results which we will now explore.
 
-Count + strength of interactions:
+### Strength and number of interactions
+
+The most popular representation is the `nutVisual_circle()` plot, which shows how the cell types are interacting with one another. This is accomplished by setting nodes of each cell type on the boundary of a circle, with lines from source to target showcasing either the number or strength of interactions.
 
 ```{r}
-par(mfrow = c(1, 2), xpd = TRUE) # change plotting device to be one row, two columns
-netVisual_circle(cellchat_crc@net$count,
-                 weight.scale   = TRUE,
-                 label.edge     = FALSE,
-                 edge.width.max = 12,
-                 title.name     = "Number of interactions")
-netVisual_circle(cellchat_crc@net$weight,
-                 weight.scale   = TRUE,
-                 label.edge     = FALSE,
-                 edge.width.max = 12,
-                 title.name     = "Interaction strength")
-par(mfrow = c(1, 1)) # reset par to not affect later plots
+#| label: fig-cell_type_interactions
+#| fig-cap: Circular plot, showcasing the strength and number of ligand-receptor interactions between cell types.
+#| fig-width: 10
+# 2 plots, side-by-side
+par(mfrow = c(1, 2), xpd = TRUE) 
+
+# Number of LR interactions between celltypes
+netVisual_circle(
+  cellchat_crc@net$count,
+  weight.scale = TRUE,
+  label.edge = FALSE,
+  edge.width.max = 12,
+  title.name = "Number of interactions")
+
+# Strength of LR interactions
+netVisual_circle(
+  cellchat_crc@net$weight,
+  weight.scale = TRUE,
+  label.edge = FALSE,
+  edge.width.max = 12,
+  title.name = "Interaction strength")
+
+# Reset par to not affect later plots
+par(mfrow = c(1, 1)) 
 ```
 
+Notice that the strongest interactions is circular between tumor cells. This tells us that tumor cells are frequently and strongly sending signals to one another. We can also see that fibroblasts appear to be sending signals to tumor cells.
 
+::: callout-warning
+TODO: fibroblast and tumor interaction biology
+:::
 
-Heatmap of number of interactions and strength:
+An alternative way to represent this same information can be done with a heatmap. of this information can be represented as a heatmap. On the y-axis are the "sources" and the x-axis are the "receivers". The intensity of the heatmap is proportional to the number/strength of interactions between the source and receiver cell types. The top colored bar plot represents the sum of column of values displayed in the heatmap. The right colored bar plot represents the sum of row of values.
 
 ```{r}
-gg_h_count  <- netVisual_heatmap(cellchat_crc, measure = "count",
-                                  color.heatmap = "Blues",
-                                  title.name    = "Number of interactions")
-gg_h_weight <- netVisual_heatmap(cellchat_crc, measure = "weight",
-                                  color.heatmap = "Reds",
-                                  title.name    = "Interaction strength")
+#| label: fig-netVisual_heatmap
+#| fig-cap: Heatmap of interaction numbers and strengths between cell types.
+# Number of LR interactions between celltypes heatmap
+gg_h_count  <- netVisual_heatmap(
+  cellchat_crc, 
+  measure = "count",
+  color.heatmap = "Blues",
+  title.name = "Number of interactions")
+
+# Stregnth of LR interactions between celltypes heatmap
+gg_h_weight <- netVisual_heatmap(
+  cellchat_crc, 
+  measure = "weight",
+  color.heatmap = "Reds",
+  title.name = "Interaction strength")
+
+# Plot heatmaps side by side
 gg_h_count + gg_h_weight
 ```
 
-Signaling scatterplot
+To summarize the amount of incoming and outgoing signal, we can also generate a scatterplot. Each point represents a unique cell types, where the size is the total number of incoming and outgoing ligand-receptor interactions for that cell type. The x-axis represents the total _outgoing_ communication probability and the y-axis, similarly, represents the total _incoming_. 
 
 ```{r}
+#| label: fig-signalingrole
+#| fig-cap: Scatterplot of incoming and outgoing signaling for each cell type.
+# Scatterplot of in/out signaling for each cell type
 netAnalysis_signalingRole_scatter(cellchat_crc)
 ```
 
-Incoming and outgoing heatmap for signaling strength:
+### Pathway-level visuals
+
+The last steps we ran in the CellChat workflow was to calculate statistics for the overarching pathways involved with each ligand-receptor. So now we can take a look at the ranked, top significant pathways associated with our dataset:
 
 ```{r}
-#| fig-width: 10
-#| fig-height: 15
-ht_out <- netAnalysis_signalingRole_heatmap(cellchat_crc, pattern = "outgoing",
-                                             width         = 10,
-                                             height        = 20,
-                                             color.heatmap = "YlOrRd",
-                                             title         = "Outgoing signaling strength")
-ht_in  <- netAnalysis_signalingRole_heatmap(cellchat_crc, pattern = "incoming",
-                                             width         = 10,
-                                             height        = 20,
-                                             color.heatmap = "GnBu",
-                                             title         = "Incoming signaling strength")
-ht_out + ht_in
-```
-
-
-Ranked barchart of interactions
-
-```{r}
+#| label: fig-ranknet
+#| fig-cap: Top ranked ligand-receptor pathways.
 #| fig-height: 8
+# Top significant pathways
 rankNet(cellchat_crc, 
         measure = "weight",
         mode = "single", 
@@ -373,27 +523,114 @@ rankNet(cellchat_crc,
         do.stat = TRUE)
 ```
 
-Bubble plot ligand-receptor interactions
+For each of these pathways, we have associated signaling strength for each cell type. We can evaluate the outgoing and incoming pathways signal strength for each cell type.
 
 ```{r}
-#| fig-width: 15
-#| fig-height: 8
+#| label: fig-heatmap_pathways
+#| fig-cap: Outgoing and incoming pathways signal strength for each cell type
+#| fig-width: 10
+#| fig-height: 10
+# Heatmap of outgoing pathway signaling strength
+ht_out <- netAnalysis_signalingRole_heatmap(
+  cellchat_crc, 
+  pattern = "outgoing",
+  width = 10,
+  height = 20,
+  color.heatmap = "YlOrRd",
+  title = "Outgoing signaling strength")
+
+# Heatmap of incoming pathway signaling strength
+ht_in  <- netAnalysis_signalingRole_heatmap(
+  cellchat_crc, 
+  pattern = "incoming",
+  width = 10,
+  height = 15,
+  color.heatmap = "GnBu",
+  title = "Incoming signaling strength")
+
+# Plot heatmaps side by side
+ht_out + ht_in
+```
+
+If we wanted to zoom in on one particular pathways, in this case `CEACAM`, we can use the `netVisual_aggregate()` and specify the signaling pathway. For a circular plot with lines directed between, we supply the `layout` argument as `"chord"`.
+
+```{r}
+#| label: fig-netVisual_aggregate_chord
+#| fig-cap: CEACAM pathways interactions between cell types.
+#| fig-width: 6.5
+#| fig-height: 6.5
+# netVisual_aggregate on the whole pathway to show chrods
+netVisual_aggregate(cellchat_crc,
+                    signaling  = "CEACAM",
+                    layout = "chord",
+                    title.name = "CEACAM signaling")
+```
+
+::: {.callout-note collapse="true"}
+# Spatial `netVisual_aggregate()`
+There is `spatial` layout that we can also supply to `netVisual_aggregate()`. However, since our dataset does not have cell types localize to particular regions of the tissue, this visual is not as informative.
+
+```{r}
+#| label: fig-netVisual_aggregate_spatial
+#| fig-cap: Spatial plot of CEACAM pathway interaction between cell types on the tissue.
+# netVisual_aggregate on the whole pathway to show arrows of interactions
+# Plotted on the spatial tissue slide
+netVisual_aggregate(
+  cellchat_crc,
+  signaling = "CEACAM",
+  layout = "spatial",
+  point.size = 0.05,
+  alpha.image = 0.1,
+  alpha = 0.6,
+  vertex.size.max = 3,
+  edge.width.max = 5,
+  vertex.label.cex = 3)
+```
+
+Other, more structured spatially dataset, can make use of this type of figure to show where exactly interactions are occuring, seen here:
+
+::: {#fig-cellchat_netVisual_aggregate_spatial .fig}
+![](../img/cellchat_netVisual_aggregate_spatial.png){width=800}
+
+Spatial images of PSAP and SPP1 signaling pathway network, the thickness of lines represents the strength of signals.<br>
+_Image source: [Dong et al. (2025)](https://www.nature.com/articles/s41698-025-01028-y/figures/7)_
+:::
+
+:::
+
+### Bubble plot
+
+Within CellChat, we can also zoom in on specific ligand-receptor pairs that belong to pathways we have identified. For example, let us take the top 5 pathways and use them as input for `netVisual_bubble()`:
+
+```{r}
+#| label: top_pathways
+# Number of unique cell types
 n_ct <- seurat_rctd@meta.data %>%
   pull(first_type) %>%
   unique() %>% length()
 
-# Many pathways are significant so we are going to zoom in on top 5
+# Top 5 significant pathways
 top_pathways <- cellchat_crc@netP$pathways[1:5]
+top_pathways
+```
 
+In particular, we are interested in the cell types that are interacting with tumor cells. So we will look at all ligand-receptor complexes in those top pathways that have tumor cells as the source. This is represented as bubbleplot, where the size of the dot is proportion to the p-value. The color represents the probability of interaction for the cell type directed interaction, as labeled on the x-axis.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
 netVisual_bubble(cellchat_crc,
-                 signaling      = top_pathways,
+                 signaling = top_pathways,
                  sort.by.source.priority = TRUE,
-                 sources.use    = 1:n_ct,
-                 targets.use    = 1:n_ct,
+                 sources.use = 1:n_ct,
+                 targets.use = "Tumor",
                  remove.isolate = TRUE,
                  color.heatmap = "viridis",
-                 angle.x        = 90)
+                 angle.x = 90)
 ```
+
+### Zoom in on specific ligand-receptor complexes
+
 
 We can also identify which ligand-receptor pairs are most significant
 
@@ -430,31 +667,6 @@ VlnPlot(crc,
         ncol = 1)
 ```
 
-And even plot the interactions on the spatial slide
-
-
-```{r}
-# netVisual_aggregate on the whole pathway to shows arrows of interacttions
-netVisual_aggregate(cellchat_crc,
-                    signaling         = "CEACAM",
-                    layout            = "spatial",
-                    point.size        = 0.05,
-                    alpha.image       = 0.1,
-                    alpha             = 0.6,
-                    vertex.size.max   = 3,
-                    edge.width.max    = 5,
-                    vertex.label.cex = 3)
-```
-
-```{r}
-#| fig-width: 8
-#| fig-height: 5
-# netVisual_aggregate on the whole pathway to show chrods
-netVisual_aggregate(cellchat_crc,
-                    signaling  = "CEACAM",
-                    layout     = "chord",
-                    title.name = "CEACAM signaling — CRC")
-```
 
 ## Session information
 
