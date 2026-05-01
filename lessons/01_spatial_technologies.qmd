@@ -1,7 +1,7 @@
 ---
 title: "Spatial Transcriptomics Technologies"
 description: |
-    Explore the current landscape of spatial transcriptomics technologies. Focusing on contrasting sequencing-based and imaging-based platforms to show how they differ in resolution, throughput and sensitivity. By the end, you will be informed on which technology is best suited for your biological question.
+    Explore the current landscape of spatial transcriptomics technologies, focusing on contrasting sequencing-based and imaging-based platforms to show how they differ in resolution, throughput, and sensitivity. By the end, you will be informed on which technology is best suited for your biological question.
 author:
   - Noor Sohail
   - Pratyusha Bala
@@ -61,7 +61,7 @@ _Image source: [Bo Xia Lab](https://www.boxialab.org/news)_
 
 **Bulk RNA-seq** is a method for comparing the averages of cellular expression for a population of cells. This method can be a good choice if looking at **comparative transcriptomics** (e.g. samples of the same tissue from different species) and for quantifying expression signatures in disease studies. It also has potential for the discovery of disease biomarkers if you are not expecting or not concerned about cellular heterogeneity in the sample.
 
-To contrast, **single-cell sequencing** is a method for measuring gene expression on a per-cell basis. This method is ideal for studies containing **cellular heterogeneity** where the differences between celltypes or cell states are the primary focus.
+To contrast, **single-cell sequencing** is a method for measuring gene expression on a per-cell basis. This method is ideal for studies containing **cellular heterogeneity** where the differences between cell types or cell states are the primary focus.
 
 ::: {#fig-sc_vs_bulk .figure}
 ![](../img/sc_vs_bulk_cells.png){width=500}
@@ -84,9 +84,9 @@ Overview of different analyses that can be performed using spatial transcriptomi
 _Image source: [Lázár et al. (2025)](https://www.nature.com/articles/s41576-025-00892-5)_
 :::
 
-Studies that focus on the tissue microenvironment benefit from the location information capture. Different niches, or local structures in the dissue, can be dissected to establish unique gene expression or unique, spatially defined cell states. Cell-cell communication analyses also use the distance between cells to identify whether or not certain cells are likely to interact with one another.
+Studies that focus on the tissue microenvironment benefit from the captured location information. Different niches, or local structures in the tissue, can be dissected to establish unique gene expression or unique, spatially defined cell states. Cell-cell communication analyses also use the distance between cells to identify whether or not certain cells are likely to interact with one another.
 
-Another application is the ability to annotate key areas of a tissue based upon the histological features of the tissue, which can be particularly useful for studies of cancer and other diseases. The histology annotations typically come in the form of H&E (Hematoxylin and eosin) stains. Here, nuclei will be stained a purple/blue hue and the eosin colors the cytomplasm pink. Pathologists can use these stains to identify key areas of a tissue, as shown below:
+Another application is the ability to annotate key areas of a tissue based upon the histological features of the tissue, which can be particularly useful for studies of cancer and other diseases. The histology annotations typically come in the form of hematoxylin and eosin (H&E) stains. Nuclei will be stained a purple/blue hue by the hematoxylin, and eosin colors the cytoplasm pink. Pathologists can use these stains to identify key areas of a tissue, as shown below:
 
 ::: {#fig-histology .figure}
 ![](../img/histology_example.jpg){width=500}
@@ -106,7 +106,7 @@ _Image source: [Rao et al. (2025)](https://www.nature.com/articles/s41586-021-03
 
 ## Sequencing-based technologies
 
-Sequencing-based methods like Visium are sometimes referred to as "spot-based methods" because the tissue is placed on a slide with a grid-like pattern. In Visium HD, Similar to a microarray, each _spot_ on the grid has a unique sequence (barcode) associated with its location. After the permeabilization step, RNA from the tissue binds to these barcode capture probes. Because we already know the location of each barcode in advance, we know which bin/spot a read comes from. Therefore, the output is the gene-expression of each bin as well as its associated location on the tissue.
+Sequencing-based methods, like Visium, are sometimes referred to as "spot-based methods" because the tissue is placed on a slide with a grid-like pattern. In Visium HD, each spot on the grid has a unique sequence (barcode) associated with its location, similar to a microarray. After the permeabilization step, RNA from the tissue binds to these barcode capture probes. Because we already know the location of each barcode in advance, we know which bin/spot a read comes from. Therefore, the output is the gene expression of each bin as well as its associated location on the tissue.
 
 ::: {#fig-seq_tech .figure}
 ![](../img/visum_vs_visHD.png){width=700}
@@ -115,7 +115,7 @@ Comparison of Visium and Visium HD data in FFPE human colorectal cancer,  showca
 _Image source: [10X Genomics: Your Introduction to Visium HD](https://www.10xgenomics.com/blog/your-introduction-to-visium-hd-spatial-biology-in-high-definition)_
 ::: 
 
-The sizes of these spots vary per technology. Earlier sequecing-based methods had larger bins, which could contain several cells per spot. As the technology has evolved, the bin sizes have become smaller, allowing for near single-cell resolution.
+The sizes of these spots vary per technology. Earlier sequencing-based methods had larger bins, which could contain several cells per spot. As the technology has evolved, the bin sizes have become smaller, allowing for near single-cell resolution.
 
 ### Summary of popular methods
 
@@ -126,9 +126,9 @@ Table: Summary of popular sequencing-based methods for spatial transcriptomics. 
 |                      | Visium HD            | Stereo-seq          | Slide-tag          |
 |----------------------|----------------------|---------------------|--------------------|
 | **Vendor**           | 10x Genomics         | Complete Biosciences           | Curio Biosciences |
-| **Capture size**     | ~11 × 11 mm–scale capture area (single array) | 5x5mm, 1x1cm, 2x1cm, 2x3cm or customizable | ~1 cm diameter puck |
-| **Resolution**       | ~2 µm “pixel” size; near single‑cell          | 500nm resolution, analysis happens at 10-12 um | 10 µm beads; near single nuclei  |
-| **H&E**              | Yes (same section)   | Yes                  | No, need to be done on serial section |
+| **Capture size**     | ~11 × 11 mm–scale capture area (single array) | 5x5 mm, 1x1 cm, 2x1 cm, 2x3 cm, or customizable | ~1 cm diameter puck |
+| **Resolution**       | ~2 µm “pixel” size; near single‑cell          | 500nm resolution; analysis happens at 10-12 µm | 10 µm beads; near single nuclei resolution  |
+| **H&E**              | Yes (same section)   | Yes                  | No; needs to be done on a serial section |
 | **Tissue preservation** | Primarily FFPE; FF also supported | Fresh frozen          | Fresh frozen        |
 | **Year released**    | 2023–2024            | 2022 (atlas)        | 2025               |
 
@@ -158,7 +158,7 @@ Showcase of MERFISH, an imaging-based technology, which can achieve single-cell 
 _Image source: [Vizgen: Leading the Global Expansion of Spatial Transcriptomics](https://vizgen.com/vizgen-leading-the-global-expansion-of-spatial-transcriptomics/)_
 :::
 
-Imaging-based spatial transcriptomics directly visualise and quantify RNA in-situ by using gene-specific probes often achieving subcellular or single-molecule resolution. Most often, the probes are detected using secondary fluorescent probes with or without signal amplification. The probe design, optics of the microscope, and method of decoding the signal define the plexity and sensitivity of these assays. MERSCOPE is built upon FISH imaging with multiple probes spanning the RNA transcript and an error-robust decoding principle, making it the most sensitive spatial transcriptomics technology.
+Imaging-based spatial transcriptomics directly visualise and quantify RNA in situ by using gene-specific probes, often achieving subcellular or single-molecule resolution. Most often, the probes are detected using secondary fluorescent probes with or without signal amplification. The probe design, optics of the microscope, and method of decoding the signal define the plexity and sensitivity of these assays. MERSCOPE is built upon FISH imaging with multiple probes spanning the RNA transcript and an error-robust decoding principle, making it the most sensitive spatial transcriptomics technology.
 
 ::: {#fig-segmentation .figure}
 ![](../img/segmentation.png){width="50%"}
@@ -167,7 +167,7 @@ Schematic of how cell boundaries are establieshed using nuclear stain, cell boun
 _Image source: [Heidari et al. (2025)](https://www.biorxiv.org/content/10.1101/2025.03.14.643160v1.full)_
 :::
 
-These technology also allow us to use DAPI, Poly-T or specific cell segmentation stains on the same slide used for transcriptomics. This allows for the identification of cell boundaries to map transcripts to a single cell. In this way, imaging-based technologies are able to capture single-cell level resoultion of tissues for the provided set of probes. The challenge however, is plexity, with technologies profiling up to a few thousand genes per experiment.
+These technologies also allow us to use DAPI, Poly-T, or specific cell segmentation stains on the same slide used for transcriptomics. This allows for the _identification of cell boundaries_ to map transcripts to a single cell. In this way, imaging-based technologies are able to capture single-cell level resolution of tissues for the provided set of probes. The challenge, however, is plexity, with technologies profiling up to a few thousand genes per experiment.
 
 
 ### Summary of popular methods
@@ -176,7 +176,7 @@ Table: Summary of popular imaging-based methods for spatial transcriptomics. {#t
 
 |                      | seqFISH                 | MERSCOPE                     | Xenium                      |
 |----------------------|-------------------------|-----------------------------|-----------------------------|
-| **vendor**           | NA (academic method)    | Vizgen                      | 10x Genomics               |
+| **Vendor**           | NA (academic method)    | Vizgen                      | 10x Genomics               |
 | **Capture size**     | Variable FOV; tiled imaging fields (typically mm-scale regions stitched across section) | Variable FOV; tiled imaging fields (mm-scale regions, stitchable to large areas) | Variable FOV; tiled high‑plex imaging over tissue sections (up to whole‑slide via tiling) |
 | **Resolution**       | Subcellular, subdiffraction (seqFISH/seqFISH+) | Subcellular (single‑molecule FISH) | Subcellular, targeted in situ (per‑cell calls with subcellular localization) |
 | **H&E**              | No (standard workflow uses fluorescence imaging only) | No (fluorescence imaging only) | (Yes) — H&E‑like morphology and protein markers supported; H&E compatibility in active development at time of review |
@@ -208,7 +208,7 @@ Table: Summary of popular imaging-based methods for spatial transcriptomics. {#t
 | **Sensitivity**            | Broad detection; may miss low-abundance genes      | High for targeted genes              |
 | **Limitations**        | Mixing of cells in one spot                         | Limited number of probes       |
 | **Throughput (slides)**    | High (parallel processing)                          | Lower (multiple imaging cycles)      |
-| **Throughput (genes)**     | High (dozens of thousands)                          | Limited (hundred to thousand*)       |
+| **Throughput (genes)**     | High (dozens of thousands)                          | Limited (hundreds to thousands)       |
 | **Cost**                   | Less upfront cost, amenable to smaller pilots                        | Higher upfront cost for probe panel, larger area per slide can minimise costs per sample |
 | **Best for…**              | Discovery projects                                  | Validation projects                  |
 
