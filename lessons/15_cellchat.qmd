@@ -70,7 +70,7 @@ Spatial transcriptomics is a great input dataset for these methods because **man
 
 ### CellChat
 
-CellChat is a method that was originally published by [Jin et. al (2021)](https://www.nature.com/articles/s41467-021-21246-9) and then updated several years [Jin et al. (2025)](https://www.nature.com/articles/s41596-024-01045-4) to incorporate spatial coordinates into the model. The output is are lists of significant ligand-receptor interactions between cell types
+CellChat is a method that was originally published by [Jin et. al (2021)](https://www.nature.com/articles/s41467-021-21246-9) and then updated several years later [Jin et al. (2025)](https://www.nature.com/articles/s41596-024-01045-4) to incorporate spatial coordinates into the model. The output is are lists of significant ligand-receptor interactions between cell types
 
 ::: {#fig-cellchat_schematic .fig}
 ![](../img/cellchat_schematic.png){width=500}
@@ -109,7 +109,7 @@ plan(multisession, workers = parallel::detectCores() - 1)
 seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
 ```
 
-For now, let us say that our biological question is which populations that tumor cells are interacting with from our dataset. So first, we are going to subset the Seurat object to our relevant bins.
+For now, let us say that our biological question is identifying which populations are interacting with the tumor cells in colorectal cancer. So first, we are going to subset the Seurat object to our relevant bins.
 
 ```{r}
 #| label: subset_crc
@@ -123,6 +123,8 @@ crc <- subset(seurat_rctd,
 crc$samples <- factor(crc$orig.ident)
 crc
 ```
+
+### Create CellChat object
 
 Similar to RCTD, CellChat has its own data structure for storing information. In order to create this object with the `createCellChat()` function, we must provide the following pieces of information:
 
@@ -199,6 +201,8 @@ cellchat_crc <- createCellChat(
   spatial.factors = spatial_factors_crc)
 ```
 
+### CellChat databset
+
 We are working with human samples so we can make use of the human database. So we assign this to our cellchat object.
 
 ```{r}
@@ -217,6 +221,7 @@ cellchat_crc <- subsetData(cellchat_crc)
 cellchat_crc <- identifyOverExpressedGenes(cellchat_crc)
 ```
 
+### Run CellChat and filter results
 
 ::: callout-important
 # Load RDS object
@@ -297,7 +302,7 @@ We can see the structure of how data is stored within the CellChat object:
 # str(cellchat_crc)
 ```
 
-### Visualizations
+## Visualize CellChat results
 
 Now we can begin visualizing how the bins in `P5CRC` are interacting with one another:
 
