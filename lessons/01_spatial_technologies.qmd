@@ -123,7 +123,7 @@ In essence, these methods allow you to apply a grid to the tissue and quantify t
 
 Table: Summary of popular sequencing-based methods for spatial transcriptomics. {#tbl-seq_methods}
 
-|                      | Visium HD            | Stereo-seq          | Slide-seq          |
+|                      | Visium HD            | Stereo-seq          | Slide-tag          |
 |----------------------|----------------------|---------------------|--------------------|
 | **Vendor**           | 10x Genomics         | Complete Biosciences           | Curio Biosciences |
 | **Capture size**     | ~11 × 11 mm–scale capture area (single array) | 5x5mm, 1x1cm, 2x1cm, 2x3cm or customizable | ~1 cm diameter puck |
