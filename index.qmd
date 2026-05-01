@@ -48,7 +48,7 @@ These materials were developed for a trainer-led workshop, but are also amenable
 #### Applications
 Download the most recent versions of R and RStudio for your laptop:
 
- - [R](http://lib.stat.cmu.edu/R/CRAN/) **(version 4.2.0 or above)**
+ - [R](http://lib.stat.cmu.edu/R/CRAN/) **(version 4.3.0 or above)**
  - [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
 
 #### Packages for R
@@ -61,7 +61,7 @@ Download the most recent versions of R and RStudio for your laptop:
 2. **All the package names listed below are case sensitive.**
 
 3. **Mac with Apple Silicon (M1/M2/etc.):**  
-    - If running R 4.2.0 up to 4.4.3, download and install this gfortran tool *before* installing your packages:  
+    - If running R 4.3.0 up to 4.4.3, download and install this gfortran tool *before* installing your packages:  
    <https://mac.r-project.org/tools/gfortran-12.2-universal.pkg>
     - If running R 4.5.0 or newer, download and install this gfortran tool *before* installing your packages:  
    <https://mac.r-project.org/tools/gfortran-14.2-universal.pkg>
