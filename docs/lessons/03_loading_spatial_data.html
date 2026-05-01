@@ -5320,11 +5320,11 @@ margin-right: 0;
   </ul></li>
   <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">Set up</a>
   <ul class="collapse">
-  <li><a href="#opening-r-studio" id="toc-opening-r-studio" class="nav-link" data-scroll-target="#opening-r-studio">Opening R Studio</a></li>
   <li><a href="#project-organization" id="toc-project-organization" class="nav-link" data-scroll-target="#project-organization">Project organization</a></li>
+  <li><a href="#opening-r-studio" id="toc-opening-r-studio" class="nav-link" data-scroll-target="#opening-r-studio">Opening R Studio</a></li>
   <li><a href="#new-script" id="toc-new-script" class="nav-link" data-scroll-target="#new-script">New script</a></li>
   </ul></li>
-  <li><a href="#loading-data-into-seurat" id="toc-loading-data-into-seurat" class="nav-link" data-scroll-target="#loading-data-into-seurat">Loading Data into Seurat</a>
+  <li><a href="#loading-data-into-seurat" id="toc-loading-data-into-seurat" class="nav-link" data-scroll-target="#loading-data-into-seurat">Loading data into Seurat</a>
   <ul class="collapse">
   <li><a href="#input-files" id="toc-input-files" class="nav-link" data-scroll-target="#input-files">Input files</a></li>
   <li><a href="#creating-the-seurat-object" id="toc-creating-the-seurat-object" class="nav-link" data-scroll-target="#creating-the-seurat-object">Creating the Seurat object</a></li>
@@ -5505,6 +5505,19 @@ Sample preparation
 <section id="set-up" class="level2">
 <h2 class="anchored" data-anchor-id="set-up">Set up</h2>
 <p>We have assembled an R Project for you to download that includes the data along with a basic file structure for good data management. Whenever you start a new project, it is a good habit to set up a similar directory structure to clearly organize your data, scripts and results. This will make it easier to keep track of your files and to share your work with others.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>TODO: download link update</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -5518,9 +5531,50 @@ Download the data
 <p>If you haven’t done this already, the project can be accessed using this <a href="https://www.dropbox.com/scl/fo/053p46ab36e53u6hr5jnl/ABPN8Bh7sKPUfG1O8L1TbRI?rlkey=lva3uunugrxp99xyo7xyf1mul&amp;st=xqpfvj2f&amp;dl=0">link</a>. You will have to left-click the link and select <code>Save Link As..</code> or <code>Download Linked File As..</code>, then select a place on your computer where you would like to place this R Project.</p>
 </div>
 </div>
+<section id="project-organization" class="level3">
+<h3 class="anchored" data-anchor-id="project-organization">Project organization</h3>
+<p>When you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as <strong>data management is often an afterthought</strong> when it should be a key part of the workflow from the very beginning. The <a href="https://datamanagement.hms.harvard.edu/">HMS Data Management Working Group</a> discusses in-depth some things to consider beyond the data creation and analysis.</p>
+<p>One important aspect of data management is organization. For each experiment you work on and analyze data for, it is considered best practice to get organized by creating <strong>a planned storage space</strong>. We will do that for our spatial transcriptomics analysis.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note for Windows OS users
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When you open the project folder after unzipping it, please check if you have a <code>data</code> folder with a sub folder also called <code>data</code>. If this is the case, please move all the files from the subfolder into the parent <code>data</code> folder.</p>
+</div>
+</div>
+</section>
 <section id="opening-r-studio" class="level3">
 <h3 class="anchored" data-anchor-id="opening-r-studio">Opening R Studio</h3>
 <p>We can open the R Project up and see that the provided file structure should look like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>spatial_transcriptomics<span class="sc">/</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>├── data</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>├── figures</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>├── results</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>├── scripts</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>└── spatial_transcriptomics.Rproj</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If your R Project looks like below, then you are ready to start!</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>TODO: Image of R project file structure</p>
+</div>
+</div>
+<p>We can also double check that all the files we need for our analysis can be found within <code>data/</code>:</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>data
@@ -5564,47 +5618,6 @@ Warning
 </div>
 </div>
 </div>
-<p>If your R Project looks like below, then you are ready to start!</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>TODO: Image of R project file structure</p>
-</div>
-</div>
-</section>
-<section id="project-organization" class="level3">
-<h3 class="anchored" data-anchor-id="project-organization">Project organization</h3>
-<p>When you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as <strong>data management is often an afterthought</strong> when it should be a key part of the workflow from the very beginning. The <a href="https://datamanagement.hms.harvard.edu/">HMS Data Management Working Group</a> discusses in-depth some things to consider beyond the data creation and analysis.</p>
-<p>One important aspect of data management is organization. For each experiment you work on and analyze data for, it is considered best practice to get organized by creating <strong>a planned storage space</strong>. We will do that for our spatial transcriptomics analysis.</p>
-<p>Look inside your project space and you will find that a directory structure has been set up for you:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>spatial_transcriptomics<span class="sc">/</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>├── data</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>├── figures</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>├── results</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>├── scripts</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>└── spatial_transcriptomics.Rproj</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note for Windows OS users
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>When you open the project folder after unzipping it, please check if you have a <code>data</code> folder with a sub folder also called <code>data</code>. If this is the case, please move all the files from the subfolder into the parent <code>data</code> folder.</p>
-</div>
-</div>
 </section>
 <section id="new-script" class="level3">
 <h3 class="anchored" data-anchor-id="new-script">New script</h3>
@@ -5637,7 +5650,7 @@ Warning
 </section>
 </section>
 <section id="loading-data-into-seurat" class="level2">
-<h2 class="anchored" data-anchor-id="loading-data-into-seurat">Loading Data into Seurat</h2>
+<h2 class="anchored" data-anchor-id="loading-data-into-seurat">Loading data into Seurat</h2>
 <p>There are several different tools that can be used for loading and analyzing spatial transcriptomics data. While each has their own nuances, they all follow the same fundamental theory and processes:</p>
 <ul>
 <li>Python’s <a href="https://squidpy.readthedocs.io/en/stable/">Squidpy</a></li>
@@ -5649,7 +5662,7 @@ Warning
 <h3 class="anchored" data-anchor-id="input-files">Input files</h3>
 <p>To load our data, we are going to make use of the function <code>Load10X_Spatial()</code>. The input needed for this function comes from the output generated by Space Ranger, including both the feature matrix and low-resolution tissue image. Once supplied, a Seurat object that contains our counts matrix and image is created.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5658,7 +5671,7 @@ Using <code>?</code> to look up function arguments
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>If you are ever unsure what parameters you can supply to a function, you can make use of the <code>?</code> call in R. This will bring up the manual page for the function which will provide more details on what each variable is used for.</p>
 <div class="cell">
@@ -5917,7 +5930,7 @@ Table 3: Columns automatically populated in <code>@meta.data</code>
 <h3 class="anchored" data-anchor-id="using-a-for-loop">Using a <code>for</code> loop</h3>
 <p>In practice, you will likely have several samples that you will need to read in data for, and that can get tedious and error-prone if you do it one at a time. So, to make the data import into R more efficient we can use a <code>for</code> loop, which will iterate over a series of commands for each of the inputs given and create Seurat objects for each of our samples.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5926,7 +5939,7 @@ Table 3: Columns automatically populated in <code>@meta.data</code>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In R, the <code>for</code> loop has the following structure/syntax:</p>
 <div class="cell">
@@ -6016,7 +6029,7 @@ Active assay: Spatial.008um (18085 features, 0 variable features)
 </div>
 <p>From the output, we can see that we now have: <code>2 layers present: counts.1, counts.2</code></p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -6025,7 +6038,7 @@ What if I am merging more than two samples?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Seurat has functionality to merge many samples together. You can do this by adding all but one Seurat object to the <code>y</code> argument in a vector format. An example is provided below, assuming you use the list structure we used previously:</p>
 <div class="cell">
@@ -6046,7 +6059,7 @@ What if I am merging more than two samples?
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>seurat_merged <span class="ot">&lt;-</span> <span class="fu">JoinLayers</span>(seurat_merged)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -6055,7 +6068,7 @@ Merging vs. integration
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>A common point of confusion is the distinction between <strong>integration</strong> and merging. In the field, integration is considered to be modifying either your counts or latent space in a way to correct for a batch variable. Whereas what we are doing now is <strong>merging</strong> or concatenating multiple samples together. This process of merging does not transform the values in the count matrices.</p>
 </div>
@@ -6816,445 +6829,449 @@ Limited RAM
 <span id="cb31-115"><a href="#cb31-115" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-116"><a href="#cb31-116" aria-hidden="true" tabindex="-1"></a>We have assembled an R Project for you to download that includes the data along with a basic file structure for good data management. Whenever you start a new project, it is a good habit to set up a similar directory structure to clearly organize your data, scripts and results. This will make it easier to keep track of your files and to share your work with others.</span>
 <span id="cb31-117"><a href="#cb31-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-118"><a href="#cb31-118" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb31-119"><a href="#cb31-119" aria-hidden="true" tabindex="-1"></a><span class="fu"># Download the data</span></span>
-<span id="cb31-120"><a href="#cb31-120" aria-hidden="true" tabindex="-1"></a>If you haven’t done this already, the project can be accessed using this <span class="co">[</span><span class="ot">link</span><span class="co">](https://www.dropbox.com/scl/fo/053p46ab36e53u6hr5jnl/ABPN8Bh7sKPUfG1O8L1TbRI?rlkey=lva3uunugrxp99xyo7xyf1mul&amp;st=xqpfvj2f&amp;dl=0)</span>. You will have to left-click the link and select <span class="in">`Save Link As..`</span> or <span class="in">`Download Linked File As..`</span>, then select a place on your computer where you would like to place this R Project.</span>
-<span id="cb31-121"><a href="#cb31-121" aria-hidden="true" tabindex="-1"></a>::::</span>
-<span id="cb31-122"><a href="#cb31-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### Opening R Studio</span></span>
-<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a>We can open the R Project up and see that the provided file structure should look like:</span>
+<span id="cb31-118"><a href="#cb31-118" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb31-119"><a href="#cb31-119" aria-hidden="true" tabindex="-1"></a>TODO: download link update</span>
+<span id="cb31-120"><a href="#cb31-120" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-121"><a href="#cb31-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-122"><a href="#cb31-122" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a><span class="fu"># Download the data</span></span>
+<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a>If you haven’t done this already, the project can be accessed using this <span class="co">[</span><span class="ot">link</span><span class="co">](https://www.dropbox.com/scl/fo/053p46ab36e53u6hr5jnl/ABPN8Bh7sKPUfG1O8L1TbRI?rlkey=lva3uunugrxp99xyo7xyf1mul&amp;st=xqpfvj2f&amp;dl=0)</span>. You will have to left-click the link and select <span class="in">`Save Link As..`</span> or <span class="in">`Download Linked File As..`</span>, then select a place on your computer where you would like to place this R Project.</span>
+<span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a>::::</span>
 <span id="cb31-126"><a href="#cb31-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: file_structure</span></span>
-<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fs)</span>
+<span id="cb31-127"><a href="#cb31-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Project organization</span></span>
+<span id="cb31-128"><a href="#cb31-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a>When you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as **data management is often an afterthought** when it should be a key part of the workflow from the very beginning. The <span class="co">[</span><span class="ot">HMS Data Management Working Group</span><span class="co">](https://datamanagement.hms.harvard.edu/)</span> discusses in-depth some things to consider beyond the data creation and analysis.</span>
+<span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a>One important aspect of data management is organization. For each experiment you work on and analyze data for, it is considered best practice to get organized by creating **a planned storage space**. We will do that for our spatial transcriptomics analysis. </span>
+<span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-133"><a href="#cb31-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-134"><a href="#cb31-134" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the first level in the downloaded directory</span></span>
-<span id="cb31-135"><a href="#cb31-135" aria-hidden="true" tabindex="-1"></a><span class="fu">dir_tree</span>(<span class="st">&quot;data&quot;</span>, <span class="at">recurse =</span> <span class="dv">1</span>)</span>
-<span id="cb31-136"><a href="#cb31-136" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-137"><a href="#cb31-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-138"><a href="#cb31-138" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb31-139"><a href="#cb31-139" aria-hidden="true" tabindex="-1"></a><span class="fu"># Cropped images</span></span>
-<span id="cb31-140"><a href="#cb31-140" aria-hidden="true" tabindex="-1"></a>You may notice that we are working with **cropped** folders for this workshop. This is due to the limitations of how much data can be loaded on a laptop. So here, we have cropped the image so that we have a smaller cross-section of the tissue to work with, ultimately reducing the number of cells for this example dataset.</span>
-<span id="cb31-141"><a href="#cb31-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-142"><a href="#cb31-142" aria-hidden="true" tabindex="-1"></a>The code used to create all the files for this workshop can be found <span class="co">[</span><span class="ot">here</span><span class="co">](Aside_crop_slide.qmd)</span>.</span>
-<span id="cb31-143"><a href="#cb31-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-144"><a href="#cb31-144" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
-<span id="cb31-145"><a href="#cb31-145" aria-hidden="true" tabindex="-1"></a>TODO: lesson on cropping unfinished</span>
-<span id="cb31-146"><a href="#cb31-146" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-147"><a href="#cb31-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-148"><a href="#cb31-148" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-149"><a href="#cb31-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-150"><a href="#cb31-150" aria-hidden="true" tabindex="-1"></a>If your R Project looks like below, then you are ready to start!</span>
-<span id="cb31-151"><a href="#cb31-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-152"><a href="#cb31-152" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
-<span id="cb31-153"><a href="#cb31-153" aria-hidden="true" tabindex="-1"></a>TODO: Image of R project file structure</span>
-<span id="cb31-154"><a href="#cb31-154" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-134"><a href="#cb31-134" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb31-135"><a href="#cb31-135" aria-hidden="true" tabindex="-1"></a><span class="fu"># Note for Windows OS users</span></span>
+<span id="cb31-136"><a href="#cb31-136" aria-hidden="true" tabindex="-1"></a>When you open the project folder after unzipping it, please check if you have a <span class="in">`data`</span> folder with a sub folder also called <span class="in">`data`</span>. If this is the case, please move all the files from the subfolder into the parent <span class="in">`data`</span> folder.</span>
+<span id="cb31-137"><a href="#cb31-137" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-138"><a href="#cb31-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-139"><a href="#cb31-139" aria-hidden="true" tabindex="-1"></a><span class="fu">### Opening R Studio</span></span>
+<span id="cb31-140"><a href="#cb31-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-141"><a href="#cb31-141" aria-hidden="true" tabindex="-1"></a>We can open the R Project up and see that the provided file structure should look like:</span>
+<span id="cb31-142"><a href="#cb31-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-145"><a href="#cb31-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-146"><a href="#cb31-146" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: file_structure</span></span>
+<span id="cb31-147"><a href="#cb31-147" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-148"><a href="#cb31-148" aria-hidden="true" tabindex="-1"></a>spatial_transcriptomics<span class="sc">/</span></span>
+<span id="cb31-149"><a href="#cb31-149" aria-hidden="true" tabindex="-1"></a>├── data</span>
+<span id="cb31-150"><a href="#cb31-150" aria-hidden="true" tabindex="-1"></a>├── figures</span>
+<span id="cb31-151"><a href="#cb31-151" aria-hidden="true" tabindex="-1"></a>├── results</span>
+<span id="cb31-152"><a href="#cb31-152" aria-hidden="true" tabindex="-1"></a>├── scripts</span>
+<span id="cb31-153"><a href="#cb31-153" aria-hidden="true" tabindex="-1"></a>└── spatial_transcriptomics.Rproj</span>
+<span id="cb31-154"><a href="#cb31-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb31-155"><a href="#cb31-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-156"><a href="#cb31-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### Project organization</span></span>
+<span id="cb31-156"><a href="#cb31-156" aria-hidden="true" tabindex="-1"></a>If your R Project looks like below, then you are ready to start!</span>
 <span id="cb31-157"><a href="#cb31-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-158"><a href="#cb31-158" aria-hidden="true" tabindex="-1"></a>When you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as **data management is often an afterthought** when it should be a key part of the workflow from the very beginning. The <span class="co">[</span><span class="ot">HMS Data Management Working Group</span><span class="co">](https://datamanagement.hms.harvard.edu/)</span> discusses in-depth some things to consider beyond the data creation and analysis.</span>
-<span id="cb31-159"><a href="#cb31-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-160"><a href="#cb31-160" aria-hidden="true" tabindex="-1"></a>One important aspect of data management is organization. For each experiment you work on and analyze data for, it is considered best practice to get organized by creating **a planned storage space**. We will do that for our spatial transcriptomics analysis. </span>
+<span id="cb31-158"><a href="#cb31-158" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb31-159"><a href="#cb31-159" aria-hidden="true" tabindex="-1"></a>TODO: Image of R project file structure</span>
+<span id="cb31-160"><a href="#cb31-160" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb31-161"><a href="#cb31-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-162"><a href="#cb31-162" aria-hidden="true" tabindex="-1"></a>Look inside your project space and you will find that a directory structure has been set up for you:</span>
+<span id="cb31-162"><a href="#cb31-162" aria-hidden="true" tabindex="-1"></a>We can also double check that all the files we need for our analysis can be found within <span class="in">`data/`</span>:</span>
 <span id="cb31-163"><a href="#cb31-163" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-166"><a href="#cb31-166" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb31-167"><a href="#cb31-167" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: data_structure</span></span>
-<span id="cb31-168"><a href="#cb31-168" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-169"><a href="#cb31-169" aria-hidden="true" tabindex="-1"></a>spatial_transcriptomics<span class="sc">/</span></span>
-<span id="cb31-170"><a href="#cb31-170" aria-hidden="true" tabindex="-1"></a>├── data</span>
-<span id="cb31-171"><a href="#cb31-171" aria-hidden="true" tabindex="-1"></a>├── figures</span>
-<span id="cb31-172"><a href="#cb31-172" aria-hidden="true" tabindex="-1"></a>├── results</span>
-<span id="cb31-173"><a href="#cb31-173" aria-hidden="true" tabindex="-1"></a>├── scripts</span>
-<span id="cb31-174"><a href="#cb31-174" aria-hidden="true" tabindex="-1"></a>└── spatial_transcriptomics.Rproj</span>
-<span id="cb31-175"><a href="#cb31-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-176"><a href="#cb31-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-177"><a href="#cb31-177" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb31-178"><a href="#cb31-178" aria-hidden="true" tabindex="-1"></a><span class="fu"># Note for Windows OS users</span></span>
-<span id="cb31-179"><a href="#cb31-179" aria-hidden="true" tabindex="-1"></a>When you open the project folder after unzipping it, please check if you have a <span class="in">`data`</span> folder with a sub folder also called <span class="in">`data`</span>. If this is the case, please move all the files from the subfolder into the parent <span class="in">`data`</span> folder.</span>
-<span id="cb31-180"><a href="#cb31-180" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-181"><a href="#cb31-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-182"><a href="#cb31-182" aria-hidden="true" tabindex="-1"></a><span class="fu">### New script</span></span>
+<span id="cb31-168"><a href="#cb31-168" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-169"><a href="#cb31-169" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the first level in the downloaded directory</span></span>
+<span id="cb31-170"><a href="#cb31-170" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fs)</span>
+<span id="cb31-171"><a href="#cb31-171" aria-hidden="true" tabindex="-1"></a><span class="fu">dir_tree</span>(<span class="st">&quot;data&quot;</span>, <span class="at">recurse =</span> <span class="dv">1</span>)</span>
+<span id="cb31-172"><a href="#cb31-172" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-173"><a href="#cb31-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-174"><a href="#cb31-174" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb31-175"><a href="#cb31-175" aria-hidden="true" tabindex="-1"></a><span class="fu"># Cropped images</span></span>
+<span id="cb31-176"><a href="#cb31-176" aria-hidden="true" tabindex="-1"></a>You may notice that we are working with **cropped** folders for this workshop. This is due to the limitations of how much data can be loaded on a laptop. So here, we have cropped the image so that we have a smaller cross-section of the tissue to work with, ultimately reducing the number of cells for this example dataset.</span>
+<span id="cb31-177"><a href="#cb31-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-178"><a href="#cb31-178" aria-hidden="true" tabindex="-1"></a>The code used to create all the files for this workshop can be found <span class="co">[</span><span class="ot">here</span><span class="co">](Aside_crop_slide.qmd)</span>.</span>
+<span id="cb31-179"><a href="#cb31-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-180"><a href="#cb31-180" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb31-181"><a href="#cb31-181" aria-hidden="true" tabindex="-1"></a>TODO: lesson on cropping unfinished</span>
+<span id="cb31-182"><a href="#cb31-182" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb31-183"><a href="#cb31-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-184"><a href="#cb31-184" aria-hidden="true" tabindex="-1"></a>Next, open a new Rscript file and start with some comments to indicate what this file is going to contain. Ideally, we will have one script per major step in our analysis. For this first script, we will be loading our data and performing quality control - as indicated in the header.</span>
+<span id="cb31-184"><a href="#cb31-184" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb31-185"><a href="#cb31-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-186"><a href="#cb31-186" aria-hidden="true" tabindex="-1"></a>Loading your libraries at the top of the script will also allow you to easily keep track of which libraries you are using and to load them all at once in the beginning.</span>
+<span id="cb31-186"><a href="#cb31-186" aria-hidden="true" tabindex="-1"></a><span class="fu">### New script</span></span>
 <span id="cb31-187"><a href="#cb31-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-190"><a href="#cb31-190" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-191"><a href="#cb31-191" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: header_libraries</span></span>
-<span id="cb31-192"><a href="#cb31-192" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Visium HD samples and QC</span></span>
-<span id="cb31-193"><a href="#cb31-193" aria-hidden="true" tabindex="-1"></a><span class="co"># Visium HD spatial transcriptomics workshop</span></span>
-<span id="cb31-194"><a href="#cb31-194" aria-hidden="true" tabindex="-1"></a><span class="co"># Author: Harvard Chan Bioinformatics Core</span></span>
-<span id="cb31-195"><a href="#cb31-195" aria-hidden="true" tabindex="-1"></a><span class="co"># Created: May 2026</span></span>
-<span id="cb31-196"><a href="#cb31-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-197"><a href="#cb31-197" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
-<span id="cb31-198"><a href="#cb31-198" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb31-199"><a href="#cb31-199" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
-<span id="cb31-200"><a href="#cb31-200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-201"><a href="#cb31-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-202"><a href="#cb31-202" aria-hidden="true" tabindex="-1"></a>Save the Rscript as <span class="in">`01_loading_visium_hd_and_qc.R`</span> and place it into the <span class="in">`scripts`</span> folder. Your working directory should look something like this:</span>
-<span id="cb31-203"><a href="#cb31-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-204"><a href="#cb31-204" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
-<span id="cb31-205"><a href="#cb31-205" aria-hidden="true" tabindex="-1"></a>TODO: Image of R project file structure with new script</span>
-<span id="cb31-206"><a href="#cb31-206" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-188"><a href="#cb31-188" aria-hidden="true" tabindex="-1"></a>Next, open a new Rscript file and start with some comments to indicate what this file is going to contain. Ideally, we will have one script per major step in our analysis. For this first script, we will be loading our data and performing quality control - as indicated in the header.</span>
+<span id="cb31-189"><a href="#cb31-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-190"><a href="#cb31-190" aria-hidden="true" tabindex="-1"></a>Loading your libraries at the top of the script will also allow you to easily keep track of which libraries you are using and to load them all at once in the beginning.</span>
+<span id="cb31-191"><a href="#cb31-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-194"><a href="#cb31-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-195"><a href="#cb31-195" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: header_libraries</span></span>
+<span id="cb31-196"><a href="#cb31-196" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Visium HD samples and QC</span></span>
+<span id="cb31-197"><a href="#cb31-197" aria-hidden="true" tabindex="-1"></a><span class="co"># Visium HD spatial transcriptomics workshop</span></span>
+<span id="cb31-198"><a href="#cb31-198" aria-hidden="true" tabindex="-1"></a><span class="co"># Author: Harvard Chan Bioinformatics Core</span></span>
+<span id="cb31-199"><a href="#cb31-199" aria-hidden="true" tabindex="-1"></a><span class="co"># Created: May 2026</span></span>
+<span id="cb31-200"><a href="#cb31-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-201"><a href="#cb31-201" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
+<span id="cb31-202"><a href="#cb31-202" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb31-203"><a href="#cb31-203" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb31-204"><a href="#cb31-204" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-205"><a href="#cb31-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-206"><a href="#cb31-206" aria-hidden="true" tabindex="-1"></a>Save the Rscript as <span class="in">`01_loading_visium_hd_and_qc.R`</span> and place it into the <span class="in">`scripts`</span> folder. Your working directory should look something like this:</span>
 <span id="cb31-207"><a href="#cb31-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-208"><a href="#cb31-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-209"><a href="#cb31-209" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading Data into Seurat</span></span>
-<span id="cb31-210"><a href="#cb31-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-211"><a href="#cb31-211" aria-hidden="true" tabindex="-1"></a>There are several different tools that can be used for loading and analyzing spatial transcriptomics data. While each has their own nuances, they all follow the same fundamental theory and processes:</span>
+<span id="cb31-208"><a href="#cb31-208" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb31-209"><a href="#cb31-209" aria-hidden="true" tabindex="-1"></a>TODO: Image of R project file structure with new script</span>
+<span id="cb31-210"><a href="#cb31-210" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-211"><a href="#cb31-211" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-212"><a href="#cb31-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-213"><a href="#cb31-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Python&#39;s <span class="co">[</span><span class="ot">Squidpy</span><span class="co">](https://squidpy.readthedocs.io/en/stable/)</span></span>
-<span id="cb31-214"><a href="#cb31-214" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>R&#39;s <span class="co">[</span><span class="ot">Spatial Experiment</span><span class="co">](https://bioconductor.org/packages/release/bioc/html/SpatialExperiment.html)</span></span>
-<span id="cb31-215"><a href="#cb31-215" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>R&#39;s <span class="co">[</span><span class="ot">Seurat</span><span class="co">](https://satijalab.org/seurat/)</span></span>
+<span id="cb31-213"><a href="#cb31-213" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading data into Seurat</span></span>
+<span id="cb31-214"><a href="#cb31-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-215"><a href="#cb31-215" aria-hidden="true" tabindex="-1"></a>There are several different tools that can be used for loading and analyzing spatial transcriptomics data. While each has their own nuances, they all follow the same fundamental theory and processes:</span>
 <span id="cb31-216"><a href="#cb31-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-217"><a href="#cb31-217" aria-hidden="true" tabindex="-1"></a>**For this workshop, we will be using the Seurat workflow.**</span>
-<span id="cb31-218"><a href="#cb31-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-219"><a href="#cb31-219" aria-hidden="true" tabindex="-1"></a><span class="fu">### Input files</span></span>
+<span id="cb31-217"><a href="#cb31-217" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Python&#39;s <span class="co">[</span><span class="ot">Squidpy</span><span class="co">](https://squidpy.readthedocs.io/en/stable/)</span></span>
+<span id="cb31-218"><a href="#cb31-218" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>R&#39;s <span class="co">[</span><span class="ot">Spatial Experiment</span><span class="co">](https://bioconductor.org/packages/release/bioc/html/SpatialExperiment.html)</span></span>
+<span id="cb31-219"><a href="#cb31-219" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>R&#39;s <span class="co">[</span><span class="ot">Seurat</span><span class="co">](https://satijalab.org/seurat/)</span></span>
 <span id="cb31-220"><a href="#cb31-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-221"><a href="#cb31-221" aria-hidden="true" tabindex="-1"></a>To load our data, we are going to make use of the function <span class="in">`Load10X_Spatial()`</span>. The input needed for this function comes from the output generated by Space Ranger, including both the feature matrix and low-resolution tissue image. Once supplied, a Seurat object that contains our counts matrix and image is created.</span>
+<span id="cb31-221"><a href="#cb31-221" aria-hidden="true" tabindex="-1"></a>**For this workshop, we will be using the Seurat workflow.**</span>
 <span id="cb31-222"><a href="#cb31-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-223"><a href="#cb31-223" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
-<span id="cb31-224"><a href="#cb31-224" aria-hidden="true" tabindex="-1"></a><span class="fu"># Using `?` to look up function arguments </span></span>
-<span id="cb31-225"><a href="#cb31-225" aria-hidden="true" tabindex="-1"></a>If you are ever unsure what parameters you can supply to a function, you can make use of the <span class="in">`?`</span> call in R. This will bring up the manual page for the function which will provide more details on what each variable is used for.</span>
+<span id="cb31-223"><a href="#cb31-223" aria-hidden="true" tabindex="-1"></a><span class="fu">### Input files</span></span>
+<span id="cb31-224"><a href="#cb31-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-225"><a href="#cb31-225" aria-hidden="true" tabindex="-1"></a>To load our data, we are going to make use of the function <span class="in">`Load10X_Spatial()`</span>. The input needed for this function comes from the output generated by Space Ranger, including both the feature matrix and low-resolution tissue image. Once supplied, a Seurat object that contains our counts matrix and image is created.</span>
 <span id="cb31-226"><a href="#cb31-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-229"><a href="#cb31-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-230"><a href="#cb31-230" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: function_man_page</span></span>
-<span id="cb31-231"><a href="#cb31-231" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-232"><a href="#cb31-232" aria-hidden="true" tabindex="-1"></a>?Load10X_Spatial</span>
-<span id="cb31-233"><a href="#cb31-233" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-234"><a href="#cb31-234" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-235"><a href="#cb31-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-236"><a href="#cb31-236" aria-hidden="true" tabindex="-1"></a>There are 3 main arguments that we will be utilizing for this step:</span>
-<span id="cb31-237"><a href="#cb31-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-238"><a href="#cb31-238" aria-hidden="true" tabindex="-1"></a>Table: Seurat&#39;s <span class="in">`Load10X_Spatial()`</span> arguments. {#tbl-Load10X_Spatial_arguments}</span>
+<span id="cb31-227"><a href="#cb31-227" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=&quot;true&quot;}</span>
+<span id="cb31-228"><a href="#cb31-228" aria-hidden="true" tabindex="-1"></a><span class="fu"># Using `?` to look up function arguments </span></span>
+<span id="cb31-229"><a href="#cb31-229" aria-hidden="true" tabindex="-1"></a>If you are ever unsure what parameters you can supply to a function, you can make use of the <span class="in">`?`</span> call in R. This will bring up the manual page for the function which will provide more details on what each variable is used for.</span>
+<span id="cb31-230"><a href="#cb31-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-233"><a href="#cb31-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-234"><a href="#cb31-234" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: function_man_page</span></span>
+<span id="cb31-235"><a href="#cb31-235" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-236"><a href="#cb31-236" aria-hidden="true" tabindex="-1"></a>?Load10X_Spatial</span>
+<span id="cb31-237"><a href="#cb31-237" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-238"><a href="#cb31-238" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb31-239"><a href="#cb31-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-240"><a href="#cb31-240" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Argument <span class="pp">|</span> Description <span class="pp">|</span></span>
-<span id="cb31-241"><a href="#cb31-241" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|-------------|</span></span>
-<span id="cb31-242"><a href="#cb31-242" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> data.dir <span class="pp">|</span> Directory containing the H5 file specified by filename and the image data in a subdirectory called <span class="in">`spatial`</span> <span class="pp">|</span></span>
-<span id="cb31-243"><a href="#cb31-243" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> bin.size <span class="pp">|</span> Specifies the bin sizes to read in (defaults to <span class="in">`c(16, 8)`</span>) <span class="pp">|</span></span>
-<span id="cb31-244"><a href="#cb31-244" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> slice    <span class="pp">|</span> Name for the stored image of the tissue slice <span class="pp">|</span></span>
-<span id="cb31-245"><a href="#cb31-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-246"><a href="#cb31-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-247"><a href="#cb31-247" aria-hidden="true" tabindex="-1"></a>Before loading in the data, let us take a look at the files we will be supplying to the function. In particular, let us take a look at sample <span class="in">`data/P5CRC_cropped`</span> which is the path we would supply as <span class="in">`data.dir`</span> in the <span class="in">`Load10X_Spatial()`</span> function.</span>
-<span id="cb31-248"><a href="#cb31-248" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb31-251"><a href="#cb31-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-252"><a href="#cb31-252" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-SpaceRanger_outs</span></span>
-<span id="cb31-253"><a href="#cb31-253" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: File structure of Space Ranger output</span></span>
-<span id="cb31-254"><a href="#cb31-254" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb31-255"><a href="#cb31-255" aria-hidden="true" tabindex="-1"></a><span class="fu">dir_tree</span>(<span class="st">&quot;data/P5CRC_cropped/&quot;</span>, <span class="at">recurse =</span> <span class="dv">1</span>)</span>
-<span id="cb31-256"><a href="#cb31-256" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-257"><a href="#cb31-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-258"><a href="#cb31-258" aria-hidden="true" tabindex="-1"></a>In the Visium HD assay, Space Ranger bins the image into 2µm x 2µm, 8µm x 8µm and 16µm x 16µm bins. **The output from each of these resolutions is found in the `binned_outputs` folder.**</span>
-<span id="cb31-259"><a href="#cb31-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-260"><a href="#cb31-260" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb31-261"><a href="#cb31-261" aria-hidden="true" tabindex="-1"></a><span class="fu"># How do I know what bin size to use?</span></span>
-<span id="cb31-262"><a href="#cb31-262" aria-hidden="true" tabindex="-1"></a>This is not an easy question to answer! </span>
+<span id="cb31-240"><a href="#cb31-240" aria-hidden="true" tabindex="-1"></a>There are 3 main arguments that we will be utilizing for this step:</span>
+<span id="cb31-241"><a href="#cb31-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-242"><a href="#cb31-242" aria-hidden="true" tabindex="-1"></a>Table: Seurat&#39;s <span class="in">`Load10X_Spatial()`</span> arguments. {#tbl-Load10X_Spatial_arguments}</span>
+<span id="cb31-243"><a href="#cb31-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-244"><a href="#cb31-244" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Argument <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb31-245"><a href="#cb31-245" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|-------------|</span></span>
+<span id="cb31-246"><a href="#cb31-246" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> data.dir <span class="pp">|</span> Directory containing the H5 file specified by filename and the image data in a subdirectory called <span class="in">`spatial`</span> <span class="pp">|</span></span>
+<span id="cb31-247"><a href="#cb31-247" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> bin.size <span class="pp">|</span> Specifies the bin sizes to read in (defaults to <span class="in">`c(16, 8)`</span>) <span class="pp">|</span></span>
+<span id="cb31-248"><a href="#cb31-248" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> slice    <span class="pp">|</span> Name for the stored image of the tissue slice <span class="pp">|</span></span>
+<span id="cb31-249"><a href="#cb31-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-250"><a href="#cb31-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-251"><a href="#cb31-251" aria-hidden="true" tabindex="-1"></a>Before loading in the data, let us take a look at the files we will be supplying to the function. In particular, let us take a look at sample <span class="in">`data/P5CRC_cropped`</span> which is the path we would supply as <span class="in">`data.dir`</span> in the <span class="in">`Load10X_Spatial()`</span> function.</span>
+<span id="cb31-252"><a href="#cb31-252" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb31-255"><a href="#cb31-255" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-256"><a href="#cb31-256" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-SpaceRanger_outs</span></span>
+<span id="cb31-257"><a href="#cb31-257" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: File structure of Space Ranger output</span></span>
+<span id="cb31-258"><a href="#cb31-258" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-259"><a href="#cb31-259" aria-hidden="true" tabindex="-1"></a><span class="fu">dir_tree</span>(<span class="st">&quot;data/P5CRC_cropped/&quot;</span>, <span class="at">recurse =</span> <span class="dv">1</span>)</span>
+<span id="cb31-260"><a href="#cb31-260" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-261"><a href="#cb31-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-262"><a href="#cb31-262" aria-hidden="true" tabindex="-1"></a>In the Visium HD assay, Space Ranger bins the image into 2µm x 2µm, 8µm x 8µm and 16µm x 16µm bins. **The output from each of these resolutions is found in the `binned_outputs` folder.**</span>
 <span id="cb31-263"><a href="#cb31-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-264"><a href="#cb31-264" aria-hidden="true" tabindex="-1"></a>The typical recommendation for a Visium HD analysis is to use the 8µm x 8µm resolution of the dataset. However, it is important to consider the dataset you are working with. For example, adipose cells are known to be a larger cell type in size. Therefore, it would be good to consider a large bin size in order to fully represent each cell within a bin. The trade-off for choosing a larger bin size is that the odds of a bin containing multiple cells goes up.</span>
-<span id="cb31-265"><a href="#cb31-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-266"><a href="#cb31-266" aria-hidden="true" tabindex="-1"></a>The smaller the bin size is, the more resources it takes to compute anything. So this is the first (of many) example where you must juggle computational practicality and biology when making a decision.</span>
-<span id="cb31-267"><a href="#cb31-267" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-268"><a href="#cb31-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-269"><a href="#cb31-269" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating the Seurat object</span></span>
-<span id="cb31-270"><a href="#cb31-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-271"><a href="#cb31-271" aria-hidden="true" tabindex="-1"></a>Now that we understand the input needed for the <span class="in">`Load10X_Spatial()`</span> function, let&#39;s use it to create a Seurat object called <span class="in">`crc`</span>. We will specify that we want to load in the <span class="in">`8µm`</span> and <span class="in">`16µm`</span> bin sizes at the same time. </span>
+<span id="cb31-264"><a href="#cb31-264" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb31-265"><a href="#cb31-265" aria-hidden="true" tabindex="-1"></a><span class="fu"># How do I know what bin size to use?</span></span>
+<span id="cb31-266"><a href="#cb31-266" aria-hidden="true" tabindex="-1"></a>This is not an easy question to answer! </span>
+<span id="cb31-267"><a href="#cb31-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-268"><a href="#cb31-268" aria-hidden="true" tabindex="-1"></a>The typical recommendation for a Visium HD analysis is to use the 8µm x 8µm resolution of the dataset. However, it is important to consider the dataset you are working with. For example, adipose cells are known to be a larger cell type in size. Therefore, it would be good to consider a large bin size in order to fully represent each cell within a bin. The trade-off for choosing a larger bin size is that the odds of a bin containing multiple cells goes up.</span>
+<span id="cb31-269"><a href="#cb31-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-270"><a href="#cb31-270" aria-hidden="true" tabindex="-1"></a>The smaller the bin size is, the more resources it takes to compute anything. So this is the first (of many) example where you must juggle computational practicality and biology when making a decision.</span>
+<span id="cb31-271"><a href="#cb31-271" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb31-272"><a href="#cb31-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-273"><a href="#cb31-273" aria-hidden="true" tabindex="-1"></a>**Typically you would only load in one bin size**, but for the purposes of better understanding bins and our Seurat data structure, we will load both here.</span>
+<span id="cb31-273"><a href="#cb31-273" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating the Seurat object</span></span>
 <span id="cb31-274"><a href="#cb31-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-277"><a href="#cb31-277" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-278"><a href="#cb31-278" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_Load10X_Spatial</span></span>
-<span id="cb31-279"><a href="#cb31-279" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">Load10X_Spatial</span>(<span class="at">data.dir =</span> <span class="st">&quot;data/P5CRC_cropped/&quot;</span>,</span>
-<span id="cb31-280"><a href="#cb31-280" aria-hidden="true" tabindex="-1"></a>                       <span class="at">bin.size =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">16</span>),</span>
-<span id="cb31-281"><a href="#cb31-281" aria-hidden="true" tabindex="-1"></a>                       <span class="at">slice =</span> <span class="st">&quot;P5CRC&quot;</span>)</span>
-<span id="cb31-282"><a href="#cb31-282" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-283"><a href="#cb31-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-284"><a href="#cb31-284" aria-hidden="true" tabindex="-1"></a>We can print out some basic information of our Seurat object to examine its data structure. We will do this frequently throughout the workshop to understand how the Seurat data structure changes with each step of the workflow.</span>
-<span id="cb31-285"><a href="#cb31-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-288"><a href="#cb31-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-289"><a href="#cb31-289" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_callout</span></span>
-<span id="cb31-290"><a href="#cb31-290" aria-hidden="true" tabindex="-1"></a>crc</span>
-<span id="cb31-291"><a href="#cb31-291" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-292"><a href="#cb31-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-293"><a href="#cb31-293" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb31-294"><a href="#cb31-294" aria-hidden="true" tabindex="-1"></a><span class="fu"># Anatomy of Seurat object</span></span>
-<span id="cb31-295"><a href="#cb31-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-296"><a href="#cb31-296" aria-hidden="true" tabindex="-1"></a>The Seurat object contains many different parts with specific functions to access each slot. To better understand how to access each component, we have created a lesson going through the <span class="co">[</span><span class="ot">anatomy of a Seurat object</span><span class="co">](Aside_seurat_anatomy.qmd)</span> for the <span class="in">`crc`</span> object we have just created.</span>
-<span id="cb31-297"><a href="#cb31-297" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-298"><a href="#cb31-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-299"><a href="#cb31-299" aria-hidden="true" tabindex="-1"></a>We can assess how many bins belong to each bin size by using the <span class="in">`ncol()`</span> function on our datasets:</span>
-<span id="cb31-300"><a href="#cb31-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-303"><a href="#cb31-303" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-304"><a href="#cb31-304" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_ncol</span></span>
-<span id="cb31-305"><a href="#cb31-305" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(crc[[<span class="st">&quot;Spatial.008um&quot;</span>]])</span>
-<span id="cb31-306"><a href="#cb31-306" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(crc[[<span class="st">&quot;Spatial.016um&quot;</span>]])</span>
-<span id="cb31-307"><a href="#cb31-307" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-308"><a href="#cb31-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-309"><a href="#cb31-309" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb31-310"><a href="#cb31-310" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 2**](03_loading_spatial_data-Answer_key.qmd#exercise-2)</span></span>
-<span id="cb31-311"><a href="#cb31-311" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>What differences do you see between the <span class="in">`8um`</span> and <span class="in">`16um`</span> bins?</span>
-<span id="cb31-312"><a href="#cb31-312" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-313"><a href="#cb31-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-314"><a href="#cb31-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-315"><a href="#cb31-315" aria-hidden="true" tabindex="-1"></a>**Seurat automatically creates some metadata** for each of the cells when the object is created. This information is stored in the <span class="in">`@meta.data`</span> slot within the Seurat object. The rownames are automatically set to be the cell names.</span>
-<span id="cb31-316"><a href="#cb31-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-317"><a href="#cb31-317" aria-hidden="true" tabindex="-1"></a>_Note that the 16um columns will contain `NA` values, which is expected because Seurat will only calculate statistics for the first bin size specified in the `bin.size` argument._</span>
+<span id="cb31-275"><a href="#cb31-275" aria-hidden="true" tabindex="-1"></a>Now that we understand the input needed for the <span class="in">`Load10X_Spatial()`</span> function, let&#39;s use it to create a Seurat object called <span class="in">`crc`</span>. We will specify that we want to load in the <span class="in">`8µm`</span> and <span class="in">`16µm`</span> bin sizes at the same time. </span>
+<span id="cb31-276"><a href="#cb31-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-277"><a href="#cb31-277" aria-hidden="true" tabindex="-1"></a>**Typically you would only load in one bin size**, but for the purposes of better understanding bins and our Seurat data structure, we will load both here.</span>
+<span id="cb31-278"><a href="#cb31-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-281"><a href="#cb31-281" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-282"><a href="#cb31-282" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_Load10X_Spatial</span></span>
+<span id="cb31-283"><a href="#cb31-283" aria-hidden="true" tabindex="-1"></a>crc <span class="ot">&lt;-</span> <span class="fu">Load10X_Spatial</span>(<span class="at">data.dir =</span> <span class="st">&quot;data/P5CRC_cropped/&quot;</span>,</span>
+<span id="cb31-284"><a href="#cb31-284" aria-hidden="true" tabindex="-1"></a>                       <span class="at">bin.size =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">16</span>),</span>
+<span id="cb31-285"><a href="#cb31-285" aria-hidden="true" tabindex="-1"></a>                       <span class="at">slice =</span> <span class="st">&quot;P5CRC&quot;</span>)</span>
+<span id="cb31-286"><a href="#cb31-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-287"><a href="#cb31-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-288"><a href="#cb31-288" aria-hidden="true" tabindex="-1"></a>We can print out some basic information of our Seurat object to examine its data structure. We will do this frequently throughout the workshop to understand how the Seurat data structure changes with each step of the workflow.</span>
+<span id="cb31-289"><a href="#cb31-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-292"><a href="#cb31-292" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-293"><a href="#cb31-293" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_callout</span></span>
+<span id="cb31-294"><a href="#cb31-294" aria-hidden="true" tabindex="-1"></a>crc</span>
+<span id="cb31-295"><a href="#cb31-295" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-296"><a href="#cb31-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-297"><a href="#cb31-297" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb31-298"><a href="#cb31-298" aria-hidden="true" tabindex="-1"></a><span class="fu"># Anatomy of Seurat object</span></span>
+<span id="cb31-299"><a href="#cb31-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-300"><a href="#cb31-300" aria-hidden="true" tabindex="-1"></a>The Seurat object contains many different parts with specific functions to access each slot. To better understand how to access each component, we have created a lesson going through the <span class="co">[</span><span class="ot">anatomy of a Seurat object</span><span class="co">](Aside_seurat_anatomy.qmd)</span> for the <span class="in">`crc`</span> object we have just created.</span>
+<span id="cb31-301"><a href="#cb31-301" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-302"><a href="#cb31-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-303"><a href="#cb31-303" aria-hidden="true" tabindex="-1"></a>We can assess how many bins belong to each bin size by using the <span class="in">`ncol()`</span> function on our datasets:</span>
+<span id="cb31-304"><a href="#cb31-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-307"><a href="#cb31-307" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-308"><a href="#cb31-308" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_ncol</span></span>
+<span id="cb31-309"><a href="#cb31-309" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(crc[[<span class="st">&quot;Spatial.008um&quot;</span>]])</span>
+<span id="cb31-310"><a href="#cb31-310" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(crc[[<span class="st">&quot;Spatial.016um&quot;</span>]])</span>
+<span id="cb31-311"><a href="#cb31-311" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-312"><a href="#cb31-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-313"><a href="#cb31-313" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb31-314"><a href="#cb31-314" aria-hidden="true" tabindex="-1"></a><span class="fu"># [**Exercise 2**](03_loading_spatial_data-Answer_key.qmd#exercise-2)</span></span>
+<span id="cb31-315"><a href="#cb31-315" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>What differences do you see between the <span class="in">`8um`</span> and <span class="in">`16um`</span> bins?</span>
+<span id="cb31-316"><a href="#cb31-316" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-317"><a href="#cb31-317" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-318"><a href="#cb31-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-321"><a href="#cb31-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-322"><a href="#cb31-322" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_meta_data_1</span></span>
-<span id="cb31-323"><a href="#cb31-323" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-324"><a href="#cb31-324" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">View</span>()</span>
-<span id="cb31-325"><a href="#cb31-325" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-326"><a href="#cb31-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-329"><a href="#cb31-329" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-330"><a href="#cb31-330" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-crc_meta_data_1_dt</span></span>
-<span id="cb31-331"><a href="#cb31-331" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: Seurat default `@meta.data`</span></span>
-<span id="cb31-332"><a href="#cb31-332" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb31-333"><a href="#cb31-333" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
-<span id="cb31-334"><a href="#cb31-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-335"><a href="#cb31-335" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
-<span id="cb31-336"><a href="#cb31-336" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-337"><a href="#cb31-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-338"><a href="#cb31-338" aria-hidden="true" tabindex="-1"></a>What does each column represent?</span>
-<span id="cb31-339"><a href="#cb31-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-340"><a href="#cb31-340" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column        <span class="pp">|</span> Description                                   <span class="pp">|</span></span>
-<span id="cb31-341"><a href="#cb31-341" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|-----------------------------------------------|</span></span>
-<span id="cb31-342"><a href="#cb31-342" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> orig.ident    <span class="pp">|</span> Sample identity if known; defaults to “s”     <span class="pp">|</span></span>
-<span id="cb31-343"><a href="#cb31-343" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> nCount_Spatial    <span class="pp">|</span> Number of UMIs per cell                       <span class="pp">|</span></span>
-<span id="cb31-344"><a href="#cb31-344" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> nFeature_Spatial  <span class="pp">|</span> Number of genes detected per cell             <span class="pp">|</span></span>
-<span id="cb31-345"><a href="#cb31-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-346"><a href="#cb31-346" aria-hidden="true" tabindex="-1"></a>: Columns automatically populated in <span class="in">`@meta.data`</span> {#tbl-metadata_cols}</span>
-<span id="cb31-347"><a href="#cb31-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-348"><a href="#cb31-348" aria-hidden="true" tabindex="-1"></a>While it may seem intimidating at first, the important thing to remember is that this is a dataframe. Therefore, we can modify and work with this dataframe just like we would any other in R!</span>
+<span id="cb31-319"><a href="#cb31-319" aria-hidden="true" tabindex="-1"></a>**Seurat automatically creates some metadata** for each of the cells when the object is created. This information is stored in the <span class="in">`@meta.data`</span> slot within the Seurat object. The rownames are automatically set to be the cell names.</span>
+<span id="cb31-320"><a href="#cb31-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-321"><a href="#cb31-321" aria-hidden="true" tabindex="-1"></a>_Note that the 16um columns will contain `NA` values, which is expected because Seurat will only calculate statistics for the first bin size specified in the `bin.size` argument._</span>
+<span id="cb31-322"><a href="#cb31-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-325"><a href="#cb31-325" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-326"><a href="#cb31-326" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: crc_meta_data_1</span></span>
+<span id="cb31-327"><a href="#cb31-327" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-328"><a href="#cb31-328" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">View</span>()</span>
+<span id="cb31-329"><a href="#cb31-329" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-330"><a href="#cb31-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-333"><a href="#cb31-333" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-334"><a href="#cb31-334" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-crc_meta_data_1_dt</span></span>
+<span id="cb31-335"><a href="#cb31-335" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: Seurat default `@meta.data`</span></span>
+<span id="cb31-336"><a href="#cb31-336" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-337"><a href="#cb31-337" aria-hidden="true" tabindex="-1"></a>crc<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
+<span id="cb31-338"><a href="#cb31-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-339"><a href="#cb31-339" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb31-340"><a href="#cb31-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-341"><a href="#cb31-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-342"><a href="#cb31-342" aria-hidden="true" tabindex="-1"></a>What does each column represent?</span>
+<span id="cb31-343"><a href="#cb31-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-344"><a href="#cb31-344" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column        <span class="pp">|</span> Description                                   <span class="pp">|</span></span>
+<span id="cb31-345"><a href="#cb31-345" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|-----------------------------------------------|</span></span>
+<span id="cb31-346"><a href="#cb31-346" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> orig.ident    <span class="pp">|</span> Sample identity if known; defaults to “s”     <span class="pp">|</span></span>
+<span id="cb31-347"><a href="#cb31-347" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> nCount_Spatial    <span class="pp">|</span> Number of UMIs per cell                       <span class="pp">|</span></span>
+<span id="cb31-348"><a href="#cb31-348" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> nFeature_Spatial  <span class="pp">|</span> Number of genes detected per cell             <span class="pp">|</span></span>
 <span id="cb31-349"><a href="#cb31-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-350"><a href="#cb31-350" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading multiple samples into Seurat</span></span>
+<span id="cb31-350"><a href="#cb31-350" aria-hidden="true" tabindex="-1"></a>: Columns automatically populated in <span class="in">`@meta.data`</span> {#tbl-metadata_cols}</span>
 <span id="cb31-351"><a href="#cb31-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-352"><a href="#cb31-352" aria-hidden="true" tabindex="-1"></a>Before we begin, we are going to remove the <span class="in">`crc`</span> object we have been playing with in order to clear up extra space on our computers. _Spatial transcriptomics takes up a lot of memory!_ So we are being careful to remove any variables that might overload the RAM.</span>
+<span id="cb31-352"><a href="#cb31-352" aria-hidden="true" tabindex="-1"></a>While it may seem intimidating at first, the important thing to remember is that this is a dataframe. Therefore, we can modify and work with this dataframe just like we would any other in R!</span>
 <span id="cb31-353"><a href="#cb31-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-356"><a href="#cb31-356" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-357"><a href="#cb31-357" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: rm_crc</span></span>
-<span id="cb31-358"><a href="#cb31-358" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete crc variable to save RAM</span></span>
-<span id="cb31-359"><a href="#cb31-359" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(crc)</span>
-<span id="cb31-360"><a href="#cb31-360" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-361"><a href="#cb31-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-362"><a href="#cb31-362" aria-hidden="true" tabindex="-1"></a>Now that we have a better understanding of how to create a Seurat object from Space Ranger outputs, let&#39;s go through how we can load multiple samples at once. In this case we want to represent both samples <span class="in">`P5CRC`</span> and <span class="in">`P5NAT`</span> in a singular Seurat object.</span>
-<span id="cb31-363"><a href="#cb31-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-364"><a href="#cb31-364" aria-hidden="true" tabindex="-1"></a><span class="fu">### Using a `for` loop </span></span>
+<span id="cb31-354"><a href="#cb31-354" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading multiple samples into Seurat</span></span>
+<span id="cb31-355"><a href="#cb31-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-356"><a href="#cb31-356" aria-hidden="true" tabindex="-1"></a>Before we begin, we are going to remove the <span class="in">`crc`</span> object we have been playing with in order to clear up extra space on our computers. _Spatial transcriptomics takes up a lot of memory!_ So we are being careful to remove any variables that might overload the RAM.</span>
+<span id="cb31-357"><a href="#cb31-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-360"><a href="#cb31-360" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-361"><a href="#cb31-361" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: rm_crc</span></span>
+<span id="cb31-362"><a href="#cb31-362" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete crc variable to save RAM</span></span>
+<span id="cb31-363"><a href="#cb31-363" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(crc)</span>
+<span id="cb31-364"><a href="#cb31-364" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb31-365"><a href="#cb31-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-366"><a href="#cb31-366" aria-hidden="true" tabindex="-1"></a>In practice, you will likely have several samples that you will need to read in data for, and that can get tedious and error-prone if you do it one at a time. So, to make the data import into R more efficient we can use a <span class="in">`for`</span> loop, which will iterate over a series of commands for each of the inputs given and create Seurat objects for each of our samples. </span>
+<span id="cb31-366"><a href="#cb31-366" aria-hidden="true" tabindex="-1"></a>Now that we have a better understanding of how to create a Seurat object from Space Ranger outputs, let&#39;s go through how we can load multiple samples at once. In this case we want to represent both samples <span class="in">`P5CRC`</span> and <span class="in">`P5NAT`</span> in a singular Seurat object.</span>
 <span id="cb31-367"><a href="#cb31-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-368"><a href="#cb31-368" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
-<span id="cb31-369"><a href="#cb31-369" aria-hidden="true" tabindex="-1"></a><span class="fu"># `for` loop syntax</span></span>
-<span id="cb31-370"><a href="#cb31-370" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-371"><a href="#cb31-371" aria-hidden="true" tabindex="-1"></a>In R, the <span class="in">`for`</span> loop has the following structure/syntax:</span>
-<span id="cb31-372"><a href="#cb31-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-375"><a href="#cb31-375" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-376"><a href="#cb31-376" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: for_loop_example</span></span>
-<span id="cb31-377"><a href="#cb31-377" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-378"><a href="#cb31-378" aria-hidden="true" tabindex="-1"></a><span class="do">## DO NOT RUN</span></span>
-<span id="cb31-379"><a href="#cb31-379" aria-hidden="true" tabindex="-1"></a><span class="co"># For loop syntax</span></span>
-<span id="cb31-380"><a href="#cb31-380" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (variable <span class="cf">in</span> input){</span>
-<span id="cb31-381"><a href="#cb31-381" aria-hidden="true" tabindex="-1"></a>    command1</span>
-<span id="cb31-382"><a href="#cb31-382" aria-hidden="true" tabindex="-1"></a>    command2</span>
-<span id="cb31-383"><a href="#cb31-383" aria-hidden="true" tabindex="-1"></a>    command3</span>
-<span id="cb31-384"><a href="#cb31-384" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-385"><a href="#cb31-385" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-386"><a href="#cb31-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-387"><a href="#cb31-387" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-388"><a href="#cb31-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-389"><a href="#cb31-389" aria-hidden="true" tabindex="-1"></a>Today, we will use it to **iterate over the two sample folders** and execute commands for each sample as we did above for a single sample:</span>
+<span id="cb31-368"><a href="#cb31-368" aria-hidden="true" tabindex="-1"></a><span class="fu">### Using a `for` loop </span></span>
+<span id="cb31-369"><a href="#cb31-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-370"><a href="#cb31-370" aria-hidden="true" tabindex="-1"></a>In practice, you will likely have several samples that you will need to read in data for, and that can get tedious and error-prone if you do it one at a time. So, to make the data import into R more efficient we can use a <span class="in">`for`</span> loop, which will iterate over a series of commands for each of the inputs given and create Seurat objects for each of our samples. </span>
+<span id="cb31-371"><a href="#cb31-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-372"><a href="#cb31-372" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
+<span id="cb31-373"><a href="#cb31-373" aria-hidden="true" tabindex="-1"></a><span class="fu"># `for` loop syntax</span></span>
+<span id="cb31-374"><a href="#cb31-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-375"><a href="#cb31-375" aria-hidden="true" tabindex="-1"></a>In R, the <span class="in">`for`</span> loop has the following structure/syntax:</span>
+<span id="cb31-376"><a href="#cb31-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-379"><a href="#cb31-379" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-380"><a href="#cb31-380" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: for_loop_example</span></span>
+<span id="cb31-381"><a href="#cb31-381" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-382"><a href="#cb31-382" aria-hidden="true" tabindex="-1"></a><span class="do">## DO NOT RUN</span></span>
+<span id="cb31-383"><a href="#cb31-383" aria-hidden="true" tabindex="-1"></a><span class="co"># For loop syntax</span></span>
+<span id="cb31-384"><a href="#cb31-384" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (variable <span class="cf">in</span> input){</span>
+<span id="cb31-385"><a href="#cb31-385" aria-hidden="true" tabindex="-1"></a>    command1</span>
+<span id="cb31-386"><a href="#cb31-386" aria-hidden="true" tabindex="-1"></a>    command2</span>
+<span id="cb31-387"><a href="#cb31-387" aria-hidden="true" tabindex="-1"></a>    command3</span>
+<span id="cb31-388"><a href="#cb31-388" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb31-389"><a href="#cb31-389" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb31-390"><a href="#cb31-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-391"><a href="#cb31-391" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Generate path to <span class="in">`data.dir`</span> by pasting &quot;_cropped&quot; to the sample name</span>
-<span id="cb31-392"><a href="#cb31-392" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Create the Seurat objects from the SpaceRanger data (<span class="in">`Load10X_Spatial()`</span>) </span>
-<span id="cb31-393"><a href="#cb31-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-394"><a href="#cb31-394" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>Set <span class="in">`slice`</span> to sample</span>
-<span id="cb31-395"><a href="#cb31-395" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>Use <span class="in">`bin.size`</span> of 8um</span>
-<span id="cb31-396"><a href="#cb31-396" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-397"><a href="#cb31-397" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Set <span class="in">`orig.ident`</span> to be sample</span>
-<span id="cb31-398"><a href="#cb31-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-399"><a href="#cb31-399" aria-hidden="true" tabindex="-1"></a>Once those steps run, we will store the newly generated Seurat object to a list called <span class="in">`list_seurat`</span> so that we can eventually merge both samples together.</span>
+<span id="cb31-391"><a href="#cb31-391" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-392"><a href="#cb31-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-393"><a href="#cb31-393" aria-hidden="true" tabindex="-1"></a>Today, we will use it to **iterate over the two sample folders** and execute commands for each sample as we did above for a single sample:</span>
+<span id="cb31-394"><a href="#cb31-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-395"><a href="#cb31-395" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Generate path to <span class="in">`data.dir`</span> by pasting &quot;_cropped&quot; to the sample name</span>
+<span id="cb31-396"><a href="#cb31-396" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Create the Seurat objects from the SpaceRanger data (<span class="in">`Load10X_Spatial()`</span>) </span>
+<span id="cb31-397"><a href="#cb31-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-398"><a href="#cb31-398" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>Set <span class="in">`slice`</span> to sample</span>
+<span id="cb31-399"><a href="#cb31-399" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>Use <span class="in">`bin.size`</span> of 8um</span>
 <span id="cb31-400"><a href="#cb31-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-401"><a href="#cb31-401" aria-hidden="true" tabindex="-1"></a>**We will be using a bin size of 8um for the remainder of this workshop!**</span>
+<span id="cb31-401"><a href="#cb31-401" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Set <span class="in">`orig.ident`</span> to be sample</span>
 <span id="cb31-402"><a href="#cb31-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-405"><a href="#cb31-405" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-406"><a href="#cb31-406" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: for_loop_Load10X_Spatial</span></span>
-<span id="cb31-407"><a href="#cb31-407" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-408"><a href="#cb31-408" aria-hidden="true" tabindex="-1"></a><span class="co"># List of samples (associated with data.dir)</span></span>
-<span id="cb31-409"><a href="#cb31-409" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;P5CRC&quot;</span>, <span class="st">&quot;P5NAT&quot;</span>)</span>
-<span id="cb31-410"><a href="#cb31-410" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-411"><a href="#cb31-411" aria-hidden="true" tabindex="-1"></a><span class="co"># Empty list to fill with Seurat objects</span></span>
-<span id="cb31-412"><a href="#cb31-412" aria-hidden="true" tabindex="-1"></a>list_seurat <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb31-413"><a href="#cb31-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-414"><a href="#cb31-414" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (sample <span class="cf">in</span> samples) {</span>
-<span id="cb31-415"><a href="#cb31-415" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb31-416"><a href="#cb31-416" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to data directory</span></span>
-<span id="cb31-417"><a href="#cb31-417" aria-hidden="true" tabindex="-1"></a>  data_dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;data/&quot;</span>, sample, <span class="st">&quot;_cropped&quot;</span>)</span>
-<span id="cb31-418"><a href="#cb31-418" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(data_dir)</span>
-<span id="cb31-419"><a href="#cb31-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-420"><a href="#cb31-420" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create seurat object and set orig ident to be sample</span></span>
-<span id="cb31-421"><a href="#cb31-421" aria-hidden="true" tabindex="-1"></a>  seurat <span class="ot">&lt;-</span> <span class="fu">Load10X_Spatial</span>(<span class="at">data.dir =</span> data_dir,</span>
-<span id="cb31-422"><a href="#cb31-422" aria-hidden="true" tabindex="-1"></a>                            <span class="at">bin.size =</span> <span class="dv">8</span>,</span>
-<span id="cb31-423"><a href="#cb31-423" aria-hidden="true" tabindex="-1"></a>                            <span class="at">slice =</span> sample)</span>
-<span id="cb31-424"><a href="#cb31-424" aria-hidden="true" tabindex="-1"></a>  seurat<span class="sc">$</span>orig.ident <span class="ot">&lt;-</span> sample</span>
-<span id="cb31-425"><a href="#cb31-425" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb31-426"><a href="#cb31-426" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store seurat object in our list</span></span>
-<span id="cb31-427"><a href="#cb31-427" aria-hidden="true" tabindex="-1"></a>  list_seurat[[sample]] <span class="ot">&lt;-</span> seurat</span>
-<span id="cb31-428"><a href="#cb31-428" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-429"><a href="#cb31-429" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-430"><a href="#cb31-430" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-431"><a href="#cb31-431" aria-hidden="true" tabindex="-1"></a>To confirm that we have succesfully loaded both samples in, we can take a look at the contents of <span class="in">`list_seurat`</span>. We should see that there are two Seurat objects in our list corresponding to each of our samples.</span>
-<span id="cb31-432"><a href="#cb31-432" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-435"><a href="#cb31-435" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-436"><a href="#cb31-436" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: list_seurat_load</span></span>
-<span id="cb31-437"><a href="#cb31-437" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb31-438"><a href="#cb31-438" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(list_seurat, &quot;intermediate/03_list_seurat.qs&quot;)</span></span>
-<span id="cb31-439"><a href="#cb31-439" aria-hidden="true" tabindex="-1"></a>list_seurat <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/03_list_seurat.qs&quot;</span>)</span>
-<span id="cb31-440"><a href="#cb31-440" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-441"><a href="#cb31-441" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-444"><a href="#cb31-444" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-445"><a href="#cb31-445" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: list_seurat_print</span></span>
-<span id="cb31-446"><a href="#cb31-446" aria-hidden="true" tabindex="-1"></a>list_seurat</span>
-<span id="cb31-447"><a href="#cb31-447" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-448"><a href="#cb31-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-449"><a href="#cb31-449" aria-hidden="true" tabindex="-1"></a>This is exactly what we had hoped to see! So now we can move on to the next step which is merging the samples together into a singular Seurat object.</span>
-<span id="cb31-450"><a href="#cb31-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-451"><a href="#cb31-451" aria-hidden="true" tabindex="-1"></a><span class="fu">### Merge datasets together</span></span>
+<span id="cb31-403"><a href="#cb31-403" aria-hidden="true" tabindex="-1"></a>Once those steps run, we will store the newly generated Seurat object to a list called <span class="in">`list_seurat`</span> so that we can eventually merge both samples together.</span>
+<span id="cb31-404"><a href="#cb31-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-405"><a href="#cb31-405" aria-hidden="true" tabindex="-1"></a>**We will be using a bin size of 8um for the remainder of this workshop!**</span>
+<span id="cb31-406"><a href="#cb31-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-409"><a href="#cb31-409" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-410"><a href="#cb31-410" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: for_loop_Load10X_Spatial</span></span>
+<span id="cb31-411"><a href="#cb31-411" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-412"><a href="#cb31-412" aria-hidden="true" tabindex="-1"></a><span class="co"># List of samples (associated with data.dir)</span></span>
+<span id="cb31-413"><a href="#cb31-413" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;P5CRC&quot;</span>, <span class="st">&quot;P5NAT&quot;</span>)</span>
+<span id="cb31-414"><a href="#cb31-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-415"><a href="#cb31-415" aria-hidden="true" tabindex="-1"></a><span class="co"># Empty list to fill with Seurat objects</span></span>
+<span id="cb31-416"><a href="#cb31-416" aria-hidden="true" tabindex="-1"></a>list_seurat <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb31-417"><a href="#cb31-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-418"><a href="#cb31-418" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (sample <span class="cf">in</span> samples) {</span>
+<span id="cb31-419"><a href="#cb31-419" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-420"><a href="#cb31-420" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to data directory</span></span>
+<span id="cb31-421"><a href="#cb31-421" aria-hidden="true" tabindex="-1"></a>  data_dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;data/&quot;</span>, sample, <span class="st">&quot;_cropped&quot;</span>)</span>
+<span id="cb31-422"><a href="#cb31-422" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(data_dir)</span>
+<span id="cb31-423"><a href="#cb31-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-424"><a href="#cb31-424" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create seurat object and set orig ident to be sample</span></span>
+<span id="cb31-425"><a href="#cb31-425" aria-hidden="true" tabindex="-1"></a>  seurat <span class="ot">&lt;-</span> <span class="fu">Load10X_Spatial</span>(<span class="at">data.dir =</span> data_dir,</span>
+<span id="cb31-426"><a href="#cb31-426" aria-hidden="true" tabindex="-1"></a>                            <span class="at">bin.size =</span> <span class="dv">8</span>,</span>
+<span id="cb31-427"><a href="#cb31-427" aria-hidden="true" tabindex="-1"></a>                            <span class="at">slice =</span> sample)</span>
+<span id="cb31-428"><a href="#cb31-428" aria-hidden="true" tabindex="-1"></a>  seurat<span class="sc">$</span>orig.ident <span class="ot">&lt;-</span> sample</span>
+<span id="cb31-429"><a href="#cb31-429" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-430"><a href="#cb31-430" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store seurat object in our list</span></span>
+<span id="cb31-431"><a href="#cb31-431" aria-hidden="true" tabindex="-1"></a>  list_seurat[[sample]] <span class="ot">&lt;-</span> seurat</span>
+<span id="cb31-432"><a href="#cb31-432" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb31-433"><a href="#cb31-433" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-434"><a href="#cb31-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-435"><a href="#cb31-435" aria-hidden="true" tabindex="-1"></a>To confirm that we have succesfully loaded both samples in, we can take a look at the contents of <span class="in">`list_seurat`</span>. We should see that there are two Seurat objects in our list corresponding to each of our samples.</span>
+<span id="cb31-436"><a href="#cb31-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-439"><a href="#cb31-439" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-440"><a href="#cb31-440" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: list_seurat_load</span></span>
+<span id="cb31-441"><a href="#cb31-441" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-442"><a href="#cb31-442" aria-hidden="true" tabindex="-1"></a><span class="co"># qs2::qs_save(list_seurat, &quot;intermediate/03_list_seurat.qs&quot;)</span></span>
+<span id="cb31-443"><a href="#cb31-443" aria-hidden="true" tabindex="-1"></a>list_seurat <span class="ot">&lt;-</span> qs2<span class="sc">::</span><span class="fu">qs_read</span>(<span class="st">&quot;intermediate/03_list_seurat.qs&quot;</span>)</span>
+<span id="cb31-444"><a href="#cb31-444" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-445"><a href="#cb31-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-448"><a href="#cb31-448" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-449"><a href="#cb31-449" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: list_seurat_print</span></span>
+<span id="cb31-450"><a href="#cb31-450" aria-hidden="true" tabindex="-1"></a>list_seurat</span>
+<span id="cb31-451"><a href="#cb31-451" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb31-452"><a href="#cb31-452" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-453"><a href="#cb31-453" aria-hidden="true" tabindex="-1"></a>We will merge the samples together because it makes it easier to run the quality control steps. It also enables us to easily compare the data quality for all cells at one time. To create this combined Seurat object, we use the <span class="in">`merge()`</span> function. Because the same cell IDs can be used in different samples, we add a **sample-specific prefix** to each of our cell IDs using the <span class="in">`add.cell.id`</span> argument to ensure the cell names are unique.</span>
+<span id="cb31-453"><a href="#cb31-453" aria-hidden="true" tabindex="-1"></a>This is exactly what we had hoped to see! So now we can move on to the next step which is merging the samples together into a singular Seurat object.</span>
 <span id="cb31-454"><a href="#cb31-454" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-457"><a href="#cb31-457" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-458"><a href="#cb31-458" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: list_seurat_merge</span></span>
-<span id="cb31-459"><a href="#cb31-459" aria-hidden="true" tabindex="-1"></a><span class="co"># Create singular seurat object out of multiple samples</span></span>
-<span id="cb31-460"><a href="#cb31-460" aria-hidden="true" tabindex="-1"></a>seurat_merged <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> list_seurat[[<span class="st">&quot;P5CRC&quot;</span>]],</span>
-<span id="cb31-461"><a href="#cb31-461" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> list_seurat[[<span class="st">&quot;P5NAT&quot;</span>]],</span>
-<span id="cb31-462"><a href="#cb31-462" aria-hidden="true" tabindex="-1"></a>                       <span class="at">add.cell.id =</span> <span class="fu">c</span>(<span class="st">&quot;P5CRC&quot;</span>, <span class="st">&quot;P5NAT&quot;</span>))</span>
-<span id="cb31-463"><a href="#cb31-463" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
-<span id="cb31-464"><a href="#cb31-464" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-465"><a href="#cb31-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-466"><a href="#cb31-466" aria-hidden="true" tabindex="-1"></a>From the output, we can see that we now have: <span class="in">`2 layers present: counts.1, counts.2`</span> </span>
-<span id="cb31-467"><a href="#cb31-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-468"><a href="#cb31-468" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
-<span id="cb31-469"><a href="#cb31-469" aria-hidden="true" tabindex="-1"></a><span class="fu"># What if I am merging more than two samples?</span></span>
-<span id="cb31-470"><a href="#cb31-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-471"><a href="#cb31-471" aria-hidden="true" tabindex="-1"></a>Seurat has functionality to merge many samples together. You can do this by adding all but one Seurat object to the <span class="in">`y`</span> argument in a vector format. An example is provided below, assuming you use the list structure we used previously: </span>
-<span id="cb31-472"><a href="#cb31-472" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-475"><a href="#cb31-475" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-476"><a href="#cb31-476" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: merging_multiple_objects</span></span>
-<span id="cb31-477"><a href="#cb31-477" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-478"><a href="#cb31-478" aria-hidden="true" tabindex="-1"></a><span class="do">## DO NOT RUN</span></span>
-<span id="cb31-479"><a href="#cb31-479" aria-hidden="true" tabindex="-1"></a>merged_seurat <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> seurat_list[[<span class="dv">1</span>]], </span>
-<span id="cb31-480"><a href="#cb31-480" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> seurat_list[<span class="dv">2</span><span class="sc">:</span> <span class="fu">length</span>(seurat_list)],</span>
-<span id="cb31-481"><a href="#cb31-481" aria-hidden="true" tabindex="-1"></a>                       <span class="at">add.cell.id =</span> <span class="fu">names</span>(seurat_list))</span>
-<span id="cb31-482"><a href="#cb31-482" aria-hidden="true" tabindex="-1"></a><span class="in">```</span>       </span>
-<span id="cb31-483"><a href="#cb31-483" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-484"><a href="#cb31-484" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-485"><a href="#cb31-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-486"><a href="#cb31-486" aria-hidden="true" tabindex="-1"></a>The two separate <span class="in">`counts`</span> indicates that our raw counts matrices are being stored as separate layers in the Seurat object. This is because we have not yet concatenated the matrices together yet with the <span class="in">`JoinLayers()`</span> function. We want to run this step for two reasons:</span>
+<span id="cb31-455"><a href="#cb31-455" aria-hidden="true" tabindex="-1"></a><span class="fu">### Merge datasets together</span></span>
+<span id="cb31-456"><a href="#cb31-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-457"><a href="#cb31-457" aria-hidden="true" tabindex="-1"></a>We will merge the samples together because it makes it easier to run the quality control steps. It also enables us to easily compare the data quality for all cells at one time. To create this combined Seurat object, we use the <span class="in">`merge()`</span> function. Because the same cell IDs can be used in different samples, we add a **sample-specific prefix** to each of our cell IDs using the <span class="in">`add.cell.id`</span> argument to ensure the cell names are unique.</span>
+<span id="cb31-458"><a href="#cb31-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-461"><a href="#cb31-461" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-462"><a href="#cb31-462" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: list_seurat_merge</span></span>
+<span id="cb31-463"><a href="#cb31-463" aria-hidden="true" tabindex="-1"></a><span class="co"># Create singular seurat object out of multiple samples</span></span>
+<span id="cb31-464"><a href="#cb31-464" aria-hidden="true" tabindex="-1"></a>seurat_merged <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> list_seurat[[<span class="st">&quot;P5CRC&quot;</span>]],</span>
+<span id="cb31-465"><a href="#cb31-465" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> list_seurat[[<span class="st">&quot;P5NAT&quot;</span>]],</span>
+<span id="cb31-466"><a href="#cb31-466" aria-hidden="true" tabindex="-1"></a>                       <span class="at">add.cell.id =</span> <span class="fu">c</span>(<span class="st">&quot;P5CRC&quot;</span>, <span class="st">&quot;P5NAT&quot;</span>))</span>
+<span id="cb31-467"><a href="#cb31-467" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
+<span id="cb31-468"><a href="#cb31-468" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-469"><a href="#cb31-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-470"><a href="#cb31-470" aria-hidden="true" tabindex="-1"></a>From the output, we can see that we now have: <span class="in">`2 layers present: counts.1, counts.2`</span> </span>
+<span id="cb31-471"><a href="#cb31-471" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-472"><a href="#cb31-472" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
+<span id="cb31-473"><a href="#cb31-473" aria-hidden="true" tabindex="-1"></a><span class="fu"># What if I am merging more than two samples?</span></span>
+<span id="cb31-474"><a href="#cb31-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-475"><a href="#cb31-475" aria-hidden="true" tabindex="-1"></a>Seurat has functionality to merge many samples together. You can do this by adding all but one Seurat object to the <span class="in">`y`</span> argument in a vector format. An example is provided below, assuming you use the list structure we used previously: </span>
+<span id="cb31-476"><a href="#cb31-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-479"><a href="#cb31-479" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-480"><a href="#cb31-480" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: merging_multiple_objects</span></span>
+<span id="cb31-481"><a href="#cb31-481" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-482"><a href="#cb31-482" aria-hidden="true" tabindex="-1"></a><span class="do">## DO NOT RUN</span></span>
+<span id="cb31-483"><a href="#cb31-483" aria-hidden="true" tabindex="-1"></a>merged_seurat <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> seurat_list[[<span class="dv">1</span>]], </span>
+<span id="cb31-484"><a href="#cb31-484" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> seurat_list[<span class="dv">2</span><span class="sc">:</span> <span class="fu">length</span>(seurat_list)],</span>
+<span id="cb31-485"><a href="#cb31-485" aria-hidden="true" tabindex="-1"></a>                       <span class="at">add.cell.id =</span> <span class="fu">names</span>(seurat_list))</span>
+<span id="cb31-486"><a href="#cb31-486" aria-hidden="true" tabindex="-1"></a><span class="in">```</span>       </span>
 <span id="cb31-487"><a href="#cb31-487" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-488"><a href="#cb31-488" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Some calculations may be done on one matrix and not the other</span>
-<span id="cb31-489"><a href="#cb31-489" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Later steps will require a singular, joined matrix</span>
-<span id="cb31-490"><a href="#cb31-490" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-493"><a href="#cb31-493" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-494"><a href="#cb31-494" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_JoinLayers</span></span>
-<span id="cb31-495"><a href="#cb31-495" aria-hidden="true" tabindex="-1"></a>seurat_merged <span class="ot">&lt;-</span> <span class="fu">JoinLayers</span>(seurat_merged)</span>
-<span id="cb31-496"><a href="#cb31-496" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-497"><a href="#cb31-497" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-498"><a href="#cb31-498" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
-<span id="cb31-499"><a href="#cb31-499" aria-hidden="true" tabindex="-1"></a><span class="fu"># Merging vs. integration</span></span>
-<span id="cb31-500"><a href="#cb31-500" aria-hidden="true" tabindex="-1"></a>A common point of confusion is the distinction between **integration** and merging. In the field, integration is considered to be modifying either your counts or latent space in a way to correct for a batch variable. Whereas what we are doing now is **merging** or concatenating multiple samples together. This process of merging does not transform the values in the count matrices.</span>
-<span id="cb31-501"><a href="#cb31-501" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-502"><a href="#cb31-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-503"><a href="#cb31-503" aria-hidden="true" tabindex="-1"></a><span class="fu">## Evaluating `merged_seurat`</span></span>
-<span id="cb31-504"><a href="#cb31-504" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-505"><a href="#cb31-505" aria-hidden="true" tabindex="-1"></a>Let’s also double check that we have the correct number of cells. First, let us see what the number of cells was for each sample:</span>
+<span id="cb31-488"><a href="#cb31-488" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-489"><a href="#cb31-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-490"><a href="#cb31-490" aria-hidden="true" tabindex="-1"></a>The two separate <span class="in">`counts`</span> indicates that our raw counts matrices are being stored as separate layers in the Seurat object. This is because we have not yet concatenated the matrices together yet with the <span class="in">`JoinLayers()`</span> function. We want to run this step for two reasons:</span>
+<span id="cb31-491"><a href="#cb31-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-492"><a href="#cb31-492" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Some calculations may be done on one matrix and not the other</span>
+<span id="cb31-493"><a href="#cb31-493" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Later steps will require a singular, joined matrix</span>
+<span id="cb31-494"><a href="#cb31-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-497"><a href="#cb31-497" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-498"><a href="#cb31-498" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_JoinLayers</span></span>
+<span id="cb31-499"><a href="#cb31-499" aria-hidden="true" tabindex="-1"></a>seurat_merged <span class="ot">&lt;-</span> <span class="fu">JoinLayers</span>(seurat_merged)</span>
+<span id="cb31-500"><a href="#cb31-500" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-501"><a href="#cb31-501" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-502"><a href="#cb31-502" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse=true}</span>
+<span id="cb31-503"><a href="#cb31-503" aria-hidden="true" tabindex="-1"></a><span class="fu"># Merging vs. integration</span></span>
+<span id="cb31-504"><a href="#cb31-504" aria-hidden="true" tabindex="-1"></a>A common point of confusion is the distinction between **integration** and merging. In the field, integration is considered to be modifying either your counts or latent space in a way to correct for a batch variable. Whereas what we are doing now is **merging** or concatenating multiple samples together. This process of merging does not transform the values in the count matrices.</span>
+<span id="cb31-505"><a href="#cb31-505" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb31-506"><a href="#cb31-506" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-509"><a href="#cb31-509" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-510"><a href="#cb31-510" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: ncells_math</span></span>
-<span id="cb31-511"><a href="#cb31-511" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum of cells in P5CRC and P5NAT in seurat_list</span></span>
-<span id="cb31-512"><a href="#cb31-512" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(list_seurat[[<span class="st">&quot;P5CRC&quot;</span>]]) <span class="sc">+</span> <span class="fu">ncol</span>(list_seurat[[<span class="st">&quot;P5NAT&quot;</span>]])</span>
-<span id="cb31-513"><a href="#cb31-513" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-514"><a href="#cb31-514" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-515"><a href="#cb31-515" aria-hidden="true" tabindex="-1"></a>Which is the same as the number of &quot;samples&quot; displayed when we call our Seurat object!</span>
-<span id="cb31-516"><a href="#cb31-516" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-519"><a href="#cb31-519" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-520"><a href="#cb31-520" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_callout</span></span>
-<span id="cb31-521"><a href="#cb31-521" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the number of cell/&quot;samples&quot; in merged seurat object</span></span>
-<span id="cb31-522"><a href="#cb31-522" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
-<span id="cb31-523"><a href="#cb31-523" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-524"><a href="#cb31-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-525"><a href="#cb31-525" aria-hidden="true" tabindex="-1"></a>If we look at the metadata of the merged Seurat object, we should be able to see the prefixes in the rownames (<span class="in">`Cells`</span>) as well as the updated <span class="in">`orig.ident`</span> we set in the <span class="in">`for`</span> loop earlier.</span>
-<span id="cb31-526"><a href="#cb31-526" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-529"><a href="#cb31-529" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-530"><a href="#cb31-530" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_metadata_head</span></span>
-<span id="cb31-531"><a href="#cb31-531" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-532"><a href="#cb31-532" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the merged object has the appropriate sample-specific prefixes</span></span>
-<span id="cb31-533"><a href="#cb31-533" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
-<span id="cb31-534"><a href="#cb31-534" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-535"><a href="#cb31-535" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-538"><a href="#cb31-538" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-539"><a href="#cb31-539" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-seurat_merged_metadata_head_dt</span></span>
-<span id="cb31-540"><a href="#cb31-540" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: First 5 rows of `@meta.data`</span></span>
-<span id="cb31-541"><a href="#cb31-541" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb31-542"><a href="#cb31-542" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
-<span id="cb31-543"><a href="#cb31-543" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-544"><a href="#cb31-544" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
-<span id="cb31-545"><a href="#cb31-545" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-546"><a href="#cb31-546" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-549"><a href="#cb31-549" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-550"><a href="#cb31-550" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_metadata_tail</span></span>
-<span id="cb31-551"><a href="#cb31-551" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-552"><a href="#cb31-552" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">tail</span>()</span>
-<span id="cb31-553"><a href="#cb31-553" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-554"><a href="#cb31-554" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-557"><a href="#cb31-557" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-558"><a href="#cb31-558" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-seurat_merged_metadata_tail_dt</span></span>
-<span id="cb31-559"><a href="#cb31-559" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: Last 5 rows of `@meta.data`</span></span>
-<span id="cb31-560"><a href="#cb31-560" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb31-561"><a href="#cb31-561" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
-<span id="cb31-562"><a href="#cb31-562" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-563"><a href="#cb31-563" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
-<span id="cb31-564"><a href="#cb31-564" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-565"><a href="#cb31-565" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-566"><a href="#cb31-566" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-567"><a href="#cb31-567" aria-hidden="true" tabindex="-1"></a>The bin identities are stored as <span class="in">`Idents()`</span>, which contain the default way to label bins. So the last step here is making sure that the <span class="in">`Idents`</span> of our bins is a useful piece of information, for example like <span class="in">`orig.ident`</span>, which contains our sample IDs.</span>
-<span id="cb31-568"><a href="#cb31-568" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-571"><a href="#cb31-571" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-572"><a href="#cb31-572" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_idents</span></span>
-<span id="cb31-573"><a href="#cb31-573" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(seurat_merged) <span class="ot">&lt;-</span> <span class="st">&quot;orig.ident&quot;</span></span>
-<span id="cb31-574"><a href="#cb31-574" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-575"><a href="#cb31-575" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-576"><a href="#cb31-576" aria-hidden="true" tabindex="-1"></a><span class="fu">## Save!</span></span>
-<span id="cb31-577"><a href="#cb31-577" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-578"><a href="#cb31-578" aria-hidden="true" tabindex="-1"></a>Now is a great spot to save our <span class="in">`seurat_merged`</span> object as the next step is going to be filtering. </span>
+<span id="cb31-507"><a href="#cb31-507" aria-hidden="true" tabindex="-1"></a><span class="fu">## Evaluating `merged_seurat`</span></span>
+<span id="cb31-508"><a href="#cb31-508" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-509"><a href="#cb31-509" aria-hidden="true" tabindex="-1"></a>Let’s also double check that we have the correct number of cells. First, let us see what the number of cells was for each sample:</span>
+<span id="cb31-510"><a href="#cb31-510" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-513"><a href="#cb31-513" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-514"><a href="#cb31-514" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: ncells_math</span></span>
+<span id="cb31-515"><a href="#cb31-515" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum of cells in P5CRC and P5NAT in seurat_list</span></span>
+<span id="cb31-516"><a href="#cb31-516" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(list_seurat[[<span class="st">&quot;P5CRC&quot;</span>]]) <span class="sc">+</span> <span class="fu">ncol</span>(list_seurat[[<span class="st">&quot;P5NAT&quot;</span>]])</span>
+<span id="cb31-517"><a href="#cb31-517" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-518"><a href="#cb31-518" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-519"><a href="#cb31-519" aria-hidden="true" tabindex="-1"></a>Which is the same as the number of &quot;samples&quot; displayed when we call our Seurat object!</span>
+<span id="cb31-520"><a href="#cb31-520" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-523"><a href="#cb31-523" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-524"><a href="#cb31-524" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_callout</span></span>
+<span id="cb31-525"><a href="#cb31-525" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the number of cell/&quot;samples&quot; in merged seurat object</span></span>
+<span id="cb31-526"><a href="#cb31-526" aria-hidden="true" tabindex="-1"></a>seurat_merged</span>
+<span id="cb31-527"><a href="#cb31-527" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-528"><a href="#cb31-528" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-529"><a href="#cb31-529" aria-hidden="true" tabindex="-1"></a>If we look at the metadata of the merged Seurat object, we should be able to see the prefixes in the rownames (<span class="in">`Cells`</span>) as well as the updated <span class="in">`orig.ident`</span> we set in the <span class="in">`for`</span> loop earlier.</span>
+<span id="cb31-530"><a href="#cb31-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-533"><a href="#cb31-533" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-534"><a href="#cb31-534" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_metadata_head</span></span>
+<span id="cb31-535"><a href="#cb31-535" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-536"><a href="#cb31-536" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the merged object has the appropriate sample-specific prefixes</span></span>
+<span id="cb31-537"><a href="#cb31-537" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb31-538"><a href="#cb31-538" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-539"><a href="#cb31-539" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-542"><a href="#cb31-542" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-543"><a href="#cb31-543" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-seurat_merged_metadata_head_dt</span></span>
+<span id="cb31-544"><a href="#cb31-544" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: First 5 rows of `@meta.data`</span></span>
+<span id="cb31-545"><a href="#cb31-545" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-546"><a href="#cb31-546" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
+<span id="cb31-547"><a href="#cb31-547" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-548"><a href="#cb31-548" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb31-549"><a href="#cb31-549" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-550"><a href="#cb31-550" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-553"><a href="#cb31-553" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-554"><a href="#cb31-554" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_metadata_tail</span></span>
+<span id="cb31-555"><a href="#cb31-555" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-556"><a href="#cb31-556" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">tail</span>()</span>
+<span id="cb31-557"><a href="#cb31-557" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-558"><a href="#cb31-558" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-561"><a href="#cb31-561" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-562"><a href="#cb31-562" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-seurat_merged_metadata_tail_dt</span></span>
+<span id="cb31-563"><a href="#cb31-563" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: Last 5 rows of `@meta.data`</span></span>
+<span id="cb31-564"><a href="#cb31-564" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-565"><a href="#cb31-565" aria-hidden="true" tabindex="-1"></a>seurat_merged<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> </span>
+<span id="cb31-566"><a href="#cb31-566" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-567"><a href="#cb31-567" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb31-568"><a href="#cb31-568" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-569"><a href="#cb31-569" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-570"><a href="#cb31-570" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-571"><a href="#cb31-571" aria-hidden="true" tabindex="-1"></a>The bin identities are stored as <span class="in">`Idents()`</span>, which contain the default way to label bins. So the last step here is making sure that the <span class="in">`Idents`</span> of our bins is a useful piece of information, for example like <span class="in">`orig.ident`</span>, which contains our sample IDs.</span>
+<span id="cb31-572"><a href="#cb31-572" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-575"><a href="#cb31-575" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-576"><a href="#cb31-576" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_idents</span></span>
+<span id="cb31-577"><a href="#cb31-577" aria-hidden="true" tabindex="-1"></a><span class="fu">Idents</span>(seurat_merged) <span class="ot">&lt;-</span> <span class="st">&quot;orig.ident&quot;</span></span>
+<span id="cb31-578"><a href="#cb31-578" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb31-579"><a href="#cb31-579" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-582"><a href="#cb31-582" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-583"><a href="#cb31-583" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_saveRDS</span></span>
-<span id="cb31-584"><a href="#cb31-584" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-585"><a href="#cb31-585" aria-hidden="true" tabindex="-1"></a><span class="co"># Save integrated Seurat object</span></span>
-<span id="cb31-586"><a href="#cb31-586" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(seurat_merged, <span class="st">&quot;data/01_seurat_merged.RDS&quot;</span>)</span>
-<span id="cb31-587"><a href="#cb31-587" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-588"><a href="#cb31-588" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-591"><a href="#cb31-591" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-592"><a href="#cb31-592" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_saveqs</span></span>
-<span id="cb31-593"><a href="#cb31-593" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-594"><a href="#cb31-594" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb31-595"><a href="#cb31-595" aria-hidden="true" tabindex="-1"></a><span class="co"># Save integrated Seurat object</span></span>
-<span id="cb31-596"><a href="#cb31-596" aria-hidden="true" tabindex="-1"></a>qs2<span class="sc">::</span><span class="fu">qs_save</span>(seurat_merged, <span class="st">&quot;intermediate/03_seurat_merged.qs&quot;</span>)</span>
-<span id="cb31-597"><a href="#cb31-597" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-598"><a href="#cb31-598" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-599"><a href="#cb31-599" aria-hidden="true" tabindex="-1"></a>A good rule of thumb is to save your intermediate objects before any filtration or after running a computationally heavy step that takes a long time to run.</span>
-<span id="cb31-600"><a href="#cb31-600" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-601"><a href="#cb31-601" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb31-602"><a href="#cb31-602" aria-hidden="true" tabindex="-1"></a><span class="fu"># Limited RAM</span></span>
-<span id="cb31-603"><a href="#cb31-603" aria-hidden="true" tabindex="-1"></a>As we go throughout the workshop, we recommend that you clear your environment after we save an RDS object to avoid taxing your laptop with objects that are too large. </span>
-<span id="cb31-604"><a href="#cb31-604" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-605"><a href="#cb31-605" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-606"><a href="#cb31-606" aria-hidden="true" tabindex="-1"></a>***</span>
-<span id="cb31-607"><a href="#cb31-607" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-608"><a href="#cb31-608" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Next Lesson &gt;&gt;</span><span class="co">](04_theory_of_PCA.qmd)</span></span>
+<span id="cb31-580"><a href="#cb31-580" aria-hidden="true" tabindex="-1"></a><span class="fu">## Save!</span></span>
+<span id="cb31-581"><a href="#cb31-581" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-582"><a href="#cb31-582" aria-hidden="true" tabindex="-1"></a>Now is a great spot to save our <span class="in">`seurat_merged`</span> object as the next step is going to be filtering. </span>
+<span id="cb31-583"><a href="#cb31-583" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-586"><a href="#cb31-586" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-587"><a href="#cb31-587" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_saveRDS</span></span>
+<span id="cb31-588"><a href="#cb31-588" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-589"><a href="#cb31-589" aria-hidden="true" tabindex="-1"></a><span class="co"># Save integrated Seurat object</span></span>
+<span id="cb31-590"><a href="#cb31-590" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(seurat_merged, <span class="st">&quot;data/01_seurat_merged.RDS&quot;</span>)</span>
+<span id="cb31-591"><a href="#cb31-591" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-592"><a href="#cb31-592" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-595"><a href="#cb31-595" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-596"><a href="#cb31-596" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: seurat_merged_saveqs</span></span>
+<span id="cb31-597"><a href="#cb31-597" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-598"><a href="#cb31-598" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-599"><a href="#cb31-599" aria-hidden="true" tabindex="-1"></a><span class="co"># Save integrated Seurat object</span></span>
+<span id="cb31-600"><a href="#cb31-600" aria-hidden="true" tabindex="-1"></a>qs2<span class="sc">::</span><span class="fu">qs_save</span>(seurat_merged, <span class="st">&quot;intermediate/03_seurat_merged.qs&quot;</span>)</span>
+<span id="cb31-601"><a href="#cb31-601" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-602"><a href="#cb31-602" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-603"><a href="#cb31-603" aria-hidden="true" tabindex="-1"></a>A good rule of thumb is to save your intermediate objects before any filtration or after running a computationally heavy step that takes a long time to run.</span>
+<span id="cb31-604"><a href="#cb31-604" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-605"><a href="#cb31-605" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb31-606"><a href="#cb31-606" aria-hidden="true" tabindex="-1"></a><span class="fu"># Limited RAM</span></span>
+<span id="cb31-607"><a href="#cb31-607" aria-hidden="true" tabindex="-1"></a>As we go throughout the workshop, we recommend that you clear your environment after we save an RDS object to avoid taxing your laptop with objects that are too large. </span>
+<span id="cb31-608"><a href="#cb31-608" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb31-609"><a href="#cb31-609" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-610"><a href="#cb31-610" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Schedule</span><span class="co">](../schedule/schedule.qmd)</span></span>
+<span id="cb31-610"><a href="#cb31-610" aria-hidden="true" tabindex="-1"></a>***</span>
+<span id="cb31-611"><a href="#cb31-611" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-612"><a href="#cb31-612" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Next Lesson &gt;&gt;</span><span class="co">](04_theory_of_PCA.qmd)</span></span>
+<span id="cb31-613"><a href="#cb31-613" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-614"><a href="#cb31-614" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Schedule</span><span class="co">](../schedule/schedule.qmd)</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

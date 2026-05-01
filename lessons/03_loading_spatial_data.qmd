@@ -113,10 +113,26 @@ With this information in mind, we can now move forward with loading our data and
 
 We have assembled an R Project for you to download that includes the data along with a basic file structure for good data management. Whenever you start a new project, it is a good habit to set up a similar directory structure to clearly organize your data, scripts and results. This will make it easier to keep track of your files and to share your work with others.
 
+::: callout-warning
+TODO: download link update
+:::
+
 ::: callout-important
 # Download the data
 If you haven’t done this already, the project can be accessed using this [link](https://www.dropbox.com/scl/fo/053p46ab36e53u6hr5jnl/ABPN8Bh7sKPUfG1O8L1TbRI?rlkey=lva3uunugrxp99xyo7xyf1mul&st=xqpfvj2f&dl=0). You will have to left-click the link and select `Save Link As..` or `Download Linked File As..`, then select a place on your computer where you would like to place this R Project.
 ::::
+
+### Project organization
+
+When you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as **data management is often an afterthought** when it should be a key part of the workflow from the very beginning. The [HMS Data Management Working Group](https://datamanagement.hms.harvard.edu/) discusses in-depth some things to consider beyond the data creation and analysis.
+
+One important aspect of data management is organization. For each experiment you work on and analyze data for, it is considered best practice to get organized by creating **a planned storage space**. We will do that for our spatial transcriptomics analysis. 
+
+
+::: callout-important
+# Note for Windows OS users
+When you open the project folder after unzipping it, please check if you have a `data` folder with a sub folder also called `data`. If this is the case, please move all the files from the subfolder into the parent `data` folder.
+:::
 
 ### Opening R Studio
 
@@ -124,10 +140,28 @@ We can open the R Project up and see that the provided file structure should loo
 
 ```{r}
 #| label: file_structure
-#| echo: false
-library(fs)
+#| eval: false
+spatial_transcriptomics/
+├── data
+├── figures
+├── results
+├── scripts
+└── spatial_transcriptomics.Rproj
+```
 
+If your R Project looks like below, then you are ready to start!
+
+::: callout-warning
+TODO: Image of R project file structure
+:::
+
+We can also double check that all the files we need for our analysis can be found within `data/`:
+
+```{r}
+#| label: data_structure
+#| echo: false
 # Print the first level in the downloaded directory
+library(fs)
 dir_tree("data", recurse = 1)
 ```
 
@@ -141,36 +175,6 @@ The code used to create all the files for this workshop can be found [here](Asid
 TODO: lesson on cropping unfinished
 :::
 
-:::
-
-If your R Project looks like below, then you are ready to start!
-
-::: callout-warning
-TODO: Image of R project file structure
-:::
-
-### Project organization
-
-When you have large amounts of data (like with spatial transcriptomics), it is easy to lose track of your files and become overwhelmed. We tend to prioritize the analysis and in the excitement of getting a first look at our data, we often forget to consider how we are going to manage our data and files. This is a common mistake, as **data management is often an afterthought** when it should be a key part of the workflow from the very beginning. The [HMS Data Management Working Group](https://datamanagement.hms.harvard.edu/) discusses in-depth some things to consider beyond the data creation and analysis.
-
-One important aspect of data management is organization. For each experiment you work on and analyze data for, it is considered best practice to get organized by creating **a planned storage space**. We will do that for our spatial transcriptomics analysis. 
-
-Look inside your project space and you will find that a directory structure has been set up for you:
-
-```{r}
-#| label: data_structure
-#| eval: false
-spatial_transcriptomics/
-├── data
-├── figures
-├── results
-├── scripts
-└── spatial_transcriptomics.Rproj
-```
-
-::: callout-important
-# Note for Windows OS users
-When you open the project folder after unzipping it, please check if you have a `data` folder with a sub folder also called `data`. If this is the case, please move all the files from the subfolder into the parent `data` folder.
 :::
 
 ### New script
@@ -198,7 +202,7 @@ TODO: Image of R project file structure with new script
 :::
 
 
-## Loading Data into Seurat
+## Loading data into Seurat
 
 There are several different tools that can be used for loading and analyzing spatial transcriptomics data. While each has their own nuances, they all follow the same fundamental theory and processes:
 
