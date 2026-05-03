@@ -1,0 +1,179 @@
+---
+title: "Subsetting a Slide - Answer Key"
+author:
+  - Noor Sohail
+  - Will Gammerdinger
+date: "2025-09-05"
+---
+
+```{r}
+#| label: load_data
+#| echo: false
+# Libraries to load
+library(tidyverse)
+library(Seurat)
+library(DropletUtils)
+library(cowplot)
+library(png)
+library(grid)
+library(magick)
+library(arrow)
+library(curl)
+library(fs)
+
+# Directories to delete when re-running rendering
+directory_to_delete <- "data/P5NAT_subsetted"
+
+# If the directory exists, then
+if (dir_exists(directory_to_delete)) {
+  # Delete the directory
+  dir_delete(directory_to_delete)
+}
+```
+
+# Exercise 1
+
+1. The area not contain colorectal samples comes from another place on the same slide. Using a loop and the parameter below, subset the non-cancer region of the slide for 8μm and 16μm bin sizes.
+
+```{r}
+#| label: set_sample_name_coordinates
+# Set sample name
+sample_name <- "P5NAT"
+
+# Set minimums and maximums for x and y
+x_min <- 29000
+x_max <- 39987
+y_min <- 54000
+y_max <- 61991
+```
+
+First, we can download the data and uncompress it. Note, this will overwrite our `binned_outputs` directory from the colorectal cancer sample.
+
+```{r}
+#| label: download_normal_data
+#| eval: false
+# Set URL for where to download the data from
+URL <- "https://cf.10xgenomics.com/samples/spatial-exp/3.0.0/Visium_HD_Human_Colon_Normal_P5/Visium_HD_Human_Colon_Normal_P5_binned_outputs.tar.gz"
+
+# Set destination folder
+dest <- file.path("data", basename(URL))
+
+# Download data
+curl_download(
+  url = URL,
+  destfile = dest,
+  mode     = "wb")
+
+# Uncompress tar.gz
+untar(tarfile = dest,
+      exdir = "data")
+```
+
+```{r}
+#| label: overwrite_uncompressed_binned_outputs
+#| echo: false
+# Set URL for where to download the data from
+URL <- "https://cf.10xgenomics.com/samples/spatial-exp/3.0.0/Visium_HD_Human_Colon_Normal_P5/Visium_HD_Human_Colon_Normal_P5_binned_outputs.tar.gz"
+
+# Set destination folder
+dest <- file.path("data", basename(URL))
+
+# Uncompress tar.gz
+untar(tarfile = dest,
+      exdir = "data")
+```
+
+```{r}
+#| label: subsetting_answer
+# Selecting the bin sizes to use
+bins <- c("008", "016")
+
+# Create directory to hold subsetted data
+dir.create(paste0("data/", sample_name, "_subsetted/binned_outputs/"), 
+           recursive = TRUE)
+
+# For each bin size
+for (bin in bins) {
+  # Set path to write data to
+  path_bin <- paste0("data/", sample_name, "_subsetted/binned_outputs/square_", bin, "um")
+  dir.create(path = path_bin,
+             recursive = TRUE)
+  
+  # Load object
+  seurat_obj <- Load10X_Spatial(
+    data.dir = "data/",
+    bin.size = c(as.integer(bin)),
+    slice = sample_name)
+  
+  # Obtain coordinates for our spatial data
+  coordinates <- GetTissueCoordinates(seurat_obj)
+  
+  # Extract bin barcodes based on the defined x and y bounds
+  cells <- coordinates %>% 
+    subset(x > x_min) %>%
+    subset(x < x_max) %>%
+    subset(y > y_min) %>%
+    subset(y < y_max) %>% 
+    row.names()
+  
+  # Label a column called filter for TRUE
+  seurat_obj$filter <- TRUE
+  
+  # Re-assign the value of FALSE to the filter column if the bin is within subsetted_bins
+  seurat_obj@meta.data[cells, "filter"] <- FALSE
+  
+  # Retain the bins which have FALSE for filter in the meta data
+  filtered_seurat_obj <- subset(seurat_obj, filter == FALSE)
+  
+  # Copy spatial images from original folder
+  dir.create(path = paste0(path_bin, "/spatial"),
+             recursive = TRUE)
+  
+    # Set path for JSON file
+  path_json <- paste0("data/binned_outputs/square_", bin, "um/spatial/scalefactors_json.json")
+  # Set path for Parquet file
+  path_parq <- paste0("data/binned_outputs/square_", bin, "um/spatial/tissue_positions.parquet")
+  # Set path for PNG file
+  path_png  <- paste0("data/binned_outputs/square_", bin, "um/spatial/tissue_lowres_image.png")
+  
+  # Combine JSON, Parquet and PNG file paths into a vector
+  files_spatial <- c(path_json, path_parq, path_png)
+
+  # Copy JSON, Parquet and PNG files into our spatial folder
+  file.copy(from = files_spatial,
+            to = paste0(path_bin, "/spatial"))
+  
+  # Write counts to h5 file
+  write10xCounts(path = paste0(path_bin, "/filtered_feature_bc_matrix.h5"),
+                 x=LayerData(filtered_seurat_obj),
+                 barcodes=colnames(filtered_seurat_obj),
+                 gene.id=rownames(filtered_seurat_obj),
+                 version="3",
+                 type="HDF5",
+                 overwrite = TRUE)
+  
+  # Remove seurat_obj
+  rm(seurat_obj)
+  # Remove filtered_seurat_obj
+  rm(filtered_seurat_obj)
+}
+```
+
+After running this loop the directory structure should now look like:
+
+```{r}
+#| label: directory_struture_after_loop
+#| echo: false
+# Load libraries
+library(fs)
+
+# Show data structure
+dir_tree(path = "data/P5NAT_subsetted/binned_outputs/",
+         recurse = TRUE)
+```
+
+***
+
+[Back to Lesson >>](04_theory_of_PCA.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)
