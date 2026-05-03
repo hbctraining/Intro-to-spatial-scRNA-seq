@@ -81,8 +81,11 @@ The data for this workshop is hosted on the [10X Genomics website](https://www.1
 # Set URL for where to download the data from
 URL <- "https://cf.10xgenomics.com/samples/spatial-exp/3.0.0/Visium_HD_Human_Colon_Cancer_P5/Visium_HD_Human_Colon_Cancer_P5_binned_outputs.tar.gz"
 
+# Create directory to hold full dataset
+dir.create("data/P5CRC_full/")
+
 # Set destination folder
-dest <- file.path("data", basename(URL))
+dest <- file.path("data/P5CRC_full", basename(URL))
 
 # Download data
 curl_download(
@@ -92,21 +95,7 @@ curl_download(
 
 # Uncompress tar.gz
 untar(tarfile = dest,
-      exdir = "data")
-```
-
-```{r}
-#| label: overwite_uncompressed_binned_outputs
-#| echo: false
-# Set URL for where to download the data from
-URL <- "https://cf.10xgenomics.com/samples/spatial-exp/3.0.0/Visium_HD_Human_Colon_Cancer_P5/Visium_HD_Human_Colon_Cancer_P5_binned_outputs.tar.gz"
-
-# Set destination folder
-dest <- file.path("data", basename(URL))
-
-# Uncompress tar.gz
-untar(tarfile = dest,
-      exdir = "data")
+      exdir = "data/P5CRC_full")
 ```
 
 ## Loading the Seurat Object
@@ -117,7 +106,7 @@ We can start the subsetting process by loading in our entire dataset into a Seur
 #| label: load_spatial_object
 # Load spatial data into Seurat object
 seurat_obj <- Load10X_Spatial(
-  data.dir = "data/",
+  data.dir = "data/P5CRC_full/",
   bin.size = 16,
   slice = "P5")
 ```
@@ -182,13 +171,13 @@ We can compare the original image, the boundaries of the slide area and the coor
 #| fig.height: 3
 #| fig-width: 10
 # Read in and orient the low resolution image
-lowres_image <- image_read("data/binned_outputs/square_016um/spatial/tissue_lowres_image.png") %>% 
+lowres_image <- image_read("data/P5CRC_full/binned_outputs/square_016um/spatial/tissue_lowres_image.png") %>% 
   image_flip %>% 
   as.raster(interpolate = TRUE) %>% 
   rasterGrob()
 
 # Read in and orient the detected tissue image
-detected_image <- image_read("data/binned_outputs/square_016um/spatial/detected_tissue_image.jpg") %>% 
+detected_image <- image_read("data/P5CRC_full/binned_outputs/square_016um/spatial/detected_tissue_image.jpg") %>% 
   as.raster(interpolate = TRUE) %>% 
   rasterGrob()
 
@@ -212,7 +201,7 @@ Let's dig a bit deeper into how the spatial data is stored. The storage of the d
 ```{r}
 #| label: read_parquet_file
 # Read parquet file
-parquet_df <- read_parquet("data/binned_outputs/square_016um/spatial/tissue_positions.parquet")
+parquet_df <- read_parquet("data/P5CRC_full/binned_outputs/square_016um/spatial/tissue_positions.parquet")
 ```
 
 We can inspect what this `parquet` data frame looks like with:
@@ -425,11 +414,11 @@ Now we will populate this directory with the files needed to be able to run the 
 #| label: write_10X_data
 #| output: false
 # Set path for JSON file
-path_json <- paste0("data/binned_outputs/square_016um/spatial/scalefactors_json.json")
+path_json <- paste0("data/P5CRC_full/binned_outputs/square_016um/spatial/scalefactors_json.json")
 # Set path for Parquest file
-path_parq <- paste0("data/binned_outputs/square_016um/spatial/tissue_positions.parquet")
+path_parq <- paste0("data/P5CRC_full/binned_outputs/square_016um/spatial/tissue_positions.parquet")
 # Set path for PNG file
-path_png  <- paste0("data/binned_outputs/square_016um/spatial/tissue_lowres_image.png")
+path_png  <- paste0("data/P5CRC_full/binned_outputs/square_016um/spatial/tissue_lowres_image.png")
 
 # Combine JSON, Parquet and PNG file paths into a vector
 files_spatial <- c(path_json, path_parq, path_png)
@@ -503,7 +492,7 @@ for (bin in bins) {
   
   # Load object
   seurat_obj <- Load10X_Spatial(
-    data.dir = "data/",
+    data.dir = "data/P5CRC_full/",
     bin.size = c(as.integer(bin)),
     slice = sample_name)
   
@@ -532,11 +521,11 @@ for (bin in bins) {
              recursive = TRUE)
   
   # Set path for JSON file
-  path_json <- paste0("data/binned_outputs/square_", bin, "um/spatial/scalefactors_json.json")
+  path_json <- paste0("data/P5CRC_full/binned_outputs/square_", bin, "um/spatial/scalefactors_json.json")
   # Set path for Parquet file
-  path_parq <- paste0("data/binned_outputs/square_", bin, "um/spatial/tissue_positions.parquet")
+  path_parq <- paste0("data/P5CRC_full/binned_outputs/square_", bin, "um/spatial/tissue_positions.parquet")
   # Set path for PNG file
-  path_png  <- paste0("data/binned_outputs/square_", bin, "um/spatial/tissue_lowres_image.png")
+  path_png  <- paste0("data/P5CRC_full/binned_outputs/square_", bin, "um/spatial/tissue_lowres_image.png")
   
   # Combine JSON, Parquet and PNG file paths into a vector
   files_spatial <- c(path_json, path_parq, path_png)

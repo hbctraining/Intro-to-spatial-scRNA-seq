@@ -55,28 +55,17 @@ First, we can download the data and uncompress it. Note, this will overwrite our
 # Set URL for where to download the data from
 URL <- "https://cf.10xgenomics.com/samples/spatial-exp/3.0.0/Visium_HD_Human_Colon_Normal_P5/Visium_HD_Human_Colon_Normal_P5_binned_outputs.tar.gz"
 
+# Create directory to hold full dataset
+dir.create("data/P5NAT_full/")
+
 # Set destination folder
-dest <- file.path("data", basename(URL))
+dest <- file.path("data/P5CRC_full", basename(URL))
 
 # Download data
 curl_download(
   url = URL,
   destfile = dest,
   mode     = "wb")
-
-# Uncompress tar.gz
-untar(tarfile = dest,
-      exdir = "data")
-```
-
-```{r}
-#| label: overwrite_uncompressed_binned_outputs
-#| echo: false
-# Set URL for where to download the data from
-URL <- "https://cf.10xgenomics.com/samples/spatial-exp/3.0.0/Visium_HD_Human_Colon_Normal_P5/Visium_HD_Human_Colon_Normal_P5_binned_outputs.tar.gz"
-
-# Set destination folder
-dest <- file.path("data", basename(URL))
 
 # Uncompress tar.gz
 untar(tarfile = dest,
@@ -101,7 +90,7 @@ for (bin in bins) {
   
   # Load object
   seurat_obj <- Load10X_Spatial(
-    data.dir = "data/",
+    data.dir = "data/P5NAT_full/",
     bin.size = c(as.integer(bin)),
     slice = sample_name)
   
@@ -130,11 +119,11 @@ for (bin in bins) {
              recursive = TRUE)
   
     # Set path for JSON file
-  path_json <- paste0("data/binned_outputs/square_", bin, "um/spatial/scalefactors_json.json")
+  path_json <- paste0("data/P5NAT_full/binned_outputs/square_", bin, "um/spatial/scalefactors_json.json")
   # Set path for Parquet file
-  path_parq <- paste0("data/binned_outputs/square_", bin, "um/spatial/tissue_positions.parquet")
+  path_parq <- paste0("data/P5NAT_full/binned_outputs/square_", bin, "um/spatial/tissue_positions.parquet")
   # Set path for PNG file
-  path_png  <- paste0("data/binned_outputs/square_", bin, "um/spatial/tissue_lowres_image.png")
+  path_png  <- paste0("data/P5NAT_full/binned_outputs/square_", bin, "um/spatial/tissue_lowres_image.png")
   
   # Combine JSON, Parquet and PNG file paths into a vector
   files_spatial <- c(path_json, path_parq, path_png)
@@ -174,6 +163,6 @@ dir_tree(path = "data/P5NAT_subsetted/binned_outputs/",
 
 ***
 
-[Back to Lesson >>](04_theory_of_PCA.qmd)
+[Back to Lesson >>](Aside_crop_slide.qmd)
 
 [Back to Schedule](../schedule/schedule.qmd)
