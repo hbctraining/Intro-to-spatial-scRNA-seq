@@ -440,7 +440,7 @@ Now we can begin visualizing how the bins in `P5CRC` are interacting with one an
 
 ### Strength and number of interactions
 
-The most popular representation is the `nutVisual_circle()` plot, which shows how the cell types are interacting with one another. This is accomplished by setting nodes of each cell type on the boundary of a circle, with lines from source to target showcasing either the number or strength of interactions.
+The most popular representation is the `netVisual_circle()` plot, which shows how the cell types are interacting with one another. This is accomplished by setting nodes of each cell type on the boundary of a circle, with lines from source to target showcasing either the number or strength of interactions.
 
 ```{r}
 #| label: fig-cell_type_interactions
@@ -469,11 +469,7 @@ netVisual_circle(
 par(mfrow = c(1, 1)) 
 ```
 
-Notice that the strongest interactions is circular between tumor cells. This tells us that tumor cells are frequently and strongly sending signals to one another. We can also see that fibroblasts appear to be sending signals to tumor cells.
-
-::: callout-warning
-TODO: fibroblast and tumor interaction biology
-:::
+Notice that the strongest interactions is circular between tumor cells. This tells us that tumor cells are frequently and strongly sending signals to one another. We can also see that fibroblasts appear to be sending signals to tumor cells. [Rodriguez et. al (2025)](https://www.nature.com/articles/s42003-025-08799-x) found that cancer-associate fibroblasts "induce pro-invasive gene expression changes involved in epithelial-mesenchymal transition, extracellular matrix remodeling, and migration."
 
 An alternative way to represent this same information can be done with a heatmap. of this information can be represented as a heatmap. On the y-axis are the "sources" and the x-axis are the "receivers". The intensity of the heatmap is proportional to the number/strength of interactions between the source and receiver cell types. The top colored bar plot represents the sum of column of values displayed in the heatmap. The right colored bar plot represents the sum of row of values.
 
@@ -617,6 +613,8 @@ top_pathways
 In particular, we are interested in the cell types that are interacting with tumor cells. So we will look at all ligand-receptor complexes in those top pathways that have tumor cells as the source. This is represented as bubbleplot, where the size of the dot is proportion to the p-value. The color represents the probability of interaction for the cell type directed interaction, as labeled on the x-axis.
 
 ```{r}
+#| label: fig-netVisiual_bubble
+#| fig-cap: Bubbleplot of significant pathways with tumor cells as source.
 #| fig-width: 8
 #| fig-height: 8
 netVisual_bubble(cellchat_crc,
@@ -631,24 +629,36 @@ netVisual_bubble(cellchat_crc,
 
 ### Zoom in on specific ligand-receptor complexes
 
+::: {.callout-note collapse="true"}
+# Accessing table of ligrand-receptor results
 
-We can also identify which ligand-receptor pairs are most significant
+If you wanted to access the full dataframe of results, we can use the `subsetCommuncation()` function:
 
 ```{r}
+#| label: lr_results
+#| eval: false
 df_lr <- subsetCommunication(cellchat_crc) %>%
   arrange(desc(prob))
-df_lr %>% head(10)
+df_lr %>% head(5)
 ```
 
-As an example, we are going to look an interaction occuring between two different population (not circular):
+```{r}
+#| label: tbl-lr_results
+#| tbl-cap: Dataframe of ligand-receptor results, sorted by probability.
+#| echo: false
+df_lr <- subsetCommunication(cellchat_crc) %>%
+  arrange(desc(prob))
+df_lr %>% head(5) %>% knitr::kable()
+```
+
+:::
+
+
+From the previous visual, perhaps we were interested in the specific ligand `COL3A1` and receptor `SDC4` interaction between fibroblasts and tumors. We can start by taking a look at the `SpatialFeaturePlot()` to get a better sense of where these genes localize on our slide:
 
 ```{r}
-# idx <- 7
-# ligand <- df_lr[idx, "ligand"]
-# receptor <- df_lr[idx, "receptor"]
-
 ligand <- "COL3A1"
-receptor <- "ADGRG1"
+receptor <- "SDC4"
 
 SpatialFeaturePlot(crc, 
                    c(ligand, receptor),
@@ -656,9 +666,11 @@ SpatialFeaturePlot(crc,
                    image.alpha = 0.2)
 ```
 
-From the results, we know that this is a ligand-recptor interaction that is significant in interactions from Fibroblasts to Tumor cells. Therefore, we would expect to see higher expression of `COL3A1` in Fibroblases and `ADGRG1` in Tumor cells.
+There is a [population of fibroblasts](12_deconvolution.html#fig-spatial_first_type_split) in the tumor cells that appears to correspond with the bins with high `COL3A1` expression. Most likely, it is these nearby fibroblasts that are interacting with tumor cells. To confirm that there is higher expression of `COL3A1` in fibroblasts, we can use a `VlnPlot()`:
 
 ```{r}
+#| label: fig-vlnplot_ligand_receptor
+#| fig-cap: Distribution of ligand-receptor pair COL3A1-SDC4 which is a significant communication between fibroblasts and tumor cells.
 #| fig-height: 6
 VlnPlot(crc, 
         c(ligand, receptor), 
@@ -667,6 +679,7 @@ VlnPlot(crc,
         ncol = 1)
 ```
 
+Notably, there is also high expression of `SDC4` in the tumor cells. This is the underlying principle of mass action utilized by CellChat. Essentially, if there is high expression of the ligand in the source cell type (fibroblasts and `COL3A1`) and high expression of the receptor (`SDC4`) in the target cell type (tumor cells), then there will be high probability communication between the two. Especially if they are localized to the same area of the tissue.
 
 ## Session information
 
