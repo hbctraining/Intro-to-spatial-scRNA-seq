@@ -1,7 +1,7 @@
 ---
 title: "Spatial Transcriptomics Technologies"
 description: |
-    Explore the current landscape of spatial transcriptomics technologies, focusing on contrasting sequencing-based and imaging-based platforms to show how they differ in resolution, throughput, and sensitivity. By the end, you will be informed on which technology is best suited for your biological question.
+    Explore the current landscape of spatial transcriptomics technologies, focusing on contrasting sequencing-based and imaging-based platforms to show how they differ in resolution, throughput and sensitivity. By the end, you will be informed on which technology is best suited for your biological question.
 author:
   - Noor Sohail
   - Pratyusha Bala
@@ -59,7 +59,7 @@ _Image source: [Bo Xia Lab](https://www.boxialab.org/news)_
 
 ### Bulk and single-cell sequencing
 
-**Bulk RNA-seq** is a method for comparing the averages of cellular expression for a population of cells. This method can be a good choice if looking at **comparative transcriptomics** (e.g. samples of the same tissue from different species) and for quantifying expression signatures in disease studies. It also has potential for the discovery of disease biomarkers if you are not expecting or not concerned about cellular heterogeneity in the sample.
+**Bulk RNA-seq** is a method for comparing the averages of cellular expression for a population of cells. This method can be a good choice if looking at **comparative transcriptomics** (e.g., samples of the same tissue from different species) and for quantifying expression signatures in disease studies. It also has potential for the discovery of disease biomarkers if you are not expecting or not concerned about cellular heterogeneity in the sample.
 
 To contrast, **single-cell sequencing** is a method for measuring gene expression on a per-cell basis. This method is ideal for studies containing **cellular heterogeneity** where the differences between cell types or cell states are the primary focus.
 
@@ -141,13 +141,13 @@ We will be using Visium HD for the hands-on portion of this workshop.
 
 **Advantages:**
 
-- Analyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets as you are sequencing the entire transcriptome instead of a gene panel.
-- Can be run on non-model organisms with greater ease.
+- Analyses that make use of many genes at once (functional analysis, RNA velocity, etc.) can be done on these datasets as you are sequencing the entire transcriptome instead of a gene panel
+- Can be run on non-model organisms with greater ease
 
 **Disadvantages:**
 
-- High-resolution experiments (Visium HD) can be very expensive 
-- Spots are not guaranteed to be a single-cell (can be multiple cells, or no cells at all)
+- High-resolution experiments (Visium HD) can be very expensive
+- Spots are not guaranteed to be a single cell (can be multiple cells, or no cells at all)
 
 ## Imaging-based technologies
 
@@ -158,7 +158,7 @@ Showcase of MERFISH, an imaging-based technology, which can achieve single-cell 
 _Image source: [Vizgen: Leading the Global Expansion of Spatial Transcriptomics](https://vizgen.com/vizgen-leading-the-global-expansion-of-spatial-transcriptomics/)_
 :::
 
-Imaging-based spatial transcriptomics directly visualise and quantify RNA in situ by using gene-specific probes, often achieving subcellular or single-molecule resolution. Most often, the probes are detected using secondary fluorescent probes with or without signal amplification. The probe design, optics of the microscope, and method of decoding the signal define the plexity and sensitivity of these assays. MERSCOPE is built upon FISH imaging with multiple probes spanning the RNA transcript and an error-robust decoding principle, making it the most sensitive spatial transcriptomics technology.
+Imaging-based spatial transcriptomics directly visualise and quantify RNA _in situ_ by using gene-specific probes, often achieving subcellular or single-molecule resolution. Most often, the probes are detected using secondary fluorescent probes with or without signal amplification. The probe design, optics of the microscope, and method of decoding the signal define the plexity and sensitivity of these assays. MERSCOPE is built upon FISH imaging with multiple probes spanning the RNA transcript and an error-robust decoding principle, making it the most sensitive spatial transcriptomics technology.
 
 ::: {#fig-segmentation .figure}
 ![](../img/segmentation.png){width="50%"}
@@ -174,13 +174,13 @@ These technologies also allow us to use DAPI, Poly-T, or specific cell segmentat
 
 Table: Summary of popular imaging-based methods for spatial transcriptomics. {#tbl-img_methods}
 
-|                      | seqFISH                 | MERSCOPE                     | Xenium                      |
+|                      | seqFISH                 | MERSCOPE                    | Xenium                      |
 |----------------------|-------------------------|-----------------------------|-----------------------------|
-| **Vendor**           | NA (academic method)    | Vizgen                      | 10x Genomics               |
+| **Vendor**           | N/A (academic method)   | Vizgen                      | 10x Genomics                |
 | **Capture size**     | Variable FOV; tiled imaging fields (typically mm-scale regions stitched across section) | Variable FOV; tiled imaging fields (mm-scale regions, stitchable to large areas) | Variable FOV; tiled high‑plex imaging over tissue sections (up to whole‑slide via tiling) |
-| **Resolution**       | Subcellular, subdiffraction (seqFISH/seqFISH+) | Subcellular (single‑molecule FISH) | Subcellular, targeted in situ (per‑cell calls with subcellular localization) |
+| **Resolution**       | Subcellular, subdiffraction (seqFISH/seqFISH+) | Subcellular (single‑molecule FISH) | Subcellular, targeted _in situ_ (per‑cell calls with subcellular localization) |
 | **H&E**              | No (standard workflow uses fluorescence imaging only) | No (fluorescence imaging only) | (Yes) — H&E‑like morphology and protein markers supported; H&E compatibility in active development at time of review |
-| **Tissue preservation** | Fresh Frozen           | FFPE, Fixed Frozen, and Fresh Frozen       | FFPE, Fixed Frozen and Fresh Frozen       |
+| **Tissue preservation** | Fresh Frozen           | FFPE, Fixed Frozen and Fresh Frozen       | FFPE, Fixed Frozen and Fresh Frozen       |
 | **Year released**    | 2014 (first seqFISH paper) | 2015 (first MERFISH paper) | 2022 (commercial launch of Xenium platform) |
 
 ### Advantages and disadvantages
