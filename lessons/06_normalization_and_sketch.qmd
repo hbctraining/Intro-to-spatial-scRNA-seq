@@ -1,7 +1,7 @@
 ---
 title: "Normalization and Sketch Downsampling"
 description: |
-  Use normalization to normalize your spatial transcriptomics data, which is crucial to make comparisons between samples and bins. You will also learn how sketch-based downsampling accelerates exploratory analysis on large  datasets.
+  In this lesson, we normalize our spatial transcriptomics data, which is crucial to make comparisons between samples and bins. You will also learn how sketch-based downsampling accelerates exploratory analysis on large  datasets.
 author:
   - Noor Sohail
 date: "2025-07-22"
@@ -30,7 +30,7 @@ library(scales)
 seurat_filtered <- qs2::qs_read("intermediate/05_seurat_filtered.qs")
 ```
 
-Approximate time: XX minutes
+Approximate time: 25 minutes
 
 ## Learning objectives 
 
@@ -42,7 +42,7 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-Normalization is the process by which we adjust raw counts to account for technical variation. **Normalization allows us to make fair comparisons of gene expression across different samples, cells, and genes**. The counts are affected by many factors, some of which are "interesting" (e.g. the expression of RNA) and some of which are "uninteresting" (e.g. sequencing depth, technical artifacts). Normalization is the process of adjusting raw count values to account for the "uninteresting" factors.
+Normalization is the process by which we adjust raw counts to account for technical variation. **Normalization allows us to make fair comparisons of gene expression across different samples, cells and genes**. The counts are affected by many factors, some of which are "interesting" (e.g. the expression of RNA) and some of which are "uninteresting" (e.g. sequencing depth and technical artifacts). Normalization is the process of adjusting raw count values to account for the "uninteresting" factors.
 
 After normalization, we will be able to identify and downsample to a representative subset of our data. This "sketch" downsampling will allow us to eventually run clustering for large datasets in a computationally and biologically efficient manner.
 
@@ -99,7 +99,7 @@ The most common transformation is a **log transformation**, which is applied in 
 
 ### Perform log-normalization
 
-Now that we are on a new step of our analysis, let us create another script titled `02_normalization_and_sketch.R` that will contain our normalization and sketching code. This will help us keep our workflow organized and modular.
+Now that we are on a new step of our analysis, let us create another R script titled `02_normalization_and_sketch.R` that will contain our normalization and sketching code. We will place this R script within our `scripts` directory. This will help us keep our workflow organized and modular.
 
 After loading the necessary libraries, we will load in the `seurat_filtered` object we created in the previous lesson.
 
@@ -109,7 +109,7 @@ After loading the necessary libraries, we will load in the `seurat_filtered` obj
 # Normalization and sketch downsampling
 # Visium HD spatial transcriptomics workshop
 # Author: Harvard Chan Bioinformatics Core
-# Created: December 2025
+# Created: May 2025
 
 # Load libraries
 library(Seurat)
@@ -130,7 +130,7 @@ seurat_sketch <- NormalizeData(seurat_filtered)
 seurat_sketch
 ```
 
-When we examine our Seurat object, `seurat_sketch`, we see that there is a new addition in the layer line that says "data". This is where our log-normalized counts are stored. The original counts are still stored in the `counts` layer, and the `data` layer contains the normalized counts.
+When we examine our Seurat object, `seurat_sketch`, we see that there is a new addition in the layer line that says `data`. This is where our log-normalized counts are stored. The original counts are still stored in the `counts` layer and the `data` layer contains the normalized counts.
 
 ::: {.callout-note collapse=true}
 # Complex normalization methods
@@ -153,7 +153,7 @@ Table: Arguments for `FindVariableFeatures()` to calculate highly variable genes
 
 | Argument | Description |
 |--------------------|----------------------------------------------------|
-| selection.method | How to choose top variable features. `vst`: Fits a line to log(variance) vs. log(mean) using loess, standardizes values, and computes variance after clipping (see clip.max). |
+| selection.method | How to choose top variable features. `vst`: Fits a line to log(variance) vs. log(mean) using loess, standardizes values and computes variance after clipping (see clip.max). |
 | nfeatures | Number of features to select as top variable features; used when selection.method is `dispersion` or `vst` |
 
 
@@ -226,18 +226,20 @@ seurat_sketch <- SketchData(object = seurat_sketch,
 
 ### Sketch assay
 
-We can see that there are four major changes that have taken place:
-
-- The number of features in the second line has double, because we have added a new assay
-- Accordingly, the number of assays has increased from one to two
-- The active assay has change from `Spatial.008um` to `sketch`
-- There is a new line listing additional assays that exist in the Seurat object
+Let's take a look at our `seurat_sketch` object now that we have done the downsampling:
 
 ```{r}
 #| label: seurat_sketch_callout
 # Seurat callout after sketch downsampling
 seurat_sketch
 ```
+
+We can see that there are four major changes that have taken place:
+
+- The number of features in the second line has doubled, because we have added a new assay
+- Accordingly, the number of assays has increased from one to two
+- The active assay has change from `Spatial.008um` to `sketch`
+- There is a new line listing additional assays that exist in the Seurat object
 
 We can also see that the `leverage.score` has been added as a column to the metadata of our object.
 
