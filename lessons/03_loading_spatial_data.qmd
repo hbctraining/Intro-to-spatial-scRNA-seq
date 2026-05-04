@@ -142,16 +142,6 @@ R Project file structure.<br>
 
 If your R Project looks like above, then you are ready to start!
 
-We can also double check that all the files we need for our analysis can be found within `data/`:
-
-```{r}
-#| label: data_structure
-#| echo: false
-# Print the first level in the downloaded directory
-library(fs)
-dir_tree("data", recurse = 1)
-```
-
 ::: callout-important
 # Cropped images
 You may notice that we are working with **cropped** folders for this workshop. This is due to the limitations of how much data can be loaded on a laptop. So here, we have cropped the image so that we have a smaller cross-section of the tissue to work with, ultimately reducing the number of cells for this example dataset.
@@ -238,6 +228,10 @@ Before loading in the data, let us take a look at the files we will be supplying
 #| label: fig-SpaceRanger_outs
 #| fig-cap: File structure of Space Ranger output
 #| echo: false
+# Load fs library
+library(fs)
+
+# Create directory tree
 dir_tree("data/P5CRC_cropped/", recurse = 1)
 ```
 
