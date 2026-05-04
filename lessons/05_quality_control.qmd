@@ -40,7 +40,7 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-In Visium HD data, the main challenge is in **delineating bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared to other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
+In Visium HD data, the main challenge is in **distinguishing bins that are poor quality from bins containing reads from less complex cells.** If you expect a particular cell type in your dataset to be less transcriptionally active as compared to other cell types in your dataset, the bins underneath this cell type will naturally have fewer detected genes and transcripts. However, having fewer detected genes and transcripts can also be a technical artifact and not a result of biological signal.
 
 Here we will learn how to identify and set thresholds for filtration so that the dataset contains high-quality bins.
 
@@ -62,12 +62,12 @@ ggplot(seurat_merged@meta.data) +
 
 ## Quality metrics
 
-We will assess a variety of metrics to evaluate which bins are considered low/high quality. **We will apply very permissive filtering here** as it has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq. 
+We will assess a variety of metrics to evaluate which bins are considered low/high quality. **We will apply very permissive filtering here** as it has been shown that low expression can be biologically meaningful for spatial context, so we won’t be as stringent as we normally are with scRNA-seq. 
 
 ::: callout-note
 # Sample-specific thresholds
 
-We are frequently asked if you you have to use the same threshold values across all your samples. We recommend that you follow what the data is telling you and apply values on a per sample basis. Ultimately the end goal is to retain **high-quality bins**, even if that means using different values for each sample.
+We are frequently asked if you you have to use the same threshold values across all your samples. We recommend that you follow what the data is telling you and apply values on a per-sample basis. Ultimately the end goal is to retain **high-quality bins**, even if that means using different values for each sample.
 :::
 
 The metrics we will be using to filter low-quality bins from high-quality ones include:
@@ -77,7 +77,7 @@ The metrics we will be using to filter low-quality bins from high-quality ones i
 - Complexity (novelty score)
 - Mitochondrial counts ratio
 
-We will calculate some of these values throughout this lesson. Others (UMIs and genes per cell), already exist in our `@meta.data`:
+We will calculate some of these values throughout this lesson. Others (UMIs and genes per cell) already exist in our `@meta.data`:
 
 ```{r}
 #| label: meta_view
@@ -99,15 +99,15 @@ meta %>%
 
 **We will be using a variety of visualization methods:**
 
-- Looking at the values of each bin on the spatial slide .
-- Distribution of values **before and after** filtration as a density plot.
+- Looking at the values of each bin on the spatial slide
+- Distribution of values **before and after** filtration as a density plot
 
 
 ### UMI counts (transcripts) per bin
 
 The `nCount` is the number of unique transcripts (UMIs) detected per bin. Oftentimes, these values will correspond with how transcriptionally active a cell may be, which is typically defined by their cell type. For example, tumor cells will have very high UMI counts.
 
-In the density plots, we expect to see a bimodal distribution. One peak should represent bins containing lower-quality bins with fewer UMIs and another peak representing healthy bins with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.
+In the density plots, we expect to see a bimodal distribution. One peak should represent bins containing lower-quality bins with fewer UMIs and a second peak should represent healthy bins with more UMIs. Ideally, the peak representing lower-quality and dying cells is small and the peak representing healthy cells is large.
 
 These numbers may be lower than what we would expect for scRNA-seq datasets due to the small size of the bins.
 
@@ -191,7 +191,7 @@ ggplot(meta_filt) +
 
 ### Genes detected per bin
 
-This is the number of genes (`nFeature`) detected per bin, or the number of genes that have a non-zero value in a bin. We have similar expectations for gene detection as we did for number of UMIs in terms of the distribution of values.
+The `nFeature` is the number of genes detected per bin, or the number of genes that have a non-zero value in a bin. We have similar expectations for gene detection as we did for number of UMIs in terms of the distribution of values.
 
 When we look at the spatial slide, we can already begin to see patterns of expression (both with genes and UMIs) that will be helpful in understanding our dataset better.
 
@@ -255,7 +255,7 @@ ggplot(meta_filt) +
 
 ### Complexity (novelty) score
 
-Sometimes there may be bins with high `nCount` (UMIs) and low `nFeature` (genes). This would indicate that few genes were sequenced many times over. We consider these instances to be cases of "low complexity" where we are getting high expression from few genes. Some cell types, such as red blood cells, are known for such behavior. However, we should be cautious when interpreting these results, as contamination or technical artifact could also contribute to this. Generally, we expect the complexity score to be above 0.80 for good-quality bins.
+Sometimes there may be bins with high `nCount` (UMIs) and low `nFeature` (genes). This finding would indicate that a few genes were sequenced many times over. We consider these instances to be cases of "low complexity", where we are getting high expression from only a small number of genes. Some cell types, such as red blood cells, are known for such behavior. However, we should be cautious when interpreting these results, as contamination or technical artifacts could also contribute to this finding. Generally, we expect the complexity score to be above 0.80 for good-quality bins.
 
 The novelty score is computed as a ratio of genes to UMIs, as shown below:
 
@@ -273,7 +273,7 @@ seurat_merged$log10GenesPerUMI <- log10(seurat_merged$nFeature_Spatial.008um) /
                                   log10(seurat_merged$nCount_Spatial.008um)
 ```
 
-There are several `NA` values in this newly generated column. This is because there are some bins with `nCount_Spatial.008um = 0`. These will naturally be filtered out once we complete our filtration, so strictly for the purposes of visualization, we are going to set these `NA` values to 0:
+There are several `NA` values in this newly generated column. This result is because there are some bins with `nCount_Spatial.008um = 0`. These bins will naturally be filtered out once we complete our filtration, so strictly for the purposes of visualization, we are going to set these `NA` values to 0:
 
 ```{r}
 #| label: zero_log10GenesPerUMI
@@ -338,7 +338,14 @@ ggplot(meta_filt) +
 
 During sequencing, we do not only measure the levels of expression from the nuclear genome - we also capture the mitochondrial genome! High levels of mitochondrial expression can be a sign of dead or dying cells. Therefore, we can calculate the proportion of reads (UMIs) that come from the mitochondria out of all the transcripts in a cell as another metric.
 
-Bins with greater than `0.25` (25%) mitochondrial reads are typically defined as poor-quality. However, if you have reason to believe that the mitochondrial content is meant to be on the higher end you can adjust this threshold. 
+Bins with greater than `0.25` (25%) mitochondrial reads are typically defined as poor-quality. However, if you have reason to believe that the mitochondrial content is meant to be on the higher end, you can adjust this threshold. 
+
+::: {.callout-note collapse=true}
+# Think about your biological question
+While using a baseline score of 0.25 is an acceptable threshold for removing high mitochondrial content cells, it is important to always go back to your original biological question. What samples are you working with? Do you expect there to be high values of mitochondrial expression due to your experimental condition?
+
+For example, if you were studying renal oncocytomas, would you make this same choice? This disease is characterized as having [aberrantly high mitochondrial expression](https://www.nature.com/articles/modpathol2015101), so would it make sense to remove cells with high mitochondrial ratio?
+:::
 
 This ratio is computed as:
 
@@ -348,17 +355,9 @@ $$
      {\text{Total reads}}
 $$
 
-::: {.callout-note collapse=true}
-# Think about your biological question
-While using a baseline score of 0.25 is an acceptable threshold for removing high mitochondrial content cells, it is important to always go back to your original biological question. What samples are you working with? Do you expect there to be high values of mitochondrial expression due to your experimental condition?
-
-For example, if you were studying renal oncocytomas would you make this same choice? This disease is characterized as having [aberrantly high mitochondrial expression](https://www.nature.com/articles/modpathol2015101), would it make sense to remove cells with high mitochondrial ratio?
-:::
-
-
 ```{r}
 #| label: calc_mitoRatio
-# Compute percent mito ratio
+# Compute percent mito ratio by finding genes that start with "MT-"
 seurat_merged$mitoRatio <- PercentageFeatureSet(object = seurat_merged, 
                                                 pattern = "^MT-")
 seurat_merged$mitoRatio <- seurat_merged@meta.data$mitoRatio / 100
@@ -453,7 +452,7 @@ seurat_merged@meta.data %>%
 
 ## Filtration
 
-We will apply very minimal filtering here. It has been shown that low expression can be biologically meaningful for spatial context so we won’t be as stringent as we normally are with scRNA-seq.
+We will apply very minimal filtering here. It has been shown that low expression can be biologically meaningful for spatial context, so we won’t be as stringent as we normally are with scRNA-seq.
 
 ```{r}
 #| label: filter_cells
