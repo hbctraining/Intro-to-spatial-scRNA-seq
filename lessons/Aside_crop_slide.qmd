@@ -39,7 +39,7 @@ In this lesson, we will:
 
 ## Background
 
-When organizing this workshop, spatial single-cell data can be quite large and the result is that analyzing it can be quite memory intensive. In order to focus on the techniques, methods and interpretation of results, we needed to reduce the size of our dataset to work better on our computers. We have already done these steps and provided you with the downstream output from this subsetting for our analysis, but we have created these materials should you want to know how to do this yourself.
+Spatial single-cell data can be very large, with the result that analyzing it can be quite memory intensive. In order to focus on the techniques, methods and interpretation of results, we needed to reduce the size of our dataset to work better on our computers. We have already done these steps and provided you with the downstream output from this subsetting for our analysis, but we have created these materials should you want to know how to do this yourself.
 
 ## Set-up
 
@@ -125,7 +125,7 @@ We can inspect this Seurat object with:
 seurat_obj
 ```
 
-We can see that this object has **`r format(nrow(seurat_obj), scientific = FALSE)`** genes **`r format(ncol(seurat_obj), scientific = FALSE)`** bins.
+We can see that this object has **`r format(nrow(seurat_obj), scientific = FALSE)`** genes and **`r format(ncol(seurat_obj), scientific = FALSE)`** bins.
 
 ## Pixel Coordinate Space
 
@@ -161,7 +161,7 @@ coordinates %>%
   kable()
 ```
 
-The `x` and `y` values correspond to the bin in pixel space that Seurat will be using. 
+The `x` and `y` values correspond to the coordinates of the bin in pixel space that Seurat will be using. 
 
 We can compare the original image, the boundaries of the slide area and the coordinates obtained from the data using the code below: 
 
@@ -261,7 +261,7 @@ From this we can see that Seurat has subsampled our dataset to only include the 
 
 ## Drawing Connections Between the Two Coordinate Spaces
 
-Within the `parquet` file the `array_row` and `array_col` are directly related to `pxl_row_in_fullres` and `pxl_col_in_fullres`, respectively. However the data has undergone an affine transformation within Space Ranger that considers a scale factor (how many pixels per bin), an offset and a rotation. In short, the `array_row` and `array_col` are associated with `pxl_row_in_fullres` and `pxl_col_in_fullres` and the `parquet` file is the key that ties them together. 
+Within the `parquet` file, the `array_row` and `array_col` are directly related to `pxl_row_in_fullres` and `pxl_col_in_fullres`, respectively. However the data has undergone an affine transformation within Space Ranger that considers a scale factor (how many pixels per bin), an offset and a rotation. In short, the `array_row` and `array_col` are associated with `pxl_row_in_fullres` and `pxl_col_in_fullres` and the `parquet` file is the key that ties them together. 
 
 Let's look at the first bin in our `coordinates` object:
 
@@ -316,7 +316,7 @@ The output of this subsetting should be bin names that fit this criteria for `x`
 head(subsetted_bins)
 ```
 
-We can confirm that this subsetting was done appropriately, by subsetting the `coordinates` object by our `subsetted_bins` names and checking the range for `x` and `y`. 
+We can confirm that this subsetting was done appropriately by subsetting the `coordinates` object to our `subsetted_bins` names and checking the range for `x` and `y`. 
 
 ```{r}
 #| label: subsetting_sanity_checks
@@ -327,15 +327,15 @@ range(coordinates[subsetted_bins,]$x)
 range(coordinates[subsetted_bins,]$y)
 ```
 
-Thus, we can confirm our pixels are all within the pixel range that we subsetted by, so we feel confident that our subsetting was appropriate. 
+Thus, we can confirm our pixels are all within the pixel range that we used to subset, so we feel confident that our subsetting was appropriate. 
 
 ::: callout-note
-Sanity checks like the above check may feel unnecessary but they are really important for good data analysis practices. It oftentimes takes less than a few moments to inspect and can save you lots of time downstream when you are debugging code.
+Sanity checks like the above check may feel unnecessary, but they are really important for good data analysis practices. It oftentimes takes less than a few moments to inspect and can save you lots of time downstream when you are debugging code.
 :::
 
 Let's go ahead and start subsetting our Seurat object. This will happen in three parts:
 
-1. Creating a new column, `filter`, in `meta.data` of the Seurat object
+1. Creating a new column, `filter`, in `meta.data` of the Seurat object to record which cells should be filtered out
 
 ```{r}
 #| label: create_filter_column
@@ -415,19 +415,19 @@ Now we will populate this directory with the files needed to be able to run the 
 #| output: false
 # Set path for JSON file
 path_json <- paste0("data/P5CRC_full/binned_outputs/square_016um/spatial/scalefactors_json.json")
-# Set path for Parquest file
+# Set path for parquet file
 path_parq <- paste0("data/P5CRC_full/binned_outputs/square_016um/spatial/tissue_positions.parquet")
 # Set path for PNG file
 path_png  <- paste0("data/P5CRC_full/binned_outputs/square_016um/spatial/tissue_lowres_image.png")
 
-# Combine JSON, Parquet and PNG file paths into a vector
+# Combine JSON, parquet and PNG file paths into a vector
 files_spatial <- c(path_json, path_parq, path_png)
 
-# Copy JSON, Parquet and PNG files into our spatial folder
+# Copy JSON, parquet and PNG files into our spatial folder
 file.copy(from = files_spatial,
           to = "data/subsetted_data/binned_outputs/square_016um/spatial")
 
-# Write counts to h5 file
+# Write counts to h5 file (used to store large datasets)
 write10xCounts("data/subsetted_data/binned_outputs/square_016um/filtered_feature_bc_matrix.h5",
   x=LayerData(filtered_seurat_obj),
   barcodes=colnames(filtered_seurat_obj),
@@ -449,25 +449,25 @@ dir_tree(path = "data/subsetted_data/",
 
 # Automate subsetting by looping through bins
 
-Now we have processed a single bin (16μm). However, we would like to process our data for two bin sizes (8μm and 16μm). This process can be automated by using the same process as above and looping through both bin sizes. We will first process the slide with the colorectal cancer, then we will leave the non-cancerous slide as an exercise
+Now we have processed a single bin (16μm). However, we would like to process our data for two bin sizes (8μm and 16μm). This process can be automated by using the same process as above and looping through both bin sizes. We will first process the slide with the colorectal cancer, then we will leave the non-cancerous slide as an exercise.
 
 ## Setting variables
 
-We are going to set-up the bin sizes that we would like to loop through and also set our boundaries for where to subset our sample. 
+We are going to set up the sample we are going to subset, the bin sizes to loop through and the boundaries for where to subset our sample. 
 
 ```{r}
 #| label: set_bins_sizes
 # Set sample name
 sample_name <- "P5CRC"
 
+# Selecting the bin sizes to use
+bins <- c("008", "016")
+
 # Set minimums and maximums for x and y
 x_min <- 52000
 x_max <- 64319
 y_min <- 57500
 y_max <- 64002
-
-# Selecting the bin sizes to use
-bins <- c("008", "016")
 ```
 
 Next, we are going to create a space to hold our subsetted data:
@@ -507,7 +507,7 @@ for (bin in bins) {
     subset(y < y_max) %>% 
     row.names()
   
-  # Label a column called filter for TRUE
+  # Label a column called filter for TRUE to record which cells should be filtered out
   seurat_obj$filter <- TRUE
   
   # Re-assign the value of FALSE to the filter column if the bin is within subsetted_bins
@@ -522,15 +522,15 @@ for (bin in bins) {
   
   # Set path for JSON file
   path_json <- paste0("data/P5CRC_full/binned_outputs/square_", bin, "um/spatial/scalefactors_json.json")
-  # Set path for Parquet file
+  # Set path for parquet file
   path_parq <- paste0("data/P5CRC_full/binned_outputs/square_", bin, "um/spatial/tissue_positions.parquet")
   # Set path for PNG file
   path_png  <- paste0("data/P5CRC_full/binned_outputs/square_", bin, "um/spatial/tissue_lowres_image.png")
   
-  # Combine JSON, Parquet and PNG file paths into a vector
+  # Combine JSON, parquet and PNG file paths into a vector
   files_spatial <- c(path_json, path_parq, path_png)
 
-  # Copy JSON, Parquet and PNG files into our spatial folder
+  # Copy JSON, parquet and PNG files into our spatial folder
   file.copy(from = files_spatial,
             to = paste0(path_bin, "/spatial"))
   
@@ -578,13 +578,13 @@ provided_seurat_object <- Load10X_Spatial(
   bin.size = 16,
   slice = "P5CRC")
 
-# Visual the subsetted data next to the provided data
+# Visualiza the subsetted data next to the provided data
 SpatialFeaturePlot(subsetted_seurat_obj,
                    features = "nFeature_Spatial.016um", 
-                     pt.size.factor = 16) +
+                   pt.size.factor = 16) +
 SpatialFeaturePlot(provided_seurat_object,
                    features = "nFeature_Spatial.016um", 
-                     pt.size.factor = 16)
+                   pt.size.factor = 16)
 ```
 
 It looks like we have the same data, but let's confirm by checking that the bins that are present in the data we just subset are also in the data that were provided:
