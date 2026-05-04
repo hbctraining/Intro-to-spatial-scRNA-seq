@@ -45,7 +45,7 @@ In this lesson, we will:
 
 # Background
 
-Principal Components Analysis is a ***dimensionality-reduction method employed to stratify data by their variance***. In other words, points that are more closely together on a PCA are more similar to each other, while points that are more dissimilar to each other will be further apart. As a result, you would likely expect ***similar cells from the same cell type to cluster near each other and apart from distinctly different cell types***. In order to demonstrate how Principal Components Analysis works we are going to describe how the process works in high-dimensional data, then work through it using a two-dimensional example data set.
+Principal Components Analysis is a ***dimensionality-reduction method employed to stratify data by their variance***. In other words, points that are more closely together on a PCA are more similar to each other, while points that are more dissimilar to each other will be further apart. As a result, you would likely expect ***similar cells from the same cell type to cluster near each other and apart from distinctly different cell types***. In order to demonstrate how Principal Components Analysis works, we are going to describe the process for high-dimensional data, then work through it using a two-dimensional example data set.
 
 Consider a single-cell experiment where you have the expression value for every gene in each cell. Let's hypothetically say that our sample has data from 25,000 genes. We could plot this 25,000-dimensional space where each dimension represents a given gene's expression and each point represents a cell in that 25,000-dimensional space. However, that is rather unintuitive and many of those dimensions are uninteresting, so we would like to reduce the dimensionality to the axes that separate the variance the most. This is what we will be doing with a Principal Components Analysis.
 
@@ -177,7 +177,7 @@ ggplot(recentered_expression_tibble, aes(x = Gene_A, y = Gene_B, label = cells))
 
 ## Create a covariance matrix
 
-The next step that we will do after we have re-centered our data around the origin is to calculate a covariance matrix. As a reminder, the covariance is the joint variability of two random variables. In this case, our random variables are the genes. The illustration below we provide examples for positive and negative covariance values along with a covariance that is near zero.
+The next step that we will do after we have re-centered our data around the origin is to calculate a covariance matrix. As a reminder, the covariance is the joint variability of two random variables. In this case, our random variables are the genes. The illustration below provides examples for positive (left) and negative (right) covariance values along with a covariance that is near zero (center).
 
 <img src="../img/Covariance.png" width="800">
 
@@ -252,7 +252,6 @@ $$
 
 1. Confirm this property by estimating the variance for Gene A.
 
-
 2. Now estimate the covariance for Gene A and Gene A
 
 3. Is the value the same? Does it match the value in the covariance matrix for Gene A and Gene A?
@@ -275,9 +274,7 @@ Estimate the covariance of Gene B and Gene A.
 
 ## Calculate Eigenvalues and Eigenvectors from the Covariance Matrix
 
-First, we will need to calculate our eigenvalues, which are a measure of variance for a principal component. We can then use eigenvalues to calculate our eigenvectors, but R will do this all in a single step for us. We can think of the eigenvectors as the weights, or influence, for transforming our re-centered expression values into PCA space. 
-
-Now that we have a covariance matrix for the re-centered expression values, we need to estimate the eigenvalues and eigenvectors for the covariance matrix. 
+Now that we have a covariance matrix for the re-centered expression values, we need to estimate the eigenvalues and eigenvectors for the covariance matrix. First, we will need to calculate our eigenvalues, which are a measure of variance for a principal component. We can then use eigenvalues to calculate our eigenvectors. We can think of the eigenvectors as the weights, or influence, for transforming our re-centered expression values into PCA space. R will do this all in a single step for us.
 
 ```{r eigen_calculation}
 # Find the eigenvalues and eigenvectors of the covariance matrix
@@ -291,7 +288,7 @@ eig
 
 **Calculating Eigenvalues**
 
-If we wanted to do this by hand then we need to set the determinant of the covariance matrix minus $\lambda$ times the identify matrix equal to 0 and solving for $\lambda$.
+If we wanted to do this by hand, then we need to set the determinant of the covariance matrix minus $\lambda$ times the identify matrix equal to 0 and solve for $\lambda$.
 
 $$
 \det\!\left(
@@ -325,7 +322,7 @@ eig$values
 
 **Calculating Eigenvectors**
 
-In order to find the eigenvectors, we need to substitute the variance and covariance values from the covariance matrix along with one of our *$\lambda$* values, *$\lambda$~1~* to find the associated eigenvector, *v~1~*. This results in *v~1~* being equal to `r eig$vectors[,1]`.
+In order to find the eigenvectors, we need to substitute the variance and covariance values from the covariance matrix along with one of our *$\lambda$* values, *$\lambda$~1~*, to find the associated eigenvector, *v~1~*. This results in *v~1~* being equal to `r eig$vectors[,1]`.
 
 $$
 \left(
@@ -341,7 +338,7 @@ $$
 \right) v_{1} = 0
 $$
 
-We can confirm this by plugging our covariance matrix, eigenvalues and eigenvectors back into the above equation and it should return 0, or near 0 (due to rounding errors).
+We can confirm this calculation by plugging our covariance matrix, eigenvalues and eigenvectors back into the above equation; it should return 0, or near 0 (due to rounding errors).
 
 ```{r check_eigen}
 # Check the eigenvalues and eigenvectors
@@ -378,9 +375,9 @@ You can see the use of `%*%` here. This is the operator used to carry out matrix
 
 ## Percent Variance Explained
 
-We are likely interested in knowing the amount of variance explained in our data by each principal component. As we alluded to earlier, we can use the eigenvalues to help us with this. The sum of all of the eigenvalues captures the total variance explained by the principal components analysis.
+We are likely interested in knowing the amount of variance explained in our data by each principal component. As we alluded to earlier, we can use the eigenvalues to help us with this calculation. The sum of all of the eigenvalues captures the total variance explained by the principal components analysis.
 
-Thus, if we want to know the proportion of the variance explained by each principal component, then we would need to divide each eigenvalue by the total variance explained (the sum of the eigenvalues) and if we wanted this as a percentage then we would need to multiply it by 100.
+Thus, if we want to know the proportion of the variance explained by each principal component, then we would need to divide each eigenvalue by the total variance explained (the sum of the eigenvalues); if we wanted this value as a percentage, we would then need to multiply it by 100.
 
 ```{r percent_explained}
 # Calculate the percent of variance explained by each PC using the eigenvalues
@@ -419,12 +416,12 @@ ggplot(pc_scores_tibble, aes(x = PC_1, y = PC_2, label = cells)) +
 ::: callout-tip
 # [**Exercise 2**](04_theory_of_PCA-Answer_key.qmd#exercise-2)
 
-When looking at the percent explained by each principal component, the first principal component should explain the most and each of the following principal components should explain less than the previous principal component. Let's have a look at our `pct_var_explained` object, are our results congruent with this expectation?
+When looking at the percent explained by each principal component, the first principal component should explain the most and each of the following principal components should explain less than the previous principal component. In our `pct_var_explained` object, are our results congruent with this expectation?
 :::
 
 # `prcomp()` comparison
 
-At this point we have completed a principal components analysis, but we can also compare it to how R does a principal components analysis and see how our results compare. One way to do a principal components analysis in R is to use the `prcomp()` function in R.
+At this point we have completed a principal components analysis, but we can also compare our analysis to how R does a principal components analysis and see how our results compare. One way to do a principal components analysis in R is to use the `prcomp()` function.
 
 In order to run `prcomp()`, we need to start from an expression matrix and move the cell IDs to the rownames:
 
@@ -446,18 +443,18 @@ First we can ensure that we have the same center of the data. `prcomp()` says th
 prcomp_PCA$center
 ```
 
-We can compare this with what we derived as the center of the data:
+We can compare this result with what we derived as the center of the data:
 
 ```{r center_hand}
 # Print the center of the data we found
 center_of_data
 ```
 
-They match which is a great sign that we did this correctly!
+They match, which is a great sign that we did this analysis correctly!
 
 ## Eigenvalues
 
-Note that eigenvalues are the variance for a particular principal component and variance is the square of the standard deviation as shown below. 
+Note that eigenvalues are the variance for a particular principal component and variance is the square of the standard deviation, as shown below. 
 
 $$
 \operatorname{var}(X) = \operatorname{sd}(X)^2
@@ -475,7 +472,7 @@ names(prcomp_eigenvalues) <- c("PC_1", "PC_2")
 prcomp_eigenvalues
 ```
 
-We can compare this with our estimation of eigenvalues by hand:
+We can compare this result with our estimation of eigenvalues by hand:
 
 ```{r eigenvalue_hand}
 # Print the eigenvalues we found
@@ -498,7 +495,7 @@ While we calculated the eigenvectors as:
 eig$vectors
 ```
 
-We can see that the values are the same, but the sign is flipped between the two methods. This is because eigenvectors are only defined "up to sign". This means for a given eigenvalue, the eigenvector *v~1~* and *-v~1~* are the same line, but point in different directions. This does not impact our principal components calculations. However, it could mean that a plot derived *v~1~* will look rotated 180&deg; when compared to a plot derived from *-v~1~*. Regardless, it looks like we have the same eigenvectors in both approaches.
+We can see that the values are the same, but the sign is flipped between the two methods. This is because eigenvectors are only defined "up to sign". This means for a given eigenvalue, the eigenvectors *v~1~* and *-v~1~* are the same line, but point in different directions. This difference does not impact our principal components calculations. However, it could mean that a plot derived from *v~1~* will look rotated 180&deg; when compared to a plot derived from *-v~1~*. Regardless, it looks like we have the same eigenvectors in both approaches.
 
 ## PC Scores
 
@@ -520,12 +517,12 @@ Once again, the values are the same, but the only difference is the sign, which 
 
 ::: callout-tip
 # [**Exercise 3**](04_theory_of_PCA-Answer_key.qmd#exercise-3)
-Create a plot of the Principal Components Analysis derived from `prcomp()`. Is it the same as the plot we derived except only reflected over the x-axis?
+Create a plot of the Principal Components Analysis derived from `prcomp()`. Is it the same as the plot we derived, except only reflected over the x-axis?
 :::
 
 # Number of PCs
 
-When carrying out a PCA, it could be interesting the know how many the possible Principal Components axes exist. The answer isn't so simple but the easiest metric to use is that **the number of PCs ≤ minimum(number_of_genes, number_of_cells)**. For a deeper dive in how the number of PCs is determined and factors that influence them, consider [this lesson](Aside_Number_of_PCs.qmd).
+When carrying out a PCA, it could be interesting the know how many possible Principal Components axes exist. The answer isn't so simple, but the easiest metric to use is that **the number of PCs ≤ the minimum number of genes or cells** (whichever is smaller). For a deeper dive in how the number of PCs is determined and factors that influence them, consider [this lesson](Aside_Number_of_PCs.qmd).
 
 ***
 

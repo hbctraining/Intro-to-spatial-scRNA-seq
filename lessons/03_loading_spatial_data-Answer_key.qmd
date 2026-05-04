@@ -22,7 +22,7 @@ editor_options:
 
 - Identify and characterize tumor cells in `CRC`
 - Construct cell-communication networks, using spatial locations to constrain our results
-- What are unique subtypes/cell states that are found in `CRC` vs. `NAT`
+- Identify unique subtypes/cell states that are found in `CRC` vs. `NAT`
 - Associate cell states with spatial locations 
 - Establish domains and niches of cell populations in quadrants of the slides
 - etc.

@@ -72,7 +72,7 @@ untar(tarfile = dest,
       exdir = "data/P5NAT_full")
 ```
 
-Next, we will use the same loop as before to for subsetting:
+Next, we will use the same loop as before for subsetting:
 
 ```{r}
 #| label: subsetting_answer
@@ -122,15 +122,15 @@ for (bin in bins) {
   
     # Set path for JSON file
   path_json <- paste0("data/P5NAT_full/binned_outputs/square_", bin, "um/spatial/scalefactors_json.json")
-  # Set path for Parquet file
+  # Set path for parquet file
   path_parq <- paste0("data/P5NAT_full/binned_outputs/square_", bin, "um/spatial/tissue_positions.parquet")
   # Set path for PNG file
   path_png  <- paste0("data/P5NAT_full/binned_outputs/square_", bin, "um/spatial/tissue_lowres_image.png")
   
-  # Combine JSON, Parquet and PNG file paths into a vector
+  # Combine JSON, parquet and PNG file paths into a vector
   files_spatial <- c(path_json, path_parq, path_png)
 
-  # Copy JSON, Parquet and PNG files into our spatial folder
+  # Copy JSON, parquet and PNG files into our spatial folder
   file.copy(from = files_spatial,
             to = paste0(path_bin, "/spatial"))
   

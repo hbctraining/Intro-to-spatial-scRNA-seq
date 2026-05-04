@@ -50,7 +50,9 @@ Approximate time: 45 minutes
 
 # Number of PCs
 
-When doing a Principal Components Analysis (PCA), you will be reducing the dimensionality of your data into Principal Components (PCs). The maximum number of PCs, sometimes called rank of the PCA, for scRNA-seq analysis will at most either be the the number of genes or the number of cells, whichever is fewer. In other words, **the number of PCs ≤ minimum(number_of_genes, number_of_cells)**. In the sections below we will discuss the reasons for this. For this lesson we will need to load `tidyverse`.
+When doing a Principal Components Analysis (PCA), you will be reducing the dimensionality of your data into Principal Components (PCs). The maximum number of PCs, sometimes called rank of the PCA, for scRNA-seq analysis will at most either be the the number of genes or the number of cells, whichever is fewer. In other words, **the number of PCs ≤ the minimum of the number of genes or number of cells** (whichever is smaller). In the sections below, we will discuss the reasons for this limit.
+
+For this lesson we will need to load `tidyverse`.
 
 ```{r}
 #| label: load_tidyverse
@@ -106,7 +108,7 @@ cov_matrix <- cov(recentered_expression_matrix)
 cov_matrix
 ```
 
-From this we can see that it is a **2x2 gene-wise** covariance matrix. However, we could have alternatively created a **4x4 cell-wise** covariance matrix using. Unfortunately, we will need to do this using some for loops. One small note before we start, since we re-centered the data on based on gene, the mean of Gene_A and Gene_B are both 0, so those gene mean terms can drop out of the covariance equation. We can confirm that with:
+From this output we can see that it is a **2x2 gene-wise** covariance matrix based on our 2 genes. However, we could have alternatively created a **4x4 cell-wise** covariance matrix using our 4 cells. One small note before we start: since we re-centered the data on based on gene, the mean of Gene_A and Gene_B are both 0, so those gene mean terms can drop out of the covariance equation. We can confirm that with:
 
 ```{r}
 #| label: confirm_recented_means
@@ -202,7 +204,7 @@ $$
 
 Therefore, the values, which satisfy $\lambda$ would be `0`, `1255.54` and `50.04`. 
 
-If we go back to our number of genes, `r n_genes`, and numbers of cells, `r n_cells`, we can see that the number of PCs was equal to the whichever was fewer, `n_cells` or `n_genes`. However, we stated that the number of PCs ≤ minimum(number_of_genes, number_of_cells), not just equal to it. In the next section we will explore why this is the case.
+If we go back to our number of genes, `r n_genes`, and numbers of cells, `r n_cells`, we can see that the number of PCs was equal to the whichever was fewer, `n_cells` or `n_genes`. However, we stated that the number of PCs is _less than or equal to_ the minimum of the number of genes or cells, not just equal to it. In the next section we will explore why this is the case.
 
 :::callout-note
 In practice, we usually use gene-wise covariance in scRNA-seq PCA, but the cell-wise perspective helps us see why zeros eigenvalues emerge and how the PCA is fundamentally about the geometry of the data rather than its orientation.
@@ -210,7 +212,7 @@ In practice, we usually use gene-wise covariance in scRNA-seq PCA, but the cell-
 
 # Sources of Reducing the Number of PCs for a PCA
 
-Now that we have demonstrated how number of PCs = minimum(number_of_genes, number_of_cells), let's understand sources of data that reduce the number of PCs so that the number of PCs ≤ minimum(number_of_genes, number_of_cells). Four major sources of this come from:
+Now that we have demonstrated how number of PCs can equal the minimum of the number of genes or cells, let's understand sources of data that reduce the number of PCs so that the number of PCs is less than or equal to this value. Four major sources of this reduction come from:
 
 - [Duplicated Data](#duplicated-data)
 - [Scaled Data](#scaled-data)
@@ -221,7 +223,7 @@ We will provide examples of each below, but first let's make the expression matr
 
 ```{r}
 #| label: create_expression_matrix_for_reduced_rank
-# Create an expression matrix to use
+# Create an expression matrix with cells as rownames to use
 expression_matrix <- expression_tibble %>% 
   as.data.frame() %>% 
   column_to_rownames("cells") %>% 
@@ -264,7 +266,7 @@ scaled_PCA <- prcomp(expression_matrix_scaled)
 round(scaled_PCA$sdev ** 2, digits = 3)
 ```
 
-Once again, we can see that we are returned 2 non-zero eigenvalues and one eigenvalue that has a value of 0. Thus, the rank of the PCA is less than the minimum(number_of_genes, number_of_cells).
+Once again, we can see that we are returned 2 non-zero eigenvalues and one eigenvalue that has a value of 0. Thus, the rank of the PCA is less than the minimum of the number of genes or cells.
 
 ## Linear Combinations of Data
 
