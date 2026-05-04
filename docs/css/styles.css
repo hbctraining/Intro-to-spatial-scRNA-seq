@@ -374,3 +374,13 @@ figure.quarto-float-tbl > div[aria-describedby] > table {
   margin-left: 0;
   margin-right: 0;
 }
+
+
+/* Extra vertical space between wrapped rows of tabs */
+.panel-tabset > .nav-tabs {
+  row-gap: 0.5rem;        /* space between rows (Bootstrap 5) */
+}
+
+.panel-tabset > .nav-tabs .nav-item {
+  margin-bottom: 0.25rem; /* adds a bit more separation */
+}

@@ -184,99 +184,75 @@ II. **Submit your work**:
 ](https://lmweber.org/OSTA/)
 - [SpatialData in Python](https://spatialdata.scverse.org/en/latest/tutorials/notebooks/notebooks.html)
 
-<!-- 
-Overview of spatial transcriptomics:
-
-- https://www.nature.com/articles/s41581-024-00841-1
-- https://www.nature.com/articles/s41592-024-02325-3
-- https://www.sciencedirect.com/science/article/pii/S1044532325000302
-- https://www.nature.com/articles/s41586-021-03634-9
-- https://www.nature.com/articles/s41576-025-00892-5
-- https://www.nature.com/articles/s41592-022-01409-2
-- https://www.sciencedirect.com/science/article/pii/S1044532325000302
-- https://www.sciencedirect.com/science/article/pii/S1673852723000759
-- https://www.nature.com/articles/s41581-024-00841-1
-- https://www.nature.com/articles/s41587-025-02811-9
-- https://link.springer.com/article/10.1186/s12967-023-04150-2
-- https://www.cell.com/cell-systems/fulltext/S2405-4712(25)00033-X
-
-Dataset paper:
-- https://www.nature.com/articles/s41588-025-02193-3
-
-
-Segmentation:
-- https://www.nature.com/articles/s41587-021-01044-w
-- https://www.nature.com/articles/s41592-020-01018-x
-- https://www.nature.com/articles/s41587-021-01044-w
-
-
-Normalization:
-- https://link.springer.com/article/10.1186/s13059-024-03241-7
-- https://link.springer.com/article/10.1186/s13059-024-03303-w
-
-Sketch workflow: 
-- https://www.nature.com/articles/s41587-023-01767-y
-- https://dl.acm.org/doi/pdf/10.1145/3019134
-
-Dimensionality reduction:
-- https://www.nature.com/articles/s41598-025-14301-8
-- https://www.nature.com/articles/s41592-024-02301-x
-
-Integration: 
-- https://www.nature.com/articles/s41592-019-0619-0
-- https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8
-
-Clustering
-- https://www.nature.com/articles/s41588-024-01664-3
-- https://www.nature.com/articles/s41598-019-41695-z
-
-Deconvolution:
-- https://www.nature.com/articles/s41587-022-01273-7
-
-Spatially variable genes:
-- https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371
-- https://www.nature.com/articles/s41467-025-56080-w
-
-Cell-cell Communication:
-- https://www.nature.com/articles/s41392-024-01888-z
-
-
-Other methods:
-
-- https://www.nature.com/articles/s41592-024-02503-3
-- https://www.biorxiv.org/content/10.1101/2025.01.20.634005v1 -->
-
 ### Reference papers
 
-| Paper | Category |
-| --- | --- |
-| *Spatial transcriptomics in health and disease* – Nature Reviews Nephrology, 2024. [Link](https://www.nature.com/articles/s41581-024-00841-1) | Overview of spatial transcriptomics |
-| *Systematic comparison of sequencing-based spatial transcriptomic methods* – Nature Methods, 2024. [Link](https://www.nature.com/articles/s41592-024-02325-3) | Overview of spatial transcriptomics |
-| *The spatial and single-cell landscape of skin: Charting the multiscale regulation of skin immune function* – Seminars in Immunology, 2025. [Link](https://www.sciencedirect.com/science/article/pii/S1044532325000302) | Overview of spatial transcriptomics |
-| *Exploring tissue architecture using spatial transcriptomics* – Nature, 2021. [Link](https://www.nature.com/articles/s41586-021-03634-9) | Overview of spatial transcriptomics |
-| *Spatial architecture of development and disease* – Nature Reviews Genetics, 2025. [Link](https://www.nature.com/articles/s41576-025-00892-5) | Overview of spatial transcriptomics |
-| *Museum of spatial transcriptomics* – Nature Methods, 2022. [Link](https://www.nature.com/articles/s41592-022-01409-2) | Overview of spatial transcriptomics |
-| *Spatially resolved transcriptomics: a comprehensive review of their technological advances, applications, and challenges* – Genomics, Proteomics & Bioinformatics, 2023. [Link](https://www.sciencedirect.com/science/article/pii/S1673852723000759) | Overview of spatial transcriptomics |
-| *Standardized metrics for assessment and reproducibility of imaging-based spatial transcriptomics datasets* – Nature Biotechnology, 2025. [Link](https://www.nature.com/articles/s41587-025-02811-9) | Overview of spatial transcriptomics |
-| *Advances in spatial transcriptomics and related data analysis strategies* – Journal of Translational Medicine, 2023. [Link](https://link.springer.com/article/10.1186/s12967-023-04150-2) | Overview of spatial transcriptomics |
-| *What is the main bottleneck in deriving biological understanding from spatial transcriptomic profiling?* – Cell Systems, 2025. [Link](https://www.cell.com/cell-systems/fulltext/S2405-4712(25)00033-X) | Overview of spatial transcriptomics |
-| *High-definition spatial transcriptomic profiling of immune cell populations in colorectal cancer* – Nature Genetics, 2025. [Link](https://www.nature.com/articles/s41588-025-02193-3) | Dataset paper |
-| *Cell segmentation in imaging-based spatial transcriptomics* – Nature Biotechnology, 2021. [Link](https://www.nature.com/articles/s41587-021-01044-w) | Segmentation |
-| *Cellpose: A generalist algorithm for cellular segmentation* – Nature Methods, 2021. [Link](https://www.nature.com/articles/s41592-020-01018-x) | Segmentation |
-| *Library size confounds biology in spatial transcriptomics data* – Genome Biology, 2024. [Link](https://link.springer.com/article/10.1186/s13059-024-03241-7) | Normalization |
-| *Gene count normalization in single-cell imaging-based spatially resolved transcriptomics* – Genome Biology, 2024. [Link](https://link.springer.com/article/10.1186/s13059-024-03303-w) | Normalization |
-| *Dictionary learning for integrative, multimodal and scalable single-cell analysis* – Nature Biotechnology, 2023. [Link](https://www.nature.com/articles/s41587-023-01767-y) | Sketch workflow |
-| *Low-Rank Approximation and Regression in Input Sparsity Time* – Journal of the ACM, 2017. [Link](https://dl.acm.org/doi/pdf/10.1145/3019134) | Sketch workflow |
-| *A comparative study of manifold learning methods for scRNA-seq with a trajectory-aware metric* – Scientific Reports, 2025. [Link](https://www.nature.com/articles/s41598-025-14301-8) | Dimensionality reduction |
-| *Seeing data as t-SNE and UMAP do* – Nature Methods, 2024. [Link](https://www.nature.com/articles/s41592-024-02301-x) | Dimensionality reduction |
-| *Fast, sensitive and accurate integration of single-cell data with Harmony* – Nature Methods, 2019. [Link](https://www.nature.com/articles/s41592-019-0619-0) | Integration |
-| *Comprehensive Integration of Single-Cell Data* – Cell, 2019. [Link](https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8) | Integration |
-| *BANKSY unifies cell typing and tissue domain segmentation for scalable spatial omics data analysis* – Nature Genetics, 2024. [Link](https://www.nature.com/articles/s41588-024-01664-3) | Clustering |
-| *From Louvain to Leiden: guaranteeing well-connected communities* – Scientific Reports, 2019. [Link](https://www.nature.com/articles/s41598-019-41695-z) | Clustering |
-| *Spatially informed cell-type deconvolution for spatial transcriptomics* – Nature Biotechnology, 2022. [Link](https://www.nature.com/articles/s41587-022-01273-7) | Deconvolution |
-| *Benchmarking algorithms for spatially variable gene identification in spatial transcriptomics* – Bioinformatics, 2025. [Link](https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371) | Spatially variable genes |
-| *Title not available (Categorization of computational methods to detect spatially variable genes, 2025)* – Nature Communications, 2025. [Link](https://www.nature.com/articles/s41467-025-56080-w) | Spatially variable genes |
-| *Cell–cell communication: new insights and clinical implications* – Signal Transduction and Targeted Therapy, 2024. [Link](https://www.nature.com/articles/s41392-024-01888-z) | Cell-cell Communication |
-| *Mapping the topography of spatial gene expression with interpretable deep learning* – Nature Methods, 2025. [Link](https://www.nature.com/articles/s41592-024-02503-3) | Other methods |
-| *ResolVI – addressing noise and bias in spatial transcriptomics* – bioRxiv preprint, 2025. [Link](https://www.biorxiv.org/content/10.1101/2025.01.20.634005v1) | Other methods |
+Here we provide papers that were used to create this workshop, in different tabsets with the associated lesson / general theme of the paper.
 
+::: {.panel-tabset}
+
+#### Overview of spatial transcriptomics
+
+- *Spatial transcriptomics in health and disease* – Nature Reviews Nephrology, 2024. [Link](https://www.nature.com/articles/s41581-024-00841-1)  
+- *Systematic comparison of sequencing-based spatial transcriptomic methods* – Nature Methods, 2024. [Link](https://www.nature.com/articles/s41592-024-02325-3)  
+- *The spatial and single-cell landscape of skin: Charting the multiscale regulation of skin immune function* – Seminars in Immunology, 2025. [Link](https://www.sciencedirect.com/science/article/pii/S1044532325000302)  
+- *Exploring tissue architecture using spatial transcriptomics* – Nature, 2021. [Link](https://www.nature.com/articles/s41586-021-03634-9)  
+- *Spatial architecture of development and disease* – Nature Reviews Genetics, 2025. [Link](https://www.nature.com/articles/s41576-025-00892-5)  
+- *Museum of spatial transcriptomics* – Nature Methods, 2022. [Link](https://www.nature.com/articles/s41592-022-01409-2)  
+- *Spatially resolved transcriptomics: a comprehensive review of their technological advances, applications, and challenges* – Genomics, Proteomics & Bioinformatics, 2023. [Link](https://www.sciencedirect.com/science/article/pii/S1673852723000759)  
+- *Standardized metrics for assessment and reproducibility of imaging-based spatial transcriptomics datasets* – Nature Biotechnology, 2025. [Link](https://www.nature.com/articles/s41587-025-02811-9)  
+- *Advances in spatial transcriptomics and related data analysis strategies* – Journal of Translational Medicine, 2023. [Link](https://link.springer.com/article/10.1186/s12967-023-04150-2)  
+- *What is the main bottleneck in deriving biological understanding from spatial transcriptomic profiling?* – Cell Systems, 2025. [Link](https://www.cell.com/cell-systems/fulltext/S2405-4712(25)00033-X)  
+
+#### Dataset paper
+
+- *High-definition spatial transcriptomic profiling of immune cell populations in colorectal cancer* – Nature Genetics, 2025. [Link](https://www.nature.com/articles/s41588-025-02193-3)  
+
+#### Segmentation
+
+- *Cell segmentation in imaging-based spatial transcriptomics* – Nature Biotechnology, 2021. [Link](https://www.nature.com/articles/s41587-021-01044-w)  
+- *Cellpose: A generalist algorithm for cellular segmentation* – Nature Methods, 2021. [Link](https://www.nature.com/articles/s41592-020-01018-x)  
+
+#### Normalization
+
+- *Library size confounds biology in spatial transcriptomics data* – Genome Biology, 2024. [Link](https://link.springer.com/article/10.1186/s13059-024-03241-7)  
+- *Gene count normalization in single-cell imaging-based spatially resolved transcriptomics* – Genome Biology, 2024. [Link](https://link.springer.com/article/10.1186/s13059-024-03303-w)  
+
+#### Sketch workflow
+
+- *Dictionary learning for integrative, multimodal and scalable single-cell analysis* – Nature Biotechnology, 2023. [Link](https://www.nature.com/articles/s41587-023-01767-y)  
+- *Low-Rank Approximation and Regression in Input Sparsity Time* – Journal of the ACM, 2017. [Link](https://dl.acm.org/doi/pdf/10.1145/3019134)  
+
+#### Dimensionality reduction
+
+- *A comparative study of manifold learning methods for scRNA-seq with a trajectory-aware metric* – Scientific Reports, 2025. [Link](https://www.nature.com/articles/s41598-025-14301-8)  
+- *Seeing data as t-SNE and UMAP do* – Nature Methods, 2024. [Link](https://www.nature.com/articles/s41592-024-02301-x)  
+
+#### Integration
+
+- *Fast, sensitive and accurate integration of single-cell data with Harmony* – Nature Methods, 2019. [Link](https://www.nature.com/articles/s41592-019-0619-0)  
+- *Comprehensive Integration of Single-Cell Data* – Cell, 2019. [Link](https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8)  
+
+#### Clustering
+
+- *BANKSY unifies cell typing and tissue domain segmentation for scalable spatial omics data analysis* – Nature Genetics, 2024. [Link](https://www.nature.com/articles/s41588-024-01664-3)  
+- *From Louvain to Leiden: guaranteeing well-connected communities* – Scientific Reports, 2019. [Link](https://www.nature.com/articles/s41598-019-41695-z)  
+
+#### Deconvolution
+
+- *Spatially informed cell-type deconvolution for spatial transcriptomics* – Nature Biotechnology, 2022. [Link](https://www.nature.com/articles/s41587-022-01273-7)  
+
+#### Spatially variable genes
+
+- *Benchmarking algorithms for spatially variable gene identification in spatial transcriptomics* – Bioinformatics, 2025. [Link](https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371)  
+- *Title not available (Categorization of computational methods to detect spatially variable genes, 2025)* – Nature Communications, 2025. [Link](https://www.nature.com/articles/s41467-025-56080-w)  
+
+#### Cell-cell communication
+
+- *Cell–cell communication: new insights and clinical implications* – Signal Transduction and Targeted Therapy, 2024. [Link](https://www.nature.com/articles/s41392-024-01888-z)  
+
+#### Other methods
+
+- *Mapping the topography of spatial gene expression with interpretable deep learning* – Nature Methods, 2025. [Link](https://www.nature.com/articles/s41592-024-02503-3)  
+- *ResolVI – addressing noise and bias in spatial transcriptomics* – bioRxiv preprint, 2025. [Link](https://www.biorxiv.org/content/10.1101/2025.01.20.634005v1)  
+
+:::
