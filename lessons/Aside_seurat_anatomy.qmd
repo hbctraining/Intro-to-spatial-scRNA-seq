@@ -58,7 +58,7 @@ As we can see from our Seurat callout, there are a lot of different slots inside
 
 ### Assays
 
-`Assays` are where we can store different counts matrices - we are not forced to keep the same features and variable genes across assays. Each assay will contain it's own `Layers` that can be distinct from other assays in the object. This is useful in several different cases:
+`Assays` are where we can store different counts matrices - we are not forced to keep the same features and variable genes across assays. Each assay will contain its own `Layers` that can be distinct from other assays in the object. This is useful in several different cases:
 
 - Multi-modal assays, where you can keep the expression matrices for RNA, ATAC, or protein in a single Seurat object
 - Storing counts matrices from a variety of different normalization techniques
@@ -148,7 +148,7 @@ By default, Seurat uses the following naming convention for the counts matrices 
 
 You may notice that our Seurat object only contains `counts` right now. This is because we have not run any normalization steps yet (we will discuss how to do so in future lessons).
 
-Using the `LayerData()` function we can access the entire counts matrix. Furthermore, we can specify the `assay` if we would prefer to not use the `DefaultAssay`.
+Using the `LayerData()` function, we can access the entire counts matrix. Furthermore, we can specify the `assay` if we would prefer to not use the `DefaultAssay` (or to document which assay we are using, to avoid potential confusion).
 
 ```{r}
 #| label: crc_LayerData
@@ -169,13 +169,13 @@ LayerData(crc,
   knitr::kable()
 ```
 
-By printing the first 5 features and cells in our object (for easier visualization). We can see that we are working with **whole numbers** which reinforces the idea that this is the **raw data**, with no transformations having been applied.
+By printing the first 5 features and cells in our object (for easier visualization), we can see that we are working with **whole numbers** — which reinforces the idea that this is the **raw data**, with no transformations having been applied.
 
 ### Spatial fields
 
-We do not just have expression data associated with our sample, we also have the spatial slide that comes with its own set of values and information.
+We do not just have expression data associated with our sample; we also have the spatial slide that comes with its own set of values and information.
 
-For example we can grab the x,y coordinates of each bin using the `GetTissueCoordinates()` function.
+For example, we can grab the x and y coordinates of each bin using the `GetTissueCoordinates()` function.
 
 ```{r}
 #| label: crc_GetTissueCoordinates
@@ -202,7 +202,7 @@ SpatialDimPlot(crc, pt.size.factor = 7)
 
 ### Metadata
 
-**Seurat automatically creates some metadata** for each of the cells when the object is created. This information is stored in the `@meta.data` slot within the Seurat object. The rownames are automatically set to be the cell names.
+**Seurat automatically generates some metadata** for each of the cells when the object is created. This information is stored in the `@meta.data` slot within the Seurat object. The rownames are automatically set to be the cell names.
 
 ```{r}
 #| label: crc_meta_data_1
@@ -251,7 +251,7 @@ crc@meta.data %>%
   knitr::kable()
 ```
 
-Additionally, we do not have use the `@meta.data` each time we want to access a single column. We can use the `$` follow by the column name as a shorthand.
+Additionally, we do not have use the `@meta.data` each time we want to access a single column. We can use `$` followed by the column name as a shorthand.
 
 ```{r}
 #| label: crc_dollar_notation
@@ -268,7 +268,7 @@ Idents(crc) <- "orig.ident"
 Idents(crc) %>% head()
 ```
 
-Where we see that the identities of the cells are the value stored in the `@meta.data` column `orig.ident`.
+Now we see that the identities of the cells are the value stored in the `@meta.data` column `orig.ident`.
 
 ***
 
