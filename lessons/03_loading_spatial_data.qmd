@@ -26,7 +26,7 @@ editor_options:
 
 ```
 
-Approximate time: XX minutes
+Approximate time: 35 minutes
 
 ## Learning objectives 
 
@@ -157,11 +157,6 @@ dir_tree("data", recurse = 1)
 You may notice that we are working with **cropped** folders for this workshop. This is due to the limitations of how much data can be loaded on a laptop. So here, we have cropped the image so that we have a smaller cross-section of the tissue to work with, ultimately reducing the number of cells for this example dataset.
 
 The code used to create all the files for this workshop can be found [here](Aside_crop_slide.qmd).
-
-::: callout-warning
-TODO: lesson on cropping unfinished
-:::
-
 :::
 
 ### New script

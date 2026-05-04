@@ -28,7 +28,7 @@ library(tidyverse)
 seurat_merged <- qs2::qs_read("intermediate/03_seurat_merged.qs")
 ```
 
-Approximate time: XX minutes
+Approximate time: 45 minutes
 
 ## Learning objectives 
 

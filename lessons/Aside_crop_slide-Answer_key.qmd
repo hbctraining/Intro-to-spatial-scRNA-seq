@@ -33,7 +33,7 @@ if (dir_exists(directory_to_delete)) {
 
 # Exercise 1
 
-1. The area not contain colorectal samples comes from another place on the same slide. Using a loop and the parameter below, subset the non-cancer region of the slide for 8μm and 16μm bin sizes.
+1. The binned output not containing colorectal cancer bins comes from [here](https://cf.10xgenomics.com/samples/spatial-exp/3.0.0/Visium_HD_Human_Colon_Normal_P5/Visium_HD_Human_Colon_Normal_P5_binned_outputs.tar.gz). Using a loop and the parameters below, subset the non-cancerous slide for 8μm and 16μm bin sizes.
 
 ```{r}
 #| label: set_sample_name_coordinates
@@ -41,13 +41,13 @@ if (dir_exists(directory_to_delete)) {
 sample_name <- "P5NAT"
 
 # Set minimums and maximums for x and y
-x_min <- 29000
-x_max <- 39987
-y_min <- 54000
-y_max <- 61991
+x_min <- 54000
+x_max <- 61991
+y_min <- 29000
+y_max <- 39987
 ```
 
-First, we can download the data and uncompress it. Note, this will overwrite our `binned_outputs` directory from the colorectal cancer sample.
+First, we can download the data and uncompress it. 
 
 ```{r}
 #| label: download_normal_data
@@ -59,18 +59,20 @@ URL <- "https://cf.10xgenomics.com/samples/spatial-exp/3.0.0/Visium_HD_Human_Col
 dir.create("data/P5NAT_full/")
 
 # Set destination folder
-dest <- file.path("data/P5CRC_full", basename(URL))
+dest <- file.path("data/P5NAT_full", basename(URL))
 
 # Download data
 curl_download(
   url = URL,
   destfile = dest,
-  mode     = "wb")
+  mode = "wb")
 
 # Uncompress tar.gz
 untar(tarfile = dest,
-      exdir = "data")
+      exdir = "data/P5NAT_full")
 ```
+
+Next, we will use the same loop as before to for subsetting:
 
 ```{r}
 #| label: subsetting_answer
@@ -148,7 +150,7 @@ for (bin in bins) {
 }
 ```
 
-After running this loop the directory structure should now look like:
+After running this loop, the directory structure should now look like:
 
 ```{r}
 #| label: directory_struture_after_loop
@@ -159,6 +161,26 @@ library(fs)
 # Show data structure
 dir_tree(path = "data/P5NAT_subsetted/binned_outputs/",
          recurse = TRUE)
+```
+
+We can also double check that the bins in the subsetted dataset from the loop match the provided cropped dataset:
+
+```{r}
+#| label: check_same_number_of_bins
+# Load subsetted data
+subsetted_seurat_obj <- Load10X_Spatial(
+  data.dir = "data/P5NAT_subsetted/",
+  bin.size = 16,
+  slice = "P5NAT")
+
+# Load provided data
+provided_seurat_object <- Load10X_Spatial(
+  data.dir = "data/P5NAT_cropped/",
+  bin.size = 16,
+  slice = "P5NAT")
+
+# Check to ensure that both data sets have the same bins
+all(colnames(subsetted_seurat_obj) == colnames(provided_seurat_object))
 ```
 
 ***

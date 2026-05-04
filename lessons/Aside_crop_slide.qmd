@@ -91,7 +91,7 @@ dest <- file.path("data/P5CRC_full", basename(URL))
 curl_download(
   url = URL,
   destfile = dest,
-  mode     = "wb")
+  mode = "wb")
 
 # Uncompress tar.gz
 untar(tarfile = dest,
@@ -294,10 +294,10 @@ Now that we have an understanding of the coordinates, let's go ahead and subset 
 ```{r}
 #| label: subset_coords
 # Set x and y bounds for subsetting image
-x_min <- 57500
-x_max <- 64002
-y_min <- 52000
-y_max <- 64319
+x_min <- 52000
+x_max <- 64319
+y_min <- 57500
+y_max <- 64002
 
 # Extract bin barcodes based on the defined x and y bounds
 subsetted_bins <- coordinates %>% 
@@ -461,10 +461,10 @@ We are going to set-up the bin sizes that we would like to loop through and also
 sample_name <- "P5CRC"
 
 # Set minimums and maximums for x and y
-x_min <- 57500
-x_max <- 64002
-y_min <- 52000
-y_max <- 64319
+x_min <- 52000
+x_max <- 64319
+y_min <- 57500
+y_max <- 64002
 
 # Selecting the bin sizes to use
 bins <- c("008", "016")
@@ -561,6 +561,40 @@ dir_tree(path = "data/P5CRC_subsetted/binned_outputs/",
          recurse = TRUE)
 ```
 
+Let's read in the subsetted data that was created from our loop and the provided cropped data, then compare them to confirm that we have recreated the same data:
+
+```{r}
+#| label: fig-compare_subsetted_provided
+#| fig-cap: Comparison of the subsetted data we created with the provided cropped data to ensure they look the same.
+# Load subsetted data
+subsetted_seurat_obj <- Load10X_Spatial(
+  data.dir = "data/P5CRC_subsetted/",
+  bin.size = 16,
+  slice = "P5CRC")
+
+# Load provided data
+provided_seurat_object <- Load10X_Spatial(
+  data.dir = "data/P5CRC_cropped/",
+  bin.size = 16,
+  slice = "P5CRC")
+
+# Visual the subsetted data next to the provided data
+SpatialFeaturePlot(subsetted_seurat_obj,
+                   features = "nFeature_Spatial.016um", 
+                     pt.size.factor = 16) +
+SpatialFeaturePlot(provided_seurat_object,
+                   features = "nFeature_Spatial.016um", 
+                     pt.size.factor = 16)
+```
+
+It looks like we have the same data, but let's confirm by checking that the bins that are present in the data we just subset are also in the data that were provided:
+
+```{r}
+#| label: check_same_number_of_bins
+# Check to ensure that both data sets have the same number of bins
+all(colnames(subsetted_seurat_obj) == colnames(provided_seurat_object))
+```
+
 At this point we have successfully subsetted our data for two different bin sizes on the slide while performing appropriate checks along the way to ensure that our subsetting has been done correctly.
 
 ::: callout-tip
@@ -574,9 +608,9 @@ At this point we have successfully subsetted our data for two different bin size
 sample_name <- "P5NAT"
 
 # Set minimums and maximums for x and y
-x_min <- 29000
-x_max <- 39987
-y_min <- 54000
-y_max <- 61991
+x_min <- 54000
+x_max <- 61991
+y_min <- 29000
+y_max <- 39987
 ```
 :::
