@@ -15,9 +15,9 @@ toc: false
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:15 | [Workshop Introduction](../slides/workshop_intro_slides.pdf) |  Will |
-| 10:45 - 11:45| [Introduction to Spatial Transcriptomics](../slides/single_cell_slides.pdf) | [Dr. Pratyusha Bala](https://singlecellcore.hms.harvard.edu/people/pratyusha-bala) |
-| 10:45 - 10:50 | Break | |
-| 10:50 - 11:25 | [Load Visium HD Data](../lessons/03_loading_spatial_data.qmd) | Noor |
+| 10:15 - 11:15| [Introduction to Spatial Transcriptomics](../slides/single_cell_slides.pdf) | [Dr. Pratyusha Bala](https://singlecellcore.hms.harvard.edu/people/pratyusha-bala) |
+| 11:15 - 11:20 | Break | |
+| 11:20 - 11:55 | [Load Visium HD Data](../lessons/03_loading_spatial_data.qmd) | Noor |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Will |
 
 ### Before the next class:
