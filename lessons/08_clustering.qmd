@@ -31,7 +31,7 @@ set.seed(12345)
 seurat_processed <- qs2::qs_read("intermediate/07_seurat_processed.qs")
 ```
 
-Approximate time: XX minutes
+Approximate time: 60 minutes
 
 ## Learning objectives 
 
