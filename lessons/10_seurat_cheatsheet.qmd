@@ -1,7 +1,7 @@
 ---
 title: "Seurat Cheatsheet"
 description: |
-  Keep a compact Seurat cheatsheet at hand that summarizes key functions for spatial transcriptomics workflows, from data loading to clustering and plotting. Use this reference to speed up scripting, avoid common syntax errors, and standardize your analysis pipeline.
+  This lesson will introduce a compact Seurat cheatsheet to keep at hand that summarizes key functions for spatial transcriptomics workflows, from data loading to clustering and plotting. Use this reference to speed up scripting, avoid common syntax errors and standardize your analysis pipeline.
 author:
   - Noor Sohail
   - Meeta Mistry
@@ -29,6 +29,8 @@ editor_options:
 # Load libraries and data
 library(Seurat)
 library(tidyverse)
+
+# Read in the Seurat object
 seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
 ```
 
@@ -43,11 +45,11 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-Here, you’ve already used Seurat through several steps and seen many function calls. In this lesson you consolidate the core Seurat commands and object operations for spatial analysis into a concise reference. It doesn’t introduce new analysis concepts - instead, it makes it easier to reproduce and script what you’ve learned without constantly searching documentation. This quick reference speeds up all later work when you adapt the pipeline to your own data.
+You’ve already used Seurat through several steps and seen many function calls. In this lesson, you will consolidate the core Seurat commands and object operations for spatial analysis into a concise reference. It doesn’t introduce new analysis concepts, but rather it makes it easier to reproduce and script what you’ve learned without constantly searching through documentation. This quick reference speeds up all later work when you adapt the pipeline to your own data.
 
 ## Seurat Cheatsheet
 
-This cheatsheet is meant to provide examples of the various functions available in Seurat. This includes how to access certain information, handy tips, and visualization functions built into the package. We have pulled together all of this information with examples using the dataset used throughout this workshop so that there are clear visuals on what the output of each function is.
+This cheatsheet is meant to provide examples of the various functions available in Seurat. This includes how to access certain information, handy tips and visualization functions built into the package. We have pulled together all of this information with examples using the dataset used throughout this workshop so that there are clear visuals on what the output of each function is.
 
 These materials were developed by referencing the following pages from the Seurat website:
 
@@ -55,15 +57,23 @@ These materials were developed by referencing the following pages from the Seura
 - [Visualization vignette](https://satijalab.org/seurat/articles/visualization_vignette.html)
 
 
-## Dataset
+## Loading in the dataset
 
+First, we will make a new script for us to practice these Seurat commands in. Will will call it `Seurat_cheatsheet.R` and place it within our `scripts` directory. At the top of the script let's provide some useful information about the script, call our libraries and also load our data.
 
 ```{r}
 #| label: load_data
 #| eval: false
+# Seurat Cheatsheet
+# Visium HD spatial transcriptomics workshop
+# Author: Harvard Chan Bioinformatics Core
+# Created: May 2026
 
+# Load libraries
 library(Seurat)
 library(tidyverse)
+
+# Load Seurat object
 seurat_processed <- readRDS("data/seurat_processed.RDS")
 ```
 
@@ -71,66 +81,73 @@ seurat_processed <- readRDS("data/seurat_processed.RDS")
 
 ## Cell barcodes
 
-Within Seurat, there are multiple ways to access the cell barcode IDs.
+Within Seurat, there are multiple ways to access the bin barcode IDs.
 
-We can use `colnames()` to get a vector of cell barcodes in the same order as they appear in the Seurat object.
+We can use `colnames()` to get a vector of bin barcodes in the same order as they appear in the Seurat object.
 
 ```{r}
 #| label: show_colnames
-colnames(seurat_processed) %>% head()
+# Show bin barcodes
+colnames(seurat_processed) %>%
+  head()
 ```
 
-
-Similarly we can use the `Cells()` function:
+Similarly, we can use the `Cells()` function:
 
 ```{r}
 #| label: show_cells
-Cells(seurat_processed) %>% head()
+# Show bin barcodes
+Cells(seurat_processed) %>%
+  head()
 ```
 
-
-It is **very important** that the values stored in `Cells()` are the same as the rownames in `meta.data`. Otherwise Seurat will start throwing errors at you!
+It is **very important** that the values stored in `Cells()` are the same as the rownames in `meta.data`. Otherwise, Seurat will start throwing errors at you!
 
 ```{r}
 #| label: check_rowname_cells_equal
+# Check that all of our bins are present in the metadata
 all(rownames(seurat_processed@meta.data) == Cells(seurat_processed))
 ```
 
-
 ## Features/genes
 
-Now we want to be able to access the rows, or genes, in our Seurat object. Rather than calling these values "genes", many tools will call them "features" as different assays (CITE-seq, ATAC-seq) provide alternative information than genes as output.
+We now want to be able to access the rows, or genes, in our Seurat object. Rather than calling these values "genes", many tools will call them "features" as different assays (CITE-seq, ATAC-seq) provide alternative information than genes as output.
 
 The `Features()` function returns a vector of all features/genes in our dataset in the same order as it appears in the count matrix.
 
 ```{r}
 #| label: show_features
-Features(seurat_processed) %>% head()
+# Show the genes names
+Features(seurat_processed) %>%
+  head()
 ```
 
 The `rownames()` function provides the same output:
 
 ```{r}
 #| label: show_rownames
-rownames(seurat_processed) %>% head()
+# Show the genes names
+rownames(seurat_processed) %>%
+  head()
 ```
 
 ***
 ::: callout-tip
 # [**Exercise 1**](10_seurat_cheatsheet-Answer_key.qmd#exercise-1)
 
-1. What are the last 5 cells barcodes and the last 5 genes in the integrated seurat object.
+1. What are the last 5 cells barcodes and the last 5 genes in the Seurat object.
 :::
 ***
 
 ## Number of cells and features
 
-If you recall, Seurat stores your count matrix as cells (columns) x genes (rows). 
+If you recall, Seurat stores your count matrix as bins (columns) x genes (rows). 
 
-Therefore, we can access the number of cells by using the `ncol()` function.
+Therefore, we can access the number of bins by using the `ncol()` function.
 
 ```{r}
 #| label: show_ncol
+# Retrieve the number of bins
 ncol(seurat_processed)
 ```
 
@@ -138,30 +155,34 @@ The number of features is returned with the `nrow()` function:
 
 ```{r}
 #| label: show_nrow
+# Retrieve the number of genes
 nrow(seurat_processed)
 ```
 
-The `dim()` function provides both the number of cells and genes for the **default assay**. Here we see the number of features followed by the number of cells:
+The `dim()` function provides both the number of bins and genes for the **default assay**. Here we see the number of features followed by the number of bins:
 
 ```{r}
 #| label: show_dim
+# Retrieve the number of genes and bins
 dim(seurat_processed)
 ```
 
 # Idents
 
-In Seurat, each cell has a label which can be accessed using `Idents()`. These are the default labels used for each cell and are used internally by Seurat plotting functions.
+In Seurat, each bin has a label which can be accessed using `Idents()`. These are the default labels used for each bin and are used internally by Seurat plotting functions.
 
-Common information set as the identity for cells include: clusters (as in our example dataset), celltype, sample, etc. You'll notice that identities are automatically stored as factors, which means we can re-organize the levels at any point to change their order for plotting purposes.
+Common information set as the identity for bins include: clusters (as in our example dataset), celltype, sample, etc. You'll notice that identities are automatically stored as factors, which means we can re-organize the levels at any point to change their order for plotting purposes.
 
 ```{r}
 #| label: show_idents
-Idents(seurat_processed) %>% head()
+# Show the idents
+Idents(seurat_processed) %>%
+  head()
 ```
 
 ## Rename Idents
 
-To quickly make modifications to identities, you can use the `RenameIdents()` function where new values are mapped to the identities. This is particularly helpful when annotating your cells from clusters to celltypes as showcased here. Bear in mind that these new identities are not stored in the `meta.data` automatically. We recommend adding these identities as a new column in the Seurat object to keep track of it for future use.
+To quickly make modifications to identities, you can use the `RenameIdents()` function where new values are mapped to the identities. This is particularly helpful when annotating your bins from clusters to celltypes as showcased here. Bear in mind that these new identities are not stored in the `meta.data` automatically. We recommend adding these identities as a new column in the Seurat object to keep track of it for future use.
 
 ```{r}
 #| label: rename_idents
@@ -180,7 +201,7 @@ seurat_processed$celltype <- Idents(seurat_processed)
 
 ::: callout-tip
 # [**Exercise 2**](10_seurat_cheatsheet-Answer_key.qmd#exercise-2)
-2. What are the last 5 identities for the cells in the integrated seurat object?
+2. What are the last 5 identities for the bins in the Seurat object?
 :::
 
 ***
@@ -189,11 +210,13 @@ seurat_processed$celltype <- Idents(seurat_processed)
 
 ## Accessing variable features
 
-To obtain a vector of all highly variable genes that were selected after running `FindVariableFeatures()`, we can use the `VariableFeatures()` function.
+To obtain a vector for all of the highly variable genes that were selected after running `FindVariableFeatures()`, we can use the `VariableFeatures()` function.
 
 ```{r}
 #| label: show_var_features
-VariableFeatures(seurat_processed) %>% head()
+# Show the highly variable genes
+VariableFeatures(seurat_processed) %>%
+  head()
 ```
 
 ## Setting variable features
@@ -217,7 +240,7 @@ VariableFeatures(seurat_processed) <- var_genes
 
 ::: callout-tip
 # [**Exercise 3**](10_seurat_cheatsheet-Answer_key.qmd#exercise-3)
-3. What are the the 5 least variable genes in the integrated seurat object?
+3. What are the 5 least variable genes in the Seurat object?
 :::
 
 ***
@@ -228,21 +251,23 @@ VariableFeatures(seurat_processed) <- var_genes
 
 Within a Seurat object you can have multiple "assays". Each assay contains its own count matrix that is separate from the other assays in the object. This structure was created with multimodal datasets in mind so we can store, for example, ATAC peaks within the same Seurat object as your RNA counts.
 
-To access the list of assays in your Seurat object, you can call `@assays`.
+To access the list of assays in our Seurat object, you can call `@assays`.
 
 ```{r}
 #| label: show_assays
+# Display available assays
 seurat_processed@assays
 ```
 
-We can additionally see which of the assays in our dataset is set as the default with the `DefaultAssays()` function. This default assay is automatically used as by Seurat functions, unless you specify otherise in the parameters of your function.
+We can additionally see which of the assays in our dataset is set as the default with the `DefaultAssays()` function. This default assay is automatically used as by Seurat functions, unless you specify otherwise in the parameters of your function.
 
 ```{r}
 #| label: show_default_assay
+# SHow defualt assay
 DefaultAssay(seurat_processed)
 ```
 
-Here we can see that the default assay is set to "integrated". If we instead wanted to use the RNA counts, we can set a new default by once again calling the `DefaultAssay()` function and storing the name of a different assay.
+Here we can see that the default assay is set to `Spatial.008um`. If we instead wanted to see the RNA counts from the `sketch` assay, we can set a new default by once again calling the `DefaultAssay()` function and storing the name of a different assay.
 
 ```{r}
 #| label: set_default_assay
@@ -257,14 +282,15 @@ We can access each assay as if the Seurat object was a named list with double br
 
 ```{r}
 #| label: access_assay
+# Access an assay that isn't the default assay with double square brackets
 seurat_processed[["Spatial.008um"]]
 ```
-
 
 And similarly run any function on it:
 
 ```{r}
 #| label: access_assay_dim
+# Run a function on an accessed assay that isn't the default assay
 dim(seurat_processed[["sketch"]])
 ```
 
@@ -272,7 +298,7 @@ dim(seurat_processed[["sketch"]])
 
 ::: callout-tip
 # [**Exercise 4**](10_seurat_cheatsheet-Answer_key.qmd#exercise-4)
-4. What are the dimensions for each assay in the integrated seurat object?
+4. What are the dimensions for each assay in the Seurat object?
 :::
 
 ***
@@ -292,6 +318,7 @@ We can see which layers are accessible with the `Layers()` function.
 
 ```{r}
 #| label: show_layers
+# Display layers
 Layers(seurat_processed[["sketch"]])
 ```
 
@@ -301,8 +328,10 @@ You can grab the entire counts matrix by making use of the `LayerData()` functio
 
 ```{r}
 #| label: show_counts_mtx
-# Subsetting to the first 5 genes and cells for easy viewing
-LayerData(seurat_processed, assay="Spatial.008um", layer="counts")[1:5, 1:5]
+# Subsetting to the first 5 genes and bins for easy viewing
+LayerData(seurat_processed,
+          assay = "Spatial.008um",
+          layer = "counts")[1:5, 1:5]
 ```
 
 ***
@@ -316,13 +345,15 @@ LayerData(seurat_processed, assay="Spatial.008um", layer="counts")[1:5, 1:5]
 
 ## Accessing specific features and metadata
 
-The `FetchData()` function is useful to directly access the counts of a feature for each cell. You can also specify the layer and assay to specify which piece of information you want.
+The `FetchData()` function is useful to directly access the counts of a feature for each bin. You can also specify the layer and assay to specify which piece of information you want.
 
 ```{r}
 #| label: fetchdata
 # Normalized counts for the gene PTPRC in the assay sketch
-FetchData(seurat_processed, vars=c("PTPRC", "sample"), 
-          assay="sketch", layer="data") %>% head()
+FetchData(seurat_processed,
+          vars = c("PTPRC", "sample"), 
+          assay = "sketch",
+          layer="data") %>% head()
 ```
 
 Conveniently, you can also get information from multiple assays at the same time. To do so, you prepend the assay name (in lowercase format) for the feature you supply to the `FetchData()` function.
@@ -330,7 +361,8 @@ Conveniently, you can also get information from multiple assays at the same time
 ```{r}
 #| label: fetchdata_assays
 # Grab the normalized counts in the integrated and RNA assays
-FetchData(seurat_processed, vars=c("sketch_PTPRC", "Spatial.008um_PTPRC"), 
+FetchData(seurat_processed,
+          vars=c("sketch_PTPRC", "Spatial.008um_PTPRC"), 
           layer="data") %>% head()
 ```
 
@@ -338,7 +370,7 @@ FetchData(seurat_processed, vars=c("sketch_PTPRC", "Spatial.008um_PTPRC"),
 
 ::: callout-tip
 # [**Exercise 6**](10_seurat_cheatsheet-Answer_key.qmd#exercise-6)
-6. Show how you would use the `FetchData()` function to generate a dataframe of UMAP_1, UMAP_2, and sample values for each cell.
+6. Show how you would use the `FetchData()` function to generate a dataframe of UMAP_1, UMAP_2 and sample values for each cell.
 :::
 
 ***
@@ -351,24 +383,31 @@ The scores for each PC is stored within the embeddings slot of the Seurat object
 
 ```{r}
 #| label: show_embeddings_pca
+# Show PCA embeddings
 # Alternative method of accessing PCA values
 # seurat_processed[['pca']]@cell.embeddings
-Embeddings(seurat_processed, reduction="pca.sketch")[1:5, 1:5]
+Embeddings(seurat_processed,
+           reduction = "pca.sketch")[1:5, 1:5]
 ```
 
-The weight (loadings) for each feature is also stored and can be accessed with `Loadings()` function.
+The weights (loadings) for each feature are also stored and can be accessed with `Loadings()` function.
 
 ```{r}
 #| label: show_loadings
+# Show PCA loadings
+# Alternative method of accessing PCA loadings
 # pbmc[['pca]]@feature.loadings
-Loadings(seurat_processed, reduction="pca.sketch")[1:5, 1:5]
+Loadings(seurat_processed,
+         reduction = "pca.sketch")[1:5, 1:5]
 ```
 
 We can also view more information about the top PCs, like the genes that are most strongly correlated with the first few PCs with the `ProjectDim()` function.
 
 ```{r}
 #| label: show_projectdim
-ProjectDim(seurat_processed, reduction = "pca.sketch")
+# Show top genes associated with PCs
+ProjectDim(seurat_processed,
+           reduction = "pca.sketch")
 ```
 
 ## UMAP/tSNE
@@ -377,8 +416,12 @@ To access the coordinates used for UMAP/tSNE plots, we specify the reduction of 
 
 ```{r}
 #| label: show_embeddings_umap
+# Accessing UMAP embeddings
+# Alternative method of accessing UMAP embeddings
 # seurat_processed[['umap']]@cell.embeddings
-Embeddings(seurat_processed, reduction="umap.sketch") %>% head()
+Embeddings(seurat_processed,
+           reduction = "umap.sketch") %>%
+  head()
 ```
 
 # Data visualization
@@ -389,25 +432,32 @@ Underneath the hood, all of Seurat's plotting functions make use of ggplot which
 
 The `DimPlot()` function allows us to visualize metadata that is categorical on different reductions (PCA, UMAP). 
 
-By default `DimPlot()` will color cells by the `Idents()` and use UMAP as the default reduction.
+By default, `DimPlot()` will color bins by the `Idents()` and use UMAP as the default reduction.
 
 ```{r}
 #| label: dimplot_ggtitle
-DimPlot(seurat_processed) + ggtitle("Seurat clusters")
+# Show different clusters on the UMAP
+DimPlot(seurat_processed) +
+  ggtitle("Seurat clusters")
 ```
 
 We can specify a different metadata column using the `group.by` argument
 
 ```{r}
 #| label: dimplot_groupby
-DimPlot(seurat_processed, group.by = "orig.ident")
+# Plot bins on UMAP different and colored by their orig.ident 
+DimPlot(seurat_processed,
+        group.by = "orig.ident")
 ```
 
 We can also use the `split.by` argument to create multiple plots that only show cells that have the same value for the metadata column specified.
 
 ```{r fig.width=8}
 #| label: dimplot_splitby
-DimPlot(seurat_processed, split.by = "orig.ident", group.by="orig.ident")
+# Plot bins on UMAP different and colored by their orig.ident and have different plots for each orig.ident
+DimPlot(seurat_processed,
+        split.by = "orig.ident",
+        group.by="orig.ident")
 ```
 
 ## FeaturePlot
@@ -416,16 +466,18 @@ The `FeaturePlot()` function allows us to visualize both metadata and features t
 
 ```{r fig.width=8}
 #| label: featureplot
+# Highlight gene expression on the UMAP
 FeaturePlot(seurat_processed, 
             features = c("FCGR3A", "MS4A7"))
 ```
 
-We can additionally `order` the values in a way that cells with higher values are shown in front (to avoid other cells drowning out them).
+We can additionally `order` the values in a way that bins with higher values are shown in front (to avoid other bins drowning out them).
 
-To identify cells that show the highest expression of a feature, we can set a `min.cutoff` based upon quantiles, where cells below the the threshold will show no expression. 
+To identify bins that show the highest expression of a feature, we can set a `min.cutoff` based upon quantiles, where bins below the the threshold will show no expression. 
 
 ```{r fig.width=8}
 #| label: featureplot_cutoff
+# Highlight gene expression on the UMAP with a min.cutoff
 FeaturePlot(seurat_processed, 
             reduction = "umap.sketch", 
             features = c("FCGR3A", "MS4A7"), 
@@ -433,113 +485,171 @@ FeaturePlot(seurat_processed,
             min.cutoff = 'q10')
 ```
 
-We can also add labels onto our UMAP to easily identify which groups of cells we are seeing the expression using the `LabelClusters()` function. The parameters shown here put a white background behind the text to make it easier to see the labels.
+We can also add labels onto our UMAP to easily identify which groups of bins we are seeing the expression using the `LabelClusters()` function. The parameters shown here put a white background behind the text to make it easier to see the labels.
 
 ```{r}
 #| label: featureplot_labelcluster
+# Set idents to seurat_cluster.projected
 Idents(seurat_processed) <- "seurat_cluster.projected"
+
+# Overlap gene expression on a UMAP
 p <- FeaturePlot(seurat_processed, 
             reduction = "umap.sketch", 
             features = "FCGR3A", 
             order = TRUE,
             min.cutoff = 'q10')
-LabelClusters(p, id = "ident",  fontface = "bold", size = 3, 
-              bg.colour = "white", bg.r = .2, force = 0)
+
+# Label clusters
+LabelClusters(p,
+              id = "ident",
+              fontface = "bold",
+              size = 3, 
+              bg.colour = "white",
+              bg.r = .2,
+              force = 0)
 ```
 
 ## FeatureScatter
 
-`FeatureScatter()` creates a scatterplot of expression values for two features with each cell being colored by the ident. Bear in mind that you can also specify a continuous metadata column and not just 2 genes/features. 
+`FeatureScatter()` creates a scatterplot of expression values for two features with each bin being colored by their `ident`. Bear in mind that you can also specify a continuous metadata column and not just 2 genes/features. 
 
 ```{r}
 #| label: featurescatter
+# Set idents to seurat_cluster.projected
 Idents(seurat_processed) <- "seurat_cluster.projected"
-FeatureScatter(seurat_processed, feature1 = "MT-ND5", feature2 = "mitoRatio") + 
+
+# Create a scatterplot using two features
+FeatureScatter(seurat_processed,
+               feature1 = "MT-ND5",
+               feature2 = "mitoRatio",
+               pt.size = 2) + 
   ggtitle("MitoRatio vs MT-ND5 expression")
 ```
 
-
 ## CellScatter
 
-To visualize the differences between two specific cells, you can use the `CellScatter()` function to get a scatterplot of values for each feature in both cells.
+To visualize the differences between two specific bins, you can use the `CellScatter()` function to get a scatterplot of values for each feature in both bins
 
 ```{r}
 #| label: cellscatter_select_cells
-cell1 <- Cells(seurat_processed)[1] 
-cell2 <- Cells(seurat_processed)[2]
+# Obtain the first bin name
+bin1 <- Cells(seurat_processed)[1] 
+# Obtain the second bin name
+bin2 <- Cells(seurat_processed)[2]
 
-# Here we can see the metadata for the first two cells in the dataset
-# We are comparing "Activated T cell" vs "CD14+ monocytes" (so they should be very different)
+# Here we can see the metadata for the first two bins in the dataset
 seurat_processed@meta.data %>% 
-  subset(rownames(seurat_processed@meta.data) %in% c(cell1, cell2)) %>% 
+  subset(rownames(seurat_processed@meta.data) %in% c(bin1, bin2)) %>% 
   select(orig.ident, nCount_Spatial.008um)
 ```
 
 ```{r}
 #| label: cellscatter
-CellScatter(seurat_processed, cell1=cell1, cell2=cell2)
+# Plot the expression from the first two bins against each other 
+CellScatter(seurat_processed,
+            cell1 = bin1,
+            cell2 = bin2)
 ```
 
 ## VlnPlot
 
 We can create a violin plot to compare the distribution of gene expression across different populations using the `VlnPlot()` function.
 
-This is a very customizable function, with many parameters to customize the look of the plots.
+This is a very customizable function with many parameters to customize the look of the plots.
 
 ```{r fig.width=9}
 #| label: vlnplot
-VlnPlot(seurat_processed, c("CD14", "CD79A"))
+# Create violin plot for each cluster plotted by two genes 
+VlnPlot(seurat_processed,
+        features = c("CD14", "CD79A"))
 ```
 
-
-In this example, we are grouping expression by sample and showing 2 plots per column. We are also removing the points (cells) by setting their size to 0.
+In this next example, we are grouping expression by sample and showing 2 plots per column. We are also removing the points (cells) by setting their size to 0.
 
 ```{r}
 #| label: vlnplot_customization
-VlnPlot(seurat_processed, c("CEACAM6", "CEACAM5", "CD52", "CXCL8"), 
-        group.by="orig.ident", ncol=2, pt.size=0)
+# Creating a multi-panel violin plot for four genes comparing the orig.ident for each 
+VlnPlot(seurat_processed, 
+        features = c("CEACAM6", "CEACAM5", "CD52", "CXCL8"), 
+        group.by="orig.ident",
+        ncol=2,
+        pt.size=0)
 ```
 
 ## RidgePlot
 
-Ridge plots are most commonly used with CITE-seq or hashtagged dataset as they provide an easy way to identify cells that express a protein/antibody. 
+Ridge plots are most commonly used with CITE-seq or hashtagged datasets as they provide an easy way to identify cells that express a protein/antibody. 
 
-For our scRNA dataset, when we call `RidgePlot()`, on the y-axis we see the unique identities assigned for each cell. The x-axis shows us the expression level for whichever feature we chose. This is a great visualization to use when justifying annotation decisions.
+When we call `RidgePlot()` for our spatial dataset, on the y-axis we see the unique identities assigned for each bin and the x-axis shows us the expression level for whichever feature we chose. This is a great visualization to use when justifying annotation decisions.
 
 ```{r}
 #| label: ridgeplot
-RidgePlot(seurat_processed, "VIM", assay="Spatial.008um") + NoLegend()
+# Create ridge plot to visualize expression levels across different clusters
+RidgePlot(seurat_processed,
+          features = "VIM",
+          assay="Spatial.008um") +
+  NoLegend()
 ```
 
 ## DimHeatmap
 
-To see the effect of genes on the principal component, we can see the top and bottom features in PC1 using the `DimHeatmap()` function.
+To see the effect of genes on a principal component, we can visualize the top and bottom features in PC1 using the `DimHeatmap()` function.
 
 ```{r}
 #| label: dimheatmap
-DimHeatmap(seurat_processed, nfeatures = 10, reduction = "pca.sketch")
+# Show the impact of the most influential genes in PC1
+DimHeatmap(seurat_processed,
+           nfeatures = 10,
+           reduction = "pca.sketch")
+```
+
+By default, PC1 is visualized, but we can edit which principal component we would like to visualize with the `dims` argument. If we wanted PC2, the code would be:
+
+```{r}
+#| label: dimheatmap_PC2
+# Show the impact of the most influential genes in PC2
+DimHeatmap(seurat_processed,
+           nfeatures = 10,
+           reduction = "pca.sketch",
+           dims = 2)
+```
+
+Or if we wanted to inspect principal components 1 through 3, then we could do:
+
+```{r}
+#| label: dimheatmap_PC13
+# Show the impact of the most influential genes in PC1, PC2 and PC3
+DimHeatmap(seurat_processed,
+           nfeatures = 10,
+           reduction = "pca.sketch",
+           dims = 1:3)
 ```
 
 ## DoHeatmap
 
-To plot the expression values for genes across all cells (grouped by their identity), you can call Seurat's `DoHeatmap()` function to identify which populations certain genes are lowly or hihgly expressed.
+To plot the expression values for genes across all bins (grouped by their identity), you can call Seurat's `DoHeatmap()` function to identify which populations certain genes are lowly or highly expressed in.
 
 ```{r fig.width=8}
 #| label: doheatmap
-DoHeatmap(seurat_processed, features=c("CD14", "FCGR3A", "FCER1A", 
-                                        "IL3RA", "CD79A", "CD3D"))
+# Plot the expression values across all bins grouped by their identity
+DoHeatmap(seurat_processed,
+          features=c("CD14", "FCGR3A", "FCER1A", 
+                     "IL3RA", "CD79A", "CD3D"))
 ```
 
 ## DotPlot
 
-Seurat also has a built in visualization tool which allows us to view the average expression of genes groups clusters called `DotPlot()`. The size of the circle represents the number of cells that express the gene within a group and the hue reprents the average expression of the feature.
+Seurat also has a built-in visualization tool which allows us to view the average expression of genes groups clusters called `DotPlot()`. The size of the circle represents the number of bins that express the gene within a group and the hue represents the average expression of the feature.
 
 If you supply a named list with labels annotating genes, those labels will appear at the top of the plot for easier visualization.
 
 ```{r fig.width=15}
 #| label: dotplot
 # List of known celltype markers
+# Create and empty list to hold our cell types and markers
 markers <- list()
+
+# Populate the list with known markers for cell types
 markers[["CD14+ monocytes"]] <- c("CD14", "LYZ")
 markers[["FCGR3A+ monocyte"]] <- c("FCGR3A", "MS4A7")
 markers[["Macrophages"]] <- c("MARCO", "ITGAM", "ADGRE1")
@@ -547,7 +657,9 @@ markers[["Conventional dendritic"]] <- c("FCER1A", "CST3")
 markers[["Plasmacytoid dendritic"]] <- c("IL3RA", "GZMB", "SERPINF1", "ITM2C")
 
 # Create dotplot based on RNA expression
-DotPlot(seurat_processed, markers, assay="Spatial.008um")
+DotPlot(seurat_processed,
+        features = markers,
+        assay="Spatial.008um")
 ```
 ***
 

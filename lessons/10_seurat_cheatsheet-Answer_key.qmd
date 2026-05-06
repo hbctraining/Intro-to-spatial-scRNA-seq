@@ -1,0 +1,130 @@
+---
+title: "Seurat Cheatsheet Answer Key"
+author:
+  - Noor Sohail
+  - Will Gammerdinger
+date: "2025-12-07"
+---
+
+```{r}
+#| label: load_data
+#| echo: false
+# Load libraries
+library(Seurat)
+library(tidyverse)
+
+# Load data
+seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
+```
+
+# Exercise 1
+
+**What are the last 5 cells barcodes and the last 5 genes in the seurat object.**
+
+
+```{r}
+#| label: print_final_genes_cells
+# Show last bin barcodes
+Cells(seurat_processed) %>% tail()
+# Show last bin barcodes
+colnames(seurat_processed) %>% tail()
+
+# Show the last genes names
+Features(seurat_processed) %>% tail()
+# Show the last genes names
+rownames(seurat_processed) %>% tail()
+```
+
+# Exercise 2
+
+**What are the last 5 identities for the bins in the Seurat object?**
+
+```{r}
+#| label: rename_idents
+#| echo: false
+# Rename some identities
+seurat_processed <- RenameIdents(object = seurat_processed, 
+                                 "1" = "CD14+ monocytes",
+                                 "3" = "CD14+ monocytes",
+                                 "2" = "Activated T cells")
+
+# These new celltype values are only stored in the idents
+# Good practice is to store these changes in a column
+seurat_processed$celltype <- Idents(seurat_processed)
+```
+
+```{r}
+#| label: print_final_idents
+# Print final five idents
+Idents(seurat_processed) %>% 
+  tail()
+```
+
+# Exercise 3
+
+**What are the 5 least variable genes in the Seurat object?**
+
+```{r}
+#| label: set_var_features
+#| echo: false
+# Get list of all variable genes
+# Remove variable genes that start with MT-
+var_genes <- VariableFeatures(seurat_processed)
+var_genes <- var_genes[!startsWith(var_genes, "MT-")]
+
+# Now we set our vector of gene names back to VariableFeatures()
+VariableFeatures(seurat_processed) <- var_genes
+```
+
+```{r}
+#| label: show_var_features
+# Show five least variable features
+VariableFeatures(seurat_processed) %>% 
+  tail()
+```
+
+::: {.callout-note}
+You may have noticed that these are the same genes from when we were looking at the last 5 genes in our Seurat object. This is due to the fact that we ran integration on the top 3,000 variable genes. As a result, the order of the genes in the integrated dataset follows the same order as the variable features!
+:::
+
+# Exercise 4
+
+**What are the dimensions for each assay in the Seurat object?**
+
+```{r}
+#| label: show_dim_assays
+# Obtain the number of bins and genes for the Spatial.008um assay
+dim(seurat_processed[["Spatial.008um"]])
+
+# Obtain the number of bins and genes for the sketch assay
+dim(seurat_processed[["sketch"]])
+```
+
+::: {.callout-note}
+Notice that the number of genes is higher in the RNA assay compared to the integrated object. This goes back to previous note, where only the expression from variable genes is stored in the `integrated` assay.
+:::
+
+# Exercise 5
+
+**Show the code to get the entire sketch normalized (data) count matrix.**
+
+```{r}
+#| label: get_counts_mtx
+#| eval: false
+# Obtain sketch count matrix for normalized count matrix
+LayerData(seurat_processed,
+          assay = "sketch",
+          layer = "scale.data")
+```
+
+# Exercise 6
+
+**Show how you would use the `FetchData()` function to generate a dataframe of UMAP_1, UMAP_2 and sample values for each cell.**
+
+```{r}
+#| label: fetchdata_exercise
+# Use FetchData to pull selected information from the Seurat object
+FetchData(seurat_processed,
+          vars = c("UMAP_1", "UMAP_2", "sample")) %>%
+  head()
+```
