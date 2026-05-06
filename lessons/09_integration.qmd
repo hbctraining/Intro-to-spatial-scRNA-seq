@@ -1,7 +1,7 @@
 ---
 title: "Integration"
 description: |
-  Learn how to evaluate whether batch effects are found in your dataset which will inform the decision of whether to integrate or not. Additionally describes the methods behind some common methods for integration.
+  In this lesson, we will evaluate whether batch effects are found in our dataset, which will inform our decision of whether to integrate or not. Additionally, this lesson will describe the methods behind some common methods for integration.
 author:
   - Noor Sohail
 date: "2025-07-22"
@@ -29,23 +29,23 @@ library(tidyverse)
 seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
 ```
 
-Approximate time: XX minutes
+Approximate time: 70 minutes
 
 ## Learning objectives 
 
 In this lesson, we will:
 
 - Identify when integration is necessary
-- Evaluate potential batch effect in our datset
-- Understand common integration algorithms
+- Evaluate potential batch effects in our datset
+- Describe common integration algorithms
 
 ## Overview of lesson
 
-When working with multiple samples, integration may **sometimes** be a necessary step. When there is a clear bias due to batch effect (date sequenced, replicate, etc.), it can be difficult to identify what is true biology and what is technical artifacts. Integration is a tool meant to align multiple datasets together. However, integration is **not always necessary**. The key is to assess the biology of your samples to evaluate whether to integration is a necessary step for your analysis.
+When working with multiple samples, integration may **sometimes** be a necessary step. When there is a clear bias due to batch effect (date sequenced, replicate, etc.), it can be difficult to identify what is true biology and what is technical artifacts. Integration is a tool meant to align multiple datasets together. However, integration is **not always necessary**. The key is to assess the biology of your samples to evaluate whether integration is a necessary step for your analysis.
 
-## What is integration
+## What is integration?
 
-Integration is the process by which uninteresting batch variables (date sequenced, kit used, platform) is accounted for to improve clustering of similar bins. The most common instance of this when multiple samples, sequenced separately, are used for a single analysis. The aim is to **align the datasets** such that similar bins (cell states) are clustered together.
+Integration is the process by which uninteresting batch variables (date sequenced, kit used, platform, etc.) is accounted for to improve clustering of similar bins. The most common instance of this is when multiple samples, sequenced separately, are used for a single analysis. The aim is to **align the datasets** such that similar bins (cell states) are clustered together.
 
 ::: {#fig-batch_effect .figure}
 ![](../img/seurat_dataset_integ.png){width="60%"}
@@ -55,14 +55,14 @@ Example of integrating multiple scRNA-seq datasets generated with different libr
 
 **Why is it important that cells of the same cell type cluster together?** 
 
-We want to identify **cell types which are present in all samples/conditions/modalities** within our dataset, and therefore would like to observe a representation of cells from both samples/conditions/modalities in every cluster. This will enable more interpretable results downstream (i.e. DE analysis, ligand-receptor analysis, differential abundance analysis, ...).
+We want to identify **cell types which are present in all samples/conditions/modalities** within our dataset, and therefore would like to observe a representation of cells from both samples/conditions/modalities in every cluster. This will enable more interpretable results downstream (i.e. DE analysis, ligand-receptor analysis, differential abundance analysis, etc.).
 
 
 ## To integrate or not to integrate
 
 But how do you know when you should integrate?
 
-We recommend that you always first look at your clustering **without integration** before running any alignment methods. This will allow you to identify if there are any batch effects present in your data, and if so, what is driving the batch effect.
+We recommend that you always first look at your clustering **without integration** before running any integration methods. This will allow you to identify if there are any batch effects present in your data, and if so, what is driving the batch effect.
 
 For example, if we have two samples that are sequenced separately, we may see a clear split in PCA and UMAP by sample. This is an example of a batch effect, where the technical batch variable (sample) is driving the clustering instead of the biological variable (cell type). Below we see such an example, where we can see that the monocytes (`LYZ` is a marker gene for monocytes) are clustering separately by sample instead of together as one cluster.
 
@@ -70,14 +70,14 @@ For example, if we have two samples that are sequenced separately, we may see a 
 ![](../img/integration_example.png)
 
 Example of how multiple samples can cause a batch effect, where the samples cluster separately instead of by cell type.<br>
-_Image source: [Intro to scRNA-seq](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/08_integration_cca_theory.html)_
+_Image source: [Introduction to scRNA-seq](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/08_integration_cca_theory.html)_
 ::: 
 
-**Do not just always perform integration because you think there might be differences - explore the data.** Condition-specific clustering of the cells indicates that we need to integrate the cells across conditions to ensure that cells of the same cell type cluster together.
+**Do not just always perform integration because you think there might be differences - explore the data.** Condition-specific clustering of the cells would indicate that we need to integrate the cells across conditions to ensure that cells of the same cell type cluster together.
 
 ### Exploring our data
 
-At this point we have not run any integration on our dataset, so we can look at the PCA and UMAP to see if there are any batch effects present in our data.
+At this point we have not run any integration on our dataset, so we can look at the PCA and UMAP to see if there are any batch effects present in our data. Let's create a new R script called `05_integration.R` and place it within our `scripts` directory.
 
 ```{r}
 #| label: header
@@ -85,14 +85,14 @@ At this point we have not run any integration on our dataset, so we can look at 
 # Integration
 # Visium HD spatial transcriptomics workshop
 # Author: Harvard Chan Bioinformatics Core
-# Created: December 2025
+# Created: May 2026
 library(Seurat)
 library(tidyverse)
 
 seurat_processed <- readRDS("data/seurat_processed.RDS")
 ```
 
-In our case, we have only one batch condition, which is our samples `P5CRC` and `P5NAT`. So now we use the `DimPlot()` function to visualize the PCA and UMAP colored by sample.
+In our case, we have only one batch condition, which is our samples, `P5CRC` and `P5NAT`. So we can now use the `DimPlot()` function to visualize the PCA and UMAP colored by sample.
 
 ```{r}
 #| label: fig-pca_umap_by_sample
@@ -122,7 +122,7 @@ When we look at the dimensionality reduction plots, we can see that there does a
 
 ::: callout-note
 # Visualize with plots other than UMAP
-When working with single-cell data, it is may be tempted to make justifications based upon the UMAP visualizations. However, we would encourage you to make use of other visualizations. Barplots, violin plots, boxplots, dotplots, and heatmaps are all useful visualizations to confirm your observations from a UMAP in a more quantitative manner.
+When working with single-cell data, it is may be tempting to make justifications based upon the UMAP visualizations. However, we would encourage you to make use of other visualizations. Barplots, violin plots, boxplots, dotplots and heatmaps are all useful visualizations to confirm your observations from a UMAP in a more quantitative manner.
 :::
 
 So here we can make a barplot of the proportion of bins in each cluster by sample to see if there are any clusters that are dominated by one sample.
@@ -159,7 +159,7 @@ LabelClusters(p, id = "ident",  fontface = "bold", size = 5,
 
 Now bins that have the label of cluster 1 or 11 are colored red while the rest are gray in the UMAP.
 
-We can similarly highlight these bins in on the slide as well:
+We can similarly highlight these bins on the slide as well:
 
 ```{r}
 #| label: fig-spatial_highlight_clusters
@@ -210,7 +210,7 @@ We are going to use `VlnPlot()` and `FeaturePlot()` to visualize which clusters 
 
 ```{r}
 #| label: fig-ceacam5
-#| fig-cap: CEACAM5 expression shown as violin plot per cluster as well as on the UMAP embedding.
+#| fig-cap: CEACAM5 expression shown as a violin plot per cluster as well as on the UMAP embedding.
 #| fig-width: 10
 p_feature <- FeaturePlot(seurat_processed, 
                          features = "CEACAM5",
@@ -228,7 +228,7 @@ p_feature | p_vln
 
 ```{r}
 #| label: fig-ceacam6
-#| fig-cap: CEACAM6 expression shown as violin plot per cluster as well as on the UMAP embedding.
+#| fig-cap: CEACAM6 expression shown as a violin plot per cluster as well as on the UMAP embedding.
 #| fig-width: 10
 p_feature <- FeaturePlot(seurat_processed, 
                          features = "CEACAM6",
@@ -246,9 +246,10 @@ p_feature | p_vln
 
 We see that clusters 1 and 11 do indeed have higher expression of the tumor marker genes! 
 
-When annotating cell types, using multiple genes is recommended to give you more confidence in your annotations. We can also make use of the `DotPlot()` function to visualize the expression of both `CEACAM5` and `CEACAM6` at the same time across all clusters. Here, the size of a dot represents the percentage of cells in a cluster that express the gene, and the color of the dot represents the average expression of the gene in that cluster.  
+When annotating cell types, using multiple genes is recommended to give you more confidence in your annotations. We can also make use of the `DotPlot()` function to visualize the expression of both `CEACAM5` and `CEACAM6` at the same time across all clusters. Here, the size of a dot represents the percentage of cells in a cluster that express the gene and the color of the dot represents the average expression of the gene in that cluster.  
 
 ```{r}
+#| label: dotplot
 DotPlot(seurat_processed, 
         features = c("CEACAM5", "CEACAM6"))
 ```
@@ -269,7 +270,7 @@ In this spatial transcriptomics workflow, integration would be performed on the 
 
 ### Harmony
 
-[Harmony](https://www.nature.com/articles/s41592-019-0619-0) was devleoped in 2019, and is an example of **a tool that can work with complex integration tasks**. It is available as an [R package on GitHub](https://github.com/immunogenomics/harmony), and it has functions for standalone and Seurat pipeline analyses. It has been shown to perform incredibly well from [benchmarking studies](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9). 
+[Harmony](https://www.nature.com/articles/s41592-019-0619-0) was developed in 2019 and is an example of **a tool that can work with complex integration tasks**. It is available as an [R package on GitHub](https://github.com/immunogenomics/harmony), and it has functions for standalone and Seurat pipeline analyses. It has been shown to perform incredibly well from [benchmarking studies](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9). 
 
 In this section, we illustrate the use of [`Harmony`](https://portals.broadinstitute.org/harmony/articles/quickstart.html) as a possible alternative to the `Seurat` integration workflow. Compared to other algorithms, `Harmony` notably presents the following advantages ([Korsunsky et al. 2019](https://www.nature.com/articles/s41592-019-0619-0), [Tran et al. (2020)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1850-9)): 
 
@@ -277,7 +278,7 @@ In this section, we illustrate the use of [`Harmony`](https://portals.broadinsti
 2. Significant gain in speed and lower memory requirements for integration of large datasets
 3. Interoperability with the `Seurat` workflow
 
-Instead of using CCA, `Harmony` applies a transformation to the principal component (PCs) values, using all available PCs, e.g. as pre-computed within the `Seurat` workflow. In this space of transformed PCs, `Harmony` uses k-means clustering to delineate clusters, seeking to define clusters with maximum "diversity". The diversity of each cluster reflects whether it contains balanced amounts of cells from each of the batches (donor, condition, tissue, technolgy...) we seek to integrate on, as should be observed in a well-integrated dataset. After defining diverse clusters, `Harmony` determines how much a cell's batch identity impacts on its PC coordinates, and applies a correction to "shift" the cell towards the centroid of the cluster it belongs to. Cells are projected again using these corrected PCs, and the process is repeated iteratively until convergence. 
+Instead of using CCA, `Harmony` applies a transformation to the principal component (PCs) values, using all available PCs, e.g. as pre-computed within the `Seurat` workflow. In this space of transformed PCs, `Harmony` uses k-means clustering to delineate clusters, seeking to define clusters with maximum "diversity". The diversity of each cluster reflects whether it contains balanced amounts of cells from each of the batches (donor, condition, tissue, technology, etc.) we seek to integrate on, as should be observed in a well-integrated dataset. After defining diverse clusters, `Harmony` determines how much a cell's batch identity impacts its PC coordinates and applies a correction to "shift" the cell towards the centroid of the cluster it belongs to. Cells are projected again using these corrected PCs and the process is repeated iteratively until convergence. 
 
 ::: {#fig-harmony-overview .figure}
 ![](../img/harmony_overview.jpeg){width=600}
@@ -291,7 +292,7 @@ For a more detailed breakdown of the `Harmony` algorithm, we recommend checking 
 
 ### CCA
 
-Integration is a powerful method that **uses shared highly variable genes from each group to identify shared subpopulations across conditions or datasets** [[Stuart and Bulter et al. (2018)](https://www.biorxiv.org/content/early/2018/11/02/460147)]. The goal of integration is to ensure that the cell types of one condition/dataset align with the same celltypes of the other conditions/datasets (e.g. control macrophages align with stimulated macrophages).
+Integration is a powerful method that **uses shared highly variable genes from each group to identify shared subpopulations across conditions or datasets** ([Stuart and Bulter et al., 2018](https://www.biorxiv.org/content/early/2018/11/02/460147)). The goal of integration is to ensure that the cell types of one condition/dataset align with the same celltypes of the other conditions/datasets (e.g. P5CRC intestinal epithelial cells align with P5NAT intestinal epithelial cells).
 
 The integration method that is available in the Seurat package utilizes the **canonical correlation analysis** (CCA); a method that expects "correspondences" or shared biological states among at least a subset of single cells across the groups. The result of this integration approach is a corrected data matrix for all datasets, enabling them to be analyzed jointly in a single workflow. To transfer information from a reference to query dataset, Seurat **does not modify the underlying expression data, but instead projects continuous data across experiments**.
 
@@ -300,15 +301,14 @@ The steps in the `Seurat` integration workflow are outlined in the figure below:
 ::: {#fig-integration-workflow .figure}
 ![](../img/integration.png)
 
-Overview of the Seurat integration workflow using canonical correlation analysis (CCA) and anchors.
-_Source: [Stuart & Butler et al., 2018](https://doi.org/10.1101/460147)_
+Overview of the Seurat integration workflow using canonical correlation analysis (CCA) and anchors.<br>
+_Image Source: [Stuart & Butler et al., 2018](https://doi.org/10.1101/460147)_
 :::
 
 
 **1. Identify shared variable genes**:
 
-Integration aims to take the matrix for each dataset (Ctrl and Stim) and identify correlated structures across them and align them in a common space. The **shared highly 
-variable genes from each dataset are used to form the intersection set**, because they are the most likely to represent those genes distinguishing the different cell types present.
+Integration aims to take the matrix for each dataset (P5CRC and P5NAT) and identify correlated structures across them and align them in a common space. The **shared highly variable genes from each dataset are used to form the intersection set**, because they are the most likely to represent those genes distinguishing the different cell types present.
 
 _Each dataset can have a different number of cells, but must have the same number of genes._
 
@@ -330,11 +330,11 @@ For each cell in one condition:
 
 **4. Filter anchors** to remove incorrect anchors:
 	
-Assess the similarity between anchor pairs by the overlap in their local neighborhoods (incorrect anchors will have low scores) - do the adjacent cells have 'best buddies' that are adjacent to each other? If not, these are removed the anchor list.
+Assess the similarity between anchor pairs by the overlap in their local neighborhoods (incorrect anchors will have low scores) - do the adjacent cells have 'best buddies' that are adjacent to each other? If not, these are removed from the anchor list.
 
 **5. Integrate the conditions/datasets**:
 
-Using the anchors and corresponding scores the cell expression values are transformed, allowing for the integration of the conditions/datasets (different samples, conditions, datasets, modalities). For each cell in the dataset we now have an integrated value, but only for the variable features used for this analysis.
+Using the anchors and corresponding scores, the cell expression values are transformed, allowing for the integration of the conditions/datasets (different samples, conditions, datasets, modalities, etc.). For each cell in the dataset we now have an integrated value, but only for the variable features used for this analysis.
 
 **If cell types are present in one dataset, but not the other, then the cells will still appear as a separate sample-specific cluster.**
 

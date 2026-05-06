@@ -42,7 +42,7 @@ p1 | p2
 
 When we look at the UMAP and PCA plot without any other pieces of information it does seem like there is a batch effect. In the PCA space, we can see in the top left-hand corner of PC space that the bins predominantly belong to `P5CRC`. Similarly in the UMAP space, there is a cluster of bins on the right-hand side that belong solely to `P5CRC` and another at the top of the UMAP.
 
-Based solely on this visualization and no additional information, it may seem like integration may be necessary - though the other bins in the dataset do appear to overlay quite well across both datasets.
+Based solely on this visualization and no additional information, it may seem like integration may be necessary. However, the other bins in the dataset do appear to overlay quite well across both datasets.
 
 # Exercise 2
 
