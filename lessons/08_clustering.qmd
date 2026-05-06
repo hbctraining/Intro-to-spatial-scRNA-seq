@@ -1,7 +1,7 @@
 ---
 title: "Clustering"
 description: |
-  Use graph-based clustering methods k-nearest neighbors and Leiden to define clusters based upon gene expression scores for single-cell datasets. You will examine how parameters like resolution affect cluster size and tissue interpretation.
+  In this lesson, we will use graph-based clustering methods, k-nearest neighbors and Leiden, to define clusters based upon gene expression scores for single-cell datasets. You will examine how parameters like resolution affect cluster size and tissue interpretation.
 author:
   - Noor Sohail
 date: "2025-07-22"
@@ -43,7 +43,7 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-At this point in the analysis, we have succesfully calculated PC scores, creating meaningful embeddings of our bins. Using this principal component, we can now evaluate the similarity of bins through clustering. This is a two-step process where we first calcualte k-nearest neighbors to build a graph structure, linking similar bins together. Then, we will utilize the Leiden algorithm to cluster bins into larger groups. These cluster labels will be reused to identify spatial domains and major celltypes in the dataset.
+At this point in the analysis, we have successfully calculated PC scores, thus providing meaningful embeddings of our bins. Using these principal component scores, we can now evaluate the similarity of bins through clustering. This is a two-step process where we first calculate k-nearest neighbors to build a graph structure, linking similar bins together. Then, we will utilize the Leiden algorithm to cluster bins into larger groups. These cluster labels will be reused to identify spatial domains and major celltypes in the dataset.
 
 
 ## Grouping similar bins together
@@ -62,7 +62,7 @@ The first step is to **construct a K-nearest neighbor (KNN) graph**. As previous
 1. Each bin is a point in PCA (n-dimensional) space.
 2. We calculate the distance (euclidean) between each bin and all other bins in this PCA space.
 3. We then connect bins together (edges) that are close to each other in this PCA space. Bins that are close together in PCA space will have similar gene expression profiles, and thus are likely to be similar.
-4. Then edge weights are calculate for each connection based upon the shared overlap in their local neighborhoods to create a **shared nearest neighbor (SNN) graph**. 
+4. Then edge weights are calculated for each connection based upon the shared overlap in their local neighborhoods to create a **shared nearest neighbor (SNN) graph**. 
 
 This means that if two bins are close together in PCA space and have similar neighbors, they will have a stronger connection (higher edge weight) than two bins that are close together but do not share similar neighbors.
 
@@ -73,7 +73,24 @@ Schematic showing how bins are connected in PCA space, where edges connected bet
 _Image source: [Analysis of Single cell RNA-seq data](https://biocellgen-public.svi.edu.au/mig_2019_scrnaseq-workshop/clustering-and-cell-annotation.html)_.
 :::
 
-All of this is done in one step with the Seurat function `FindNeighbors()`. The function takes in the PCA reduction and calculates the KNN graph. We specify the `reduction` (sketch) as well as which components (`dims`) will be used for the calculation. In this case, we will be using the first 50 PCs.
+All of this is done in one step with the Seurat function `FindNeighbors()`. Let's go ahead and make a new script to be used for our clustering, we will call it `04_clustering.R` and place it within our `scripts` directory. We will add this to the header of the script:
+
+```{r}
+#| label: header
+#| eval: false
+# Clustering
+# Visium HD spatial transcriptomics workshop
+# Author: Harvard Chan Bioinformatics Core
+# Created: May 2026
+
+# Load libraries
+library(Seurat)
+library(tidyverse)
+
+# TODO: Load Seurat object
+```
+
+The `FindNeighbors()` function takes in the PCA reduction and calculates the KNN graph. We specify the `reduction` (sketch) as well as which components (`dims`) will be used for the calculation. In this case, we will be using the first 50 PCs.
 
 ```{r}
 #| label: FindNeighbors
@@ -91,15 +108,15 @@ We should now see two graphs in the `@graphs` slot of `seurat_processed`. The fi
 seurat_processed@graphs
 ```
 
-We use the SNN graph because it considers both the distance beteween two bins and the similarity of their local neighborhoods. This leads to more robust and biologically meaningful connections between bins. In contrast, the KNN graph only considers the distance between two bins, which may not capture the full complexity of the global relationships between many bins at once.
+We use the SNN graph because it considers both the distance between two bins and the similarity of their local neighborhoods. This leads to more robust and biologically meaningful connections between bins. In contrast, the KNN graph only considers the distance between two bins, which may not capture the full complexity of the global relationships between many bins at once.
 
- Now that we have this shared nearest neighbor graph, we can being the clustering step.
+ Now that we have this shared nearest neighbor graph, we can begin the clustering step.
 
 ## Clustering
 
 The next step in the spatial transcriptomics workflow is to **group bins into clusters based on the neigborhood graph**.
 
-The `FindClusters()` function iteratively groups bins with the goal of optimizing the standard modularity function (a measure of how well a network is partitioned into clusters). Higher modularity values indicate a clearer cluster structure. By default, `FindClusters()` uses the Louvain algorithm, but we will be setting `algorithm = 4` to [use the Leiden algorithm](https://www.nature.com/articles/s41598-019-41695-z) due to its increased speed and ability to connect communities. 
+The `FindClusters()` function iteratively groups bins with the goal of optimizing the standard modularity function (a measure of how well a network is partitioned into clusters). Higher modularity values indicate a clearer cluster structure. In other words, we want clusters to be well-separated from one another, yet, internally, tightly knit. By default, `FindClusters()` uses the Louvain algorithm, but we will be setting `algorithm = 4` to [use the Leiden algorithm](https://www.nature.com/articles/s41598-019-41695-z) due to its increased speed and ability to connect communities. 
 
 ::: {#fig-leiden .figure}
 ![](../img/leiden_schematic.png){width=600}
@@ -108,12 +125,12 @@ Schematic showing how bins are connected in neighborhood space, where clusters a
 _Image source: [Traag et al. (2019)](https://www.nature.com/articles/s41598-019-41695-z)_.
 :::
 
-Another key parameter is `resolution`, which controls the **granularity of the clustering** and must be tuned for each experiment. **Higher resolution values produce more clusters**. For a first-pass look at the data, a lower resolution is sufficient to broad patterns and communities. Typically, we recommend that datasets on the order of 30,000–50,000 cells/bins, setting a `resolution` between `0.4` and `1.4` typically yields reasonable clustering. So for a much larger dataset, such as this one, we will be setting a low resolution parameter to start.
+Another key parameter is `resolution`, which controls the **granularity of the clustering** and must be tuned for each experiment. **Higher resolution values produce more clusters**. For a first-pass look at the data, a lower resolution is sufficient to see broad patterns and communities. Typically, we recommend that for datasets on the order of 30,000–50,000 cells/bins, setting a `resolution` between `0.4` and `1.4` typically yields reasonable clustering. So for a much larger dataset, such as this one, we will be setting a low resolution parameter to start.
 
 
 ::: callout-note
 # Testing different resolution values
-Typically we would recommend using a variety of different resolutions and select a resolution that best suits your dataset. However, for the sake of time, we will proceed with a `resolution = 0.65`. We have more [detailed explanations](https://hbctraining.github.io/Intro-to-scRNAseq-Quarto/lessons/10_clustering_cells_SCT.html#find-clusters) of how to test a variety of resolutions at one time.
+We would typically recommend using a variety of different resolutions and select a resolution that best suits your dataset. However, for the sake of time, we will proceed with a `resolution = 0.65`. We have more [detailed explanations](https://hbctraining.github.io/Intro-to-scRNAseq-Quarto/lessons/10_clustering_cells_SCT.html#find-clusters) of how to test a variety of resolutions at one time.
 :::
 
 ```{r}
@@ -125,7 +142,7 @@ seurat_processed <- FindClusters(seurat_processed,
                                  random.seed = 12345)
 ```
 
-If we take a look at the columns in our `@meta.data`, we see that the column `seurat_cluster.sketched` is a new column that was added.
+If we take a look at the columns in our `@meta.data`, we see that a new column, `seurat_cluster.sketched`, was added.
 
 ```{r}
 #| label: head_meta_data_clusters
@@ -149,7 +166,7 @@ seurat_processed@meta.data %>%
 ::: callout-tip
 # [**Exercise 1**](08_clustering-Answer_key.qmd#exercise-1)
 
-1. When we looked at the first few rows of our metadata, it appeared that there were many cells that do not have a cluster value. Count how many `NA`'s are found for our cluster with `table()` function and use the argument (`useNA = "ifany"`). Why do you think there are so many `NA` values?
+1. When we look at the first few rows of our metadata, it appears that there were many cells that do not have a cluster value. Count how many `NA`'s are found for our `seurat_cluster.sketched` column with `table()` function and use the argument (`useNA = "ifany"`). Why do you think there are so many `NA` values?
 
 :::
 
@@ -175,9 +192,9 @@ LabelClusters(p, id = "ident",  fontface = "bold", size = 5,
               bg.colour = "white", bg.r = .2, force = 0)
 ```
 
-Ideally we would see **distinct clusters of bins that are well separated from each other**. If we see a lot of overlap between clusters, this may indicate that the clustering is not optimal and we may need to adjust our `resolution` parameter or re-consider our previous steps (QC, filtration, highly variable gene selection, etc.) to improve the clustering.
+We would ideally see **distinct clusters of bins that are well separated from each other**. If we see a lot of overlap between clusters, this may indicate that the clustering is not optimal and we may need to adjust our `resolution` parameter or re-consider our previous steps (QC, filtration, highly variable gene selection, etc.) to improve the clustering.
 
-## Project back to entire dataset
+## Project back to the entire dataset
 
 Recall that we have been calculating all of these steps on our sketched dataset of 10,000 bins. Now, we want to know what the cluster labels are for all of the bins in our full dataset. We can do this with the `ProjectData()` function.
 
@@ -193,7 +210,7 @@ During this projection step, we provide the sketched information we have just ca
 - `sketched.reduction` = reduction (PCA) calculated on the sketch assay (`pca.sketch`)
 - `umap.model` =  UMAP reduction calculated on the sketch assay (`umap.sketch`)
 
-The we specify the `assay` with the full dataset that we want to project onto (in this case, the `Spatial.008um` assay). We also specify the `full.reduction` to name the PCA that will have scores for each bin (`full.pca.sketch`) as well as the number of principal components to use (`dims`).
+Then, we specify the `assay` with the full dataset that we want to project onto (in this case, the `Spatial.008um` assay). We also specify the `full.reduction` to name the PCA that will have scores for each bin in the full dataset (`full.pca.sketch`) as well as the number of principal components to use (`dims`).
 
 ```{r}
 #| label: ProjectData
@@ -262,7 +279,7 @@ seurat_processed@meta.data %>% head() %>% knitr::kable()
 
 This is a good point to pause and inspect our datset!
 
-We now have UMAP and cluster labels for every bin in our dataset. Earlier, we visualized the _sketch_ UMAP with the cluster labels. and saw separation in groups. Now, we can visualize the _full_ UMAP with the projected cluster labels to ensure that the projection step worked and that the clusters are still well separated in the full dataset.
+We now have UMAP and cluster labels for every bin in our dataset. Earlier, we visualized the _sketch_ UMAP with the cluster labels and saw separation in groups. Now, we can visualize the _full_ UMAP with the projected cluster labels to ensure that the projection step worked and that the clusters are still well separated in the full dataset.
 
 ```{r}
 #| label: fig-umap_projected_clusters
@@ -288,23 +305,23 @@ To ensure that our cluster labels are listed in proper numeric order, we are goi
 ```{r}
 #| label: arrange_cluster_levels
 # Arrange seurat_cluster.projected so that values are in numeric order
-order <- seurat_processed$seurat_cluster.projected %>%
+cluster_order <- seurat_processed$seurat_cluster.projected %>%
   unique() %>% as.numeric() %>%
   sort() %>% as.character()
-order
+cluster_order
 ```
 
 ```{r}
 #| label: factor_cluster_levels
 # Factorize seurat_cluster.projected with levels in correct numeric order
 seurat_processed$seurat_cluster.projected <- seurat_processed$seurat_cluster.projected %>% 
-  factor(levels = order)
+  factor(levels = cluster_order)
 
 # Print head of seurat_cluster.projected to confirm levels are in correct order
 seurat_processed$seurat_cluster.projected %>% head()
 ```
 
-Now we should see the levels in numeric order on our UMAP legend.
+We should now see the levels in numerical order on our UMAP legend.
 
 ```{r}
 #| label: fig-umap_numeric
@@ -339,7 +356,7 @@ SpatialDimPlot(seurat_processed,
 
 ## Assessing cluster quality
 
-In the ideal scenario, we expect that the clusters should correspond with the celltypes in our dataset at this point. When we began the analysis, we identified the celltypes that we expect to see in the dataset. 
+In the ideal scenario, we expect that the clusters should correspond with the celltypes in our dataset at this point. When we began the analysis, we identified the celltypes that we expected to see in the dataset. 
 
 Here, we have taken that information one step further by finding several well characterized marker genes for each celltype:
 
@@ -361,7 +378,7 @@ So now, for example, we can see how the marker genes for Endothelial cells appea
 
 ```{r}
 #| label: fig-vln_endothelial_marker
-#| fig-cap: Violin plot of `PECAM1` and `VWF` for each cluster to potentially identify populations of Endothelial cells.
+#| fig-cap: Violin plots of `PECAM1` and `VWF` for each cluster to potentially identify populations of Endothelial cells.
 VlnPlot(seurat_processed,
         features = c("PECAM1", "VWF"),
         pt.size = 0.1,
@@ -369,12 +386,12 @@ VlnPlot(seurat_processed,
   NoLegend()
 ```
 
-We can clearly see that there is an uptick of expression of both genes in cluster 8 - which is an indication that cluster 8 is likely comprised of Endothelial cells. Because we know these celltype markers, we are able to more concretely tell how well the clustering and QC of our dataset is going. This is why we strongly encourage everyone to being a single-cell study with a general concept of broad celltypes and marker genes to save time down the line.
+We can see that there is an uptick of expression of both genes in cluster 8, which is an indication that cluster 8 is likely comprised of Endothelial cells. Because we know these celltype markers, we are able to more concretely tell how well the clustering and QC of our dataset is going. This is why we strongly encourage everyone to go into a single-cell study with a general concept of the broad, expected celltypes and marker genes associated with them to save time down the line.
 
 ::: callout-tip
-# [**Exercise 2**](08_clustering-Answer_key.qmd#exercise-2)
+# [**Exercise 3**](08_clustering-Answer_key.qmd#exercise-3)
 
-2. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with celltypes.
+3. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with celltypes.
 
 ```{r}
 #| label: marker_list
@@ -391,7 +408,7 @@ marker_list <- list(
 )
 ```
 
-3. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.
+4. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.
 
 :::
 

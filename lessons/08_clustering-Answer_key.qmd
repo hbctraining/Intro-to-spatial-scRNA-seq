@@ -37,7 +37,7 @@ table(seurat_processed$seurat_cluster.projected,
       seurat_processed$orig.ident)
 ```
 
-Now we know that the bins found in cluster 1 belong primarily to the sample `P5CRC`
+Now, we know that the bins found in cluster 1 belong primarily to the sample `P5CRC`
 
 ```{r}
 #| label: barplot_nbins_cluster
@@ -54,7 +54,7 @@ seurat_processed@meta.data %>%
 
 # Exercise 3
 
-2. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with celltypes.
+3. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with celltypes.
 
 ```{r}
 #| label: marker_list
@@ -81,7 +81,7 @@ DotPlot(seurat_processed,
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-3. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.
+4. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.
 
 Based upon the dotplot, the good thing is that while it may not be the clearest signal, we are able to identify major populations of cells in the clusters. At this point, you can see there is some uncertainty in this **very rough assignment** and that is okay!
 
@@ -103,10 +103,9 @@ Based upon the dotplot, the good thing is that while it may not be the clearest 
 | 13      | Neural cells                      |
 | 14      | ?                       |
 
-In a standard analysis, we could test out different resolution scores to better tease apart clusters of different celltypes from one another. However, in future lessons we are going to (1) run an alternative, spatially-constrained clustering method and (2) automatically annotate our dataset.
+In a standard analysis, we could test out different resolution scores to better tease apart clusters of different celltypes from one another. However, in future lessons, we are going to (1) run an alternative, spatially-constrained clustering method and (2) automatically annotate our dataset.
 
 This is a good exercise to run to ensure that we are able to identify key celltypes in our dataset.
-
 
 ***
 
