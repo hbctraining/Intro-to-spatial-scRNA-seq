@@ -1,7 +1,7 @@
 ---
 title: "Deconvolution"
 description: |
-  Break down multi-cell spatial spots into estimated cell type proportions using deconvolution methods such as RCTD with single-cell RNA-seq references. This lesson covers reference preparation, model fitting, and visualization of cell composition across tissue.
+  This lesson breaks down multi-cell spatial spots into estimated cell type proportions using deconvolution methods such as RCTD with single-cell RNA-seq references. This lesson covers reference preparation, model fitting and visualization of cell composition across tissue.
 author:
   - Noor Sohail
 date: "2025-07-22"
@@ -37,23 +37,23 @@ options(future.globals.maxSize = 8000 * 1024^2)
 seurat_banksy <- qs2::qs_read("intermediate/09_seurat_banksy_2.qs")
 ```
 
-Approximate time: XX minutes
+Approximate time: 40 minutes
 
 ## Learning objectives 
 
 In this lesson, we will:
 
-- Load and investigate our reference dataset, used for cell type annotation
+- Load and investigate our reference dataset used for cell type annotation
 - Convert our Seurat object into an RCTD data structure
 - Deconvolve bins to assign cell types and assess the annotation
 
 ## Overview of lesson
 
-While the clusters are helpful in identifying groups of bins that are similar to one another, we have not yet determined the cell type for each bin. For sequencing-based methods, deconvolution is a great first step in determining the cell type for each spot, given that a spot may have multiple cells contained within. We will be using the method Robust Cell Type Deconvolution (RCTD) to assign cell type labels for each bin. These deconvolution outputs are reused in subsequent analyses, such as cell–cell communication.
+While the clusters are helpful in identifying groups of bins that are similar to one another, we have not yet determined the cell type for each bin. For sequencing-based methods, deconvolution is a great first step in determining the cell type for each spot, given that a bin may have multiple cells contained within it. We will be using the method Robust Cell Type Deconvolution (RCTD) to assign cell type labels for each bin. These deconvolution outputs are reused in subsequent analyses, such as cell–cell communication.
 
 ## What is deconvolution?
 
-The single-digit micron resolution is a big technological improvement over Visium's original ∼55μm spots. Because a single spot can include several cell types, the dataset is not straightforward to annotate. As a result, many methods **model each spot as a mixture**, assigning proportion values for each cell type within that spot. Each spot is represented as a piechart showing proportions of the cell type composition.
+The single-digit micron resolution is a big technological improvement over Visium's original ∼55μm spots. Because a single spot could include several cell types, the dataset is not straightforward to annotate. As a result, many methods **model each spot as a mixture**, assigning proportion values for each cell type within that spot. Each spot is represented as a piechart showing proportions of the cell type composition.
 
 ::: {#fig-svg_schematic .fig}
 
@@ -63,7 +63,7 @@ Schematic showing how, in sequencing-based spatial transcriptomics, each bin may
 _Image source: [Ma et al. (2022)](https://www.nature.com/articles/s41587-022-01273-7)_
 :::
 
-While Visium HD reduces bin size to approach single-cell resolution, it is important to note that sequencing-based spatial transcriptomics captures RNA from a defined spatial area rather than from isolated cells. As a result, transcripts from multiple cells overlapping a bin can be pooled and sequenced together. This means that even small bins may contain mixed cellular signals, which has important implications for downstream analyses such as differential gene expression.
+While Visium HD reduces bin size to approach single-cell resolution, it is important to note that sequencing-based spatial transcriptomics captures RNA from a defined spatial area rather than from isolated cells. As a result, transcripts from multiple cells overlapping a bin would be pooled and sequenced together. This means that even small bins may contain mixed cellular signals, which has important implications for downstream analyses such as differential gene expression.
 
 ::: callout-important
 # Imaging-based technologies
@@ -81,9 +81,16 @@ To annotate your dataset, we recommend to do a mixture of the following:
 
 ### Robust Cell Type Deconvolution (RCTD)
 
+We will carry out our deconvolution in a new script called `07_deconvolution.R`, which will be kept in our `scripts` directory. At the top of the script, we will add a header, call our libraries and load our Seurat object.
+
 ```{r}
 #| label: load_data
 #| eval: false
+# Deconvolution with RCTD
+# Visium HD spatial transcriptomics workshop
+# Author: Harvard Chan Bioinformatics Core
+# Created: May 2026
+
 # Load libraries
 library(Seurat)
 library(tidyverse)
@@ -99,13 +106,13 @@ options(future.globals.maxSize = 8000 * 1024^2)
 seurat_banksy <- readRDS("data/intermediate_seurat/seurat_banksy.rds")
 ```
 
-To perform accurate annotation of cell types, we must also take into consideration that our 8µm x 8µm bins may contain **multiple cells**. The method [Robust Cell Type Deconvolution](https://www.nature.com/articles/s41587-021-00830-w) (RCTD) has been shown to accurately annotate spatial datasets from a variety of technologies while taking into consideration that a single bin may exhibit multiple cell type profiles.
+To perform accurate annotation of cell types, we must also take into consideration that our 8µm x 8µm bins may contain **multiple cells**. The method [Robust Cell Type Deconvolution](https://www.nature.com/articles/s41587-021-00830-w) (RCTD) has been shown to accurately annotate spatial datasets from a variety of technologies, while taking into consideration that a single bin may exhibit multiple cell type profiles.
 
 ::: {#fig-BANKSY_schematic .figure}
 ![](../img/RCTD_schematic.png){width=700}
 
 Schematic of how RCTD creates a probabilistic model to represent bins as a mixture of cell types in spatial datasets.<br>
-_Image source: [Cable et al. (2021)](https://www.nature.com/articles/s41587-021-00830-w)_
+_Image source: [Cable et al., 2021](https://www.nature.com/articles/s41587-021-00830-w)_
 ::: 
 
 The overaching process of RCTD involves several steps:
@@ -125,7 +132,7 @@ RCTD uses an **annotated scRNA-seq dataset (reference) and our spatial dataset (
 
  For our reference, we will use the [paired scRNA-seq FLEX dataset](https://www.10xgenomics.com/platforms/visium/product-family/dataset-human-crc) that was generated from the same patients as the original study. The code for how this object was created can be found [here](Aside_gen_reference_rctd.qmd).
 
-First, let us load in the reference seurat object that was downloaded with the spatial dataset.
+First, let us load in the reference Seurat object that we downloaded with the spatial dataset at the beginning of the workshop.
 
 ```{r}
 #| label: load_ref
@@ -139,13 +146,20 @@ We can take a look at the unique celltypes in the reference dataset by plotting 
 ```{r}
 #| label: fig-umap_reference
 #| fig-cap: UMAP of reference dataset to be used for deconvolution.
-# UMAP of reference dataset
+# Set idents
 Idents(seurat_ref) <- "Level1"
+
+# UMAP of reference dataset
 p <- DimPlot(seurat_ref) +
   ggtitle("RCTD Reference Dataset")
 # Add cluster labels
-LabelClusters(p, id = "ident",  fontface = "bold", size = 3, 
-              bg.colour = "white", bg.r = .2, force = 0)
+LabelClusters(p,
+              id = "ident",
+              fontface = "bold",
+              size = 3, 
+              bg.colour = "white",
+              bg.r = .2,
+              force = 0)
 ```
 
 ## Running RCTD
@@ -155,11 +169,11 @@ As mentioned earlier, there are two main inputs that must be supplied to RCTD:
 - **Reference**: an object containing the raw counts and celltype column in metadata.
 - **Query**: a spatial transcriptomics object that we want to deconvolve against the reference.
 
-We are going to create some custom RCTD object out of our original Seurat object for RCTD. This is essentially create a new _data structure_ that fits with what the `Run.RCTD()` function expects. 
+We are going to create some custom RCTD objects out of our original Seurat object for RCTD. This will essentially create a new _data structure_ that fits with what the `Run.RCTD()` function expects. 
 
 ### Create reference
 
-Now that we better understand the reference, we are going to make a RCTD object out of it. We will use the `Reference()` function to cast our Seurat object into the correct format.  We supply the following three parameters:
+Now that we better understand the reference, we are going to make an RCTD object out of it. We will use the `Reference()` function to cast our Seurat object into the correct format.  We supply the following three parameters:
 
 - `counts` = raw counts matrix
 - `cell_types` = celltype annotation
@@ -186,7 +200,7 @@ reference <- Reference(counts = counts,
 ::: {.callout-note collapse="true"}
 # Structure of `reference`
 
-When we look at the structure of this `reference` object, we can see that we have our `nUMI`, `counts`, and `cell_types` in this object.
+When we look at the structure of this `reference` object, we can see that we have our `nUMI`, `counts` and `cell_types` in this object.
 
 ```{r}
 #| label: str_reference
@@ -205,15 +219,18 @@ str(reference)
 # Subset to P5CRC sample
 crc <- subset(seurat_banksy, 
               subset = (orig.ident == "P5CRC"))
+
+# Inspect the Seurat object
 crc
 ```
 
-We cannot use the same sketch information from the [previous lessons](06_normalization_and_sketch.qmd) since this is one sample (and not both). Therefore we are going to quickly run through the sketch workflow one more time. However we will not be running the entire workflow, as we only need the PCA scores to project back to the larger dataset.
+We cannot use the same sketch information from the [previous lessons](06_normalization_and_sketch.qmd) since this is one sample (and not both). Therefore, we are going to quickly run through the sketch workflow one more time. However, we will not be running the entire workflow, as we only need the PCA scores to project back to the larger dataset.
 
 ```{r}
 #| label: crc_sketch_workflow
 #| eval: false
 # Create sketch of CRC subset
+# Set default assay
 DefaultAssay(crc) <- 'Spatial.008um'
 
 # HVGs are required input for SketchData
@@ -232,7 +249,8 @@ crc <- SketchData(
 # Stop at PCA
 crc <- FindVariableFeatures(crc)
 crc <- ScaleData(crc)
-crc <- RunPCA(crc, reduction.name = "pca.sketch_crc")
+crc <- RunPCA(crc,
+              reduction.name = "pca.sketch_crc")
 ```
 
 ```{r}
@@ -242,7 +260,7 @@ crc <- RunPCA(crc, reduction.name = "pca.sketch_crc")
 crc <- qs2::qs_read("intermediate/12_crc_sketch.qs")
 ```
 
-RCTD requires another unique data structure as input to run. So we create our query object with `SpatialRNA()` by suppling the spatial coordinates and raw counts for the bins. Note that we do not have to supply any celltype information, like we did with the reference object earlier. This is becuase we don't have any celltype information yet! That is the output we are hoping to generate from running RCTD.
+RCTD requires another unique data structure as input to run. So we will create our query object with `SpatialRNA()` by suppling the spatial coordinates and raw counts for the bins. Note that we do not have to supply any celltype information, like we did with the reference object earlier. This is becuase we don't have any celltype information yet! That is the output we are hoping to generate from running RCTD.
 
 ```{r}
 #| label: query_rctd
@@ -254,7 +272,7 @@ counts_sketch <- crc[["sketch_crc"]]$counts
 cells_sketch <- colnames(crc[["sketch_crc"]])
 
 # Spatial coordinates for each bin in sketch assay
-coords <- GetTissueCoordinates(crc)[cells_sketch, 1:2]
+coords <- GetTissueCoordinates(crc)[cells_sketch, c("x", "y")]
 
 # Grab nUMI per sketch bin
 nUMI_sketch <- crc@meta.data[cells_sketch, "nCounts_Spatial.008um"]
@@ -268,7 +286,7 @@ query <- SpatialRNA(coords = coords,
 ::: {.callout-note collapse="true"}
 # Structure of `query`
 
-When we look at the structure of this `reference` object, we can see that we have our `nUMI`, `counts`, and `coords` in this object.
+When we look at the structure of this `query` object, we can see that we have our `nUMI`, `counts` and `coords` in this object.
 
 ```{r}
 #| label: str_query
@@ -279,7 +297,7 @@ str(query)
 
 ### Run RCTD
 
-The more celltypes you have the longer this will take.
+Now that we have created our reference and query objects, we will create and RCTD object and run RCTD. It should be noted that RCTD can take The more celltypes you have the longer this will take.
 
 ::: callout-warning
 We need to provide a time estimate for this step
@@ -294,8 +312,9 @@ This took me ~5 minutes
 RCTD <- create.RCTD(spatialRNA = query, 
                     reference = reference, 
                     max_cores = parallel::detectCores() - 1)
-# Run devonlution
-RCTD <- run.RCTD(RCTD, doublet_mode = "doublet") # This step takes a while
+# Run deconvolution
+# This step may take 5-10 minutes to run
+RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
 ```
 
 ```{r}
@@ -307,7 +326,7 @@ RCTD <- qs2::qs_read("intermediate/12_RCTD_crc.qs")
 
 ### RCTD results
 
-The resultant dataframe from RCTD will contain the following columns according to the [documentation](https://mirror.accum.se/mirror/bioconductor.org/packages/devel/bioc/vignettes/spacexr/inst/doc/rctd-tutorial.html):
+The resulting dataframe from RCTD will contain the following columns according to the [documentation](https://mirror.accum.se/mirror/bioconductor.org/packages/devel/bioc/vignettes/spacexr/inst/doc/rctd-tutorial.html):
 
 | Column       | Description                                                                                   |
 |--------------|--------------------------------------------------------------------------------------------------------|
@@ -323,7 +342,8 @@ The results of deconvolution are stored in the `results$results_df` slot of the 
 #| eval: false
 # Grab results dataframe and view first few rows
 df_rctd_results <- RCTD@results$results_df
-df_rctd_results %>% head()
+df_rctd_results %>%
+  head()
 ```
 
 ```{r}
@@ -347,7 +367,9 @@ ggplot(df_rctd_results,
   geom_bar() +
   theme_bw() + NoLegend() +
   ggtitle("P5CRC: RCTD First Type Results") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.5,
+                                   hjust=1))
 ```
 
 Just by looking at the total number of bins, this is a good reminder that we only have the RCTD results for the 5,000 bins we sketched to.
@@ -361,7 +383,7 @@ Let us take a look at how many rows (bins) we have these annotations for:
 nrow(df_rctd_results)
 ```
 
-But didn't our `sketch` assay include 5,000 bins? RCTD runs its own QC step that filters out bins with low expression or _rejects_ bins where it is unable to map a cell type from the reference dataset. This is why we have fewer bins than we expected. So we are going to do some data wrangling to ensure that we keep track of all information. Including those ~200 bins without `first_type` labels.
+But didn't our `sketch` assay include 5,000 bins? RCTD runs its own QC step that filters out bins with low expression or _rejects_ bins where it is unable to map a cell type from the reference dataset. This is why we have fewer bins than we expected. So we are going to do some data wrangling to ensure that we keep track of all information. Including those ~200 bins without `first_type` labels. We will handle this when we project our data back to the larger CRC Seurat object and we will get an error message.
 
 ```{r}
 #| label: sketch_rctd_df
@@ -382,7 +404,7 @@ df_rctd_results <- df_rctd_results %>%
 colnames(df_rctd_results)
 ```
 
-Now let us merge this information into our Seurat object. This step is necessary because in order to `ProjectData()`, we need the RCTD results to live in our `@meta.data` slot.
+Now, let us merge this information into our Seurat object. This step is necessary because in order to `ProjectData()`, we need the RCTD results to live in our `@meta.data` slot.
 
 ```{r}
 #| label: merge_rctd
@@ -393,17 +415,16 @@ meta <- crc@meta.data
 # Merge together RCTD results and metadata
 meta <- left_join(x = meta, 
                   y = df_rctd_results,
-                  by = "cell")
+                  by = "cell")   %>%
+  column_to_rownames("cell")
 
 # Put meta into crc Seurat object
-rownames(meta) <- meta$cell
 crc@meta.data <- meta
 ```
 
-
 ## Project back to full dataset
 
-Now we can run the `ProjectData()`, just like we did last time.
+Now, we can run the `ProjectData()`, just like we did last time in order to project out RCTD results to the full CRC dataset.
 
 ```{r}
 #| label: failed_project_data
@@ -426,7 +447,7 @@ Why did we get an error when we tried to get RCTD labels for the entire dataset?
 
 ```{r}
 #| label: set_unassigned
-# Set value ot unassigned to sketch bins that do not have values
+# Set value of unassigned to sketch bins that do not have values
 # This is because ProjectData will throw errors otherwise
 cols <- c("spot_class_sketch", 
           "first_type_sketch", 
@@ -448,12 +469,13 @@ We can use the `table()` function to quickly see how many unassigned bins we hav
 
 ```{r}
 #| label: table_unassigned
+# Show the number of bins assigned to each cell type, including unassigned
 table(crc@meta.data$first_type_sketch)
 ```
 
 :::
 
-Now we can once again run `ProjectData()` to actually get celltype labels for each bin in our dataset.
+At this point, we can once again run `ProjectData()` to actually get celltype labels for each bin in our dataset.
 
 ```{r}
 #| label: project_data
@@ -516,9 +538,11 @@ SpatialDimPlot(crc,
 ::: {.callout-note collapse="true"}
 # Alternative spatial visualization
 
+Sometimes it can be difficult to see patterns for a given celltype when all of the celltypes are present in the same plot. Due to this difficulty, we can also facet our different celltypes into their own plots:
+
 ```{r}
 #| label: fig-spatial_first_type_split
-#| fig-cap: Spatial overlay of the first type RCTD results after `ProjectData()`, split by first_type.
+#| fig-cap: "Spatial overlay of the first type RCTD results after `ProjectData()` split by first_type."
 #| fig-width: 12
 #| fig-height: 9
 # Grab x, y coordiantes and first_type celltype labels
@@ -594,7 +618,7 @@ seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
 :::{.callout-tip}
 # [**Exercise 1**](12_deconvolution-Answer_key.qmd#exercise-1)
 
-1. What is the sample-specific proportion for each `first_type`? Create a ggplot barplot showing the proportions of each cell type. _Hint: Refer back to the code we used [here](09_integration.qmd#fig-cell_proportion_barplot)_
+1. What is the sample-specific proportion for each `first_type`? Create a ggplot barplot showing the proportions of each cell type. _Hint: Refer back to the code we used [here](09_integration.qmd#fig-cell_proportion_barplot)_.
 
 2. Create a dotplot using the known marker genes for each celltype to see if the `first_type` labels align with known celltype genes.
 
