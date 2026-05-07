@@ -42,11 +42,11 @@ rownames(seurat_processed) %>% tail()
 ```{r}
 #| label: rename_idents
 #| echo: false
-# Rename some identities
+# Rename all identities
 seurat_processed <- RenameIdents(object = seurat_processed, 
-                                 "1" = "CD14+ monocytes",
-                                 "3" = "CD14+ monocytes",
-                                 "2" = "Activated T cells")
+                                 "1" = "Tumor",
+                                 "2" = "B cells",
+                                 "3" = "Intestinal epithelial cells")
 
 # These new celltype values are only stored in the idents
 # Good practice is to store these changes in a column
@@ -83,9 +83,6 @@ VariableFeatures(seurat_processed) %>%
   tail()
 ```
 
-::: {.callout-note}
-You may have noticed that these are the same genes from when we were looking at the last 5 genes in our Seurat object. This is due to the fact that we ran integration on the top 3,000 variable genes. As a result, the order of the genes in the integrated dataset follows the same order as the variable features!
-:::
 
 # Exercise 4
 
@@ -100,13 +97,10 @@ dim(seurat_processed[["Spatial.008um"]])
 dim(seurat_processed[["sketch"]])
 ```
 
-::: {.callout-note}
-Notice that the number of genes is higher in the RNA assay compared to the integrated object. This goes back to previous note, where only the expression from variable genes is stored in the `integrated` assay.
-:::
 
 # Exercise 5
 
-**Show the code to get the entire sketch normalized (data) count matrix.**
+**Show the code to get the entire sketch log-normalized (`data`) count matrix.**
 
 ```{r}
 #| label: get_counts_mtx
@@ -114,17 +108,17 @@ Notice that the number of genes is higher in the RNA assay compared to the integ
 # Obtain sketch count matrix for normalized count matrix
 LayerData(seurat_processed,
           assay = "sketch",
-          layer = "scale.data")
+          layer = "data")
 ```
 
 # Exercise 6
 
-**Show how you would use the `FetchData()` function to generate a dataframe of UMAP_1, UMAP_2 and sample values for each cell.**
+**Show how you would use the `FetchData()` function to generate a dataframe of fullumapsketch_1, fullumapsketch_2 and orig.ident values for each cell.**
 
 ```{r}
 #| label: fetchdata_exercise
 # Use FetchData to pull selected information from the Seurat object
 FetchData(seurat_processed,
-          vars = c("UMAP_1", "UMAP_2", "sample")) %>%
+          vars = c("fullumapsketch_1", "fullumapsketch_2", "orig.ident")) %>%
   head()
 ```

@@ -206,6 +206,34 @@ seurat_processed$celltype <- Idents(seurat_processed)
 
 ***
 
+# Tissue coordinates
+
+As this is a spatial dataset, there is another slot where the coordinates for each bin in our dataset is stored. We can use the `GetTissueCoordinates()` function in order to grab these x, y coordinates:
+
+```{r}
+#| label: get_tissue_coordinates_1
+
+GetTissueCoordinates(seurat_processed) %>%
+  tail()  
+```
+
+However, you may notice that the only bins that are returned belong to **one sample**. This is because this function will only return the results for **one image at a time**. So we would have to specify the image as it is stored within our Seurat object to access the coordinates for different tissues:
+
+```{r}
+#| label: seurat_callout
+seurat_processed
+```
+
+The second `spatial fields of view present` is `P5NAT.008um` which we will supply to the `image` parameter to grab the coordinates for the other slide in the dataset.
+
+```{r}
+#| label: get_tissue_coordinates_2
+# Get tissue coordinates for NAT sample
+GetTissueCoordinates(seurat_processed,
+                     image = "P5NAT.008um") %>%
+  tail()  
+```
+
 # Highly variable features
 
 ## Accessing variable features
@@ -240,7 +268,7 @@ VariableFeatures(seurat_processed) <- var_genes
 
 ::: callout-tip
 # [**Exercise 3**](10_seurat_cheatsheet-Answer_key.qmd#exercise-3)
-3. What are the 5 least variable genes in the Seurat object?
+3. What are the 5 least variable genes (of the top 3,000) in the Seurat object?
 :::
 
 ***
@@ -338,7 +366,7 @@ LayerData(seurat_processed,
 
 ::: callout-tip
 # [**Exercise 5**](10_seurat_cheatsheet-Answer_key.qmd#exercise-5)
-5. Show the code to get the entire sketch normalized (data) count matrix.
+5. Show the code to get the entire sketch log-normalized (`data`) count matrix.
 :::
 
 ***
@@ -371,7 +399,7 @@ FetchData(seurat_processed,
 
 ::: callout-tip
 # [**Exercise 6**](10_seurat_cheatsheet-Answer_key.qmd#exercise-6)
-6. Show how you would use the `FetchData()` function to generate a dataframe of UMAP_1, UMAP_2 and sample values for each cell.
+6. Show how you would use the `FetchData()` function to generate a dataframe of `fullumapsketch_1`, `fullumapsketch_2` and `orig.ident` values for each cell..
 :::
 
 ***
@@ -465,6 +493,23 @@ DimPlot(seurat_processed,
         group.by="orig.ident")
 ```
 
+## SpatialDimPlot
+
+Similarly, we can plot these categorical values and plot them on top of the tissue slide with `SpatialDimPlot()`:
+
+```{r}
+#| label: fig-spatialdimplot
+#| fig-cap: "Grouping the `SpatialDimPlot` by the `orig.ident`."
+#| fig-width: 10
+# Plot bins on spatial slide, colored by their orig.ident 
+SpatialDimPlot(seurat_processed,
+        group.by = "orig.ident",
+        pt.size.factor = 15)
+```
+
+
+There are a [variety of different parameters](https://satijalab.org/seurat/reference/spatialplot) that can be specified in order to create the plot that you want to make.
+
 ## FeaturePlot
 
 The `FeaturePlot()` function allows us to visualize both metadata and features that are continuous on different reductions (PCA, UMAP). 
@@ -498,7 +543,7 @@ We can also add labels onto our UMAP to easily identify which groups of bins we 
 
 ```{r}
 #| label: fig-featureplot_labelcluster
-#| fig-cap: "Displaying the expression of a Tumor cell marker on the UMAP, while also showing the cluster labels."
+#| fig-cap: "Displaying the expression of a Tumor cell marker LCN2 on the UMAP, while also showing the cluster labels."
 # Set idents to seurat_cluster.projected
 Idents(seurat_processed) <- "seurat_cluster.projected"
 
@@ -513,10 +558,25 @@ p <- FeaturePlot(seurat_processed,
 LabelClusters(p,
               id = "ident",
               fontface = "bold",
-              size = 3, 
+              size = 8, 
               bg.colour = "white",
               bg.r = .2,
               force = 0)
+```
+
+## SpatialFeaturePlot
+
+Just as we can plot genes or numeric values on top of the UMAP, we can also do the same with the tissue with `SpatialFeaturePlot()`
+
+
+```{r}
+#| label: fig-spatialfeatureplot
+#| fig-cap: "Displaying the expression of a Tumor cell marker LCN2 on the tissue."
+#| fig-width: 10
+# Overlap gene expression on a spatial side
+SpatialFeaturePlot(seurat_processed, 
+            features = "LCN2", 
+            pt.size.factor = 15)
 ```
 
 ## FeatureScatter
@@ -543,10 +603,10 @@ To visualize the differences between two specific bins, you can use the `CellSca
 
 ```{r}
 #| label: cellscatter_select_cells
-# Obtain the first bin name
-bin1 <- Cells(seurat_processed)[1] 
-# Obtain the second bin name
-bin2 <- Cells(seurat_processed)[2]
+# Obtain a bin name
+bin1 <- Cells(seurat_processed)[2] 
+# Obtain a second bin name
+bin2 <- Cells(seurat_processed)[7]
 
 # Here we can see the metadata for the first two bins in the dataset
 seurat_processed@meta.data %>% 
@@ -556,8 +616,8 @@ seurat_processed@meta.data %>%
 
 ```{r}
 #| label: fig-cellscatter
-#| fig-cap: "A scatterploty showing the relationship in expression between two bins."
-# Plot the expression from the first two bins against each other 
+#| fig-cap: "A scatterplot showing the relationship in expression between two bins."
+# Plot the expression from two bins against each other 
 CellScatter(seurat_processed,
             cell1 = bin1,
             cell2 = bin2)
@@ -659,7 +719,7 @@ DoHeatmap(seurat_processed,
 
 ## DotPlot
 
-Seurat also has a built-in visualization tool which allows us to view the average expression of genes groups clusters called `DotPlot()`. The size of the circle represents the number of bins that express the gene within a group and the hue represents the average expression of the feature.
+Seurat also has a built-in visualization tool which allows us to view the average expression of genes, grouped by cluseter, with a function called `DotPlot()`. The size of the circle represents the number of bins that express the gene within a group and the hue represents the average expression of the feature.
 
 If you supply a named list with labels annotating genes, those labels will appear at the top of the plot for easier visualization.
 
