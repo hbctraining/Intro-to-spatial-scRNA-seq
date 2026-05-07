@@ -68,7 +68,7 @@ With that being said, there are certain elements that are unique to a spatial da
 
 ## Variation in the dataset
 
-First we will create a new R script called `03_dimensionality_reduction.R` and place it within our `scripts` directory.  We will continue where we left off in the previous lesson and load in the `seurat_sketch` object. With this sketch assay, we need to once again ask which genes are driving the variation in the dataset?
+First we will create a new R script called `03_dimensionality_reduction_and_clustering.R` and place it within our `scripts` directory.  We will continue where we left off in the previous lesson and load in the `seurat_sketch` object. With this sketch assay, we need to once again ask which genes are driving the variation in the dataset?
 
 ```{r}
 #| label: header

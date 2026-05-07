@@ -1,7 +1,7 @@
 ---
 title: "Clustering"
 description: |
-  In this lesson, we will use graph-based clustering methods, k-nearest neighbors and Leiden, to define clusters based upon gene expression scores for single-cell datasets. You will examine how parameters like resolution affect cluster size and tissue interpretation.
+  In this lesson, we will use graph-based clustering methods (k-nearest neighbors and Leiden clustering) to define clusters based upon gene expression scores for single-cell datasets. You will examine how parameters like resolution affect cluster size and tissue interpretation.
 author:
   - Noor Sohail
 date: "2025-07-22"
@@ -39,16 +39,16 @@ In this lesson, we will:
 
 - Compute a neighborhood graph to identify similar phenotypes in bins
 - Group bins into clusters based upon their gene expression profiles
-- Evaluate the quality of clustering against biological knowns
+- Evaluate the quality of clustering against known biology
 
 ## Overview of lesson
 
-At this point in the analysis, we have successfully calculated PC scores, thus providing meaningful embeddings of our bins. Using these principal component scores, we can now evaluate the similarity of bins through clustering. This is a two-step process where we first calculate k-nearest neighbors to build a graph structure, linking similar bins together. Then, we will utilize the Leiden algorithm to cluster bins into larger groups. These cluster labels will be reused to identify spatial domains and major celltypes in the dataset.
+At this point in the analysis, we have successfully calculated PC scores, thus providing meaningful embeddings of our bins. Using these principal component scores, we can now evaluate the similarity of bins through clustering. This is a two-step process where we first calculate k-nearest neighbors to build a graph structure, linking similar bins together. Then, we will utilize the Leiden algorithm to cluster bins into larger groups. These cluster labels will be reused to identify spatial domains and major cell types in the dataset.
 
 
 ## Grouping similar bins together
 
-Now, we want to group similar bins (cell states) together based upon their gene expression profiles with clustering. This is a two step process that involves:
+Now, we want to group similar bins (cell states) together based upon their gene expression profiles with clustering. This is a two-step process that involves:
 
 1. Constructing a K-nearest neighbor (KNN) graph based on the PCA space.
 2. Group bins together based upon the KNN graph to assign cluster labels to each bin.
@@ -57,12 +57,12 @@ This graph-based approach allows us to partition the graph of bins into highly i
 
 ## k-nearest neighbors (kNN)
 
-The first step is to **construct a K-nearest neighbor (KNN) graph**. As previous mentioned, this is calculated on the PCA space. Recall that we have multiple principle components (PCs) with scores for each one of our bins. We can think of the steps taken like so:
+The first step is to **construct a K-nearest neighbor (KNN) graph**. As previously mentioned, this is calculated on the PCA space. Recall that we have multiple principal components (PCs) with scores for each one of our bins. We can think of the steps taken like so:
 
 1. Each bin is a point in PCA (n-dimensional) space.
 2. We calculate the distance (euclidean) between each bin and all other bins in this PCA space.
-3. We then connect bins together (edges) that are close to each other in this PCA space. Bins that are close together in PCA space will have similar gene expression profiles, and thus are likely to be similar.
-4. Then edge weights are calculated for each connection based upon the shared overlap in their local neighborhoods to create a **shared nearest neighbor (SNN) graph**. 
+3. We then connect bins together (edges) that are close to each other. Bins that are close together in PCA space will have similar gene expression profiles, and thus are likely to be similar.
+4. To further confirm the similarity of bins, we ask, _do these two bins also share nearby neighbors (bins)?_ These shared neighbors are an additional layer of confirmation that bin A and bin B are similar to one another if they are connected to the same bins (neighbors). We use this to recalculate the edge weights between bins, **creating a shared nearest neighbor (SNN) graph**.
 
 This means that if two bins are close together in PCA space and have similar neighbors, they will have a stronger connection (higher edge weight) than two bins that are close together but do not share similar neighbors.
 
@@ -73,22 +73,7 @@ Schematic showing how bins are connected in PCA space, where edges connected bet
 _Image source: [Analysis of Single cell RNA-seq data](https://biocellgen-public.svi.edu.au/mig_2019_scrnaseq-workshop/clustering-and-cell-annotation.html)_.
 :::
 
-All of this is done in one step with the Seurat function `FindNeighbors()`. Let's go ahead and make a new script to be used for our clustering, we will call it `04_clustering.R` and place it within our `scripts` directory. We will add this to the header of the script:
-
-```{r}
-#| label: header
-#| eval: false
-# Clustering
-# Visium HD spatial transcriptomics workshop
-# Author: Harvard Chan Bioinformatics Core
-# Created: May 2026
-
-# Load libraries
-library(Seurat)
-library(tidyverse)
-
-# TODO: Load Seurat object
-```
+All of this is done in one step with the Seurat function `FindNeighbors()`. We will continue writing this code in the script we created last lesson titled `03_dimensionality_reduction_and_clustering.R`
 
 The `FindNeighbors()` function takes in the PCA reduction and calculates the KNN graph. We specify the `reduction` (sketch) as well as which components (`dims`) will be used for the calculation. In this case, we will be using the first 50 PCs.
 
@@ -114,7 +99,7 @@ We use the SNN graph because it considers both the distance between two bins and
 
 ## Clustering
 
-The next step in the spatial transcriptomics workflow is to **group bins into clusters based on the neigborhood graph**.
+The next step in the spatial transcriptomics workflow is to **group bins into clusters based on the neighborhood graph**.
 
 The `FindClusters()` function iteratively groups bins with the goal of optimizing the standard modularity function (a measure of how well a network is partitioned into clusters). Higher modularity values indicate a clearer cluster structure. In other words, we want clusters to be well-separated from one another, yet, internally, tightly knit. By default, `FindClusters()` uses the Louvain algorithm, but we will be setting `algorithm = 4` to [use the Leiden algorithm](https://www.nature.com/articles/s41598-019-41695-z) due to its increased speed and ability to connect communities. 
 
@@ -170,12 +155,15 @@ seurat_processed@meta.data %>%
 
 :::
 
-The Seurat workflow tends to automatically change the `Idents()` of the Seurat object to the last cluster values that were calculated during `FindClusters()`. If we take a look at our `Idents` we can see if that it has changed from `orig.ident` to `seurat_cluster.sketched`.
+The `FindClusters()` function automatically updates the `Idents()` of our Seurat object. If we take a look at our `Idents` we can see if that it has changed from `orig.ident` to `seurat_cluster.sketched`.
 
 ```{r}
 #| label: idents
+# Check updated idents after running FindClusters()
 Idents(seurat_processed) %>% head()
 ```
+
+So if you had previously set a different column as your `Idents()`, just know that it has automatically been updated at this point.
 
 ### Visualize clusters on UMAP
 
@@ -183,7 +171,7 @@ We previously [calculated UMAP coordinates](07_dim_reduction.qmd#umap) for our s
 
 ```{r}
 #| label: fig-umap_sketch
-#| fig-cap: UMAP scatterplot with bins colored and labeled by sketch Leiden cluster annotation.
+#| fig-cap: UMAP scatterplot, colored by Leiden clusters calculated on the sketch assay.
 # Plot UMAP
 p <- DimPlot(seurat_processed, 
         reduction = "umap.sketch", label = T) + 
@@ -198,9 +186,7 @@ We would ideally see **distinct clusters of bins that are well separated from ea
 
 Recall that we have been calculating all of these steps on our sketched dataset of 10,000 bins. Now, we want to know what the cluster labels are for all of the bins in our full dataset. We can do this with the `ProjectData()` function.
 
-::: callout-warning
-TODO: what method is used for ProjectData()
-:::
+In essence, this function takes our sketched PCA and extends it out to the rest of the bins in our dataset. In doing so, we calculate a "full" PCA for each bin. From this, we are able to identify bins that are similar to one another and transfer labels from the smaller subset to the full dataset. Thereby "projecting" clustering values from downsampled bins onto the entire dataset.
 
 ### Run `ProjectData()`
 
@@ -277,7 +263,7 @@ seurat_processed@meta.data %>% head() %>% knitr::kable()
 
 ### Visualize projected clusters
 
-This is a good point to pause and inspect our datset!
+This is a good point to pause and inspect our dataset!
 
 We now have UMAP and cluster labels for every bin in our dataset. Earlier, we visualized the _sketch_ UMAP with the cluster labels and saw separation in groups. Now, we can visualize the _full_ UMAP with the projected cluster labels to ensure that the projection step worked and that the clusters are still well separated in the full dataset.
 
@@ -356,9 +342,9 @@ SpatialDimPlot(seurat_processed,
 
 ## Assessing cluster quality
 
-In the ideal scenario, we expect that the clusters should correspond with the celltypes in our dataset at this point. When we began the analysis, we identified the celltypes that we expected to see in the dataset. 
+In the ideal scenario, we expect that the clusters should correspond with the cell types in our dataset at this point. When we began the analysis, we identified the cell types that we expected to see in the dataset. 
 
-Here, we have taken that information one step further by finding several well characterized marker genes for each celltype:
+Here, we have taken that information one step further by finding several well characterized marker genes for each cell type:
 
 Table: Marker genes for broad cell types in our dataset. {#tbl-marker_genes}
 
@@ -386,12 +372,12 @@ VlnPlot(seurat_processed,
   NoLegend()
 ```
 
-We can see that there is an uptick of expression of both genes in cluster 8, which is an indication that cluster 8 is likely comprised of Endothelial cells. Because we know these celltype markers, we are able to more concretely tell how well the clustering and QC of our dataset is going. This is why we strongly encourage everyone to go into a single-cell study with a general concept of the broad, expected celltypes and marker genes associated with them to save time down the line.
+We can see that there is an uptick of expression of both genes in cluster 8, which is an indication that cluster 8 is likely comprised of Endothelial cells. Because we know these cell type markers, we are able to more concretely tell how well the clustering and QC of our dataset is going. This is why we strongly encourage everyone to go into a single-cell study with a general concept of the broad, expected cell types and marker genes associated with them to save time down the line.
 
 ::: callout-tip
 # [**Exercise 3**](08_clustering-Answer_key.qmd#exercise-3)
 
-3. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with celltypes.
+3. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with cell types.
 
 ```{r}
 #| label: marker_list
@@ -408,13 +394,13 @@ marker_list <- list(
 )
 ```
 
-4. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.
+4. Roughly identify which clusters correspond to which cell types to provide better context for future analyses.
 
 :::
 
 ## Save!
 
-Now is a great spot to save our `seurat_processed` object as we have added a lot new information into our Seurat object, including:
+Now is a great spot to save our `seurat_processed` object as we have added a lot of new information into our Seurat object, including:
 
 - Sketch HVGs
 - Scaled log-normalized counts
