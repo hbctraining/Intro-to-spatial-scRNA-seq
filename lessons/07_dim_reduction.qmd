@@ -1,7 +1,7 @@
 ---
 title: "Dimensionality Reduction"
 description: |
-  In this lesson we will, apply dimensionality reduction techniques like PCA and UMAP to obtain informative low-dimensional embeddings. This lesson shows how to compute and interpret these embeddings for downstream analysis.
+  In this lesson, we will apply dimensionality reduction techniques like PCA and UMAP to obtain informative low-dimensional embeddings. This lesson shows how to compute and interpret these embeddings for downstream analysis.
 author:
   - Noor Sohail
 date: "2025-07-22"
@@ -41,14 +41,14 @@ In this lesson, we will:
 
 ## Overview of lesson
 
-At this point, we have loaded our dataset, filtered to high quality bins and downsampled. Even though we have reduced the number of bins, ultimately we still have thousands of genes to contend with. The goal is summarize the information across genes to identify bins that are similar to one another in gene-expression space. We will learn how reduce the number of dimensions (genes) using principal component analysis (PCA) and UMAP. These embeddings become the backbone for clustering, visualization and downstream analyses in future lessons.
+At this point, we have loaded our dataset after we ran filtration, normalization, and downsampling. Even though we have reduced the number of bins, ultimately we still have thousands of genes to contend with. The goal is to summarize the information across genes to identify bins that are similar to one another in gene-expression space. We will learn how to reduce the number of dimensions (genes) using principal component analysis (PCA) and UMAP. These embeddings become the backbone for clustering, visualization and downstream analyses in future lessons.
 
 
 ## Single-cell RNA-seq (scRNA-seq) workflow
 
 We will be performing a standard scRNA-seq workflow on our `sketch` assay. For more explicit details on each one of these steps, we have materials on how to conduct a [scRNA-seq analysis](https://hbctraining.github.io/Intro-to-scRNAseq/) from start to end.
 
-Here we show the overarching steps that are takin in a classical single-cell analysis.
+Here we show the overarching steps that are taken in a classical single-cell analysis.
 
 ::: {#fig-sc_workflow .figure}
 ![](../img/sc_workflow_2022.jpg){width=630}
@@ -68,12 +68,12 @@ With that being said, there are certain elements that are unique to a spatial da
 
 ## Variation in the dataset
 
-First we will create a new R script called `03_dimensionality_reduction.R` and place it within our `scripts` directory.  We will continue where we left off in the previous lesson and load in the `seurat_sketch` object. With this sketch assay, we need to once again ask, what genes are driving the variation in the dataset?
+First we will create a new R script called `03_dimensionality_reduction.R` and place it within our `scripts` directory.  We will continue where we left off in the previous lesson and load in the `seurat_sketch` object. With this sketch assay, we need to once again ask which genes are driving the variation in the dataset?
 
 ```{r}
 #| label: header
 #| eval: false
-# Dimensionality reduction (PCA and UMAP)
+# Dimensionality reduction (PCA + UMAP) and clustering
 # Visium HD spatial transcriptomics workshop
 # Author: Harvard Chan Bioinformatics Core
 # Created: May 2026
@@ -130,7 +130,7 @@ ranked_variable_genes[1:15]
 
 ### Visualize highly variable genes
 
-We can visualize the dispersion of all genes using Seurat's `VariableFeaturePlot()`, which shows a gene's average expression across all bins on the x-axis and variance on the y-axis. Ideally, we would see genes lay across the entire x-axis, as we want to ensure that we are using genes that are both lowly and highly expressed.
+We can visualize the dispersion of all genes using Seurat's `VariableFeaturePlot()`, which shows a gene's average expression across all bins on the x-axis and variance on the y-axis. Ideally, we would see genes lay across the entire x-axis, as we want to ensure that we are using genes that are both lowly and highly expressed. From the y-axis, we see genes with high levels of variance (gene expression changes across populations) near the top. These scores are how we identify what are our **top** variable features.
 
 For the visualization, we are adding labels using `LabelPoints()` to help us better understand which genes are driving the shape of our data.
 
@@ -160,7 +160,7 @@ PCA is a technique used to emphasize variation as well as similarity, and to bri
 For a more **detailed explanation on PCA**, please [look over this lesson](04_theory_of_PCA.qmd) (adapted from StatQuests/Josh Starmer's YouTube video). We also strongly encourage you to explore the video [StatQuest's video](https://www.youtube.com/watch?v=_UVHneBUBW0) for a more thorough understanding.
 :::
 
-Let's say you are working with a single-cell RNA-seq dataset with _12,000 cells_ and you have quantified the expression of _20,000 genes_. The schematic below demonstrates how you would go from a cell x gene matrix to principal component (PC) scores for each individual cell.
+Let's say you are working with a single-cell RNA-seq dataset with _12,000 cells_ and you have quantified the expression of _20,000 genes_. The schematic below demonstrates how you would go from a cell-by-gene matrix to principal component (PC) scores for each individual cell.
 
 ::: {#fig-PCA_schematic .figure}
 ![](../img/PCA_scrnaseq_1.png){width=900}
@@ -170,8 +170,8 @@ Schematic of PCA: from a cell-by-gene count matrix to principal component scores
 
 To perform PCA, we need to first choose the most variable features, then **scale the data**. Since highly expressed genes exhibit the highest amount of variation and we don't want our 'highly variable genes' only to reflect high expression, we need to scale the data to account for the dependence of variation on expression level. The Seurat `ScaleData()` function will scale the data by:
 
--   Adjusting the expression of each gene to give a mean expression across bins to be 0
--   Scaling expression of each gene to give a variance across bins to be 1
+- Adjusting the expression of each gene to give a mean expression across bins of 0
+- Scaling expression of each gene to give a variance across bins of 1
 
 ```{r}
 #| label: scale_data
@@ -180,7 +180,7 @@ seurat_processed <- ScaleData(seurat_processed)
 seurat_processed
 ```
 
-We have calculated a new layer titled `scale.data`, where our scaled log-normalized counts now exist. So now we can proceed in calculating our Principal Components with `RunPCA()`.
+We have calculated a new layer titled `scale.data`, where our scaled log-normalized counts now exist. So now we can proceed with calculating our Principal Components with `RunPCA()`.
 
 ```{r}
 #| label: run_pca
@@ -188,6 +188,15 @@ We have calculated a new layer titled `scale.data`, where our scaled log-normali
 seurat_processed <- RunPCA(seurat_processed,
                            assay = "sketch",
                            reduction.name = "pca.sketch")
+```
+
+```{r}
+#| label: print_top_pc_genes
+#| echo: false
+# Examine PCA results 
+print(seurat_processed[["pca.sketch"]], 
+                        dims = 1:5, 
+                        nfeatures = 10)
 ```
 
 The information printed out shows the top genes that influence a bin's score for each component. This includes genes that have both a positive and negative weight.
@@ -218,16 +227,16 @@ DimPlot(seurat_processed,
         reduction = "pca.sketch")
 ```
 
-Ultimately, what we have calculated with PCA are values that can represent how similar bins are to one another. We would expect that bins with similar gene expression will have similar PC values. For example, we would anticipate that two bins from Fibroblast cells would have comparable gene expression, which would also results in similar principal component scores. This is why many of the downstream steps use PCA as the input.
+Ultimately, what we have calculated with PCA are values that can represent how similar bins are to one another. We would expect that bins with similar gene expression will have similar PC values. For example, we would anticipate that two bins from Fibroblast cells would have comparable gene expression, which would also result in similar principal component scores. This is why many of the downstream steps use PCA as the input.
 
 ::: {.callout-note collapse="true"}
 # Selecting PC dimensions
 
-To overcome the extensive technical noise in the expression of any single gene for scRNA-seq data, Seurat assigns cells to clusters based on their PCA scores derived from the expression of the integrated most variable genes. Each PC essentially representing a "metagene" that combines information across a correlated gene set. **Determining how many PCs to include in the clustering step is therefore important to ensure that we are capturing the majority of the variation**, or cell types, present in our dataset. 
+Each PC essentially represents a "metagene" that combines information across a correlated gene set. **Determining how many PCs to include in the clustering step is therefore important to ensure that we are capturing the majority of the variation**, or cell types, present in our dataset. 
 
 It is useful to explore the PCs prior to deciding which PCs to include for the downstream clustering analysis.
 
-The **elbow plot** is a helpful way to determine how many PCs to use for clustering so that we are capturing majority of the variation in the data. The elbow plot visualizes the standard deviation of each PC, and we are looking for where the standard deviations begins to plateau. Essentially, **where the elbow appears is usually the threshold for identifying the majority of the variation**. However, this method can be quite subjective. 
+The **elbow plot** is a helpful way to determine how many PCs to use for clustering so that we are capturing the majority of variation in the data. The elbow plot visualizes the standard deviation of each PC, and we are looking for where the standard deviations begin to plateau. Essentially, **where the elbow appears is usually the threshold for identifying the majority of the variation**. However, this method can be quite subjective. 
 
 Let's draw an elbow plot using the top 50 PCs:
 
@@ -242,6 +251,8 @@ ElbowPlot(object = seurat_processed,
 
 Based on this plot, we could roughly determine the majority of the variation by where the elbow occurs around PC8 - PC10, or one could argue that it should be when the data points start to get close to the X-axis, PC30 or so. This gives us a very rough idea of the number of PCs needed to be included.
 
+A general rule of thumb is to use a **minimum of 30 PCs for an analysis.** This is to adequately represent the majority of the variation in the data.
+
 :::
 
 **We will be using 50 PCs for our downstream steps.**
@@ -251,13 +262,13 @@ Based on this plot, we could roughly determine the majority of the variation by 
 To visualize the cell clusters, there are a few different [dimensionality reduction techniques](https://www.nature.com/articles/s41598-025-14301-8) that can be helpful. The most popular methods include:
 
 - t-distributed stochastic neighbor embedding: [t-SNE](https://www.nature.com/articles/s41467-019-13056-x)
-- Uniform Manifold Approximation and Projection:[UMAP](https://www.scdiscoveries.com/blog/knowledge/what-is-a-umap-plot/)
-- Singular valude decomposition: [SVD](https://pmc.ncbi.nlm.nih.gov/articles/PMC12753137/)
+- Uniform manifold approximation and projection: [UMAP](https://www.scdiscoveries.com/blog/knowledge/what-is-a-umap-plot/)
+- Singular value decomposition: [SVD](https://pmc.ncbi.nlm.nih.gov/articles/PMC12753137/)
 
 ::: {.callout-note collapse="true"}
 # UMAP vs t-SNE vs SVD
 
-Both UMAP and t-SNE are built under the same general structure of taking a larger dimensional space (PCA) and flattening it to two dimension uses manifolds. UMAP has come out on top between the two due its ability to balance both local and global structures of the dataset. Additionally, it is less sensitive to parameter choice, making it easier to tune. In contrast, the output of t-SNE plots tend to emphasize the local neighborhood to the detriment of the global structure of the data.
+Both UMAP and t-SNE are built under the same general structure of taking a larger dimensional space (PCA) and flattening it to two dimensions using manifolds. UMAP has come out on top between the two due its ability to balance both local and global structures of the dataset. Additionally, it is less sensitive to parameter choice, making it easier to tune. In contrast, the output of t-SNE plots tend to emphasize the local neighborhood to the detriment of the global structure of the data.
 
 ::: {#fig-umap_vs_tsne .figure}
 ![](../img/umap_vs_tsne.png){width=500}
@@ -269,7 +280,7 @@ _Image source: [Marx (2024)](https://www.nature.com/articles/s41592-024-02301-x)
 SVD is another form of reduction that is best suited for sparse, scATAC-seq datasets.
 :::
 
-Each method aims to place bins with similar local neighborhoods in high-dimensional space together in low-dimensional space. These methods will require you to input number of PCA dimensions to use for the visualization, we suggest using the same number of PCs as input to the clustering analysis. Here, we will proceed with the [UMAP method](https://umap-learn.readthedocs.io/en/latest/how_umap_works.html) for visualizing the clusters.
+Each method aims to place bins with similar local neighborhoods in high-dimensional space together in low-dimensional space. These methods will require you to input the number of PCA dimensions to use for the visualization, we suggest using the same number of PCs as input to the clustering analysis. Here, we will proceed with the [UMAP method](https://umap-learn.readthedocs.io/en/latest/how_umap_works.html) for visualizing the clusters.
 
 ```{r}
 #| label: run_umap
@@ -300,7 +311,7 @@ DimPlot(seurat_processed,
 
 As with PCA, the values on the UMAP axes are not meaningful. What actually matters is the **distance and relative arrangement of points** in the UMAP space. Rotations or reflections of the plot do not change these relationships, as the distance will be preserved. This is why many figures omit axis tick labels entirely.
 
-So if you got different UMAP coordinates, that is within expectation as long as the overall structure and patterns are preserved.
+So if you got different UMAP coordinates, that is to be expected as long as the overall structure and patterns are preserved.
 
 
 ::: {#fig-rotated_umap .figure}
@@ -318,6 +329,14 @@ Many papers discuss the difficulties of interpreting results when plotted on a U
 2. Plot the `nCount_Spatial.008um` on the UMAP with `FeaturePlot()`. Do you notice any patterns?
 3. Plot the expression of one of the top variable genes on the UMAP also with `FeaturePlot()`. What do you notice?
 :::
+
+As a sanity check that we have our PCA and UMAP values stored in our Seurat object, we can call the `@reduction` slot to preview the information retained.
+
+```{r}
+#| label: seurat_reduction
+# View dimensionality reduction results
+seurat_processed@reductions
+```
 
 ```{r}
 #| label: save_seurat_qs
