@@ -136,7 +136,7 @@ When we examine our Seurat object, `seurat_sketch`, we see that there is a new a
 # Complex normalization methods
 Various methods have been developed specifically for scRNA-seq normalization. Some simpler methods resemble what we have seen with bulk RNA-seq; the application of global scale factors adjusting for a count-depth relationship that is assumed common across all genes. However, if those assumptions are not true then this basic normalization can lead to over-correction for lowly and moderately expressed genes and, in some cases, under-normalization of highly expressed genes ([Bacher et al. (2017)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5473255/)).
 
-One such example is the [SCTransform](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1874-1) method, which models gene expression using a regularized negative binomial regression. This method accounts for technical variation. For more information on this methods, the Introduction to scRNA-seq workshop has a [lesson](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/07_SCT_normalization.html#normalization-and-regressing-out-sources-of-unwanted-variation-using-sctransform) on how apply SCTransform and what is does in detail.
+One such example is the [SCTransform](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1874-1) method, which models gene expression using a regularized negative binomial regression. This method accounts for technical variation. For more information on this methods, the Introduction to scRNA-seq workshop has a [lesson](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/07_SCT_normalization.html#normalization-and-regressing-out-sources-of-unwanted-variation-using-sctransform) on how apply SCTransform and what is does in detail. For spatial data, it’s reasonable to start with a simpler log‑normalization and use SCTransform only when its extra modeling is needed.
 :::
 
 ## Highly variable genes (HVGs)
@@ -153,8 +153,8 @@ Table: Arguments for `FindVariableFeatures()` to calculate highly variable genes
 
 | Argument | Description |
 |--------------------|----------------------------------------------------|
-| selection.method | How to choose top variable features. `vst`: Fits a line to log(variance) vs. log(mean) using loess, standardizes values and computes variance after clipping (see clip.max). |
-| nfeatures | Number of features to select as top variable features; used when selection.method is `dispersion` or `vst` |
+| `selection.method` | Method used to define and rank variable genes. The default `"vst"` (variance‑stabilizing transformation) fits a smooth curve to the relationship between mean expression and variance, then identifies genes that show more variability than expected at their average expression level.  |
+| `nfeatures` | Number of features to select as top variable features; used when selection.method is `dispersion` or `vst` |
 
 
 ```{r}
@@ -197,14 +197,9 @@ Contrasting the number of cells per cell type against leverage scores, highlight
 _Image source: [Hao et al. (2024)](https://www.nature.com/articles/s41587-023-01767-y)_
 ::: 
 
-::: callout-warning
-TODO: explain how leverage score is calculated
-:::
+[Leverage scores](https://dl.acm.org/doi/pdf/10.1145/3019134) measure how much each bin contributes to the main patterns of variation in the dataset. In order to estimate these leverage scores, we first consider each bin by its expression across highly variable genes and identify a small number of dominant expression patterns (similar to principal components in PCA). Each bin can then be expressed in terms of these patterns. Bins that lie in common, homogeneous regions of expression space and are thus easily “replaceable” have low leverage scores. While bins in rare or extreme regions have high leverage scores, because removing them would noticeably change the dominant patterns.
 
-
-A [leverage score](https://dl.acm.org/doi/pdf/10.1145/3019134) is calculated for each bin. This value reflects the magnitude of a bin's contribution to the gene-covariance matrix, and its importance to the overall dataset. From these scores, bins are selected and added to the sketch assay. This sketch-based analyses aims to "subsample" large datasets in a way that preserves rare populations. The authors of Seurat found that rare celltype populations (with fewer cells) have higher leverage scores.
-
-This means that our downsampled cells in the sketch will **oversample rare populations**, retaining the biological complexity of the dataset while drastically compressing the number of cells. 
+Therefore, leverage scores reflect the magnitude of a bin's contribution to the gene-covariance matrix and its importance to the overall dataset. From these leverage scores, bins are selected with probabilities related to their leverage scores and added to the sketch assay. Importantly, because bins are sampled based on leverage scores, the sketched dataset will still contain some common bins, but they will be undersampled. However, rare or extreme bins are more likely to be sampled and will thus be oversampled. **This results in a sketch that preserves the biological diversity of the full dataset, particularly for rare populations, while also using far fewer bins**.
 
 ### Downsampling
 
