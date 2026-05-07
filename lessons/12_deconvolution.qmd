@@ -297,13 +297,7 @@ str(query)
 
 ### Run RCTD
 
-Now that we have created our reference and query objects, we will create and RCTD object and run RCTD. It should be noted that RCTD can take The more celltypes you have the longer this will take.
-
-::: callout-warning
-We need to provide a time estimate for this step
-
-This took me ~5 minutes
-:::
+Now that we have created our reference and query objects, we will create and RCTD object and run RCTD. It should be noted that RCTD can take longer when you have more celltypes. This should take 5-10 minutes to run.
 
 ```{r}
 #| label: run_RCTD
