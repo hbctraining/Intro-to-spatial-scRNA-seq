@@ -62,9 +62,9 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 10:55 | [Normalization and Sketch Downsampling](../lessons/06_normalization_and_sketch.qmd) | Will |
-| 10:55 - 11:00 | Break | |
-| 11:00 - 11:55 | [Dimensionality Reduction](../lessons/07_dim_reduction.qmd) | Noor |
+| 10:30 - 11:10 | [Normalization and Sketch Downsampling](../lessons/06_normalization_and_sketch.qmd) | Will |
+| 11:10 - 11:15 | Break | |
+| 11:15 - 11:55 | [Dimensionality Reduction](../lessons/07_dim_reduction.qmd) | Noor |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Will |
 
 ### Before the next class:
@@ -120,9 +120,9 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 10:55 | [BANKSY Spatial Clustering](../lessons/11_banksy_clustering.qmd) | Will |
-| 10:55 - 11:00 | Break | |
-| 11:00 - 11:55 | [Deconvolution](../lessons/12_deconvolution.qmd) | Noor |
+| 10:30 - 11:10 | [BANKSY Spatial Clustering](../lessons/11_banksy_clustering.qmd) | Will |
+| 11:10 - 11:15 | Break | |
+| 11:15 - 11:55 | [Deconvolution](../lessons/12_deconvolution.qmd) | Noor |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Noor |
 
 ### Before the next class:

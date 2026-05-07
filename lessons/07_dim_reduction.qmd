@@ -29,7 +29,7 @@ set.seed(12345)
 seurat_sketch <- qs2::qs_read("intermediate/06_seurat_sketch.qs")
 ```
 
-Approximate time: 55 minutes
+Approximate time: 40 minutes
 
 ## Learning objectives 
 

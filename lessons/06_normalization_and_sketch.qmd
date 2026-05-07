@@ -30,7 +30,7 @@ library(scales)
 seurat_filtered <- qs2::qs_read("intermediate/05_seurat_filtered.qs")
 ```
 
-Approximate time: 25 minutes
+Approximate time: 40 minutes
 
 ## Learning objectives 
 

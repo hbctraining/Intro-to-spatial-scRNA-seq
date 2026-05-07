@@ -41,7 +41,7 @@ options(future.globals.maxSize = 8000 * 1024^2)
 seurat_processed <- qs2::qs_read("intermediate/08_seurat_processed.qs")
 ```
 
-Approximate time: XX minutes
+Approximate time: 40 minutes
 
 ## Learning objectives 
 
