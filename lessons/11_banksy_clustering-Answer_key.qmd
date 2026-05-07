@@ -42,9 +42,9 @@ _Image source: [Intro to scRNA-seq analysis](https://hbctraining.github.io/Intro
 
 # Exercise 2
 
-2. What does the UMAP look like when use the BANKSY derived harmony latent space to calculate UMAP coordinates?
+2. What does the UMAP look like when use the BANKSY derived Harmony latent space to calculate UMAP coordinates?
 
-First we calculate UMAP on the BANKSY harmony latent space.
+First, we calculate UMAP on the BANKSY Harmony latent space.
 
 ```{r}
 #| label: RunUMAP_banksy
@@ -58,12 +58,13 @@ seurat_banksy <- RunUMAP(seurat_banksy,
 seurat_banksy
 ```
 
-Then we can visualize what each of the resultant clusters appear like on the BANKSY derived UMAP space:
+Then, we can visualize what each of the resulting clusters appear like on the BANKSY derived UMAP space:
 
 ```{r}
 #| label: fig-umap_banksy
 #| fig-cap: UMAP of both BANKSY derived clusters and gene expression derived clusters.
 #| fig-width: 14
+# Create DimPlot using the BANKSY derived UMAP space
 DimPlot(seurat_banksy, 
         group.by = c("banksy_cluster",
                      "seurat_cluster.projected"),
@@ -71,7 +72,7 @@ DimPlot(seurat_banksy,
         label = TRUE)
 ```
 
-The BANKSY clusters align much better with the BANKSY derived UMAP coordinates. This is due to the fact that they have the same underlying structure. We can also see more clearly that the cluster 1 tumor cells we identified earlier appears to have been split into different sub-groups. This aligns with what we see in the spatial slide, where there appears to be spatially constrained clusters tumor groups in the BANKSY clusters.
+The BANKSY clusters align much better with the BANKSY derived UMAP coordinates. This is due to the fact that they have the same underlying structure. We can also see more clearly that the cluster 1 tumor cells we identified earlier appear to have been split into different sub-groups. This aligns with what we see in the spatial slide, where there appears to be spatially-constrained clusters of tumor bins in the BANKSY clusters.
 
 # Exercise 3
 
@@ -79,6 +80,7 @@ The BANKSY clusters align much better with the BANKSY derived UMAP coordinates. 
 
 ```{r}
 #| label: marker_list
+# Create marker list
 marker_list <- list(
   "B cells" = c("IGKC", "IGHM", "CD79A", "MS4A1", "MZB1"),
   "Endothelial cells" = c("PECAM1", "VWF", "PLVAP", "ENG", "KLF2"),
@@ -100,7 +102,7 @@ DotPlot(seurat_banksy,
         marker_list,
         group.by = "banksy_cluster",
         cluster.idents = TRUE) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 3. Roughly identify which clusters correspond to which celltypes to provide better context for future analyses.

@@ -1,7 +1,7 @@
 ---
 title: "Spatially Derived Clusters"
 description: |
-  Discover how BANKSY leverages neighborhood information to cluster spatial transcriptomics data using both gene expression and spatial context. You will compare BANKSY clusters with expression-only methods and evaluate differences in tissue domain detection.
+  In this lesson, we will discover how BANKSY leverages neighborhood information to cluster spatial transcriptomics data using both gene expression and spatial context. You will compare BANKSY clusters with expression-only methods and evaluate differences in tissue domain detection.
 author:
   - Noor Sohail
 date: "2025-07-22"
@@ -47,22 +47,22 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Calculate BANKSY counts matrix which incorporates neighborhood structure
-- Run harmony integration
-- Evaluate spatially constrained clusters
+- Calculate a BANKSY counts matrix which incorporates neighborhood structure
+- Run Harmony integration
+- Evaluate spatially-constrained clusters
 
 ## Overview of lesson
 
-At this point in the analysis, we have clusters and UMAP coordinates calculated based **solely upon the gene expression**. As this is a spatial dataset, we also have the ability to incorporate the location of bins, or the neighborhood structure, in the clustering process. Here, we will make use of the BANKY method that adds the local structure as information to ultimately calculate new clusters that are spatially constrained.
+At this point in the analysis, we have clusters and UMAP coordinates calculated based **solely upon the gene expression**. As this is a spatial dataset, we also have the ability to incorporate the location of bins, or the neighborhood structure, in the clustering process. Here, we will make use of the BANKSY method that adds the local structure as information to ultimately calculate new clusters that are spatially constrained.
 
 ## BANKSY
 
 ::: columns
 
 ::: column
-In the standard single-cell workflow, our clusters are identified solely based upon the similarity of gene expression between bins. However, this approach does not take into account the spatial relationship and how close they are in proximity to one another. The idea being that we would expect bins of similar expression and celltype to be closeby.
+In the standard single-cell workflow, our clusters are identified solely based upon the similarity of gene expression between bins. However, this approach does not take into account the spatial relationship and how close bins are in proximity to one another. The idea being that we would expect bins of similar expression and celltype to be closeby.
 
-[BANKSY](https://www.nature.com/articles/s41588-024-01664-3) is an alogorithm that allows you calculate scores that consider both gene expression and spatial proximity of bins to one another. How much consideration that can be given to the spatial locations can be modulated with a `lambda` value. This `lamdba` value controls the balance between gene expression and location.  
+[BANKSY](https://www.nature.com/articles/s41588-024-01664-3) is an algorithm that allows you calculate scores that consider both the gene expression and spatial proximity of bins to one another. How much consideration can be given to the spatial locations is modulated with a `lambda` value. This `lamdba` value controls the balance between gene expression and location.  
 
 Therefore, BANKSY is a powerful way to include the full extent of data in our dataset to group bins together.
 :::
@@ -89,11 +89,16 @@ _Image source: [Singhar et al. (2024)](https://www.nature.com/articles/s41588-02
 
 ### Set-up for BANKSY
 
-To start, we are going to load all the libraries necessary for this analysis as usual.
+To start, we are going to open a new script and save it as `06_BANKSY.R` to our `scripts` directory. Then, we will load all the libraries necessary for this analysis as usual.
 
 ```{r}
 #| label: analysis_setup
 #| eval: false
+# BANKSY Spatially Derived Clustering
+# Visium HD spatial transcriptomics workshop
+# Author: Harvard Chan Bioinformatics Core
+# Created: May 2026
+
 # Load libariries
 library(Seurat)
 library(Banksy)
@@ -121,13 +126,13 @@ Before we jump in and use the `RunBanksy()` function, we first need to understan
 | Parameter      | Description                                                                                                                                                |
 |----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `group`        | Allows us to run BANKSY on multiple samples, enabling the function to understand that overlapping spatial locations can come from different slides.       |
-| `dimx`, `dimy` | The x and y coordinates of a spot on the tissue slide.                                                                                                    |
+| `dimx`, `dimy` | The x and y coordinates of the bins on the tissue slide.                                                                                                    |
 | `split.scale`  | (`True` or `False`) Whether to use within-group scaling parameter, accounting for minor differences between datasets.   |
 | `k_geom`       | Number of bins to consider for the local neighborhood. Larger values will yield larger domains.                                                           |
 | `lambda`       | Influence of the neighborhood. Larger values yield more spatially coherent domains. The authors recommend using 0.8 to identify broader spatial domains. |
 
 
-We already have the `group` parameter with `orig.ident` (representing our two samples) and so we will set `split.scale` to `True`. Therefore the next parameter we needs to supply in the `@meta.data` are the `dimx` and `dimy` spatial coordinates for every bin in the dataset.
+We already have the `group` parameter with `orig.ident` (representing our two samples) and so we will set `split.scale` to `True`. Therefore, the next parameter we need to supply in the `@meta.data` are the `dimx` and `dimy` spatial coordinates for every bin in the dataset.
 
 The easiest way to grab the coordinates is the `GetTissueCoordinates()` function:
 
@@ -147,7 +152,7 @@ coords_nat <- GetTissueCoordinates(seurat_processed,
 coords <- rbind(coords_crc, coords_nat)
 ```
 
-Why did we have to run `GetTissueCoordinates()` twice? This is because this function will only return the coordinates for one image at a time. So we need to specifiy the `image` for each sample and then merge together to create a merged dataframe with x and y coordinates for each sample
+Why did we have to run `GetTissueCoordinates()` twice? This is because this function will only return the coordinates for one image at a time. So we need to specifiy the `image` for each sample and then merge together to create a merged dataframe with x and y coordinates for each sample.
 
 ```{r}
 #| label: head_coordinates
@@ -158,14 +163,15 @@ coords %>% head()
 
 ```{r}
 #| label: tbl-coordinates
-#| tbl-cap: Resultant dataframe of `x` and `y` coordinates from the `GetTissueCoordinates()` function.
+#| tbl-cap: Resulting dataframe of `x` and `y` coordinates from the `GetTissueCoordinates()` function.
 #| echo: false
+# Inspect the coordinates data frame
 coords %>% 
   head() %>%
   knitr::kable()
 ```
 
-Next we are going to add these coordinates into our metadata, this is so that we can directly call this column from the `RunBanksy()` function.
+Next, we are going to add these coordinates into our metadata, so that we can directly call this column from the `RunBanksy()` function.
 
 ```{r}
 #| label: join_coordinates
@@ -173,7 +179,10 @@ Next we are going to add these coordinates into our metadata, this is so that we
 # Join together metadata with coordinates
 seurat_processed@meta.data <- left_join(x = seurat_processed@meta.data, 
                                         y = coords, 
-                                        by = "cell")
+                                        by = "cell") %>%
+  column_to_rownames("cell")
+
+# Inspect the metadata with the x and y coordinates added 
 seurat_processed@meta.data %>% head()
 ```
 
@@ -181,29 +190,25 @@ seurat_processed@meta.data %>% head()
 #| label: tbl-join_coordinates
 #| tbl-cap: Joined `@meta.data` and `coords` dataframes.
 #| echo: false
+# Join together metadata with coordinates
 seurat_processed@meta.data <- left_join(x = seurat_processed@meta.data, 
                                         y = coords, 
-                                        by = "cell")
+                                        by = "cell")  %>%
+  column_to_rownames("cell")
+
+# Inspect the metadata with the x and y coordinates added 
 seurat_processed@meta.data %>% 
   head() %>%
   knitr::kable()
-```
-
-But wait, the rownames with the bin barcodes are missing! It is vital that the rownames of our Seurat object align with what is stored in `Cell()`. So we are going to add the rownames back into our metadata, which is why we stored them as a column in the metadata earlier.
-
-```{r}
-#| label: add_cell_barcode_to_rownames
-# Add cell barcodes back to rownames
-rownames(seurat_processed@meta.data) <- seurat_processed$cell
 ```
 
 ### Running BANKSY
 
 The last thing we need to do before running BANKSY is to set values for `lambda`, `use_agf`, and `k_geom`, where:
 
-- `k_geom` defines how many k-nearest neighbors to use when looking at neighboring bins.
-- `use_agf` toggles whether or not we want to use the "Azimithal gabor filter" which are values that constrain bin niches.
-- `lambda` determines how much weight to assign to the spatial locations. The higher the value, the more weight is given to the spatial structure of the tissue.
+- `k_geom` - Defines how many k-nearest neighbors to use when looking at neighboring bins.
+- `use_agf` - Toggles whether or not we want to use the "Azimithal gabor filter" which are values that constrain bin niches.
+- `lambda` - Determines how much weight to assign to the spatial locations. The higher the value, the more weight is given to the spatial structure of the tissue.
 
 
 Here we can see an example of what happens when different `lambda` values are set before clustering for a brain sample:
@@ -217,17 +222,15 @@ _Image source: [Spatial Nanocourse](https://hbctraining.github.io/spatial_nanoco
 
 The authors of BANKSY recommend setting `lambda = 0.8` which is what we will also use.
 
-::: callout-warning
-Want to link out materials on working on HPC in this callout box
-:::
-
 ::: callout-important
 # RAM and memory
-We have been running these analyses on laptops/computers with local resources throughout this workshop. Realistically for a spatial dataset, you would be using either HPC or a cloud-based platform (Google or AWS) which provides access to much more RAM and memory for such large datasets. 
+We have been running these analyses on laptops/computers with local resources throughout this workshop. Realistically, for a spatial dataset, you would be using either a high-performance computing cluster or a cloud-based platform (Google or AWS) which provides access to much more RAM and memory for such large datasets. 
 
-This BANKSY step is a great example of the limitations of running these analyses locally. Not everyone will be able to run this step to completion due to a lack of resources - which is okay because at the end of the lesson, we will provide the seurat object generated during this step.
+This BANKSY step is a great example of the limitations of running these analyses locally. Not everyone will be able to run this step to completion due to a lack of resources, which is okay because at the end of the lesson, we will provide the Seurat object generated during this step.
 
 _And this is on a cropped slide, not the full dataset!_
+
+Because of these memory limitations, you maybe be interested in running R on the O2 cluster through the either the command-line or, more likely, through the O2 Portal. The O2 Portal provides an R Studio environment for you to work within, but it allows you to leverage the the memory available on the high-performance computing cluster. We have materials for [running R on O2 and also through the O2 Portal](https://hbctraining.github.io/BMI714_Intro_to_HPC/schedule/workshop_schedule.html). 
 :::
 
 
@@ -239,7 +242,8 @@ seurat_banksy <- RunBanksy(seurat_processed,
                            lambda = 0.8, 
                            k_geom = 15, 
                            use_agf = TRUE,
-                           dimx = 'x', dimy = 'y', 
+                           dimx = 'x',
+                           dimy = 'y', 
                            group = "orig.ident", 
                            split.scale = TRUE,
                            assay = 'Spatial.008um', 
@@ -264,9 +268,9 @@ seurat_banksy
 
 ### BANKSY matrix
 
-The `RunBanksy()` step generated a **new counts matrix** from the original counts matrix. In actually what happens it that BANKSY will concatenate 3 different matrices together, all of which are computed from the top highly variable features.
+The `RunBanksy()` step generated a **new counts matrix** from the original counts matrix. In practice, what happens is that BANKSY will concatenate 3 different matrices together, all of which are computed from the top highly variable features.
 
-If we take a look at the beginning, middle, and end of the `Features()` in the BANKSY matrix we can see each component of the 3 matrices:
+If we take a look at the beginning, middle and end of the `Features()` in the BANKSY matrix we can see each component of the 3 matrices:
 
 ```{r}
 #| label: banksy_features
@@ -274,15 +278,15 @@ If we take a look at the beginning, middle, and end of the `Features()` in the B
 Features(seurat_banksy) %>% head()
 
 # Middle features in BANKSY matrix
-Features(seurat_banksy)[2000:2005]
+Features(seurat_banksy)[2001:2006]
 
 # Last features in BANKSY matrix
-Features(seurat_banksy) %>% tail()
+Features(seurat_banksy)[4001:4006]
 ```
 
 As mentioned before, this is actually three different matrices stacked on top of one another:
 
-1. **Original counts:** These are the original, normalized counts for the top highly variable features.
+1. **Original counts:** These are the original, normalized counts for the top highly variable genes
 
 2. **Weighted mean expression (m0):** The average gene expression of neighboring cells, where closer neighbors are _weighted_ more heavily than distant ones. This gives each cell a representation of its local micro-environment.
 
@@ -336,6 +340,7 @@ At this point, we still do not have our spatially constrained clusters. But now 
 ```{r}
 #| label: instructor_load_process_banksy
 #| echo: false
+# Load Banksy object
 seurat_banksy <- qs2::qs_read("intermediate/09_seurat_banksy_2.qs")
 ```
 
@@ -351,7 +356,7 @@ With this new matrix, we are once again going to calculate PCA, this time storin
 ```{r}
 #| label: RunPCA
 #| eval: false
-# PCA
+# Run PCA
 seurat_banksy <- RunPCA(seurat_banksy, 
                         assay = "BANKSY", 
                         reduction.name = "pca.banksy", 
@@ -360,7 +365,7 @@ seurat_banksy <- RunPCA(seurat_banksy,
 ```
 
 
-With this new PCA, we can visualize the distribution of bins to evaluate whether or not integration is necessary. The batch variable we may need to account for is `orig.ident` or samples. Additionally, we can pick a marker gene to determine whether there is a split (batch effect) in the data. For this example, we will be using the gene `IGKC`, a known B cell marker gene.
+With this new PCA, we can visualize the distribution of bins to evaluate whether or not integration is necessary. The batch variable we may need to account for is `orig.ident`, or samples. Additionally, we can pick a marker gene to determine whether there is a split (batch effect) in the data. For this example, we will be using the gene `IGKC`, a known B cell marker gene.
 
 ```{r}
 #| label: fig-pca_banksy
@@ -384,9 +389,9 @@ There appears to be 2 unique populations of B cells in our PCA space, where the 
 
 ### Integration
 
-We are going to use the [Harmony algorithm](https://www.nature.com/articles/s41592-019-0619-0) to batch correct our dataset. Starting from the `pca.banksy` values, the `RunHarmony()` function will iteratively adjust the PCA space such that we no longer see a divide demarkated by the batch variable specified in the dataset. We are going to store the resultant latent space as `harmony.banksy` within the Seurat object. 
+We are going to use the [Harmony algorithm](https://www.nature.com/articles/s41592-019-0619-0) to correct our dataset for batch. Starting from the `pca.banksy` values, the `RunHarmony()` function will iteratively adjust the PCA space such that we no longer see a divide demarkated by the batch variable specified in the dataset. We are going to store the resulting latent space as `harmony.banksy` within the Seurat object.
 
-This step may take several iterations to run, but should converge within a few minutes. 
+This step may take several iterations to run, but it should converge within a few minutes. 
 
 ```{r}
 #| label: RunHarmony
@@ -423,7 +428,7 @@ There is no longer a split within the B cell populations, which indicates that w
 
 ### Clustering
 
-With this harmony integrated space, we can use the `FindNeighbors()` and `FindClusters()` functions to perform the clustering. We will be using the same `resolution = 0.65` from the previous step to make equivalent comparisons between the spatially-weighted clusters against the transcript-based clusters later on.
+With this Harmony integrated space, we can use the `FindNeighbors()` and `FindClusters()` functions to perform clustering. We will be using the same `resolution = 0.65` from the previous step to make equivalent comparisons between the spatially-weighted clusters against the transcript-based clusters later on.
 
 ```{r}
 #| label: find_neighbors_clusters
@@ -472,7 +477,7 @@ seurat_banksy <- readRDS("data/intermediate_seurat/seurat_banksy.rds")
 
 :::
 
-Now is also a great point to assess how well the integration step worked when looking at each of our clusters. As we would hope, most of the clusters are comprised of both samples:
+Now is also a great time to assess how well the integration step worked when looking at each of our clusters. As we would hope, most of the clusters are comprised of both samples:
 
 ```{r}
 #| label: fig-cell_proportion_barplot
@@ -495,9 +500,10 @@ First, let us see how each of the clusters appear on the spatial slide with `Spa
 
 ```{r}
 #| label: fig-spatial_clusters
-#| fig-cap: Spatial overlay of both BANKSY derived clusters and gene expression derived clusters.
+#| fig-cap: "Spatial overlay of both BANKSY derived clusters and gene expression derived clusters for both samples."
 #| fig-width: 10
 #| fig-height: 10
+# Visualize the spatial overlay of both BANKSY derived clusters and gene expression derived clusters for both samples
 SpatialDimPlot(seurat_banksy, 
                group.by = c("banksy_cluster",
                             "seurat_cluster.projected"), 
@@ -538,7 +544,7 @@ ggplot(df %>% subset(orig.ident == "P5CRC"),
 
 :::
 
-For one, we can see that there is less "noise" in the `seurat_banksy` clusters where bins of a cluster are not as scattered throughout the slide - which is what would be expected from the BANKSY algorithm.
+For one, we can see that there is less "noise" in the `seurat_banksy` clusters, where bins of a cluster are not as scattered throughout the slide. This is what would be expected from the BANKSY algorithm.
 
 ### UMAP
 
@@ -546,6 +552,7 @@ For one, we can see that there is less "noise" in the `seurat_banksy` clusters w
 #| label: fig-umap
 #| fig-cap: UMAP of both BANKSY derived clusters and gene expression derived clusters.
 #| fig-width: 14
+# Compare the UMAPs of the BANKSY derived clusters and gene expression derived clusters
 DimPlot(seurat_banksy, 
         group.by = c("banksy_cluster",
                      "seurat_cluster.projected"),
@@ -554,7 +561,7 @@ DimPlot(seurat_banksy,
 ```
 
 
-On the UMAP, we can see that cluster 1 in `seurat_cluster.projected` appears to be split in half. This tells us that based upon gene expression along (`seurat_clusters.projected`) these are the same celltype, but that there is a subtle, spatial difference between bins in those two regions. If we go back to the spatial overlay, we see that cluster 1 belongs primarily to tissue on the left. We see that there is a clear spatial divide when we look at the `banksy_clusters`, split in half from top to bottom.
+On the UMAP, we can see that cluster 1 in `seurat_cluster.projected` appears to be split in half in the `banksy_cluster`. This tells us that based upon gene expression along (`seurat_clusters.projected`) these are the same celltype, but that there is a subtle, spatial difference between bins in those two regions. If we go back to the spatial overlay, we see that cluster 1 belongs primarily to tissue on the left. We see that there is a clear spatial divide when we look at the `banksy_clusters`, split in half from top to bottom.
 
 ::: callout-warning
 Not happy with this wording
@@ -565,7 +572,7 @@ An important note about this UMAP is that we are still using the `UMAP_1` and `U
 
 :::{.callout-tip}
 # [**Exercise 2**](11_banksy_clustering-Answer_key.qmd#exercise-2)
-2. What does the UMAP look like when use the BANKSY derived harmony latent space to calculate UMAP coordinates?
+2. What does the UMAP look like when use the BANKSY derived Harmony latent space to calculate UMAP coordinates?
 :::
 
 ## Assess clustering
@@ -582,7 +589,7 @@ Table: Marker genes for broad cell types in our dataset. {#tbl-marker_genes}
 | Intestinal epithelial cells | CLCA1, FCGBP, MUC2, PIGR, ZG16                             |
 | Myeloid cells               | C1QC, SELENOP, SPP1, LYZ, CD68                             |
 | Neural cells                | NRXN1, L1CAM, NCAM1, VIP, CALB2                            |
-| Smooth muscle cells         | TAGLN, ACTA2, MYH11, MYL9, CNN1                            |
+| Smooth Muscle cells         | TAGLN, ACTA2, MYH11, MYL9, CNN1                            |
 | T cells                     | TRAC, CD3E, TRBC2, IL7R, CD52                              |
 | Tumor cells                 | CEACAM6, CEACAM5, EPCAM, KRT8, LCN2                        |
 
@@ -591,6 +598,7 @@ So now, for example, we can see how the marker genes for Smooth Muscle cells app
 ```{r}
 #| label: fig-vln_endothelial_marker
 #| fig-cap: Violin plot of `ACTA2` and `MYH11` for each BANKSY cluster to potentially identify populations of Smooth Muscle cells.
+# Create violin plots for two Smooth Muslce cells marker genes
 VlnPlot(seurat_banksy,
         features = c("ACTA2", "MYH11"),
         pt.size = 0,
@@ -607,6 +615,7 @@ We can clearly see that there is an uptick of expression of both genes in cluste
 
 ```{r}
 #| label: marker_list
+# Create marker list
 marker_list <- list(
   "B cells" = c("IGKC", "IGHM", "CD79A", "MS4A1", "MZB1"),
   "Endothelial cells" = c("PECAM1", "VWF", "PLVAP", "ENG", "KLF2"),
@@ -624,13 +633,14 @@ marker_list <- list(
 
 :::
 
-
-
 ## Save!
+
+Lastly, let's go ahead and save our Seurat object before we go any further:
 
 ```{r}
 #| label: save_seurat
 #| eval: false
+# Save seurat_banksy
 saveRDS(seurat_banksy, "data/seurat_banksy.RDS")
 ```
 
