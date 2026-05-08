@@ -495,7 +495,7 @@ While we calculated the eigenvectors as:
 eig$vectors
 ```
 
-We can see that the values are the same, but the sign is flipped between the two methods. This is because eigenvectors are only defined "up to sign". This means for a given eigenvalue, the eigenvectors *v~1~* and *-v~1~* are the same line, but point in different directions. This difference does not impact our principal components calculations. However, it could mean that a plot derived from *v~1~* will look rotated 180&deg; when compared to a plot derived from *-v~1~*. Regardless, it looks like we have the same eigenvectors in both approaches.
+We can see that the values are the same, but the sign is flipped between the two methods. This is because eigenvectors are only defined "up to sign". This means for a given eigenvalue, the eigenvectors *v~1~* and *-v~1~* are the same line, but point in different directions. This difference does not impact our principal components calculations. However, it could mean that a plot derived from *v~1~* will look reflected over the x-axis when compared to a plot derived from *-v~1~*. Regardless, it looks like we have the same eigenvectors in both approaches.
 
 ## PC Scores
 
