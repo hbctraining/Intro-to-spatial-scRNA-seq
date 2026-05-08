@@ -399,7 +399,7 @@ FetchData(seurat_processed,
 
 ::: callout-tip
 # [**Exercise 6**](10_seurat_cheatsheet-Answer_key.qmd#exercise-6)
-6. Show how you would use the `FetchData()` function to generate a dataframe of `fullumapsketch_1`, `fullumapsketch_2` and `orig.ident` values for each cell..
+6. Show how you would use the `FetchData()` function to generate a dataframe of `fullumapsketch_1`, `fullumapsketch_2` and `orig.ident` values for each cell.
 :::
 
 ***
