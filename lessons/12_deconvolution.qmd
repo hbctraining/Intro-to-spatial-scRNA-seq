@@ -8,7 +8,7 @@ date: "2025-07-22"
 categories: 
   - Spatial transcriptomics
   - Deconvolution
-  - Celltype annotation
+  - Cell type annotation
 keywords:
   - RCTD
   - scRNA-seq
@@ -59,22 +59,22 @@ The single-digit micron resolution is a big technological improvement over Visiu
 
 ![](../img/card_deconvolution.png){width="50%"}
 
-Schematic showing how, in sequencing-based spatial transcriptomics, each bin may be a mixture of cells and celltypes.
+Schematic showing how, in sequencing-based spatial transcriptomics, each bin may be a mixture of cells and cell types.
 _Image source: [Ma et al. (2022)](https://www.nature.com/articles/s41587-022-01273-7)_
 :::
 
-While Visium HD reduces bin size to approach single-cell resolution, it is important to note that sequencing-based spatial transcriptomics captures RNA from a defined spatial area rather than from isolated cells. As a result, transcripts from multiple cells overlapping a bin would be pooled and sequenced together. This means that even small bins may contain mixed cellular signals, which has important implications for downstream analyses such as differential gene expression.
+While Visium HD reduces bin size to approach single-cell resolution, it is important to note that this sequencing-based spatial transcriptomics captures RNA from a defined spatial area rather than from isolated cells. As a result, transcripts from multiple cells overlapping in a bin would be pooled and sequenced together. This means that even small bins may contain mixed cellular signals, which has important implications for downstream analyses, such as differential gene expression.
 
 ::: callout-important
 # Imaging-based technologies
 It is important to note that up until this point, the entire workflow we have been using would work for either imaging- or sequencing-based spatial technologies. **Deconvolution is not an appropriate step for imaging-based technologies.**
 
-This is because when we work with imaging-based technologies, we are using _single-cells_ after segmentation. Therefore it does not make sense to model a mixture of celltypes when the input is single cells. As a result, the annotation for these datasets follows a similar workflow as celltyping a single-cell experiment. 
+This is because when we work with imaging-based technologies, we are using _single-cells_ after segmentation. Therefore it does not make sense to model a mixture of cell types when the input is single cells. As a result, the annotation for these datasets follows a similar workflow as celltyping a single-cell experiment. 
 
 To annotate your dataset, we recommend to do a mixture of the following:
 
-- Use [marker genes from the literature](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/11_clustering_quality_control.html#exploring-known-cell-type-markers) that are specific to a celltype
-- Identify [top genes per cluster](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/13_marker_identification.html) to map celltypes to clusters
+- Use [marker genes from the literature](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/11_clustering_quality_control.html#exploring-known-cell-type-markers) that are specific to a cell type
+- Identify [top genes per cluster](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/13_marker_identification.html) to map cell types to clusters
 - Apply automatic celltyping algorithms (i.e [Azimuth](https://azimuth.hubmapconsortium.org/), [CellTypist](https://www.celltypist.org/encyclopedia/Immune/v2), [SingleR](https://bioconductor.org/packages/devel/bioc/vignettes/SingleR/inst/doc/SingleR.html), etc.)
 :::
 
@@ -115,7 +115,7 @@ Schematic of how RCTD creates a probabilistic model to represent bins as a mixtu
 _Image source: [Cable et al., 2021](https://www.nature.com/articles/s41587-021-00830-w)_
 ::: 
 
-The overaching process of RCTD involves several steps:
+The overarching process of RCTD involves several steps:
 
 1. RCTD calculates the average gene expression for each cell type in a reference single-cell RNA sequencing dataset.
 2. Each bin/pixel in the query spatial transcriptomics data is treated as containing an unknown mix of multiple cell types.
@@ -141,7 +141,7 @@ seurat_ref <- readRDS("data/crc_flex_ref_downsample.RDS")
 seurat_ref
 ```
 
-We can take a look at the unique celltypes in the reference dataset by plotting the UMAP of the reference dataset. These are stored in column `Level1` and should give us a better understanding of the make-up of our dataset by celltype.
+We can take a look at the unique cell types in the reference dataset by plotting the UMAP of the reference dataset. These are stored in column `Level1` and should give us a better understanding of the make-up of our dataset by cell type.
 
 ```{r}
 #| label: fig-umap_reference
@@ -166,7 +166,7 @@ LabelClusters(p,
 
 As mentioned earlier, there are two main inputs that must be supplied to RCTD:
 
-- **Reference**: an object containing the raw counts and celltype column in metadata.
+- **Reference**: an object containing the raw counts and cell type column in metadata.
 - **Query**: a spatial transcriptomics object that we want to deconvolve against the reference.
 
 We are going to create some custom RCTD objects out of our original Seurat object for RCTD. This will essentially create a new _data structure_ that fits with what the `Run.RCTD()` function expects. 
@@ -176,7 +176,7 @@ We are going to create some custom RCTD objects out of our original Seurat objec
 Now that we better understand the reference, we are going to make an RCTD object out of it. We will use the `Reference()` function to cast our Seurat object into the correct format.  We supply the following three parameters:
 
 - `counts` = raw counts matrix
-- `cell_types` = celltype annotation
+- `cell_types` = cell type annotation
 - `nUMI` = total number of counts per cell (`nCount`)
 
 ```{r}
@@ -184,7 +184,7 @@ Now that we better understand the reference, we are going to make an RCTD object
 # Raw counts of reference dataset
 counts <- seurat_ref[["RNA"]]$counts
 
-# Celltype annotation of reference dataset (must be a factor)
+# cell type annotation of reference dataset (must be a factor)
 cluster <- seurat_ref$Level1
 cluster <- as.factor(cluster)
 
@@ -260,7 +260,7 @@ crc <- RunPCA(crc,
 crc <- qs2::qs_read("intermediate/12_crc_sketch.qs")
 ```
 
-RCTD requires another unique data structure as input to run. So we will create our query object with `SpatialRNA()` by suppling the spatial coordinates and raw counts for the bins. Note that we do not have to supply any celltype information, like we did with the reference object earlier. This is becuase we don't have any celltype information yet! That is the output we are hoping to generate from running RCTD.
+RCTD requires another unique data structure as input to run. So we will create our query object with `SpatialRNA()` by suppling the spatial coordinates and raw counts for the bins. Note that we do not have to supply any cell type information, like we did with the reference object earlier. This is because we don't have any cell type information yet! That is the output we are hoping to generate from running RCTD.
 
 ```{r}
 #| label: query_rctd
@@ -297,7 +297,7 @@ str(query)
 
 ### Run RCTD
 
-Now that we have created our reference and query objects, we will create and RCTD object and run RCTD. It should be noted that RCTD can take longer when you have more celltypes. This should take 5-10 minutes to run.
+Now that we have created our reference and query objects, we will create an `RCTD` object and use thee `run.RCTD()` function. **This should take 5-10 minutes to run.**
 
 ```{r}
 #| label: run_RCTD
@@ -317,6 +317,8 @@ RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
 # qs2::qs_save(RCTD, "intermediate/12_RCTD_crc.qs")
 RCTD <- qs2::qs_read("intermediate/12_RCTD_crc.qs")
 ```
+
+Note that RCTD can take longer when you have more cell types, which is the reason we used the `Level1` annotation of cell types over `Level2` from the reference dataset.
 
 ### RCTD results
 
@@ -353,7 +355,7 @@ We can also visualize the number of identifications established for each `first_
 
 ```{r}
 #| label: fig-barplot_n_first_type_sketch
-#| fig-cap: Number of sketched bins assigned to a celltype with RCTD.
+#| fig-cap: Number of sketched bins assigned to a cell type with RCTD.
 # Number of cell types annotated to each bin in sketch assay
 ggplot(df_rctd_results,
        aes(x = first_type, 
@@ -442,7 +444,7 @@ crc <- ProjectData(
                  second_type = "second_type_sketch"))
 ```
 
-Why did we get an error when we tried to get RCTD labels for the entire dataset? This is because we have those `NA` values for some of the bins in sketch. The `ProjectData()` function expects actual values for every sketched bin. Therefore, to get around this issue, we are going to set the bins with no label as `unassigned` in the metadata.
+Why did we get an error when we tried to get RCTD labels for the entire dataset? This is because we have those `NA` values for bins in the sketch assay. The `ProjectData()` function expects actual values for every sketched bin. Therefore, to get around this issue, we are going to label those bins as `unassigned` in the metadata.
 
 ```{r}
 #| label: set_unassigned
@@ -474,7 +476,7 @@ table(crc@meta.data$first_type_sketch)
 
 :::
 
-At this point, we have assigned labels for each bin in the sketch assay. So we can once again run `ProjectData()` and this time get celltype labels for each bin in our dataset.
+At this point, we have assigned labels for each bin in the sketch assay. So we can once again run `ProjectData()` and this time get cell type labels for each bin in our dataset.
 
 ```{r}
 #| label: project_data
@@ -509,7 +511,7 @@ We can get an overview of how many bins we have with a barplot. As we might expe
 
 ```{r}
 #| label: fig-barplot_n_first_type
-#| fig-cap: Number of bins assigned to a celltype with RCTD after `ProjectData()`.
+#| fig-cap: Number of bins assigned to a cell type with RCTD after `ProjectData()`.
 # Barplot of first_type labels after ProjectData()
 ggplot(crc@meta.data,
        aes(x = first_type, fill = first_type)) +
@@ -539,14 +541,14 @@ SpatialDimPlot(crc,
 ::: {.callout-note collapse="true"}
 # Alternative spatial visualization
 
-Sometimes it can be difficult to see patterns for a given celltype when all of the celltypes are present in the same plot. Due to this difficulty, we can also facet our different celltypes into their own plots:
+Sometimes it can be difficult to see patterns for a given cell type when all of the cell types are present in the same plot. Due to this difficulty, we can also facet our different cell types into their own plots:
 
 ```{r}
 #| label: fig-spatial_first_type_split
 #| fig-cap: "Spatial overlay of the first type RCTD results after `ProjectData()` split by first_type."
 #| fig-width: 12
 #| fig-height: 9
-# Grab x, y coordiantes and first_type celltype labels
+# Grab x, y coordinates and first_type cell type labels
 df <- FetchData(crc,
                 vars = c("x", "y", 
                          "first_type"))
@@ -557,7 +559,7 @@ ggplot(df,
            color = first_type)) +
   geom_point(size = 0.05) +
   theme_bw() +
-  # Split by celltype label
+  # Split by cell type label
   facet_wrap(~first_type) +
   NoLegend()
 ```
@@ -586,7 +588,7 @@ This is consistent with what we observe in our own dataset, where the immune cel
 
 ### UMAP
 
-We can now see how the celltypes fall on our UMAP space.
+We can now see how the cell types fall on our UMAP space.
 
 ```{r}
 #| label: fig-UMAP_first_type
@@ -600,7 +602,7 @@ LabelClusters(p, id = "ident",  fontface = "bold", size = 3,
               bg.colour = "white", bg.r = .2, force = 0)
 ```
 
-As we might expect, the immune populations (myeloid, T and B cells) appear close to one another in UMAP space due to the similarity of their gene expression. The most distinctly clustered populations are the tumor and epithelial bins, which are do not have as many similarities as the rest of the cell types in the dataset.
+As we might expect, the immune populations (myeloid, T and B cells) appear close to one another in UMAP space due to the similarity of their gene expression. The most distinctly clustered populations are the tumor and epithelial bins, which have very different gene expression patterns compared to the rest of the cell types in the dataset.
 
 ## P5CRC and P5NAT results
 
@@ -662,7 +664,7 @@ SpatialDimPlot(seurat_rctd,
 
 1. What is the sample-specific proportion for each `first_type`? Create a ggplot barplot showing the proportions of each cell type. _Hint: Refer back to the code we used [here](09_integration.qmd#fig-cell_proportion_barplot)_.
 
-2. Create a dotplot using the known marker genes for each celltype to see if the `first_type` labels align with known celltype genes.
+2. Create a dotplot using the known marker genes for each cell type to see if the `first_type` labels align with known cell type genes.
 
 ```{r}
 #| label: marker_list
