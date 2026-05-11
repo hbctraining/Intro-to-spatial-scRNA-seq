@@ -22,7 +22,7 @@ editor_options:
 
 # Exercise 2
 
-2. Run ORA analysis on the cell type that you calculated DE results for in the previous exercise. What is the top pathway that appears?
+2. Run an ORA analysis on the cell type that you calculated DE results for in the previous exercise. What is the top pathway that appears?
 
 # Exercise 3
 
