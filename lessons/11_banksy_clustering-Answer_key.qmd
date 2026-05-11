@@ -102,33 +102,28 @@ DotPlot(seurat_banksy,
 
 Based upon the dotplot, the good thing is that while it may not be the clearest signal, we are able to identify major populations of cells in the clusters.
 
-::: callout-warning
-Most of these annotations are wrong, need to fix
-:::
-
-| Cluster | Cell type                    |
-|---------|------------------------------|
-| 1       | B cells                      |
-| 2       | Tumor cells                  |
-| 3       | Tumor cells                  |
-| 4       | Intestinal epithelial cells  |
-| 5       | Endothelial cells            |
-| 6       | B cells                      |
-| 7       | B cells / T cells            |
-| 8       | Smooth muscle cells          |
-| 9       | Smooth muscle cells                |
-| 10      | T cells                      |
-| 11      | Intestinal epithelial cells  |
-| 12      | Fibroblasts                  |
-| 13      | Fibroblasts                  |
-| 14      | Tumor cells                  |
-| 15      | Tumor cells                  |
-| 16      | Intestinal epithelial cells  |
-| 17      | Myeloid cells (?)            |
-| 18      | Neural cells                 |
-| 19      | Neural cells                 |
-| 20      | ?                            |
-
+| BANKSY Cluster | Cell Type |
+|---------|-----------|
+| 1 | B cells |
+| 2 | Intestinal epithelial cells |
+| 3 | Intestinal epithelial cells |
+| 4 | ? |
+| 5 | Endothelial cells |
+| 6 | Intestinal epithelial cells |
+| 7 | T cells |
+| 8 | ? |
+| 9 | Smooth muscle cells |
+| 10 | Intestinal epithelial cells |
+| 11 | Intestinal epithelial cells |
+| 12 | Myeloid cells |
+| 13 | Tumor cells |
+| 14 | Tumor cells |
+| 15 | Tumor cells |
+| 16 | Intestinal epithelial cells |
+| 17 | ? |
+| 18 | Tumor cells |
+| 19 | Tumor cells |
+| 20 | Neural cells |
 
 ***
 

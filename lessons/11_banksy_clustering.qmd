@@ -670,7 +670,7 @@ VlnPlot(seurat_banksy,
 We can clearly see that there is an uptick of expression of both genes in cluster 9 - which is an indication that cluster 9 is likely comprised of Smooth Muscle cells.
 
 ::: callout-tip
-# [**Exercise 3**](08_clustering-Answer_key.qmd#exercise-3)
+# [**Exercise 3**](11_banksy_clustering-Answer_key.qmd#exercise-3)
 
 3. Use the `DotPlot()` function in conjunction with `marker_list` to see if clusters correspond well with cell types.
 
