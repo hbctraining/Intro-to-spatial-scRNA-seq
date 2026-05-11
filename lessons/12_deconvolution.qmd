@@ -325,8 +325,8 @@ The resulting dataframe from RCTD will contain the following columns according t
 | Column       | Description                                                                                   |
 |--------------|--------------------------------------------------------------------------------------------------------|
 | `spot_class` | RCTD’s classification (doublet mode):<br>• `singlet` – 1 cell type on pixel<br>• `doublet_certain` – 2 cell types on pixel<br>• `doublet_uncertain` – 2 cell types on pixel, but only confident of 1<br>• `reject` – no prediction given for pixel |
-| `first_type` | First cell type predicted on the bead; defined for all `spot_class` values except `reject`.           |
-| `second_type`| Second cell type predicted on the bead for doublet `spot_class` (`doublet_certain`, `doublet_uncertain`); not a confident prediction in the `doublet_uncertain` case. |
+| `first_type` | First cell type predicted on the bin; defined for all `spot_class` values except `reject`.           |
+| `second_type`| Second cell type predicted on the bin for doublet `spot_class` (`doublet_certain`, `doublet_uncertain`); not a confident prediction in the `doublet_uncertain` case. |
 
 
 The results of deconvolution are stored in the `results$results_df` slot of the `RCTD` object:
@@ -377,7 +377,12 @@ Let us take a look at how many rows (bins) we have these annotations for:
 nrow(df_rctd_results)
 ```
 
-But didn't our `sketch` assay include 5,000 bins? RCTD runs its own QC step that filters out bins with low expression or _rejects_ bins where it is unable to map a cell type from the reference dataset. This is why we have fewer bins than we expected. So we are going to do some data wrangling to ensure that we keep track of all information. Including those ~200 bins without `first_type` labels. We will handle this when we project our data back to the larger CRC Seurat object and we will get an error message.
+But didn't our `sketch` assay include 5,000 bins? RCTD runs its own QC step that filters out bins with low expression or _rejects_ bins where it is unable to map a cell type from the reference dataset. This is why we have fewer bins than we expected. So we are going to do some data wrangling to ensure that we keep track of all information. Including those ~200 bins without `first_type` labels. In a future step, we will set the label for these bins to be `unassigned`.
+
+To do so, we are first going to do some wrangling to the results dataframe:
+
+1. Append `_sketch` to all column names
+2. Remove factors (to avoid downstream errors)
 
 ```{r}
 #| label: sketch_rctd_df
@@ -409,8 +414,8 @@ meta <- crc@meta.data
 # Merge together RCTD results and metadata
 meta <- left_join(x = meta, 
                   y = df_rctd_results,
-                  by = "cell")   %>%
-  column_to_rownames("cell")
+                  by = "cell")
+rownames(meta) <- meta$cell
 
 # Put meta into crc Seurat object
 crc@meta.data <- meta
@@ -469,7 +474,7 @@ table(crc@meta.data$first_type_sketch)
 
 :::
 
-At this point, we can once again run `ProjectData()` to actually get celltype labels for each bin in our dataset.
+At this point, we have assigned labels for each bin in the sketch assay. So we can once again run `ProjectData()` and this time get celltype labels for each bin in our dataset.
 
 ```{r}
 #| label: project_data
@@ -514,6 +519,8 @@ ggplot(crc@meta.data,
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
+This visual primes us to expect that the majority of the bins in our dataset are intestinal epithelial cells. From the original publication, we also know that these epithelial cells can be broken down even further into goblet and enterocytes (from `Level2` annotation of the reference dataset).
+
 ### Spatial overlay
 
 We can also see how the bins are located on the slide itself.
@@ -557,6 +564,26 @@ ggplot(df,
 
 :::
 
+As we previously noted, the left-most region on th `P5CRC` slide is comprised primarily of tumor cells. There are some myeloid and fibroblast cells mixed throughout this region as well. The rest of the tissue contains mostly epithelial cells, which is to be expected when we consider the layered structure of the colon.
+
+::: {#fig-colon_schematic_cell_type .fig}
+![](../img/colon_schematic_cell_type.png){width="60%"}
+
+Schematic showing the cell type structure of the colon, where the epithelial layer lines the surface to form a barrier between the gut microbiome and the underlying immune compartment.<br>
+_Image source: [Ternet et al. (2021)](https://link.springer.com/article/10.1186/s12964-021-00712-3)_
+:::
+
+The colon wall is organized into distinct layers. The innermost surface facing the gut cavity is lined by epithelial cells (goblet, enterocyte, tuft cells), which form a structure known as Crypts of Lieberkühn. These cells form a barrier, selectively allowing interactions between the gut microbiome and the inner regions of the tissue (mucosa). Here, the immune component (T and B cells) are present. Right underneath there is another layer of muscle cells, known as the muscularis mucosae, which is responsible for the folded structure of the colon. Together, these layers allow the colon to control what passes from the gut cavity into the rest of the tissue.
+
+::: {#fig-colon_schematic_immune_cell_type .fig}
+![](../img/colon_schematic_immune_cell_type.png){width="60%"}
+
+Schematic showing the cell type structure of the colon, where inner layers are comprised on immune, neuronal, and muscle cells.<br>
+_Image source: [Min et al. (2020)](https://www.nature.com/articles/s12276-020-0386-0)_
+:::
+
+This is consistent with what we observe in our own dataset, where the immune cells (B and T cells) are found deeper within the tissue rather than at the surface. Recall that this is the `P5CRC` sample, meaning that the structure will not be exactly as shown in these schematics due to the abnormalities caused by cancer. In the P5NAT sample, we will be able to more clearly see the normal colon structure outlined here.
+
 ### UMAP
 
 We can now see how the celltypes fall on our UMAP space.
@@ -572,6 +599,8 @@ p <- DimPlot(crc,
 LabelClusters(p, id = "ident",  fontface = "bold", size = 3, 
               bg.colour = "white", bg.r = .2, force = 0)
 ```
+
+As we might expect, the immune populations (myeloid, T and B cells) appear close to one another in UMAP space due to the similarity of their gene expression. The most distinctly clustered populations are the tumor and epithelial bins, which are do not have as many similarities as the rest of the cell types in the dataset.
 
 ## P5CRC and P5NAT results
 
@@ -609,6 +638,25 @@ We have run RCTD of the full dataset for both P5CRC and P5NAT for you all to loa
 seurat_rctd <- readRDS("data/intermediate_seurat/seurat_RCTD.rds")
 ```
 
+```{r}
+#| label: instructor_load_seurat_rctd
+#| echo: false
+# Load Seurat object with P5CRC and P5NAT cell type annotations
+seurat_rctd <- qs2::qs_read("intermediate/12_seurat_RCTD.qs")
+```
+
+```{r}
+#| label: fig-spatial_first_type_both_samples
+#| fig-cap: Spatial overlay of the first type RCTD results after `ProjectData()` for both samples.
+#| fig-width: 12
+#| fig-height: 4
+# Spatial plot of first_type labels after ProjectData()
+SpatialDimPlot(seurat_rctd,
+               group.by = "first_type",
+               pt.size.factor = 15,
+               image.alpha = 0)
+```
+
 :::{.callout-tip}
 # [**Exercise 1**](12_deconvolution-Answer_key.qmd#exercise-1)
 
@@ -630,6 +678,8 @@ marker_list <- list(
   "Tumor cells" = c("CEACAM6", "CEACAM5", "EPCAM", "KRT8", "LCN2")
 )
 ```
+
+Do we generally agree with the annotation that was done with RCTD based upon these results?
 
 :::
 
