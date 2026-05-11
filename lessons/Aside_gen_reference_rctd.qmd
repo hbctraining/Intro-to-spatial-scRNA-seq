@@ -105,7 +105,7 @@ seurat <- subset(seurat,
                  subset = (QCFilter == "Keep"))
 ```
 
-Even after filtration, this is a very large dataset so the last step is going to be downsampling this reference. The metadata column `Level1` contains celltype annotations for the dataset, so we will set those as the `Idents()` of the object. This is so that when we run `subset()` and specify `downsample = 500`, we will be 
+Even after filtration, this is a very large dataset so the last step is going to be downsampling this reference. The metadata column `Level1` contains celltype annotations for the dataset, so we will set those as the `Idents()` of the object. This is so that when we run `subset()` and specify `downsample = 500`, we will be getting 500 cells for each of the cell types in `Level1`.
 
 ```{r}
 #| label: downsample
