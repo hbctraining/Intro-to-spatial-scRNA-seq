@@ -26,13 +26,6 @@ seurat_banksy <- qs2::qs_read("intermediate/09_seurat_banksy_2.qs")
 
 1. What steps/functions did we use to calculate clusters previously?
 
-::: {#fig-sc_workflow .figure}
-![](../img/sc_workflow_2022.jpg){width=630}
-
-Single-cell RNA-seq analysis workflow.<br>
-_Image source: [Intro to scRNA-seq analysis](https://hbctraining.github.io/Intro-to-scRNAseq/)_.
-:::
-
 
 - Principle component analysis: `RunPCA()`
 - Evaluate necessity of integration
