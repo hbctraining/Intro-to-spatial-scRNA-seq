@@ -500,7 +500,7 @@ msigGSEA_results <- msig_GSEA@result
 
 ::: callout-note
 # Setting seed
-The permutations are performed using random reordering, so every time we run the function we will get slightly different results. If we would like to use the same permutations every time we run a function, then we use the `set.seed()` function prior to running. The input to `set.seed()` can be any integer.
+The permutations are performed using random reordering, so every time we run the function we will get slightly different results. If we would like to use the same permutations every time we run a function, then we use the `set.seed()` function prior to running.
 :::
 
 This is a good spot to save the results so that we can revisit them at any point later on:
