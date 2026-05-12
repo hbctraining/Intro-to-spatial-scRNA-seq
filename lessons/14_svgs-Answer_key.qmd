@@ -1,0 +1,82 @@
+---
+title: "Spatially Variable Genes - Answer Key"
+author:
+  - Noor Sohail
+date: "2026-04-10"
+license: "CC-BY-4.0"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: load_libraries_data
+#| echo: false
+# Load libraries and data
+library(Seurat)
+library(tidyverse)
+library(qs2)
+
+# Increases the size of the default vector (8GB)
+options(future.globals.maxSize = 8000 * 1024^2)
+# Set parallelization (multithreading) to speed up calculations
+library(future)
+plan(multisession, workers = parallel::detectCores() - 1)
+
+# Load dataset
+seurat_rctd <- qs_read("intermediate/12_seurat_RCTD.qs")
+```
+
+# Exercise 1
+
+1. Pick a different cell type and run `FindSpatiallyVariableFeatures()`. Name the population you chose and print the top 6 genes in the results.
+
+```{r}
+#| label: morans_i_svgs
+#| fig-width: 15
+#| fig-height: 6
+# Vector of unique cell types
+cell_types <- seurat_rctd$first_type %>%
+  unique() %>% sort()
+
+for (ct in cell_types) {
+  # Subset to cell type P5CRC bins
+  crc_sub <- subset(seurat_rctd,
+                subset = (orig.ident == "P5CRC") &
+                        (first_type == ct))
+  # Re-calculate HVGs on subset data
+  crc_sub <- FindVariableFeatures(crc_sub)
+  # Scale log-normalized counts
+  crc_sub <- ScaleData(crc_sub)
+
+  # Run Moran's I on the top 50 highly variable genes
+  crc_sub <- FindSpatiallyVariableFeatures(crc_sub,
+                                          selection.method = "moransi",
+                                          verbose = TRUE,
+                                          features = VariableFeatures(crc_sub)[1:50],
+                                          image = "P5CRC.008um")
+
+
+  # Get top spatially variable features
+  top_svg <- SpatiallyVariableFeatures(crc_sub, 
+                                        method = "moransi")
+  top_svg <- top_svg[1:6]
+
+
+  p <- SpatialFeaturePlot(crc_sub,
+                   features = top_svg,
+                   pt.size.factor = 15,
+                   image.alpha = 0.1, 
+                   ncol = 3)
+
+  print(ct)
+  print(top_svg)
+  print(p)
+}
+```
+
+***
+
+[Back to Lesson >>](14_svgs.qmd)
+
+[Back to Schedule](../schedule/schedule.qmd)

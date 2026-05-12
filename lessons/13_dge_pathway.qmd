@@ -105,7 +105,6 @@ _Image source: [Introduction to scRNA-seq](https://hbctraining.github.io/Intro-t
 :::
 
 
-
 We can use this same function to compare two groups of cells which represent different conditions by modifying the `ident` values provided. The `FindMarkers()` function has **several important arguments** we can provide when running it. To view what these parameters are, we can access the help page on this function:
 
 ```{r}

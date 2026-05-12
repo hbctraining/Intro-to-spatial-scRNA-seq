@@ -8,7 +8,7 @@ date: "2026-03-20"
 categories: 
   - Spatial transcriptomics
   - SVGs
-  - Moran's *I*
+  - Moran's $I$
 keywords:
   - Variable genes
   - Spatial patterns
@@ -44,13 +44,13 @@ Approximate time: 30 minutes
 
 In this lesson, we will:
 
-- Define the Moran's *I* calculation
-- Run Moran's *I* to identify spatially variable genes
+- Define the Moran's $I$ calculation
+- Run Moran's $I$ to identify spatially variable genes
 - Visualize spatially variable genes
 
 ## Overview of lesson
 
-At this step, instead of comparing defined cell types, you might ask which genes vary as a function of spatial location. In this lesson you apply methods for detecting spatially variable genes (SVGs), then map and visualize their expression patterns across the tissue. These genes often serve as interpretable anchors for defining domains, building signatures and linking expression to morphology.
+At this step, instead of comparing defined cell types, you might ask which genes vary as a function of spatial location. In this lesson we will apply methods for detecting spatially variable genes (SVGs), then map and visualize their expression patterns across the tissue. These genes often serve as interpretable anchors for defining domains, building signatures and linking expression to morphology.
 
 ## Spatially variable genes (SVGs)
 
@@ -64,14 +64,13 @@ Schematic of how spatially variable genes present themselves in spatial data.<br
 _Image source: [Yan et al., 2025](https://www.nature.com/articles/s41467-025-56080-w)_
 :::
 
-These methods can be used to identify genes that have strong strong spatial associations for downstream analyses - similar to how we used HVGs to calculate PCA. These SVGs can also be used to evaluate spatial niches within cell-types to assist in find subtypes with the tissue. 
+These methods can be used to identify genes that have strong spatial associations for downstream analyses - similar to how we used HVGs to calculate PCA. These SVGs can also be used to evaluate spatial niches within cell-types to assist in finding subtypes within the tissue. 
 
-Ultimately, these genes provide another peek in the spatial context of the tissue. 
+Ultimately, these genes provide another peek into the spatial context of the tissue. 
 
+##  Moran's $I$
 
-##  Moran's *I*
-
-Many of the SVG algorithms are built upon the concept of [Moran's *I*](https://en.wikipedia.org/wiki/Moran%27s_I), which is defined as "a measure of spatial autocorrelation". The math behind the method is defined like so:
+Many of the SVG algorithms are built upon the concept of [Moran's $I$](https://en.wikipedia.org/wiki/Moran%27s_I), which is defined as "a measure of spatial autocorrelation". The math behind the method is defined like so:
 
 $$
 I =
@@ -91,24 +90,36 @@ where:
 - $w_{ij}$ are the elements of the spatial-weights matrix, with $w_{ii} = 0$;
 - $S_0$ is the sum of all spatial weights, $S_0 = \sum_{i=1}^N \sum_{j=1}^N w_{ij}$.
 
-For a random spatial distribution, Moran's *I* will be near zero. A large positive value indicates the data is clustered. A large negative value indicates that the data is dispersed, meaning units that are close spatially have dissimilar variable values.
+::: {.callout-note collapse="true"}
+# Breakdown of Moran's $I$ calculation
 
-**The range of values for Moran's *I* E(I) in spatial transcriptomics is usually [-1, 1].**
+In simpler terms, the Moran's $I$ calculation looks at two bins at a time, $i$ and $j$. The term $w_{ij}$ is a measure of "closeness" between bins $i$ and $j$, where greater influence (weight) is given to bins that are spatially near to one another. 
+
+This calculation is done **one gene at a time**, so we get an $I$ value for each gene, represented as $x$ in the equation. Here, $\bar{x}$ is the average expression of a gene across all bins in the dataset. When we calculate $(x_i - \bar{x})$ and $(x_j - \bar{x})$, we are subtracting the normalized expression of gene $x$ for bins $i$ and $j$ from the average expression. In essence, we are calculating the deviation from the mean for both bins. This calculation is run for every pair of bins in the dataset, with the weighted products being summed together.
+
+Additionally, we normalize the score in the denominator by calculating the gene's variance with $\sum_{i=1}^N (x_i - \bar{x})^2$ in the dataset. The last component of the equation is to multiply $\frac{N}{S_0}$ to the results. This is to scale the final $I$ value in such a way that we can compare results from different genes against one another, even if there are different spatial weights and gene expression distributions.
+
+:::
+
+**The range of values for Moran's $I$ _E(I)_ in spatial transcriptomics is usually [-1, 1].**
+
+For a random spatial distribution, Moran's $I$ will be near zero. A large positive value indicates the data is clustered. A large negative value indicates that the data is dispersed, meaning units that are close spatially have dissimilar variable values.
+
 
 ::: {#fig-morans_i .fig}
 ![](../img/morans_i.png)
 
-Range of Moran's *I* values, showing the range of scores that correspond to different spatial structures (dispersed, random, clustered).<br>
+Range of Moran's $I$ values, showing the range of scores that correspond to different spatial structures (dispersed, random, clustered).<br>
 _Image source: [Tsui et al., 2022](https://www.frontiersin.org/journals/built-environment/articles/10.3389/fbuil.2022.954642/full)_
 :::
 
-To see why this is the case, consider the expression $(x_i - \bar{x}) (x_j - \bar{x})$ in the above formula. If $x_i$ and $x_j$ are similar and far from the mean, then this product will be large and positive. If they are dissimilar (in particular, if one is well above the mean and one is far below) then this product will be large and negative. If $x_i$ and $x_j$ are both similar to the mean, then this value would be small. Note that Moran's *I* depends strongly on the calculation of $w_{ij}$, which represents the spatial relations of the bins. A large value $w_{ij}$ indicates that bins $x_i$ and $x_j$ are close spatially.
+To see why this is the case, consider the expression $(x_i - \bar{x}) (x_j - \bar{x})$ in the above formula. If $x_i$ and $x_j$ are similar and far from the mean, then this product will be large and positive. If they are dissimilar (in particular, if one is well above the mean and one is far below) then this product will be large and negative. If $x_i$ and $x_j$ are both similar to the mean, then this value would be small. Note that Moran's $I$ depends strongly on the calculation of $w_{ij}$, which represents the spatial relations of the bins. A large value $w_{ij}$ indicates that bins $i$ and $j$ are close spatially.
 
-## Running Moran's *I*
+## Running Moran's $I$
 
-Moran's *I* will work best if we focus on one sample at a time, as the spatial coordinates will be consistent within a single slide. Furthermore, because this step can take a long time to run, we are going to further subset the data to a singular celltype. In this way, we are attempting to evaluate genes that are specific to spatially defined subtype of a celltype. 
+Moran's $I$ will work best if we focus on one sample at a time, as the spatial coordinates will be consistent within a single slide. Furthermore, because this step can take a long time to run, we are going to further subset the data to a singular cell type. In this way, we are attempting to evaluate genes that are specific to spatially defined subtype of a cell type. 
 
-Let's begin by creating a new R script, `09_SVGs.R`, and adding it to our `scripts` directory:
+Let's begin by creating a new R script, `08_SVGs.R`, and adding it to our `scripts` directory:
 
 ```{r}
 #| label: header_libraries
@@ -118,7 +129,7 @@ Let's begin by creating a new R script, `09_SVGs.R`, and adding it to our `scrip
 # Author: Harvard Chan Bioinformatics Core
 # Created: May 2026
 
-# Load libararies
+# Load libraries
 library(tidyverse)
 library(Seurat)
 set.seed(12345)
@@ -148,12 +159,15 @@ For the best results, we are going to make use of the `scale.data` assay (this i
 
 ```{r}
 #| label: ScaleData
+# Re-calculate HVGs on subset data
+crc_sub <- FindVariableFeatures(crc_sub)
+
 # Scale log-normalized counts
 crc_sub <- ScaleData(crc_sub)
 crc_sub
 ```
 
-We can now calculate Moran's *I* with the `FindSpatiallyVariableFeatures()` function and set the `selection.method = "moransi"`. We are additionally going to specify that we want to evaluate Moran's *I* on the top 50 highly variable genes. A gene that is spatially variable is likely to also be highly variable because ultimately we are assessing changes in gene expression across different populations. We take the top 50 to reduce the number of calculations that take place (so we can reasonably run this on a laptop).
+We can now calculate Moran's $I$ with the `FindSpatiallyVariableFeatures()` function and set the `selection.method = "moransi"`. We are additionally going to specify that we want to evaluate Moran's $I$ on the top 50 highly variable genes. A gene that is spatially variable is likely to also be highly variable because ultimately we are assessing changes in gene expression across different populations. We take the top 50 to reduce the number of calculations that take place (so we can reasonably run this on a laptop). Ideally you would run this on the full set of highly variable genes.
 
 **This step may take a few minutes to run.**
 
@@ -171,11 +185,11 @@ crc_sub <- FindSpatiallyVariableFeatures(crc_sub,
 ```{r}
 #| label: instructor_svg
 #| echo: false
-# qs2::qs_save(crc_sub, "intermediate/14_crc_svg.qs")
+#qs2::qs_save(crc_sub, "intermediate/14_crc_svg.qs")
 crc_sub <- qs2::qs_read("intermediate/14_crc_svg.qs")
 ```
 
-Once the calculation completes, we can evaluate the Moran's *I* scores and associated p-values for each of the genes. We will have to do a bit of subsetting as we only calculated these values for 50 genes.
+Once the calculation completes, we can evaluate the Moran's $I$ scores and associated p-values for each of the genes. We will have to do a bit of subsetting as we only calculated these values for 50 genes.
 
 ```{r}
 #| label: SVFInfo
@@ -189,7 +203,7 @@ SVFInfo(crc_sub, method = "moransi") %>%
 
 ```{r}
 #| label: tbl-SVFInfo
-#| tbl-cap: "Results of `FindSpatiallyVariableFeatures()` with associated Moran's *I* scores and p-values."
+#| tbl-cap: "Results of `FindSpatiallyVariableFeatures()` with associated Moran's $I$ scores and p-values."
 #| echo: false
 # Moran's I scores for each gene
 SVFInfo(crc_sub, method = "moransi") %>%
@@ -219,13 +233,41 @@ And visualize the expression of these genes on the spatial slide:
 #| fig-height: 6
 # Spatial plot of top SVGs
 SpatialFeaturePlot(crc_sub,
-                   features = top10_svg,
+                   features = top10_svg[1:6],
                    pt.size.factor = 15,
                    image.alpha = 0.1, 
-                   ncol = 5)
+                   ncol = 3)
 ```
 
-Recall in the [BANKSY lesson](11_banksy_clustering.qmd) we noted that the BANKSY algorithm identified different, spatially constrained subtypes in this cancerous region. Now, we can clearly see which of those genes were defining the phenotype of these tumor subtypes.
+Notice that all of these genes have noticeable patterns of expression that are constrained to specific regions of the tissue. **This is the power of spatially variable genes!** We can identify genes where there is a clear spatial component to their expression patterns.
+
+Recall in the [BANKSY lesson](11_banksy_clustering.qmd) we noted that the BANKSY algorithm identified different, spatially constrained subtypes in this cancerous region. For example, we can zoom in clusters 13, 14, and 15.
+
+```{r}
+#| label: cluster_facet_wrap
+#| fig-width: 10
+#| fig-height: 3
+# Grab x and y coordinates for plotting
+# Also get the sample ID and the banksy cluster score for each bin
+df <- FetchData(crc_sub,
+                vars = c("x", "y", 
+                         "banksy_cluster"))
+
+# Subset to one sample (P5CRC)
+ggplot(df %>% subset(banksy_cluster %in% c(13, 14, 15)),
+       # Plot spatial coordinates and color by cluster
+       aes(x = x, y = -y,
+           color = banksy_cluster)) +
+  geom_point(size = 0.05) +
+  theme_bw() +
+  # Create separate plots for each cluster
+  facet_wrap(~banksy_cluster) +
+  NoLegend()
+```
+
+Interestingly, clusters 14 and 15 appear to be associated with the top and bottom of the tissue. This suggests that there is a spatial organization of cells with different function. 
+
+So now we can begin to see which of those genes were defining the phenotype of these tumor subtypes.
 
 ```{r}
 #| label: fig-dotplot_tumor_svgs
@@ -235,23 +277,39 @@ Recall in the [BANKSY lesson](11_banksy_clustering.qmd) we noted that the BANKSY
 DotPlot(crc_sub,
         top10_svg,
         group.by = "banksy_cluster",
-        idents = c(6, 13, 14, 15, 19)) +
+        cluster.idents = TRUE,
+        idents = c(13, 14, 15)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-Now we can see that there is a phenotype that is distinct between each of these groups of cancerous regions. For example, cluster 15 and 19 appear to be have different expression patterns compared to the other groups of tumor clusters
+A distinct phenotype emerges for each group of cancerous regions.
 
-**Using these spatially variable genes, we can identify subtypes of broader cell types.**
+For instance, cluster 14 shows strong expression of [OLFM4](https://www.nature.com/articles/s42003-023-05504-8), a known marker of [intestinal stem cells](https://www.gastrojournal.org/article/S0016-5085(09)00800-2/fulltext) and tumor cells typically located at the base of epithelial crypts. These cells differentiate into secretory lineages, resembling Paneth cells, which are not usually present in the colon. Furthermore, this differentiation is associated with reduced cell adhesion capabilities.
 
-## Other SVG methods
+In contrast, cluster 15 is characterized by high expression of [REG3A](https://www.genecards.org/cgi-bin/carddisp.pl?gene=REG3A), which plays a key role in modulating gut microbiome interactions by killing Gram-positive bacteria. Increased REG3A expression has been reported in multiple cancer types and is typically associated with enhanced proliferation of [endocrine cells](https://www.nature.com/articles/s42003-023-04616-5).
 
-As the field of spatial transcriptomics is ever evolving, there are other algorithms that use other priors and calcluations to identify spatially variable genes. Some methods include, but are not limited to:
+We can see that while both clusters 14 and 15 are tumor cells, they differ both spatially and in gene expression. Meanwhile, cluster 13 appears to be a transient state between the two populations. Using spatially variable genes, we can start defining regions of the tissue and annotate the function of those regions. This will help us understand the spatial organization of the tissue.
+
+:::{.callout-tip}
+# [**Exercise 1**](14_svgs-Answer_key.qmd#exercise-1)
+1. Pick a different cell type and run `FindSpatiallyVariableFeatures()`. Name the population you chose and print the top 6 genes in the results.
+:::
+
+## SVG use cases and methods
+
+There are many different use cases of these SVGs, for example:
+
+- Instead of HVGs as input for PCA, use SVGs to run the workflow all the way to clustering
+- Identify spatial regions based upon top SVGs (e.g cortical layers)
+- Classify subtypes of broader cell types
+
+As the field of spatial transcriptomics is ever evolving, there are other algorithms that utilize different priors to identify spatially variable genes. Some methods include, but are not limited to:
 
 - [SpatialDE](https://www.nature.com/articles/nmeth.4636)
 - [MERINGUE](https://genome.cshlp.org/content/31/10/1843.long)
 - [BinSpect](https://link.springer.com/article/10.1186/s13059-021-02286-2)
 
-Note that several of these are written in Python.
+Note that some of these are written in Python.
 
 ***
 
