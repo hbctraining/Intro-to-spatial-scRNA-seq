@@ -57,7 +57,7 @@ By now, we have meaningful annotations for most of our bins for both samples. So
 
 ## Differential gene expression (DGE)
 
-What if we were interested in a particular cell type and **understanding how gene expression changes across the different conditions?** To answer this, we will perform a differential gene expression analysis. Let's start by creating a new R script called `08_DGE_and_functional_analysis.R` and place it within our `scripts` directory.
+What if we were interested in a particular cell type and **understanding how gene expression changes across the different conditions?** To answer this, we will perform a differential gene expression analysis. Let's start by creating a new R script called `07_DGE_and_functional_analysis.R` and place it within our `scripts` directory.
 
 ```{r}
 #| label: load 

@@ -81,7 +81,7 @@ To annotate your dataset, we recommend to do a mixture of the following:
 
 ### Robust Cell Type Deconvolution (RCTD)
 
-We will carry out our deconvolution in a new script called `07_deconvolution.R`, which will be kept in our `scripts` directory. At the top of the script, we will add a header, call our libraries and load our Seurat object.
+We will carry out our deconvolution in a new script called `06_deconvolution.R`, which will be kept in our `scripts` directory. At the top of the script, we will add a header, call our libraries and load our Seurat object.
 
 ```{r}
 #| label: load_data
