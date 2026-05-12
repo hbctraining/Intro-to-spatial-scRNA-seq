@@ -13,12 +13,60 @@ editor_options:
 #| label: load_libraries_data
 #| echo: false
 # Load libraries and data
+# Load libraries and data
+library(Seurat)
+library(tidyverse)
+library(EnhancedVolcano)
 
+# ORA and GSEA libraries
+library(tidyverse)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(msigdbr)
+
+set.seed(12345)
+
+seurat_rctd <- qs2::qs_read("intermediate/12_seurat_RCTD.qs")
 ```
 
 # Exercise 1
 
 1. Pick a different cell type and run `FindMarkers()`. Name the population you chose and print the top 6 genes in the results.
+
+```{r}
+#| label: dge_cell_types
+# Vector of unique cell types
+cell_types <- seurat_rctd$first_type %>%
+  unique() %>% sort()
+
+# Store DGE results
+list_dge <- list()
+
+for (ct in cell_types) {
+  # Subset to cell type
+  seurat_sub <- subset(seurat_rctd,
+                        first_type == ct)
+  Idents(seurat_sub) <- "orig.ident"
+
+  # Calculate DGEs with wilcox test
+  dge <- FindMarkers(seurat_myeloid,
+                    ident.1 = "P5CRC",
+                    ident.2 = "P5NAT")
+  dge$gene <- rownames(dge)
+  # Store full DGE results
+  list_dge[[ct]] <- dge
+
+  # Filter significant genes
+  dge_sig <- dge %>% subset(p_val_adj < 0.05)
+  # Get the gene names and get the first 6 values
+  genes <- dge_sig %>%
+    pull(gene) %>%
+    head(6)
+
+  # Print top 6 genes
+  print(paste(ct, ":", genes))
+}
+```
 
 # Exercise 2
 

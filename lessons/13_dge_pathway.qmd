@@ -1,7 +1,7 @@
 ---
 title: "Differential Gene Expression"
 description: |
-  In this lesson, we will perform differential expression analysis between celltypes of the matched cancer and normal samples. Afterwards, we will prcoess the significant genes into pathway and gene set enrichment analyses to observe trends.
+  In this lesson, we will perform differential expression analysis between cell types of the matched cancer and normal samples. Afterwards, we will process the significant genes into pathway and gene set enrichment analyses to observe trends.
 author:
   - Noor Sohail
   - Meeta Mistry
@@ -48,16 +48,16 @@ Approximate time: 90 minutes
 In this lesson, we will:
 
 - Run differential gene expression analysis using a Wilcoxon test
-- Calculate over-representated pathways
+- Calculate over-represented pathways
 - Identify gene set enrichment scores for pathways
 
 ## Overview of lesson
 
-By now, we have meaningful annotations for most of our bins for both samples. So now we can start to ask the question of how gene expression changes between sample conditions (NAT and CRC). Running a differential gene expression analysis is a great way to evaluate the significance of change between populations. However, looking at a table of genes can be overwhelming! So we can take the output from the DGE analysis to identify pathways that are enriched in one condition compared to another. This provides a mechanistic insight in the biological processes that differ between samples.
+By now, we have meaningful annotations for most of our bins for both samples. So now we can start to ask the question of how gene expression changes between sample conditions (NAT and CRC). Running a differential gene expression analysis is a great way to evaluate the significance of change between populations. However, looking at a table of genes can be overwhelming! So we can take the output from the DGE analysis to identify pathways that are enriched in one condition compared to another. This provides a mechanistic insight into the biological processes that differ between samples.
 
 ## Differential gene expression (DGE)
 
-What if we were interested in a particular celltype and **understanding how gene expression changes across the different conditions?** To answer this, we will perform a differential gene expression analysis. Let's start by creating a new R script called `08_DGE_and_functional_analysis.R` and place it within our `scripts` directory.
+What if we were interested in a particular cell type and **understanding how gene expression changes across the different conditions?** To answer this, we will perform a differential gene expression analysis. Let's start by creating a new R script called `08_DGE_and_functional_analysis.R` and place it within our `scripts` directory.
 
 ```{r}
 #| label: load 
@@ -88,14 +88,14 @@ For instance, maybe we are interested in seeing how the Myeloid population chang
 ```{r}
 #| label: subset_myeloid
 # Subset to Myeloid cells
-seurat_macro <- subset(seurat_rctd,
+seurat_myeloid <- subset(seurat_rctd,
                        first_type == "Myeloid")
-Idents(seurat_macro) <- "orig.ident"
+Idents(seurat_myeloid) <- "orig.ident"
 ```
 
 ### `FindMarkers()`
 
-The `FindMarkers()` function in the Seurat package is used to perform differential expression analysis between groups of cells. We will provide arguments to specify `ident.1` and `ident.2`, the two groups of cells we are interested in comparing. This function is commonly used at the [celltype annotation step](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/13_marker_identification.html), but can also be used to calculate differentially expressed genes between experimental conditions.
+The `FindMarkers()` function in the Seurat package is used to perform differential expression analysis between groups of cells. We will provide arguments to specify `ident.1` and `ident.2`, the two groups of cells we are interested in comparing. This function is commonly used at the [cell type annotation step](https://hbctraining.github.io/Intro-to-scRNAseq/lessons/13_marker_identification.html), but can also be used to calculate differentially expressed genes between experimental conditions.
 
 ::: {#fig-findmarkers .fig}
 ![](../img/marker_ident_function3.png){width=350}
@@ -118,7 +118,7 @@ Below we have described in more detail what each of these arguments do:
 
 | Parameter         | Description                                                                                                                                                                                  | Default |
 |-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `logfc.threshold` | The minimum log2 fold change for average expression of a gene in the group relative to the average expression in all other groups combined.                                                 | 0.25    |
+| `logfc.threshold` | The minimum log2 fold change for average expression of a gene in `ident.1` vs `ident.2`.                                                 | 0.25    |
 | `min.diff.pct`    | The minimum percent difference between the percent of cells expressing the gene in the group and the percent of cells expressing the gene in all other groups combined.                    | —       |
 | `min.pct`         | Only test genes that are detected in a minimum fraction of cells in either of the two populations; speeds up the function by skipping very infrequently expressed genes.                    | 0.1     |
 | `ident.1`         | The group of interest; this function evaluates one group at a time, and `ident.1` must correspond to a value set in `Idents()`.                                                              | —       |
@@ -128,8 +128,8 @@ Below we have described in more detail what each of these arguments do:
 ```{r}
 #| label: FindMarkers
 #| eval: false
-# Calculate DGEs
-dge <- FindMarkers(seurat_macro,
+# Calculate DGEs with wilcox test
+dge <- FindMarkers(seurat_myeloid,
                    ident.1 = "P5CRC",
                    ident.2 = "P5NAT")
 dge$gene <- rownames(dge)
@@ -141,7 +141,7 @@ dge %>% head()
 #| tbl-cap: "Wilcoxon test results from comparing P5CRC and P5NAT Myeloid bins."
 #| echo: false
 # Calculate DGEs
-dge <- FindMarkers(seurat_macro,
+dge <- FindMarkers(seurat_myeloid,
                    ident.1 = "P5CRC",
                    ident.2 = "P5NAT")
 dge$gene <- rownames(dge)
@@ -153,15 +153,15 @@ dge %>% head() %>% knitr::kable()
 | Column      | Description                                                                                                                  |
 |------------|------------------------------------------------------------------------------------------------------------------------------|
 | `gene`     | The gene symbol.                                                                                                             |
-| `p_val`    | The p-value not adjusted for multiple test corrections.                                                                      |
-| `avg_logFC`| The average log-fold change between sample groups. Positive values indicate that the gene is more highly expressed in `ident.1`. |
+| `p_val`    | The p-value not adjusted for multiple test corrections. **This should not be used to identify significant (see `p_val_adj`)**                                                                     |
+| `avg_logFC`| The average log-fold change between sample groups, calculated as: $$\frac{gene\_avg_{ident.1}}{gene\_avg_{ident.2}}$$ Positive values indicate that the gene is more highly expressed in `ident.1`. |
 | `pct.1`    | The percentage of cells where the gene is detected in `ident.1` (P5CRC).                                                     |
 | `pct.2`    | The percentage of cells where the gene is detected on average in `ident.2` (P5NAT).                                             |
 | `p_val_adj`| The adjusted p-value, based on Bonferroni correction using all genes in the dataset, used to determine significance.         |
 
-::: callout-note
+::: callout-important
 # Inflated p-values
-These tests treat each cell as an independent replicate and ignore inherent correlations between cells originating from the same sample. This results in highly **inflated p-values** for each gene. Studies have shown a large number of false positive associations with these results.
+These tests treat each cell as an independent replicate and ignore inherent correlations between cells originating from the same sample. This results in highly **inflated p-values** for each gene. [Studies have shown](https://academic.oup.com/bib/article/23/5/bbac286/6649780?login=false) a large number of [false positive associations](https://www.nature.com/articles/s41467-021-25960-2) with these results.
 :::
 
 ### Visualizing results
@@ -170,7 +170,7 @@ Now that we have our DGE results, we can visualize the genes in a variety of dif
 
 **Volcano plot**
 
-To get a first look at the genes that are retained, we can generated a volcano plot using the `EnhancedVolcano()` function. This is a visualization that allows us to quickly see trends in the significant genes. The x-axis represents the average log2-fold change value, showing the degree of difference between the two conditions. On the y-axis, we see our p_val_adj column represented after a negative log10 transformation is applied to better see the spread of the adjusted p-values.
+To get a first look at the differences in each condition, we can generate a volcano plot using the `EnhancedVolcano()` function. This is a visualization that allows us to quickly see trends in the significant genes. The x-axis represents the average log2-fold change value, showing the degree of difference between the two conditions. On the y-axis, we see our p_val_adj column represented after a negative log10 transformation is applied to better see the spread of the adjusted p-values.
 
 **Volcano plots provide a great overview of which genes are up-regulated (positive on the x-axis) or down-regulated (negative on the x-axis).** These results are all relative to `ident.1` (P5CRC).
 
@@ -190,7 +190,7 @@ EnhancedVolcano(dge,
 
 **Violin plots**
 
-While looking at the overall trends in the data is a great starting point, we can also look at genes that have large differences between CRC and NAT. To do this, we can take a pull the top 6 genes:
+While looking at the overall trends in the data is a great starting point, we can also look at genes that have large differences between CRC and NAT. To do this, we can pull the top 6 genes:
 
 ```{r}
 #| label: top_genes
@@ -210,10 +210,12 @@ And then plot them using the `VlnPlot()` function:
 #| label: fig-vln
 #| fig-cap: "Violin plot of top 6 genes in the Myeloid population."
 # Violin plot expression of genes per condition
-VlnPlot(seurat_macro, 
+VlnPlot(seurat_myeloid, 
         genes,
         group.by = "orig.ident")
 ```
+
+This can also be a helpful way in identifying the directionality of the log-fold change! `SRGN` had a positive `avg_log2FC` score and we can see there is more expression of this gene in condition `P5CRC`.
 
 **UMAP plot**
 
@@ -225,11 +227,13 @@ We can look at the distribution of gene expression for each of the top 6 genes w
 #| fig-height: 6
 #| fig-width: 10
 # UMAP of gene expression
-FeaturePlot(seurat_macro, 
+FeaturePlot(seurat_myeloid, 
             genes, 
             reduction = "full.umap.sketch",
             ncol = 3)
 ```
+
+These visuals would be most helpful if we had re-run PCA, UMAP, and clustering on this myeloid subpopulation. In doing so, we would be able to associate clusters to different subtypes of myeloid cells, which would inform the biological context of change in these genes.
 
 **Spatial plot**
 
@@ -239,10 +243,10 @@ We also have the spatial coordinates for these bins, so we can plot the expressi
 #| label: fig-spatialfeatureplot
 #| fig-cap: "Expression of top DE gene on the tissue."
 # Spatial plot of gene expression
-SpatialFeaturePlot(seurat_macro, 
+SpatialFeaturePlot(seurat_myeloid, 
                    genes[1], 
                    image.alpha = 0.1, 
-                   pt.size.factor = 18)
+                   pt.size.factor = 20)
 ```
 
 :::{.callout-tip}
@@ -259,13 +263,13 @@ When it comes to functional analysis there are **various analyses** that can be 
 - Identify genes' involvement in novel pathways or networks by grouping genes together based on similar trends
 - Use global changes in gene expression by visualizing all genes being significantly up- or down-regulated in the context of external interaction data
 
-Generally, for any differential expression analysis, it is useful to interpret the resulting gene lists using freely available web- and R-based tools.  While tools for functional analysis span a wide variety of techniques, they can loosely be categorized into three main types: over-representation analysis, functional class scoring and pathway topology ([Khatri et al., (2012)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002375)). 
+Generally, for any differential expression analysis, it is useful to interpret the resulting gene lists using freely available web- and R-based tools.  While tools for functional analysis span a wide variety of techniques, they can loosely be categorized into [three main types](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002375): over-representation analysis, functional class scoring and pathway topology. 
 
 ::: {#fig-findmarkers .fig}
 ![](../img/pathway_analysis.png){width=600}
 
 Different methods of assessing pathways.<br>
-_Image source: [Khatri et al., (2012)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002375)_
+_Image source: [Khatri et al. (2012)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002375)_
 :::
 
 
@@ -274,7 +278,7 @@ In this lesson, we will walk you through both an over-representation analysis an
 
 ## Over-representation analysis
 
-Over-representation analysis (ORA) is used to determine which _a priori_ defined gene sets are more present (over-represented) in a subset of “interesting” genes than what would be expected by chance [(Huang et al., 2009)](https://pmc.ncbi.nlm.nih.gov/articles/PMC2615629/). Most genes in the genome have some pre-existing annotation associated with it, which has been compiled through a combination of manual curation and computational algorithms. There are a number of existing databases which define genes using a controlled vocabulary and then categorize genes into groups (gene sets) based on shared function, involvement in a pathway or presence in a specific cellular location, etc. A very commonly used gene annotataion resource is the [Gene Ontology (GO) database](https://geneontology.org/), and is what we will use in our workflow.
+Over-representation analysis (ORA) is used to determine which _a priori_ defined gene sets are more present (over-represented) in a subset of “interesting” genes than what would be expected by chance [(Huang et al. 2009)](https://pmc.ncbi.nlm.nih.gov/articles/PMC2615629/). Most genes in the genome have some pre-existing annotation associated with it, which has been compiled through a combination of manual curation and computational algorithms. There are a number of existing databases which define genes using a controlled vocabulary and then categorize genes into groups (gene sets) based on shared function, involvement in a pathway or presence in a specific cellular location, etc. A very commonly used gene annotation resource is the [Gene Ontology (GO) database](https://geneontology.org/), and is what we will use in our workflow.
 
 We then use those categorizations to assess whether or not the enrichment observed amongst our DE gene results when compared to the larger universe of genes is significant. 
 
@@ -321,7 +325,7 @@ sigUp_genes <- as.character(sigUp$gene)
 sigUp_genes %>% head()
 ```
 
-Finally, we can perform the GO enrichment analysis with `enrichGO()` and save the results:
+Finally, we can perform the GO enrichment analysis with `enrichGO()`, focusing on the `BP` biological processes pathways:
 
 ```{r}
 #| label: GO_upregulated
@@ -336,9 +340,9 @@ egoUp <- enrichGO(gene = sigUp_genes,
                   readable = TRUE)
 ```
 
-::: callout-note
-# Notes about `enrichGO()` parameters
-**Note 1:** The different organisms with annotation databases available to use with the `OrgDb` argument can be found [here](../img/orgdb_annotation_databases.png).
+::: {.callout-note collapse="true"}
+# `enrichGO()` parameters
+**Note 1:** The different organisms with annotation databases available to use with the `OrgDb` argument can be found [here](https://bioconductor.org/packages/release/BiocViews.html#___OrgDb).
 
 **Note 2:** The `keyType` argument may be coded as `keytype` in different versions of `clusterProfiler`.
 
@@ -401,21 +405,21 @@ dotplot(egoUp,
 
 ## Gene Set Enrichment Analysis (GSEA)
 
-While over-representation analysis is helpful and commonly used, it does require you to subset your gene list using an arbitrary threshold. There could very well be many genes that very narrowly miss this threshold and are therefore not considered in the functional analysis. To get around this, there are there are **functional class scoring (FCS) methods** that can be helpful. For these methods the hypothesis is that **although large changes in individual genes can have significant effects on pathways (and will be detected via ORA methods), weaker but coordinated changes in sets of functionally related genes (i.e., pathways) can also have significant effects**. Thus, rather than setting a threshold to identify 'significant genes', all genes are considered in the analysis. The gene-level statistics from the dataset are aggregated to generate a single pathway-level statistic and statistical significance of each pathway is reported. This type of analysis can be particularly helpful if the differential expression analysis only outputs a small list of significant DE genes.
+While over-representation analysis is helpful and commonly used, it does require you to subset your gene list using an arbitrary threshold. There could very well be many genes that very narrowly miss this threshold and are therefore not considered in the functional analysis. To get around this, there are **functional class scoring (FCS) methods** that can be helpful. For these methods the hypothesis is that **although large changes in individual genes can have significant effects on pathways (and will be detected via ORA methods), weaker but coordinated changes in sets of functionally related genes (i.e., pathways) can also have significant effects**. Thus, rather than setting a threshold to identify 'significant genes', all genes are considered in the analysis. The gene-level statistics from the dataset are aggregated to generate a single pathway-level statistic and statistical significance of each pathway is reported. This type of analysis can be particularly helpful if the differential expression analysis only outputs a small list of significant DE genes.
 
-A commonly used example of an FCS method is GSEA [(Subramanium et al., 2005)](https://www.pnas.org/doi/10.1073/pnas.0506580102). Gene set enrichment analysis utilizes gene-level statistics or log2-fold changes for all genes to look to see whether gene sets for particular biological pathways (e.g., derived from KEGG pathways, Gene Ontology terms, MSigDB, etc.) are enriched among the large positive- or negative-fold changes.
+A commonly used example of an FCS method is GSEA [(Subramanian et al. 2005)](https://www.pnas.org/doi/10.1073/pnas.0506580102). Gene set enrichment analysis utilizes gene-level statistics or log2-fold changes for all genes to look to see whether gene sets for particular biological pathways (e.g., derived from KEGG pathways, Gene Ontology terms, MSigDB, etc.) are enriched among the large positive- or negative-fold changes.
 
 ::: {#fig-findmarkers .fig}
 ![](../img/gsea_overview.png){width=400}
 
 Schematic of the GSEA method.<br>
-_Image source: [Subramanium et al., (2005)](https://www.pnas.org/doi/10.1073/pnas.0506580102)_
+_Image source: [Subramanium et al. (2005)](https://www.pnas.org/doi/10.1073/pnas.0506580102)_
 :::
 
 This image describes the theory of GSEA, with the 'gene set S' showing the metric used (in our case, ranked log2-fold change) to determine enrichment of genes in the gene set. There are four main steps that are being performed:
 
 1. **Rank genes**:
-    - Genes in a dataset are ranked based on the given statistic, which in our case is the shrunken log2-fold changes. 
+    - Genes in a dataset are ranked based on the given statistic, which in our case is the log2-fold changes. 
 2. **Calculate enrichment scores for each gene set**
     - This score reflects how often genes in the set appear at the top or bottom of the ranked list.
     - The score is calculated by walking down the list of log2-fold changes and increasing the running-sum statistic every time a gene in the gene set is encountered and decreasing it when genes are not part of the gene set.
@@ -517,7 +521,7 @@ Take a look at the results table and reorder by NES (normalized enrichment score
 #| eval: false
 # Look at results ordered by NES
 msigGSEA_results %>%
-  arrange(-NES) %>%
+  arrange(desc(abs(NES))) %>%
   View()
 ```
 
@@ -525,7 +529,7 @@ msigGSEA_results %>%
 #| label: tbl-msigdb_results
 #| tbl-cap: GSEA pathway analysis results, ordered by normalized enrichment score (NES).
 #| echo: false
-msigGSEA_results %>% arrange(-NES) %>% head() %>% knitr::kable()
+msigGSEA_results %>% arrange(desc(abs(NES))) %>% head() %>% knitr::kable()
 ```
 
 - The first few columns of the results table identify the gene set information.
@@ -539,16 +543,16 @@ msigGSEA_results %>% arrange(-NES) %>% head() %>% knitr::kable()
 
 ### GSEA visualization
 
-Let's explore the GSEA plot of enrichment of one of the pathways in the ranked list using a built-in function from clusterProfiler. We can pick the top term `GOMF_CYTOKINE_ACTIVITY`:
+Let's explore the GSEA plot of enrichment of one of the pathways in the ranked list using a built-in function from clusterProfiler. We can pick one of the top terms `GOBP_INFLAMMATORY_RESPONSE`:
 
 ```{r}
 #| label: create_GSEA_plot
 # Plot the GSEA plot for a single enriched GO term
 gseaplot(msig_GSEA,
-         geneSetID = 'GOMF_CYTOKINE_ACTIVITY')
+         geneSetID = 'GOBP_INFLAMMATORY_RESPONSE')
 ```
 
-In this plot, the lines in upper panel (or on the x-axis in the lower panel) represent the genes in the gene set `GOMF_CYTOKINE_ACTIVITY` and where they occur among the log2-fold changes. The largest positive log2-fold changes are on the left-hand side of the plot, while the largest negative log2-fold changes are on the right. The top plot shows the magnitude of the log2-fold changes for each gene, while the bottom plot shows the running sum, with the enrichment score peaking at the red dotted line (which is among the positive log2-fold changes). This suggests the up-regulation of this function.
+In this plot, the lines in upper panel (or on the x-axis in the lower panel) represent the genes in the gene set `GOBP_INFLAMMATORY_RESPONSE` and where they occur among the log2-fold changes. The largest positive log2-fold changes are on the left-hand side of the plot, while the largest negative log2-fold changes are on the right. The top plot shows the magnitude of the log2-fold changes for each gene, while the bottom plot shows the running sum, with the enrichment score peaking at the red dotted line (which is among the positive log2-fold changes). This suggests the up-regulation of this function.
 
 ***
 
