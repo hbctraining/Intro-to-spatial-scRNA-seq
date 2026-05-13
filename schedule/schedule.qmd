@@ -120,9 +120,9 @@ II. **Submit your work**:
 | Time |  Topic  | Instructor |
 |:-----------:|:----------:|:--------:|
 | 10:00 - 10:30 | Self-learning lessons discussion | All |
-| 10:30 - 11:10 | [BANKSY Spatial Clustering](../lessons/11_banksy_clustering.qmd) | Will |
+| 10:30 - 11:10 | [BANKSY Spatial Clustering](../lessons/11_banksy_clustering.qmd) | Noor |
 | 11:10 - 11:15 | Break | |
-| 11:15 - 11:55 | [Deconvolution](../lessons/12_deconvolution.qmd) | Noor |
+| 11:15 - 11:55 | [Deconvolution](../lessons/12_deconvolution.qmd) | Will |
 | 11:55 - 12:00 | Overview of self-learning materials and homework submission | Noor |
 
 ### Before the next class:

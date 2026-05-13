@@ -151,7 +151,7 @@ counts_norm_crc[1:5, 1:5]
 
 ```{r}
 #| label: tbl-get_assay
-#| tbl-cap: First 5 bins and genes of log-normalized counts in the P5CRC dataset.
+#| tbl-cap: "First 5 bins and genes of log-normalized counts in the P5CRC dataset."
 #| echo: false
 # Get normalized counts matrices
 counts_norm_crc <- GetAssayData(crc,
@@ -172,7 +172,7 @@ coords_crc %>% head()
 
 ```{r}
 #| label: tbl-get_coords
-#| tbl-cap: Spatial coordinates of the first 5 bins in the P5CRC dataset.
+#| tbl-cap: "Spatial coordinates of the first 5 bins in the P5CRC dataset."
 #| echo: false
 # Get spatial coordinates
 coords_crc <- FetchData(crc, vars = c("x", "y"))
@@ -284,7 +284,7 @@ cellchat_crc@var.features$features.info %>%
 
 ```{r}
 #| label: tbl-identify_overexpressed_genes
-#| tbl-cap: Top over expressed genes in each cell type.
+#| tbl-cap: "Top over expressed genes in each cell type."
 #| echo: false
 # Identify genes that are over-expressed relative to other cell types
 cellchat_crc <- identifyOverExpressedGenes(cellchat_crc)
@@ -340,7 +340,7 @@ These steps run under the principle of mass action, where high expression of lig
 
 ```{r}
 #| label: tbl-computeCommunProb_params
-#| tbl-cap: Parameters for `computeCommunProb()` function.
+#| tbl-cap: "Parameters for `computeCommunProb()` function."
 #| echo: false
 library(knitr)
 library(kableExtra)
@@ -439,11 +439,11 @@ With this information, we can begin visualizing how the bins in `P5CRC` are inte
 
 ### Strength and number of interactions
 
-The most popular representation is the `netVisual_circle()` plot, which shows how the cell types are interacting with one another. This is accomplished by setting nodes of each cell type on the boundary of a circle, with lines from source to target showcasing either the number or strength of interactions.
+The most popular representation is the `netVisual_circle()` plot, which shows how the celltypes are interacting with one another. This is accomplished by setting nodes of each celltype on the boundary of a circle, with lines from source to target showcasing either the number or strength of interactions.
 
 ```{r}
 #| label: fig-cell_type_interactions
-#| fig-cap: Circular plot, showcasing the strength and number of ligand-receptor interactions between cell types.
+#| fig-cap: "Circular plot, showcasing the strength and number of ligand-receptor interactions between cell types."
 #| fig-width: 10
 # 2 plots, side-by-side
 par(mfrow = c(1, 2), xpd = TRUE) 
@@ -468,13 +468,13 @@ netVisual_circle(
 par(mfrow = c(1, 1)) 
 ```
 
-Notice that the strongest interactions is circular between tumor cells. This tells us that tumor cells are frequently and strongly sending signals to one another. We can also see that fibroblasts appear to be sending signals to tumor cells. [Rodriguez et. al (2025)](https://www.nature.com/articles/s42003-025-08799-x) found that cancer-associate fibroblasts "induce pro-invasive gene expression changes involved in epithelial-mesenchymal transition, extracellular matrix remodeling, and migration."
+Notice that the strongest interactions are circular between tumor cells. This tells us that tumor cells are frequently and strongly sending signals to one another. We can also see that fibroblasts appear to be sending signals to tumor cells. [Rodriguez et al., 2025](https://www.nature.com/articles/s42003-025-08799-x), found that cancer-associate fibroblasts "induce pro-invasive gene expression changes involved in epithelial-mesenchymal transition, extracellular matrix remodeling and migration."
 
-An alternative way to represent this same information can be done with a heatmap. of this information can be represented as a heatmap. On the y-axis are the "sources" and the x-axis are the "receivers". The intensity of the heatmap is proportional to the number/strength of interactions between the source and receiver cell types. The top colored bar plot represents the sum of column of values displayed in the heatmap. The right colored bar plot represents the sum of row of values.
+An alternative way to represent this same information can be done with a heatmap. On the y-axis are the "sources" and the x-axis are the "receivers". The intensity of the heatmap is proportional to the number/strength of interactions between the source and receiver cell types. The top colored bar plot represents the sum of column of values displayed in the heatmap. The right colored bar plot represents the sum of row of values.
 
 ```{r}
 #| label: fig-netVisual_heatmap
-#| fig-cap: Heatmap of interaction numbers and strengths between cell types.
+#| fig-cap: "Heatmap of interaction numbers and strengths between cell types."
 # Number of LR interactions between celltypes heatmap
 gg_h_count  <- netVisual_heatmap(
   cellchat_crc, 
@@ -493,22 +493,22 @@ gg_h_weight <- netVisual_heatmap(
 gg_h_count + gg_h_weight
 ```
 
-To summarize the amount of incoming and outgoing signal, we can also generate a scatterplot. Each point represents a unique cell types, where the size is the total number of incoming and outgoing ligand-receptor interactions for that cell type. The x-axis represents the total _outgoing_ communication probability and the y-axis, similarly, represents the total _incoming_. 
+To summarize the amount of incoming and outgoing signal, we can also generate a scatterplot. Each point represents a unique cell types, where the size is the total number of incoming and outgoing ligand-receptor interactions for that celltype. The x-axis represents the total _outgoing_ communication probability and the y-axis, similarly, represents the total _incoming_ communication probability. 
 
 ```{r}
 #| label: fig-signalingrole
-#| fig-cap: Scatterplot of incoming and outgoing signaling for each cell type.
+#| fig-cap: "Scatterplot of incoming and outgoing signaling for each cell type."
 # Scatterplot of in/out signaling for each cell type
 netAnalysis_signalingRole_scatter(cellchat_crc)
 ```
 
 ### Pathway-level visuals
 
-The last steps we ran in the CellChat workflow was to calculate statistics for the overarching pathways involved with each ligand-receptor. So now we can take a look at the ranked, top significant pathways associated with our dataset:
+The last steps we ran in the CellChat workflow was to calculate statistics for the overarching pathways involved with each ligand-receptor. So now we can take a look at the ranked, top significant pathways associated within our dataset:
 
 ```{r}
 #| label: fig-ranknet
-#| fig-cap: Top ranked ligand-receptor pathways.
+#| fig-cap: "Top ranked ligand-receptor pathways."
 #| fig-height: 8
 # Top significant pathways
 rankNet(cellchat_crc, 
@@ -518,11 +518,11 @@ rankNet(cellchat_crc,
         do.stat = TRUE)
 ```
 
-For each of these pathways, we have associated signaling strength for each cell type. We can evaluate the outgoing and incoming pathways signal strength for each cell type.
+For each of these pathways, we have associated signaling strength for each celltype. We can evaluate the outgoing and incoming pathways signal strength for each celltype.
 
 ```{r}
 #| label: fig-heatmap_pathways
-#| fig-cap: Outgoing and incoming pathways signal strength for each cell type
+#| fig-cap: "Outgoing and incoming pathways signal strength for each celltype"
 #| fig-width: 10
 #| fig-height: 10
 # Heatmap of outgoing pathway signaling strength
@@ -547,11 +547,11 @@ ht_in  <- netAnalysis_signalingRole_heatmap(
 ht_out + ht_in
 ```
 
-If we wanted to zoom in on one particular pathways, in this case `CEACAM`, we can use the `netVisual_aggregate()` and specify the signaling pathway. For a circular plot with lines directed between, we supply the `layout` argument as `"chord"`.
+If we wanted to zoom in on one particular pathway, in this case `CEACAM`, we can use the `netVisual_aggregate()` and specify the signaling pathway. For a circular plot with lines directed between, we supply the `layout` argument as `"chord"`.
 
 ```{r}
 #| label: fig-netVisual_aggregate_chord
-#| fig-cap: CEACAM pathways interactions between cell types.
+#| fig-cap: "CEACAM pathways interactions between celltypes."
 #| fig-width: 6.5
 #| fig-height: 6.5
 # netVisual_aggregate on the whole pathway to show chrods
@@ -567,7 +567,7 @@ There is `spatial` layout that we can also supply to `netVisual_aggregate()`. Ho
 
 ```{r}
 #| label: fig-netVisual_aggregate_spatial
-#| fig-cap: Spatial plot of CEACAM pathway interaction between cell types on the tissue.
+#| fig-cap: "Spatial plot of CEACAM pathway interaction between celltypes on the tissue."
 # netVisual_aggregate on the whole pathway to show arrows of interactions
 # Plotted on the spatial tissue slide
 netVisual_aggregate(
@@ -582,13 +582,13 @@ netVisual_aggregate(
   vertex.label.cex = 3)
 ```
 
-Other, more structured spatially dataset, can make use of this type of figure to show where exactly interactions are occuring, seen here:
+Other, more structured spatially datasets, can make use of this type of figure to show where exactly interactions are occuring, seen here:
 
 ::: {#fig-cellchat_netVisual_aggregate_spatial .fig}
 ![](../img/cellchat_netVisual_aggregate_spatial.png){width=800}
 
 Spatial images of PSAP and SPP1 signaling pathway network, the thickness of lines represents the strength of signals.<br>
-_Image source: [Dong et al. (2025)](https://www.nature.com/articles/s41698-025-01028-y/figures/7)_
+_Image source: [Dong et al., 2025](https://www.nature.com/articles/s41698-025-01028-y/figures/7)_
 :::
 
 :::
@@ -609,11 +609,11 @@ top_pathways <- cellchat_crc@netP$pathways[1:5]
 top_pathways
 ```
 
-In particular, we are interested in the cell types that are interacting with tumor cells. So we will look at all ligand-receptor complexes in those top pathways that have tumor cells as the source. This is represented as bubbleplot, where the size of the dot is proportion to the p-value. The color represents the probability of interaction for the cell type directed interaction, as labeled on the x-axis.
+In particular, we are interested in the celltypes that are interacting with tumor cells. So we will look at all ligand-receptor complexes in those top pathways that have tumor cells as the source. This is represented as a bubbleplot, where the size of the dot is proportion to the p-value. The color represents the probability of interaction for the celltype-directed interaction, as labeled on the x-axis.
 
 ```{r}
 #| label: fig-netVisiual_bubble
-#| fig-cap: Bubbleplot of significant pathways with tumor cells as source.
+#| fig-cap: "Bubbleplot of significant pathways with tumor cells as source."
 #| fig-width: 8
 #| fig-height: 8
 netVisual_bubble(cellchat_crc,
@@ -629,7 +629,7 @@ netVisual_bubble(cellchat_crc,
 ### Zoom in on specific ligand-receptor complexes
 
 ::: {.callout-note collapse="true"}
-# Accessing table of ligrand-receptor results
+# Accessing the table of ligand-receptor results
 
 If you wanted to access the full dataframe of results, we can use the `subsetCommuncation()` function:
 
@@ -643,7 +643,7 @@ df_lr %>% head(5)
 
 ```{r}
 #| label: tbl-lr_results
-#| tbl-cap: Dataframe of ligand-receptor results, sorted by probability.
+#| tbl-cap: "Dataframe of ligand-receptor results, sorted by probability."
 #| echo: false
 df_lr <- subsetCommunication(cellchat_crc) %>%
   arrange(desc(prob))
@@ -653,14 +653,16 @@ df_lr %>% head(5) %>% knitr::kable()
 :::
 
 
-From the previous visual, perhaps we were interested in the specific ligand `COL3A1` and receptor `SDC4` interaction between fibroblasts and tumors. We can start by taking a look at the `SpatialFeaturePlot()` to get a better sense of where these genes localize on our slide:
+From the previous visual, perhaps we were interested in the specific ligand, `COL3A1`, and receptor, `SDC4`, interaction between fibroblasts and tumors. We can start by taking a look at the `SpatialFeaturePlot()` to get a better sense of where these genes localize on our slide:
 
 ```{r}
+#| label: fig-spatialfeatureplot
+#| fig-cap: "SpatialFeaturePlot showing the expression of a ligand (COL3A1) and a receptor (SDC4) on our CRC slide."
 ligand <- "COL3A1"
 receptor <- "SDC4"
 
 SpatialFeaturePlot(crc, 
-                   c(ligand, receptor),
+                   features = c(ligand, receptor),
                    pt.size.factor = 15,
                    image.alpha = 0.2)
 ```
@@ -669,22 +671,23 @@ There is a [population of fibroblasts](12_deconvolution.html#fig-spatial_first_t
 
 ```{r}
 #| label: fig-vlnplot_ligand_receptor
-#| fig-cap: Distribution of ligand-receptor pair COL3A1-SDC4 which is a significant communication between fibroblasts and tumor cells.
+#| fig-cap: "Distribution of ligand-receptor pair, COL3A1-SDC4, which has significant communication between fibroblasts and tumor cells."
 #| fig-height: 6
 VlnPlot(crc, 
-        c(ligand, receptor), 
+        features = c(ligand, receptor), 
         group.by = "first_type",
         pt.size = 0,
         ncol = 1)
 ```
 
-Notably, there is also high expression of `SDC4` in the tumor cells. This is the underlying principle of mass action utilized by CellChat. Essentially, if there is high expression of the ligand in the source cell type (fibroblasts and `COL3A1`) and high expression of the receptor (`SDC4`) in the target cell type (tumor cells), then there will be high probability communication between the two. Especially if they are localized to the same area of the tissue.
+Notably, there is also high expression of `SDC4` in the tumor cells. This is the underlying principle of mass action utilized by CellChat. Essentially, if there is high expression of the ligand (`COL3A1`) in the source celltype (fibroblasts) and high expression of the receptor (`SDC4`) in the target celltype (tumor cells), then there will be a high probability communication between the two, especially, if they are localized to the same area of the tissue.
 
 ## Session information
 
-Now we would want to save the output of sessionInfo():
+Now that we have completed our analysis, it would be a good time record the packages and versions of the tools we used in the analysis. The `sink()` function allows us to save the output from a function, in this case the `sessionInfo()` function. This improves the reproducibility of our code for ourselves and others. We can do this like:
 
 ```{r}
+#| label: sessioninfo
 #| eval: false
 # Create and save a text file with sessionInfo
 sink("sessionInfo_spatial_transcriptomics.txt")
