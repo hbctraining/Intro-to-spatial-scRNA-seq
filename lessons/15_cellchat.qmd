@@ -88,11 +88,7 @@ First, the authors created a database of known ligand-receptor interactions from
 
 ## Running cellchat
 
-<<<<<<< Updated upstream
-CellChat was written such that you run the workflow on one sample at a time and then merge all datasets together to run a comparative analysis. So here, we are going to focus on the ligand-receptor results for our `P5CRC` dataset. As this is a new analysis, we will create a new script titled `09_cellchat.R`:
-=======
-CellChat was written such that you run the workflow on one sample at a time and then merge all datasets together to run a comparative analysis. So here, we are going to focus on the ligand-receptor results for our `P5CRC` dataset. As this is a new analysis, we will create a new script titled `0X_cellchat.R` and place it within our `scripts` directory:
->>>>>>> Stashed changes
+CellChat was written such that you run the workflow on one sample at a time and then merge all datasets together to run a comparative analysis. So here, we are going to focus on the ligand-receptor results for our `P5CRC` dataset. As this is a new analysis, we will create a new script titled `09_cellchat.R` and place it within our `scripts` directory:
 
 ```{r}
 #| label: header_libraries
