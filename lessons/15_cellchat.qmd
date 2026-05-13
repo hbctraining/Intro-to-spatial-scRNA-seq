@@ -1,7 +1,7 @@
 ---
 title: "CellChat"
 description: |
-  Analyze cell–cell communication in spatial transcriptomics using CellChat infer signaling networks. You will build interaction graphs between cell types and relate spatial proximity to signaling strength.
+  In this lesson, we will analyze cell–cell communication in spatial transcriptomics using CellChat to infer signaling networks. You will build interaction graphs between celltypes and relate spatial proximity to signaling strength.
 author:
   - Noor Sohail
 date: "2026-04-19"
@@ -52,13 +52,13 @@ Approximate time: XX minutes
 
 In this lesson, we will:
 
-- Create CellChat object
-- Run CellChat workflow to calculate ligand-receptor interactions
+- Create a CellChat object
+- Run the CellChat workflow to calculate ligand-receptor interactions
 - Visualize ligand receptor interactions
 
 ## Overview of lesson
 
-At this point in our analysis, we are comfortable with the different cell type annotations in our dataset. So we might start asking questions about how each of those populations are interacting with one another. In this lesson we will use CellChat, building directed signaling networks. These interaction maps help connect static expression patterns to dynamic biological processes such as immune infiltration, niche signaling, or tumor–stroma crosstalk.
+At this point in our analysis, we are comfortable with the celltype annotations of our dataset. So we might start asking questions about how each of those populations are interacting with one another. In this lesson, we will use CellChat to build directed signaling networks. These interaction maps help connect static expression patterns to dynamic biological processes such as immune infiltration, niche signaling or tumor–stroma crosstalk.
 
 ## Cell-cell communication
 
@@ -66,29 +66,33 @@ At this point in our analysis, we are comfortable with the different cell type a
 ![](../img/ccc_schematic.png){width=500}
 
 Schematic of representative signal pathways for cell-cell communication.<br>
-_Image source: [Su et al. (2024)](https://www.nature.com/articles/s41392-024-01888-z)_
+_Image source: [Su et al., 2024](https://www.nature.com/articles/s41392-024-01888-z)_
 :::
 
-We know that cells do not exist in an isolated environment, where they do not interact with anything. The opposite is true, where cells interact with one another and exchange information through various mechanisms such as signal transduction for activating proteins. Understanding which cells interact with each other is crucial for understanding how cell differentiation, organ development, and metabolism is modulated.
+We know that cells do not exist in an isolated environment, where they do not interact with anything. The opposite is true, where cells interact with one another and exchange information through various mechanisms, such as signal transduction for activating proteins. Understanding which cells interact with each other is crucial for understanding how cell differentiation, organ development and metabolism is modulated.
 
 Spatial transcriptomics is a great input dataset for these methods because **many cell interactions are observed between cells in close proximity**. The coordinates become a powerful input parameter to improve the accuracy of interaction results.
 
 ### CellChat
 
-CellChat is a method that was originally published by [Jin et. al (2021)](https://www.nature.com/articles/s41467-021-21246-9) and then updated several years later [Jin et al. (2025)](https://www.nature.com/articles/s41596-024-01045-4) to incorporate spatial coordinates into the model. The output is are lists of significant ligand-receptor interactions between cell types
+CellChat is a method that was originally published by [Jin et al., 2021](https://www.nature.com/articles/s41467-021-21246-9), and then updated several years later [Jin et al., 2025](https://www.nature.com/articles/s41596-024-01045-4), to incorporate spatial coordinates into the model. The outputs of CellChat are lists of significant ligand-receptor interactions between cell types.
 
 ::: {#fig-cellchat_schematic .fig}
 ![](../img/cellchat_schematic.png){width=500}
 
 Overview of CellChat method.<br>
-_Image source: [Hao et al. (2021)](https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2021.751158/full)_
+_Image source: [Hao et al., 2021](https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2021.751158/full)_
 :::
 
-First, the authors created a database of known ligand-receptor interactions from the literature classified as: secreted signaling, extracellular matrix recepotrs, and cell-cell contact. This database is used in conjunction with your own dataset and its cell type labels to identify communcations between populations. In essence, the method identifies overexpressed ligand receptors from the database in your own data to measure association using the principle of mass action.
+First, the authors created a database of known ligand-receptor interactions from the literature classified as: secreted signaling, extracellular matrix recepotrs and cell-cell contact. This database is used in conjunction with your own dataset and its celltype labels to identify communcations between populations. In essence, the method identifies overexpressed ligand receptors from the database in your own data to measure association using the principle of mass action.
 
 ## Running cellchat
 
+<<<<<<< Updated upstream
 CellChat was written such that you run the workflow on one sample at a time and then merge all datasets together to run a comparative analysis. So here, we are going to focus on the ligand-receptor results for our `P5CRC` dataset. As this is a new analysis, we will create a new script titled `09_cellchat.R`:
+=======
+CellChat was written such that you run the workflow on one sample at a time and then merge all datasets together to run a comparative analysis. So here, we are going to focus on the ligand-receptor results for our `P5CRC` dataset. As this is a new analysis, we will create a new script titled `0X_cellchat.R` and place it within our `scripts` directory:
+>>>>>>> Stashed changes
 
 ```{r}
 #| label: header_libraries
@@ -96,7 +100,7 @@ CellChat was written such that you run the workflow on one sample at a time and 
 # CellChat
 # Visium HD spatial transcriptomics workshop
 # Author: Harvard Chan Bioinformatics Core
-# Created: December 2025
+# Created: May 2025
 
 # Load libararies
 library(tidyverse)
@@ -160,7 +164,7 @@ counts_norm_crc <- GetAssayData(crc,
 counts_norm_crc[1:5, 1:5] %>% knitr::kable()
 ```
 
-Next we will grab the spatial coordinates associated with each bin. Here, we will use the `FetchData()` function to grab the coordinates we stored in the `@meta.data` in the . You could also use the ouput from the `GetTissueCoordinates()` function as well.
+Next, we will grab the spatial coordinates associated with each bin. Here, we will use the `FetchData()` function to grab the coordinates we stored in the `@meta.data`. You could also use the ouput from the `GetTissueCoordinates()` function as well.
 
 ```{r}
 #| label: get_coords
@@ -179,10 +183,10 @@ coords_crc <- FetchData(crc, vars = c("x", "y"))
 coords_crc %>% head() %>% knitr::kable()
 ```
 
-Now we need to grab the `spatial.factors` which is described as a dataframe with `ratio` and `tol`, where:
+We now need to grab the `spatial.factors` which is described as a dataframe with `ratio` and `tol`, where:
 
-- `ratio` – conversion from image units (e.g., pixels) to micrometers. For example: `ratio = 0.18` means `1 pixel = 0.18 µm`.
-- `tol` – distance tolerance to make center-to-center distance comparisons more robust, often set to about _half_ the cell/spot size (in µm).
+- `ratio`: conversion from image units (e.g., pixels) to micrometers. For example: `ratio = 0.18` means `1 pixel = 0.18 µm`.
+- `tol`: distance tolerance to make center-to-center distance comparisons more robust, often set to about _half_ the cell/spot size (in µm).
 
 Luckily, these values are stored in the `scalefactors_json.json` file that Space Ranger outputs. So we will need to load in the file using `jsonlite` and then create a dataframe with the relevant information.
 
@@ -193,14 +197,14 @@ sf_json <- jsonlite::fromJSON("data/P5CRC_cropped/binned_outputs/square_008um/sp
 
 # Create spatial.factors dataframe
 spatial_factors_crc <- data.frame(
-  # pixels-to-µm conversion factor
+  # Pixels-to-µm conversion factor
   ratio = sf_json$bin_size_um / sf_json$spot_diameter_fullres,
-  # neighbour tolerance radius in µm
+  # Neighbour tolerance radius in µm
   tol = sf_json$bin_size_um / 2)
 spatial_factors_crc
 ```
 
-Now that we have generated all three input files needed for `createCellChat()`, we can start the CellChat workflow. We will additionally supply our metadata as well as the column which contains our cell type annotations (`first_type`).
+With all three input files needed for `createCellChat()` generated, we can start the CellChat workflow. We will additionally supply our metadata as well as the column which contains our cell type annotations (`first_type`).
 
 ```{r}
 #| label: create_cellchat
@@ -209,18 +213,17 @@ cellchat_crc <- createCellChat(
   object = counts_norm_crc,
   coordinates = coords_crc,
   spatial.factors = spatial_factors_crc,
-
   meta = crc@meta.data,
   group.by = "first_type",
   datatype = "spatial")
 
-# Callout CellChat object
+# Display the CellChat object
 cellchat_crc
 ```
 
 ### CellChat databset
 
-CellChatDB is the database that contains the manually curated set of ligand-receptor interactions created by the authors. It includes the following types of interations:
+CellChatDB is the database that contains the manually curated set of ligand-receptor interactions created by the authors. It includes the following types of interactions:
 
 - Secretory autocrine/paracrine signaling interactions
 - Cell-cell contact interactions
@@ -257,7 +260,7 @@ cellchat_db <- subsetDB(CellChatDB,
 
 :::
 
-Now that the database is linked to our dataset, we next **must** run the `subsetData()` function to filter the dataset to the signaling genes to save on computation.
+Now that the database is linked to our dataset, we **need** to run the `subsetData()` function to filter the dataset to the signaling genes to save on computation.
 
 ```{r}
 #| label: subsetdata_cellchat
@@ -265,7 +268,7 @@ Now that the database is linked to our dataset, we next **must** run the `subset
 cellchat_crc <- subsetData(cellchat_crc)
 ```
 
-Next, we identify which genes are overexpressed in each cell type (unique values in `group.by` column). These scores are calculated with a [wilcoxon and auROC test](https://rdrr.io/github/immunogenomics/presto/man/wilcoxauc.html) from the `calculateOverExpressed()` function. 
+Next, we identify which genes are overexpressed in each cell type. These scores are calculated with a [Wilcoxon and auROC test](https://rdrr.io/github/immunogenomics/presto/man/wilcoxauc.html) from the `calculateOverExpressed()` function. 
 
 This is very similar to how we ran `FindMarkers()` in a [previous lesson](13_dge_pathway.qmd). The results are stored in the `@var.features` slot of the CellChat object. To preview what is happening behind the scenes, we can take a look at the top genes per clusters, ranked by the adjusted p-value and log-fold change.
 
@@ -304,7 +307,7 @@ Some of these genes may look familiar!
 
 **We will not be running the following three steps during class due to the time it takes to compute.** We will provide an RDS object with the output in the appropriate step of the workflow.
 
-Similar to how we identified over-expressed genes per cell type, we can also calculate over expressed **interactions**, or ligand-receptor pairs. 
+Similar to how we identified over-expressed genes per cell type, we can also calculate over-expressed **interactions**, or ligand-receptor pairs. 
 
 ```{r}
 #| label: identifyOverExpressedInteractions
@@ -323,11 +326,13 @@ This next step of `smoothData()` (or `projectData()` in older version of CellCha
 # (Optional) 
 # Smooth expression over the protein-protein interaction network to reduce dropout noise. 
 # If you run this, set raw.use = FALSE in computeCommunProb()
-cellchat_crc <- smoothData(cellchat_crc, adj = PPI.human)
-# cellchat <- projectData(cellchat, PPI.human) # older version of function
+cellchat_crc <- smoothData(cellchat_crc,
+                           adj = PPI.human)
+# For older versions of CellChat, the function is: 
+# cellchat <- projectData(cellchat, PPI.human) 
 ```
 
-The last computationally heavy step of this workflow is `computeCommunProb()`, which calculates the interaction strengths and probabilities of cell types. The steps are to:
+The last computationally heavy step of this workflow is `computeCommunProb()` function, which calculates the interaction strengths and probabilities of cell types. The steps are:
 
 1. Summarize gene expression per cell type by average and normalize (`triMean`)
 2. Create ligand-receptor (LR) pairs and assign values based on expression patterns for each cell type
@@ -335,7 +340,7 @@ The last computationally heavy step of this workflow is `computeCommunProb()`, w
 4. Computer communication strength for LR and cell type pairs, incorporating spatial weights
 5. Run permutation test for significance testing
 
-These steps run under the principles of mass action, where high expression of ligand and receptors in cell types indicate a higher interaction strength.
+These steps run under the principle of mass action, where high expression of ligand and receptors in cell types indicate a higher interaction strength.
 
 ```{r}
 #| label: tbl-computeCommunProb_params
@@ -345,18 +350,16 @@ library(knitr)
 library(kableExtra)
 
 args <- data.frame(
-  Argument = c("object", "type", "raw.use", "distance.use",
-               "interaction.range", "scale.distance",
-               "contact.dependent", "contact.range"),
+  Argument = c("`object`", "`type`", "`raw.use`", "distance.use", "`interaction.range`", "`scale.distance`", "`contact.dependent`", "`contact.range`"),
   Description = c(
     "CellChat object.",
     'Method for average expression; "triMean" (default) or "truncatedMean" (needs trim).',
-    "Use raw (TRUE) or if smoothData() was run (FALSE).",
-    "Apply spatial distance constraints (TRUE/FALSE).",
-    "Max ligand interaction distance (µm).",
-    "Scaling factor for spatial distances (e.g., 1, 0.2).",
-    "Whether signaling is contact-dependent (TRUE/FALSE).",
-    "Max distance (µm) for cells to be considered in contact."
+    "Use raw (TRUE) or if smoothData() was run (FALSE)",
+    "Apply spatial distance constraints (TRUE/FALSE.",
+    "Maximum ligand interaction distance (µm)",
+    "Scaling factor for spatial distances (e.g., 1, 0.2)",
+    "Whether signaling is contact-dependent (TRUE/FALSE)",
+    "Maximum distance (µm) for cells to be considered in contact"
   )
 )
 
@@ -406,24 +409,24 @@ cellchat_crc <- readRDS("data/intermediate_seurat/cellchat_crc_computeCommunProb
 
 :::
 
-
-We can now filter results based first on the how many bins belong to each cell type.
+We can now filter results based first on the how many bins belong to each cell type:
 
 ```{r}
 #| label: filtercommunication
-# Removes cell-type pairs with too few cells
-cellchat_crc <- filterCommunication(cellchat_crc, min.cells = 5)
+# Removes celltype pairs with too few bins
+cellchat_crc <- filterCommunication(cellchat_crc,
+                                    min.cells = 5)
 ```
 
 Each of the ligands and receptors are associated with different signaling pathways. So to summarize the results, we can aggregate the values to create a pathway-level score to identify more general trends in the data.
 
 ```{r}
 #| label: summarize_pathways
-# Summarise L-R pair probabilities into signalling pathway probabilities
+# Summarize Ligand-Receptor pair probabilities into signalling pathway probabilities
 cellchat_crc <- computeCommunProbPathway(cellchat_crc)
 # Count interactions and sum weights into a flat network matrix
 cellchat_crc <- aggregateNet(cellchat_crc)
-# Compute how much each cell type sends vs receives across all pathways
+# Compute how much each celltype sends vs receives across all pathways
 cellchat_crc <- netAnalysis_computeCentrality(cellchat_crc, slot.name = "netP")
 ```
 
@@ -436,7 +439,7 @@ cellchat_crc <- qs2::qs_read("intermediate/15_cellchat_crc.qs")
 
 ## Visualize CellChat results
 
-Now we can begin visualizing how the bins in `P5CRC` are interacting with one another. The CellChat package comes built in with a variety of different ways to visualize the results which we will now explore.
+With this information, we can begin visualizing how the bins in `P5CRC` are interacting with one another. The CellChat package comes with a variety of different built-in ways to visualize the results which we will now explore.
 
 ### Strength and number of interactions
 
