@@ -84,7 +84,7 @@ Overview of CellChat method.<br>
 _Image source: [Hao et al., 2021](https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2021.751158/full)_
 :::
 
-First, the authors created a database of known ligand-receptor interactions from the literature classified as: secreted signaling, extracellular matrix recepotrs and cell-cell contact. This database is used in conjunction with your own dataset and its celltype labels to identify communcations between populations. In essence, the method identifies overexpressed ligand receptors from the database in your own data to measure association using the principle of mass action.
+First, the authors created a database of known ligand-receptor interactions from the literature classified as: secreted signaling, extracellular matrix recepotrs and cell-cell contact. This database is used in conjunction with your own dataset and its celltype labels to identify communcations between populations. In essence, the method identifies overexpressed ligand receptors from the database in your own data to measure association using the principle of mass action. Using this assumption, if there is high expression of a ligand in a cell type and high expression of a receptor, then the probability of ligand-receptor interaction strength is high.
 
 ## Running cellchat
 
@@ -240,19 +240,32 @@ cellchat_crc@DB <- cellchat_db
 
 ::: callout-note
 # Subset CellChatDB
-If you are not interested in the full set of interactions, you can subset the CellChatDB object like so:
+
+The database contains ligand-receptors that can be broadly categorized in 4 groups:
+
+```{r}
+#| label: pie_cellchat_db
+# Pie chart of cellchat database categories
+showDatabaseCategory(cellchat_db)
+```
+
+If you are only interested in a particular group of interactions, say from one on the signaling groups, you can use the `subsetDB()` function and specificy which group you want in the `search` argument.
+
+Here we show what the full list of categories are:
 
 ```{r}
 #| label: subset_DB
 #| eval: false
 # DO NOT RUN
 # Subset CellChatDB for cell-cell communication analysis
-cellchat_db <- subsetDB(CellChatDB, 
+cellchat_db <- subsetDB(cellchat_db, 
                             search = c("Secreted Signaling",
                                        "ECM-Receptor", 
-                                       "Cell-Cell Contact"), 
-                            non_protein = FALSE)
+                                       "Cell-Cell Contact",
+                                       "Non-protein Signaling"))
 ```
+
+
 
 :::
 
@@ -264,9 +277,9 @@ Now that the database is linked to our dataset, we **need** to run the `subsetDa
 cellchat_crc <- subsetData(cellchat_crc)
 ```
 
-Next, we identify which genes are overexpressed in each cell type. These scores are calculated with a [Wilcoxon and auROC test](https://rdrr.io/github/immunogenomics/presto/man/wilcoxauc.html) from the `calculateOverExpressed()` function. 
+Next, we identify which genes are overexpressed in each cell type with `identifyOverExpressedGenes()`. This is very similar to how we ran `FindMarkers()` in a [previous lesson](13_dge_pathway.qmd). These scores are calculated with a [Wilcoxon and auROC test](https://rdrr.io/github/immunogenomics/presto/man/wilcoxauc.html) and stored in the `@var.features` slot of the CellChat object. 
 
-This is very similar to how we ran `FindMarkers()` in a [previous lesson](13_dge_pathway.qmd). The results are stored in the `@var.features` slot of the CellChat object. To preview what is happening behind the scenes, we can take a look at the top genes per clusters, ranked by the adjusted p-value and log-fold change.
+To preview what is happening behind the scenes, we can take a look at the top genes per clusters, ranked by the adjusted p-value and log-fold change.
 
 ```{r}
 #| label: identify_overexpressed_genes
@@ -277,7 +290,7 @@ cellchat_crc <- identifyOverExpressedGenes(cellchat_crc)
 # Print top genes per cell type
 cellchat_crc@var.features$features.info %>%
   group_by(clusters) %>%
-  arrange(pvalues.adj, logFC) %>%
+  arrange(pvalues.adj, desc(logFC)) %>%
   slice_head(n = 2) %>% 
   View()
 ```
@@ -336,8 +349,6 @@ The last computationally heavy step of this workflow is `computeCommunProb()` fu
 4. Computer communication strength for LR and cell type pairs, incorporating spatial weights
 5. Run permutation test for significance testing
 
-These steps run under the principle of mass action, where high expression of ligand and receptors in cell types indicate a higher interaction strength.
-
 ```{r}
 #| label: tbl-computeCommunProb_params
 #| tbl-cap: "Parameters for `computeCommunProb()` function."
@@ -346,7 +357,7 @@ library(knitr)
 library(kableExtra)
 
 args <- data.frame(
-  Argument = c("`object`", "`type`", "`raw.use`", "distance.use", "`interaction.range`", "`scale.distance`", "`contact.dependent`", "`contact.range`"),
+  Argument = c("object", "type", "raw.use", "distance.use", "interaction.range", "scale.distance", "contact.dependent", "contact.range"),
   Description = c(
     "CellChat object.",
     'Method for average expression; "triMean" (default) or "truncatedMean" (needs trim).',
@@ -394,7 +405,7 @@ This creates a new slot in the CellChat object called, `@net`, where the interac
 
 ::: callout-important
 # Load RDS object
-Those three steps take a long time to run, so we have created an RDS object for you to load in with the results from these steps:
+Those three steps take a long time to run (~25 minutes), so we have created an RDS object for you to load in with the results from these steps:
 
 ```{r}
 #| label: load_cellchat_rds
@@ -414,14 +425,16 @@ cellchat_crc <- filterCommunication(cellchat_crc,
                                     min.cells = 5)
 ```
 
-Each of the ligands and receptors are associated with different signaling pathways. So to summarize the results, we can aggregate the values to create a pathway-level score to identify more general trends in the data.
+Each ligand-receptor is associated with a pathway, which comes from the database that was curated from the scientific literature. So to summarize the results, we can aggregate the values to create a pathway-level score to identify more general trends in the data.
 
 ```{r}
 #| label: summarize_pathways
 # Summarize Ligand-Receptor pair probabilities into signalling pathway probabilities
 cellchat_crc <- computeCommunProbPathway(cellchat_crc)
+
 # Count interactions and sum weights into a flat network matrix
 cellchat_crc <- aggregateNet(cellchat_crc)
+
 # Compute how much each celltype sends vs receives across all pathways
 cellchat_crc <- netAnalysis_computeCentrality(cellchat_crc, slot.name = "netP")
 ```
@@ -469,6 +482,17 @@ par(mfrow = c(1, 1))
 ```
 
 Notice that the strongest interactions are circular between tumor cells. This tells us that tumor cells are frequently and strongly sending signals to one another. We can also see that fibroblasts appear to be sending signals to tumor cells. [Rodriguez et al., 2025](https://www.nature.com/articles/s42003-025-08799-x), found that cancer-associate fibroblasts "induce pro-invasive gene expression changes involved in epithelial-mesenchymal transition, extracellular matrix remodeling and migration."
+
+::: callout-note
+
+```{r}
+SpatialDimPlot(crc %>% subset(first_type %in% c("Tumor", "Fibroblast")),
+                group.by = "first_type",
+                pt.size.factor = 13,
+                image.alpha = 0.2)
+```
+
+:::
 
 An alternative way to represent this same information can be done with a heatmap. On the y-axis are the "sources" and the x-axis are the "receivers". The intensity of the heatmap is proportional to the number/strength of interactions between the source and receiver cell types. The top colored bar plot represents the sum of column of values displayed in the heatmap. The right colored bar plot represents the sum of row of values.
 
@@ -609,7 +633,7 @@ top_pathways <- cellchat_crc@netP$pathways[1:5]
 top_pathways
 ```
 
-In particular, we are interested in the celltypes that are interacting with tumor cells. So we will look at all ligand-receptor complexes in those top pathways that have tumor cells as the source. This is represented as a bubbleplot, where the size of the dot is proportion to the p-value. The color represents the probability of interaction for the celltype-directed interaction, as labeled on the x-axis.
+In particular, we are interested in the celltypes that are interacting with tumor cells. So we will look at all ligand-receptor complexes in those top pathways that have tumor cells as the target. This is represented as a bubbleplot, where the size of the dot is proportion to the p-value. The color represents the probability of interaction for the celltype-directed interaction, as labeled on the x-axis.
 
 ```{r}
 #| label: fig-netVisiual_bubble
