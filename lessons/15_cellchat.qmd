@@ -71,7 +71,7 @@ _Image source: [Su et al., 2024](https://www.nature.com/articles/s41392-024-0188
 
 We know that cells do not exist in an isolated environment, where they do not interact with anything. The opposite is true, where cells interact with one another and exchange information through various mechanisms, such as signal transduction for activating proteins. Understanding which cells interact with each other is crucial for understanding how cell differentiation, organ development and metabolism is modulated.
 
-Spatial transcriptomics is a great input dataset for these methods because **many cell interactions are observed between cells in close proximity**. The coordinates become a powerful input parameter to improve the accuracy of interaction results.
+Spatial transcriptomics is a great input dataset for these methods because **cell interactions are oftentimes between cells in close proximity**. The coordinates become a powerful input parameter to improve the accuracy of interaction results.
 
 ### CellChat
 
@@ -483,18 +483,24 @@ par(mfrow = c(1, 1))
 
 Notice that the strongest interactions are circular between tumor cells. This tells us that tumor cells are frequently and strongly sending signals to one another. We can also see that fibroblasts appear to be sending signals to tumor cells. [Rodriguez et al., 2025](https://www.nature.com/articles/s42003-025-08799-x), found that cancer-associate fibroblasts "induce pro-invasive gene expression changes involved in epithelial-mesenchymal transition, extracellular matrix remodeling and migration."
 
-::: callout-note
+::: {.callout-note collapse="true"}
+# Zoom in on tumor and fibroblast bins
+
+We can also zoom in on the tumor and fibroblast bins to identify where they exist spatially.
 
 ```{r}
+#| label: fig-fibtro_tumor_tissue
+# Color bins by tissue after subsetting to tumor and fibroblasts
 SpatialDimPlot(crc %>% subset(first_type %in% c("Tumor", "Fibroblast")),
                 group.by = "first_type",
                 pt.size.factor = 13,
                 image.alpha = 0.2)
 ```
 
+As we might hope to see, there are fibroblasts that are located in close proximity to tumor bins.
 :::
 
-An alternative way to represent this same information can be done with a heatmap. On the y-axis are the "sources" and the x-axis are the "receivers". The intensity of the heatmap is proportional to the number/strength of interactions between the source and receiver cell types. The top colored bar plot represents the sum of column of values displayed in the heatmap. The right colored bar plot represents the sum of row of values.
+An alternative way to represent the circular plots can be done with a heatmap. On the y-axis are the "sources" and the x-axis are the "receivers". The intensity of the heatmap is proportional to the number/strength of interactions between the source and receiver cell types. The top colored bar plot represents the sum of column of values displayed in the heatmap. The right colored bar plot represents the sum of row of values.
 
 ```{r}
 #| label: fig-netVisual_heatmap
@@ -528,7 +534,7 @@ netAnalysis_signalingRole_scatter(cellchat_crc)
 
 ### Pathway-level visuals
 
-The last steps we ran in the CellChat workflow was to calculate statistics for the overarching pathways involved with each ligand-receptor. So now we can take a look at the ranked, top significant pathways associated within our dataset:
+The last steps we ran in the CellChat workflow was to calculate statistics for each pathway, which is comprised of various ligand-receptors. So now we can take a look at the top significant pathways associated within our dataset:
 
 ```{r}
 #| label: fig-ranknet
@@ -539,10 +545,18 @@ rankNet(cellchat_crc,
         measure = "weight",
         mode = "single", 
         stacked = TRUE, 
-        do.stat = TRUE)
+        do.stat = TRUE) +
+  xlab("Pathways")
 ```
 
 For each of these pathways, we have associated signaling strength for each celltype. We can evaluate the outgoing and incoming pathways signal strength for each celltype.
+
+::: callout-warning
+# Plotting errors and warning
+> "Error: not enough space for cells at track index '1'."
+
+This error comes from when the size of the plot is too small to display the plot. Hit the "Zoom" button on "Plots" tab of RStudio and enlarge the image to view the image. 
+:::
 
 ```{r}
 #| label: fig-heatmap_pathways
@@ -573,6 +587,8 @@ ht_out + ht_in
 
 If we wanted to zoom in on one particular pathway, in this case `CEACAM`, we can use the `netVisual_aggregate()` and specify the signaling pathway. For a circular plot with lines directed between, we supply the `layout` argument as `"chord"`.
 
+Similar to the first visual we made, this is a circular plot that represents how much interaction is occuring between cell types **for a single pathway**.
+
 ```{r}
 #| label: fig-netVisual_aggregate_chord
 #| fig-cap: "CEACAM pathways interactions between celltypes."
@@ -584,6 +600,8 @@ netVisual_aggregate(cellchat_crc,
                     layout = "chord",
                     title.name = "CEACAM signaling")
 ```
+
+The [CEACAM genes/pathway](https://pmc.ncbi.nlm.nih.gov/articles/PMC7127089/) is notably increased in epithelial tumor cells in colon cancer. These results we are seeing is consistent with that assumption, where we see many interactions within the CEACAM pathway to be with tumor bins.
 
 ::: {.callout-note collapse="true"}
 # Spatial `netVisual_aggregate()`
@@ -623,23 +641,23 @@ Within CellChat, we can also zoom in on specific ligand-receptor pairs that belo
 
 ```{r}
 #| label: top_pathways
-# Number of unique cell types
-n_ct <- seurat_rctd@meta.data %>%
-  pull(first_type) %>%
-  unique() %>% length()
-
 # Top 5 significant pathways
 top_pathways <- cellchat_crc@netP$pathways[1:5]
 top_pathways
 ```
 
-In particular, we are interested in the celltypes that are interacting with tumor cells. So we will look at all ligand-receptor complexes in those top pathways that have tumor cells as the target. This is represented as a bubbleplot, where the size of the dot is proportion to the p-value. The color represents the probability of interaction for the celltype-directed interaction, as labeled on the x-axis.
+In particular, we are interested in the celltypes that are interacting with tumor cells. So we will look at all ligand-receptor complexes in those top pathways that have tumor cells as the target. This is represented as a bubbleplot, where the size of the dot is proportion to the p-value. If a dot does not appear for, this indicates that the interaction is not significant. The color represents the probability of interaction for the celltype-directed interaction, as labeled on the x-axis.
 
 ```{r}
 #| label: fig-netVisiual_bubble
 #| fig-cap: "Bubbleplot of significant pathways with tumor cells as source."
 #| fig-width: 8
 #| fig-height: 8
+# Number of unique cell types
+n_ct <- seurat_rctd@meta.data %>%
+  pull(first_type) %>%
+  unique() %>% length()
+
 netVisual_bubble(cellchat_crc,
                  signaling = top_pathways,
                  sort.by.source.priority = TRUE,
@@ -649,6 +667,8 @@ netVisual_bubble(cellchat_crc,
                  color.heatmap = "viridis",
                  angle.x = 90)
 ```
+
+In our case, the dots all appear to be the same size. This tells us that the pathways we selected earlier, when a ligand-receptor is significant, it is found to have a very low p-value (very significant).
 
 ### Zoom in on specific ligand-receptor complexes
 
