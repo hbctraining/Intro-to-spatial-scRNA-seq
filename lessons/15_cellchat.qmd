@@ -46,7 +46,7 @@ options(future.globals.maxSize = 8000 * 1024^2)
 seurat_rctd <- qs2::qs_read("intermediate/12_seurat_RCTD.qs")
 ```
 
-Approximate time: XX minutes
+Approximate time: 60 minutes
 
 ## Learning objectives 
 
