@@ -343,11 +343,20 @@ cellchat_crc <- smoothData(cellchat_crc,
 
 The last computationally heavy step of this workflow is `computeCommunProb()` function, which calculates the interaction strengths and probabilities of cell types. The steps are:
 
-1. Summarize gene expression per cell type by average and normalize (`triMean`)
-2. Create ligand-receptor (LR) pairs and assign values based on expression patterns for each cell type
-3. Assign weights to cell types based upon spatial proximity, where higher weights indicates closeness
-4. Computer communication strength for LR and cell type pairs, incorporating spatial weights
+1. Summarize gene expression by calculating the robust mean gene expression per cell group (`triMean`)
+2. Identify ligand-receptor (LR) compounds (from the database) and assign values based upon average gene expression per cell group (calculated in previous step)
+3. Create spatial proximity matrix between cell groups to weight source-target cell groups based upon nearness
+4. Compute communication strength for LR and cell type pairs, incorporating spatial weights
 5. Run permutation test for significance testing
+
+::: {.collapse-note collapse="true"}
+# Author note on tri-mean
+
+In the [documentation](https://github.com/sqjin/CellChat/blob/master/tutorial/CellChat-vignette.Rmd) for CellChat, the author defines tri-mean like so:
+
+> Of note, 'trimean' approximates 25% truncated mean, implying that the average gene expression is zero if the percent of expressed cells in one group is less than 25%. To use 10% truncated mean, USER can set `type = "truncatedMean"` and `trim = 0.1`. The function `computeAveExpr` can help to check the average expression of signaling genes of interest, e.g, `computeAveExpr(cellchat, features = c("CXCL12","CXCR4"), type =  "truncatedMean", trim = 0.1)`. 
+
+:::
 
 ```{r}
 #| label: tbl-computeCommunProb_params
@@ -375,6 +384,10 @@ kable(args, col.names = c("Argument", "Description")) |>
   column_spec(1, width = "20%") |>
   column_spec(2, width = "80%")
 ```
+
+Of particular note is the `scale.distance` parameter. Remember how earlier we established what the `ratio` was to establish the pixel distance for 1µm? This is where that information comes into play, where we tell `computeCommunProb()` that if a cell group is not within `scale.distance`µm of each other, then they are unlikely to interact with one another.
+
+With all the previously calculated values, we can now run the `computeCommunProb()` function:
 
 ```{r}
 #| label: computeCommunProb
